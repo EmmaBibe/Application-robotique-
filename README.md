@@ -77,3 +77,13 @@ export ANDROID_HOME=/chemin/vers/android-sdk   # avec platforms;android-34 et bu
 ```
 
 Le script n'utilise ni Gradle ni Android Studio : aapt2, javac, d8, zipalign et apksigner suffisent. La clé `android/robomaster.keystore` sert uniquement aux versions de test ; elle est conservée pour que chaque nouvelle APK s'installe par-dessus la précédente sans perdre la progression.
+
+## Application Windows
+
+Le dossier `desktop/` contient une version de bureau basée sur Electron : une fenêtre qui sert l'application embarquée, sans installation ni connexion. Pour la reconstruire :
+
+```bash
+./desktop/build-windows.sh   # produit desktop/dist/RoboMaster-Windows.zip
+```
+
+Décompresser l'archive puis lancer `RoboMaster.exe`. La progression est enregistrée dans le profil Windows de l'utilisateur.

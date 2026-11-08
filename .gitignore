@@ -1,3 +1,5 @@
 android/build/
 android/RoboMaster.apk
 android/*.idsig
+desktop/dist/
+desktop/cache/
