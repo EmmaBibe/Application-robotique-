@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>RoboMaster — De zéro au Master Robotique</title>
+  <meta name="description" content="Parcours interactif pour apprendre la robotique de A à Z : maths, électronique, programmation, commande, perception, IA, ROS 2 et robotique de demain.">
+  <meta name="theme-color" content="#0f1729" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f5f7fb" media="(prefers-color-scheme: light)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <a class="skip" href="#main">Aller au contenu</a>
+
+  <aside class="sidebar" id="sidebar" aria-label="Navigation principale">
+    <a class="brand" href="#/">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><use href="#logo"/></svg>
+      <span>Robo<b>Master</b></span>
+    </a>
+    <nav id="nav-desktop"></nav>
+    <div class="sidebar-foot" id="sidebar-foot"></div>
+  </aside>
+
+  <div class="shell">
+    <header class="topbar">
+      <button class="icon-btn only-mobile" id="btn-menu" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="crumbs" id="crumbs"></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="btn-search" aria-label="Rechercher (touche /)">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-focus" aria-label="Minuteur de concentration">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-theme" aria-label="Changer de thème">
+          <svg viewBox="0 0 24 24"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+        </button>
+        <div class="xp-chip" id="xp-chip" title="Ton niveau"></div>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1"></main>
+  </div>
+
+  <nav class="tabbar" id="nav-mobile" aria-label="Navigation mobile"></nav>
+
+  <div class="focus-widget" id="focus-widget" hidden></div>
+  <div class="toast-zone" id="toasts" aria-live="polite"></div>
+  <div class="modal" id="modal" hidden></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="0 0 48 48">
+      <rect x="9" y="12" width="30" height="24" rx="7" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="19" cy="24" r="3.2" fill="currentColor"/>
+      <circle cx="29" cy="24" r="3.2" fill="currentColor"/>
+      <path d="M24 12V6M20 6h8M9 24H4M44 24h-5M17 36v5M31 36v5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <noscript><p style="padding:2rem">Active JavaScript pour utiliser l'application.</p></noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

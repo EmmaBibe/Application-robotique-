@@ -1,0 +1,235 @@
+import { P, H, Tip, Warn, Danger, Future, Real, Info, F, Sim, Pipe, Q, Exo, Code, Defi, Manual, Think, Table } from './b.js';
+
+// ============================================================================
+// Intelligence artificielle
+// ============================================================================
+
+export const ia = {
+  id: 'ia', phase: 'intelligence', icon: '🧠', title: 'Intelligence artificielle pour la robotique',
+  desc: 'Apprentissage supervisé, réseaux de neurones, apprentissage par renforcement et modèles de fondation pour robots.',
+  master: 'Apprentissage automatique',
+  intro: 'L\'IA transforme la robotique plus vite que n\'importe quelle autre technologie. Ce module te donne des bases solides, sans magie : un neurone, une descente de gradient, un agent qui apprend par essais et erreurs. Puis on regarde où va la recherche.',
+  lessons: [
+    {
+      id: 'ml', title: 'Apprendre à partir d\'exemples', sub: 'Apprentissage supervisé et neurone artificiel', min: 28, level: 2,
+      why: 'Toute l\'IA moderne repose sur une idée simple : ajuster des paramètres pour réduire une erreur sur des exemples. Comprendre un neurone, c\'est comprendre la brique de base des grands modèles de langage comme de la vision des voitures autonomes.',
+      objectives: ['Distinguer apprentissage supervisé, non supervisé et par renforcement', 'Comprendre le perceptron et sa règle d\'apprentissage', 'Comprendre la descente de gradient', 'Reconnaître le surapprentissage'],
+      blocks: [
+        Table(['Type', 'On fournit', 'Le système apprend', 'Exemple robotique'], [
+          ['Supervisé', 'des exemples avec la bonne réponse', 'à prédire la réponse', 'reconnaître des objets à partir d\'images annotées'],
+          ['Non supervisé', 'des données sans réponse', 'des structures, des regroupements', 'détecter des anomalies de vibration sur un moteur'],
+          ['Par renforcement', 'un environnement et des récompenses', 'une stratégie qui maximise la récompense', 'apprendre à marcher'],
+          ['Par imitation', 'des démonstrations humaines', 'à reproduire le geste', 'apprendre à plier du linge en regardant'],
+        ]),
+        H('Le neurone artificiel'),
+        F('sortie = activation( w₁·x₁ + w₂·x₂ + … + b )', 'somme pondérée des entrées plus un biais, puis une fonction d\'activation'),
+        Sim('perceptron'),
+        P('<p>Le perceptron ajuste ses poids à chaque erreur. Il sait séparer deux classes par une droite. Pour des frontières plus complexes (l\'exemple XOR), on empile des neurones en <strong>couches</strong> : c\'est un réseau de neurones, et avec beaucoup de couches, de l\'apprentissage profond (deep learning).</p>'),
+        Defi('defi-neurone', 'Entraîne ton neurone', 'Place au moins 8 points de chaque classe (au moins 20 en tout), de façon à ce qu\'une droite puisse les séparer, puis entraîne le neurone jusqu\'à 100 % de bonnes réponses.', 'perceptron', { goal: true }),
+        H('La descente de gradient'),
+        P('<p>Les réseaux modernes apprennent en minimisant une <strong>fonction de perte</strong> (l\'erreur moyenne). Le gradient indique dans quelle direction la perte augmente ; on fait un petit pas dans la direction opposée :</p>'),
+        F('w ← w − η · ∂perte/∂w', 'η : taux d\'apprentissage'),
+        P('<p>Taux trop petit : apprentissage interminable. Trop grand : on saute par-dessus le minimum et ça diverge. La <strong>rétropropagation</strong> calcule efficacement ces dérivées pour des millions de paramètres.</p>'),
+        Code('c1', 'Descente de gradient sur une fonction simple : on veut trouver le minimum de f(w) = (w − 3)². Sa dérivée vaut 2(w − 3). Écris <code>descente(w0, eta, n)</code> qui applique n pas et renvoie w.', {
+          fn: 'descente',
+          starter: 'function descente(w0, eta, n) {\n  let w = w0;\n  for (let i = 0; i < n; i++) {\n    // w = w - eta * dérivée\n  }\n  return w;\n}',
+          tests: [[[0, 0.1, 1], 0.6], [[0, 0.5, 1], 3], [[10, 0.1, 50], 3.000100], [[0, 1.1, 3], 8.184]],
+          sol: 'function descente(w0, eta, n) {\n  let w = w0;\n  for (let i = 0; i < n; i++) w -= eta * 2 * (w - 3);\n  return w;\n}',
+        }),
+        Warn('Un modèle qui apprend « par cœur » ses exemples d\'entraînement peut échouer sur de nouvelles données : c\'est le <strong>surapprentissage</strong>. On garde toujours des données de test jamais vues pendant l\'entraînement pour évaluer honnêtement le modèle. Et la qualité des données compte plus que la taille du modèle.', 'Le surapprentissage'),
+        Q('q1', 'Pourquoi un seul perceptron ne peut-il pas résoudre XOR ?', ['Il n\'a pas assez de données', 'Il ne peut tracer qu\'une frontière droite, et XOR n\'est pas séparable par une droite', 'Le taux d\'apprentissage est mauvais', 'Il faut plus d\'époques'], 1, 'C\'est la découverte de Minsky et Papert en 1969, qui a ralenti la recherche pendant des années jusqu\'aux réseaux multicouches.'),
+        Q('q2', 'Que se passe-t-il si le taux d\'apprentissage est beaucoup trop grand ?', ['L\'apprentissage est plus précis', 'Les poids oscillent ou divergent', 'Rien', 'Le modèle surapprend'], 1, 'Essaie dans l\'exercice de code avec η = 1,1 : on s\'éloigne du minimum à chaque pas.'),
+      ],
+      cards: [['Formule d\'un neurone ?', 'sortie = activation(Σ wᵢxᵢ + b).'], ['Mise à jour en descente de gradient ?', 'w ← w − η·∂perte/∂w.'], ['Qu\'est-ce que le surapprentissage ?', 'Le modèle apprend par cœur l\'entraînement et généralise mal.'], ['Pourquoi des couches multiples ?', 'Pour représenter des frontières non linéaires.']],
+    },
+    {
+      id: 'reseaux', title: 'Réseaux de neurones profonds en robotique', sub: 'Ce qu\'ils font bien, ce qu\'ils font mal', min: 20, level: 2,
+      why: 'Les réseaux profonds sont devenus incontournables pour la perception. Savoir comment on les entraîne, les déploie sur un robot et les évalue est indispensable pour un ingénieur roboticien.',
+      objectives: ['Connaître les grandes architectures (CNN, réseaux récurrents, transformers)', 'Comprendre le cycle données → entraînement → déploiement', 'Savoir déployer un modèle sur un ordinateur embarqué', 'Évaluer un modèle avec les bonnes métriques'],
+      blocks: [
+        Table(['Architecture', 'Données', 'Usage'], [
+          ['CNN (convolutifs)', 'images', 'détection, segmentation'],
+          ['Réseaux récurrents, LSTM', 'séquences', 'prédiction de trajectoires, signaux temporels (historique)'],
+          ['Transformers', 'séquences, images, multimodal', 'modèles de langage, vision moderne, politiques robotiques'],
+          ['Réseaux de graphes', 'graphes', 'relations entre objets, essaims'],
+          ['Modèles de diffusion', 'génération', 'générer des images, et aussi des trajectoires de robot'],
+        ]),
+        Pipe('Du jeu de données au robot', [
+          ['Collecter', 'Images ou données dans les conditions réelles.', '20 000 images', 'Varie éclairages, angles, arrière-plans. Le réseau ne saura que ce qu\'il a vu.'],
+          ['Annoter', 'Indiquer la bonne réponse pour chaque exemple.', 'boîtes, masques', 'Long et coûteux. Des outils semi-automatiques aident.'],
+          ['Séparer', 'Entraînement, validation, test.', '70 / 15 / 15 %', 'Le jeu de test ne sert qu\'à la toute fin.'],
+          ['Entraîner', 'Sur GPU, souvent en partant d\'un modèle pré-entraîné.', 'apprentissage par transfert', 'Le transfert divise par 10 ou 100 la quantité de données nécessaires.'],
+          ['Évaluer', 'Précision, rappel, mAP, matrice de confusion.', 'mAP@0.5 = 0,87', 'Regarde surtout les erreurs : sont-elles dangereuses ?'],
+          ['Optimiser', 'Quantification, élagage, conversion.', 'ONNX, TensorRT, int8', 'Pour tourner en temps réel sur un Jetson ou un microcontrôleur.'],
+          ['Déployer et surveiller', 'Dans un nœud ROS 2, avec suivi des performances réelles.', '30 images/s', 'Les données du terrain révèlent toujours des cas imprévus : on recollecte et on réentraîne.'],
+        ]),
+        H('Précision et rappel'),
+        F('précision = VP / (VP + FP) &nbsp;&nbsp;&nbsp; rappel = VP / (VP + FN)', 'VP : vrais positifs, FP : faux positifs, FN : faux négatifs'),
+        P('<p>Pour un détecteur de piétons, un faux négatif (piéton raté) est bien plus grave qu\'un faux positif (freinage inutile). On privilégie alors le <strong>rappel</strong>. Choisir la bonne métrique est une décision d\'ingénieur, pas de statisticien.</p>'),
+        Code('c1', 'Écris <code>metriques(vp, fp, fn)</code> qui renvoie <code>[precision, rappel]</code>.', {
+          fn: 'metriques',
+          starter: 'function metriques(vp, fp, fn) {\n  return [0, 0];\n}',
+          tests: [[[90, 10, 30], [0.9, 0.75]], [[50, 0, 50], [1, 0.5]], [[8, 2, 0], [0.8, 1]]],
+          sol: 'function metriques(vp, fp, fn) {\n  return [vp / (vp + fp), vp / (vp + fn)];\n}',
+        }),
+        Real('L\'apprentissage par transfert est la norme : on ne part presque jamais de zéro. On prend un réseau entraîné sur des millions d\'images génériques, et on l\'affine avec quelques centaines d\'images de son problème (pièces de son usine, plantes de son champ).'),
+        Q('q1', 'Pour un robot qui trie des déchets dangereux, quelle métrique surveiller en priorité pour la classe « dangereux » ?', ['La précision', 'Le rappel : ne rater aucun déchet dangereux', 'La vitesse', 'La taille du modèle'], 1, 'Rater un déchet dangereux est grave ; en écarter un de trop l\'est beaucoup moins.'),
+      ],
+      cards: [['Précision ?', 'VP / (VP + FP) : parmi ce que je détecte, combien est correct.'], ['Rappel ?', 'VP / (VP + FN) : parmi ce qui existe, combien je détecte.'], ['Qu\'est-ce que l\'apprentissage par transfert ?', 'Partir d\'un modèle pré-entraîné et l\'affiner sur ses propres données.'], ['Outils pour accélérer un modèle sur Jetson ?', 'ONNX et TensorRT, quantification int8.']],
+    },
+    {
+      id: 'renforcement', title: 'Apprentissage par renforcement', sub: 'Apprendre par essais et erreurs', min: 28, level: 3,
+      why: 'C\'est ainsi que les robots quadrupèdes et humanoïdes récents ont appris à marcher, courir et se relever. Le renforcement permet de découvrir des comportements qu\'aucun humain ne saurait programmer à la main.',
+      objectives: ['Comprendre agent, état, action, récompense', 'Comprendre le Q-learning', 'Comprendre le compromis exploration / exploitation', 'Connaître le transfert simulation → réalité'],
+      blocks: [
+        Pipe('La boucle de l\'apprentissage par renforcement', [
+          ['État s', 'L\'agent observe la situation.', 'case (3, 2)', null],
+          ['Action a', 'Il choisit une action selon sa politique.', 'aller à droite', 'Parfois au hasard, pour explorer.'],
+          ['Environnement', 'Le monde réagit.', 'nouvelle case (4, 2)', null],
+          ['Récompense r', 'Un nombre qui dit si c\'était bien.', '−0,1 (un pas de plus)', 'Concevoir la récompense est tout un art : l\'agent optimisera exactement ce qu\'on récompense, pas ce qu\'on voulait dire.'],
+          ['Apprentissage', 'Il met à jour son estimation de la valeur des actions.', 'Q(s, a) mis à jour', 'Petit à petit, il découvre quelles actions mènent aux grandes récompenses futures.'],
+        ]),
+        F('Q(s,a) ← Q(s,a) + α · [ r + γ · max<sub>a\'</sub> Q(s\',a\') − Q(s,a) ]', 'mise à jour du Q-learning'),
+        Sim('qlearning'),
+        Defi('defi-rl', 'Le robot qui apprend seul', 'Lance l\'apprentissage et ajuste α, γ et ε pour que le robot découvre le chemin optimal (16 déplacements) vers sa base de recharge.', 'qlearning', { goal: true }),
+        Table(['Paramètre', 'Rôle', 'Trop petit', 'Trop grand'], [
+          ['α (apprentissage)', 'vitesse de mise à jour', 'apprend très lentement', 'instable, oublie vite'],
+          ['γ (actualisation)', 'importance du futur', 'myope : ne voit pas la base lointaine', 'proche de 1 : vise le long terme'],
+          ['ε (exploration)', 'fréquence des actions au hasard', 'reste coincé sur une solution moyenne', 'n\'exploite jamais ce qu\'il sait'],
+        ]),
+        Warn('Un agent optimise sa récompense, pas ton intention. Exemple réel : un agent récompensé pour la vitesse de son personnage dans une course a appris à tourner en rond en ramassant des bonus, sans jamais finir. En robotique, une récompense mal conçue peut produire des mouvements violents ou dangereux. Toujours tester en simulation, avec des limites physiques.', 'Le piège de la récompense'),
+        H('De la simulation au réel'),
+        P('<p>Un robot réel ne peut pas tomber des millions de fois. On entraîne donc en <strong>simulation</strong> (Isaac Lab, MuJoCo, Gazebo), avec des milliers de robots virtuels en parallèle. Puis on transfère sur le vrai robot : c\'est le <strong>sim-to-real</strong>. Pour que ça marche, on rend la simulation volontairement variée (masses, frottements, retards, bruits aléatoires) : c\'est la <strong>randomisation de domaine</strong>. La politique apprend à être robuste à tout, y compris au monde réel.</p>'),
+        Code('c1', 'Écris <code>majQ(q, r, qMaxSuivant, alpha, gamma, terminal)</code> qui renvoie la nouvelle valeur de Q(s, a). Si terminal est vrai, la cible est juste r.', {
+          fn: 'majQ',
+          starter: 'function majQ(q, r, qMaxSuivant, alpha, gamma, terminal) {\n  return q;\n}',
+          tests: [[[0, 10, 0, 0.5, 0.9, true], 5], [[0, -0.1, 5, 0.5, 0.9, false], 2.2], [[2, -0.1, 5, 0.1, 0.9, false], 2.24]],
+          sol: 'function majQ(q, r, qn, a, g, term) {\n  const cible = term ? r : r + g * qn;\n  return q + a * (cible - q);\n}',
+        }),
+        Q('q1', 'Pourquoi garder une part d\'exploration aléatoire (ε > 0) ?', ['Pour faire joli', 'Pour découvrir des actions meilleures que celles déjà connues', 'Pour ralentir l\'apprentissage', 'Pour économiser de la mémoire'], 1, 'Sans exploration, l\'agent répète la première solution trouvée, même si elle est mauvaise.'),
+      ],
+      cards: [['Les éléments de l\'apprentissage par renforcement ?', 'Agent, état, action, récompense, politique.'], ['Mise à jour du Q-learning ?', 'Q ← Q + α[r + γ·max Q(s\') − Q].'], ['Qu\'est-ce que la randomisation de domaine ?', 'Varier aléatoirement les paramètres de simulation pour que la politique soit robuste au réel.'], ['Rôle de γ ?', 'Pondérer l\'importance des récompenses futures.']],
+    },
+    {
+      id: 'fondation', title: 'Modèles de fondation et robots généralistes', sub: 'Langage, vision, action', min: 22, level: 2,
+      why: 'Depuis 2023, des modèles qui comprennent le langage et la vision commencent à piloter des robots. C\'est la plus grande transformation en cours. Les ingénieurs qui la comprennent tôt auront une longueur d\'avance considérable.',
+      objectives: ['Comprendre ce qu\'est un modèle de fondation', 'Connaître le principe des modèles vision-langage-action (VLA)', 'Comprendre l\'apprentissage par imitation', 'Mesurer les limites et les enjeux de sécurité'],
+      blocks: [
+        P('<p>Un <strong>modèle de fondation</strong> est un très grand réseau de neurones (souvent un transformer) pré-entraîné sur d\'énormes quantités de données, puis adapté à de nombreuses tâches. Les grands modèles de langage en sont l\'exemple le plus connu. En robotique, on les utilise de trois façons :</p>'),
+        Table(['Usage', 'Principe', 'Exemple'], [
+          ['Planificateur de tâches', 'le modèle de langage découpe une consigne en étapes', '« range la cuisine » → saisir le bol, l\'ouvrir, le poser dans l\'évier...'],
+          ['Perception ouverte', 'un modèle vision-langage reconnaît des objets décrits en mots', '« trouve le tournevis à manche rouge »'],
+          ['Politique VLA', 'un modèle vision-langage-action produit directement les commandes du robot', 'images + consigne → mouvements de la pince'],
+        ]),
+        H('L\'apprentissage par imitation'),
+        P('<p>Un humain téléopère le robot (avec une manette, un exosquelette, un casque de réalité virtuelle) et réalise la tâche des dizaines ou des centaines de fois. Le réseau apprend à reproduire ces gestes à partir de ce que voient les caméras. Des méthodes comme les politiques à diffusion ou les transformers d\'action ont rendu cette approche efficace pour des tâches délicates : plier du linge, cuisiner, insérer un câble.</p>'),
+        Pipe('Comment une politique VLA pilote un robot', [
+          ['Entrées', 'Images des caméras + consigne en texte + état du robot.', '« mets la pomme dans le panier »', null],
+          ['Encodage', 'Un modèle vision-langage pré-entraîné comprend la scène et la consigne.', 'représentation interne', 'Il a appris sur Internet ce qu\'est une pomme et un panier.'],
+          ['Tête d\'action', 'Une partie du réseau produit les commandes.', 'séquence de positions de la pince', 'Souvent sous forme de petits morceaux de trajectoire (« action chunks »).'],
+          ['Contrôle bas niveau', 'Un contrôleur classique exécute les consignes en sécurité.', 'asservissements, limites', 'L\'IA décide quoi faire ; l\'automatique classique garantit comment le faire sans danger.'],
+        ]),
+        Future('Les données sont le goulot d\'étranglement : contrairement au texte, il n\'existe pas « d\'Internet des mouvements de robots ». D\'où les grands projets de collecte partagée entre laboratoires, la téléopération à grande échelle, l\'apprentissage à partir de vidéos humaines et la simulation massive. Les compétences recherchées : collecte et qualité de données robotiques, évaluation rigoureuse, intégration sûre avec la commande classique.', 'Ce qui se prépare'),
+        Danger('Un modèle qui génère des actions peut produire un mouvement inattendu. Les règles restent : limites de vitesse et d\'effort, zones interdites, arrêt d\'urgence matériel, surveillance par un système de sécurité indépendant de l\'IA. On ne certifie pas un réseau de neurones comme on certifie un automate de sécurité.', 'Sécurité avant tout'),
+        Think('t1', 'Imagine que tu dois déployer un robot généraliste dans une maison de retraite pour aider à servir les repas. Liste trois risques et, pour chacun, une mesure de protection qui ne dépend pas de l\'IA.', 'Exemples : collision avec une personne → vitesse limitée et capteurs de contact avec arrêt immédiat ; renverser un liquide chaud → interdiction matérielle de manipuler au-dessus des personnes, contenants fermés ; consigne mal comprise → confirmation vocale avant toute action, liste blanche de tâches autorisées. La sécurité se construit en couches.'),
+        Q('q1', 'Dans une architecture robotique moderne avec IA, quel rôle garde l\'automatique classique ?', ['Aucun, l\'IA fait tout', 'Exécuter les mouvements de façon stable et sûre, avec des limites garanties', 'Seulement l\'affichage', 'La recharge'], 1, 'L\'IA propose ; les couches classiques exécutent et protègent.'),
+      ],
+      cards: [['Qu\'est-ce qu\'un modèle VLA ?', 'Vision-Language-Action : un modèle qui transforme images et consigne en actions de robot.'], ['Principe de l\'apprentissage par imitation ?', 'Apprendre à reproduire des démonstrations humaines.'], ['Goulot d\'étranglement des robots généralistes ?', 'Les données de manipulation réelles.'], ['Qui garantit la sécurité dans un robot piloté par IA ?', 'Des couches indépendantes : limites matérielles, contrôleurs de sécurité, arrêt d\'urgence.']],
+    },
+  ],
+};
+
+// ============================================================================
+// ROS 2
+// ============================================================================
+
+export const ros = {
+  id: 'ros', phase: 'intelligence', icon: '🧩', title: 'ROS 2 et architecture logicielle',
+  desc: 'Le système nerveux logiciel des robots : nœuds, topics, services, actions, tf2, simulation et bonnes pratiques.',
+  master: 'Projets et logiciel robotique',
+  intro: 'ROS 2 (Robot Operating System) est l\'outil commun à presque tous les laboratoires et à une grande partie de l\'industrie. Arriver en Master en sachant déjà s\'en servir est un avantage énorme.',
+  lessons: [
+    {
+      id: 'ros-concepts', title: 'Les concepts de ROS 2', sub: 'Nœuds, topics, services, actions', min: 28, level: 2,
+      why: 'Un robot réel, c\'est des dizaines de programmes qui tournent en même temps. ROS 2 les fait communiquer de façon standard, ce qui permet de réutiliser des milliers de briques existantes.',
+      objectives: ['Comprendre nœuds, topics, services, actions et paramètres', 'Lire un graphe ROS', 'Connaître les commandes de base', 'Savoir choisir entre topic, service et action'],
+      blocks: [
+        P('<p>ROS 2 n\'est pas un système d\'exploitation au sens propre : c\'est un <strong>intergiciel</strong> (middleware) et un ensemble d\'outils qui tournent sous Linux (et aussi Windows, macOS). Il repose sur DDS, une norme industrielle de communication.</p>'),
+        Table(['Concept', 'Analogie', 'Usage', 'Exemple'], [
+          ['Nœud', 'un programme spécialisé', 'une fonction du robot', 'driver_lidar, slam, planner'],
+          ['Topic', 'une radio : on publie, d\'autres écoutent', 'flux de données continu', '/scan, /odom, /cmd_vel'],
+          ['Service', 'un appel téléphonique : question, réponse', 'requête courte et ponctuelle', '/reset_odometry'],
+          ['Action', 'une commande de restaurant avec suivi', 'tâche longue, avec retour de progression et annulation', '/navigate_to_pose'],
+          ['Paramètre', 'un réglage', 'configuration d\'un nœud', 'max_speed = 0,5'],
+          ['Message', 'le format des données', 'structure typée', 'geometry_msgs/Twist'],
+        ]),
+        Sim('rosgraph'),
+        H('Les commandes du quotidien'),
+        Table(['Commande', 'Effet'], [
+          ['<code>ros2 run paquet noeud</code>', 'lancer un nœud'], ['<code>ros2 launch paquet fichier.launch.py</code>', 'lancer tout un système'],
+          ['<code>ros2 node list</code>', 'lister les nœuds actifs'], ['<code>ros2 topic list</code>', 'lister les topics'],
+          ['<code>ros2 topic echo /scan</code>', 'afficher les messages d\'un topic'], ['<code>ros2 topic hz /scan</code>', 'mesurer la fréquence de publication'],
+          ['<code>ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2}}"</code>', 'publier un message à la main'],
+          ['<code>ros2 service call /reset std_srvs/srv/Empty</code>', 'appeler un service'], ['<code>ros2 bag record -a</code>', 'enregistrer toutes les données pour les rejouer'],
+          ['<code>rqt_graph</code>', 'afficher le graphe des nœuds et topics'],
+        ]),
+        Tip('<code>ros2 bag</code> enregistre tous les messages d\'une session réelle. Tu peux ensuite les rejouer autant de fois que tu veux pour mettre au point un algorithme, sans le robot. C\'est l\'un des outils les plus précieux de ROS.', 'Enregistrer pour rejouer'),
+        Q('q1', 'Pour demander au robot d\'aller à la cuisine (30 secondes de trajet, avec suivi et possibilité d\'annuler), tu utilises :', ['un topic', 'un service', 'une action', 'un paramètre'], 2, 'Tâche longue avec retour de progression et annulation : c\'est exactement le rôle d\'une action.'),
+        Q('q2', 'Le lidar publie ses mesures 10 fois par seconde. Mécanisme ?', ['Topic', 'Service', 'Action', 'Paramètre'], 0, 'Flux continu, plusieurs abonnés possibles : topic.'),
+      ],
+      cards: [['Topic, service ou action pour un flux de capteur ?', 'Topic.'], ['Topic, service ou action pour une tâche longue annulable ?', 'Action.'], ['Commande pour voir les messages d\'un topic ?', 'ros2 topic echo /nom.'], ['Sur quelle norme de communication repose ROS 2 ?', 'DDS.']],
+    },
+    {
+      id: 'ros-noeud', title: 'Écrire son premier nœud', sub: 'rclpy, launch, tf2, URDF, simulation', min: 28, level: 2,
+      why: 'Passer de la théorie à la pratique : un nœud qui lit un capteur, décide et commande. C\'est le geste de base de tout développeur ROS.',
+      objectives: ['Lire et comprendre un nœud Python', 'Comprendre le rôle de tf2 et de l\'URDF', 'Connaître les outils de simulation et de visualisation', 'Organiser un espace de travail ROS 2'],
+      blocks: [
+        P('<p>Voici un nœud complet qui s\'abonne au lidar et publie une commande de vitesse : avancer, sauf si un obstacle est trop proche devant.</p>'),
+        P('<pre><code>import rclpy\nfrom rclpy.node import Node\nfrom sensor_msgs.msg import LaserScan\nfrom geometry_msgs.msg import Twist\n\n\nclass Evitement(Node):\n    def __init__(self):\n        super().__init__(\'evitement\')\n        self.declare_parameter(\'distance_securite\', 0.5)\n        self.pub = self.create_publisher(Twist, \'/cmd_vel\', 10)\n        self.create_subscription(LaserScan, \'/scan\', self.sur_scan, 10)\n\n    def sur_scan(self, scan: LaserScan):\n        n = len(scan.ranges)\n        devant = scan.ranges[n // 2 - 15 : n // 2 + 15]   # ±15 rayons au centre\n        valides = [d for d in devant if scan.range_min &lt; d &lt; scan.range_max]\n        proche = min(valides, default=float(\'inf\'))\n\n        cmd = Twist()\n        seuil = self.get_parameter(\'distance_securite\').value\n        if proche &lt; seuil:\n            cmd.angular.z = 0.6          # tourner sur place\n        else:\n            cmd.linear.x = 0.25          # avancer\n        self.pub.publish(cmd)\n\n\ndef main():\n    rclpy.init()\n    rclpy.spin(Evitement())\n    rclpy.shutdown()</code></pre>'),
+        Warn('Selon le lidar, l\'indice central du tableau ne correspond pas toujours à « devant » : il faut calculer l\'indice à partir de <code>angle_min</code> et <code>angle_increment</code>. C\'est un exemple typique d\'hypothèse cachée à vérifier sur ton matériel.', 'Vérifie tes hypothèses'),
+        H('Les briques indispensables'),
+        Table(['Outil', 'Rôle'], [
+          ['<b>colcon</b>', 'compiler l\'espace de travail (<code>colcon build</code>)'],
+          ['<b>Fichiers launch</b>', 'démarrer plusieurs nœuds avec leurs paramètres en une commande'],
+          ['<b>URDF / xacro</b>', 'décrire le robot : segments, articulations, masses, géométrie, capteurs'],
+          ['<b>tf2</b>', 'gérer tous les repères (map, odom, base_link, laser, camera...) et leurs transformations dans le temps'],
+          ['<b>RViz</b>', 'visualiser en 3D le robot, les scans, les cartes, les trajectoires'],
+          ['<b>Gazebo</b>', 'simulateur physique : tester sans robot réel'],
+          ['<b>Nav2, MoveIt, slam_toolbox</b>', 'briques de navigation, de manipulation et de cartographie prêtes à l\'emploi'],
+        ]),
+        Tip('La convention REP 105 de ROS définit les repères standard d\'un robot mobile : <code>map</code> (fixe, global), <code>odom</code> (continu mais dérive), <code>base_link</code> (le robot). Le SLAM publie map → odom, l\'odométrie publie odom → base_link. Respecter ces conventions, c\'est pouvoir brancher Nav2 sans effort.', 'Les repères standard'),
+        Manual('defi-ros', 'Ton premier pas avec ROS 2', 'Installe ROS 2 (version LTS en cours) sur Ubuntu, ou utilise une image Docker. Lance le tutoriel turtlesim : <code>ros2 run turtlesim turtlesim_node</code> et <code>ros2 run turtlesim turtle_teleop_key</code>. Puis affiche la pose de la tortue avec <code>ros2 topic echo /turtle1/pose</code> et visualise le graphe avec rqt_graph.', 80),
+        Q('q1', 'Quel outil décrit la géométrie, les articulations et les masses d\'un robot ?', ['RViz', 'URDF', 'colcon', 'DDS'], 1, 'L\'URDF (souvent écrit en xacro) est la description du robot utilisée par RViz, Gazebo, MoveIt et tf2.'),
+      ],
+      cards: [['Rôle de tf2 ?', 'Gérer les repères du robot et leurs transformations au cours du temps.'], ['Que décrit un URDF ?', 'Les segments, articulations, masses et géométries du robot.'], ['Compiler un espace de travail ROS 2 ?', 'colcon build.'], ['Repères standard d\'un robot mobile ?', 'map, odom, base_link.']],
+    },
+    {
+      id: 'architecture', title: 'Architecture logicielle et qualité', sub: 'Concevoir un logiciel de robot qui tient', min: 20, level: 2,
+      why: 'Un logiciel de robot mal organisé devient impossible à maintenir et dangereux. Les entreprises recherchent des ingénieurs qui savent structurer, tester et documenter.',
+      objectives: ['Découper un système en couches et en nœuds', 'Tester un logiciel robotique (unitaire, simulation, matériel)', 'Connaître les bonnes pratiques : versionnage, intégration continue, documentation', 'Comprendre les enjeux de cybersécurité'],
+      blocks: [
+        Pipe('Architecture en couches d\'un robot autonome', [
+          ['Matériel et drivers', 'Moteurs, capteurs, bus.', 'ros2_control, drivers', 'Couche la plus proche du métal, souvent en C++ ou sur microcontrôleur.'],
+          ['Contrôle', 'Asservissements, cinématique.', 'contrôleurs à 100–1000 Hz', 'Temps réel, sûr, déterministe.'],
+          ['Perception et estimation', 'Fusion, localisation, détection.', 'EKF, SLAM, vision', null],
+          ['Planification', 'Chemins, trajectoires, évitement.', 'Nav2, MoveIt', null],
+          ['Décision', 'Machine à états, arbre de comportement, planificateur de tâches.', 'mission', 'Peut inclure un modèle de langage pour interpréter des consignes.'],
+          ['Interface', 'Supervision, téléopération, journaux.', 'tableau de bord', 'Jamais dans les boucles critiques.'],
+        ]),
+        H('Tester un robot'),
+        Table(['Niveau', 'Quoi', 'Outils'], [
+          ['Tests unitaires', 'une fonction isolée (cinématique, filtre)', 'pytest, GoogleTest'],
+          ['Tests d\'intégration', 'plusieurs nœuds ensemble', 'launch_testing'],
+          ['Simulation', 'le système complet dans un monde virtuel', 'Gazebo, Isaac Sim'],
+          ['Rejeu de données', 'algorithmes sur des données réelles enregistrées', 'ros2 bag'],
+          ['Matériel dans la boucle', 'le vrai calculateur avec un monde simulé', 'banc de test'],
+          ['Essais terrain', 'le robot réel, avec un protocole et des critères', 'checklists, mesures'],
+        ]),
+        Tip('Mets en place une intégration continue dès le début : à chaque commit, un serveur compile le code et lance les tests automatiquement. Un bug détecté en cinq minutes coûte dix fois moins qu\'un bug découvert sur le robot.', 'Intégration continue'),
+        Warn('Un robot connecté est une cible. Mots de passe par défaut, ports ouverts, topics ROS accessibles à tout le réseau : un attaquant peut prendre le contrôle des moteurs. Active SROS2 (chiffrement et authentification DDS), isole le réseau du robot, mets à jour. La nouvelle réglementation européenne sur les machines intègre désormais la cybersécurité.', 'Cybersécurité'),
+        Q('q1', 'Où ne faut-il jamais placer une boucle de contrôle critique ?', ['Sur le microcontrôleur', 'Dans la couche contrôle temps réel', 'Dans l\'interface web de supervision via Wi-Fi', 'Dans ros2_control'], 2, 'Le Wi-Fi a des latences imprévisibles et peut se couper. Les boucles critiques restent locales.'),
+      ],
+      cards: [['Couches d\'un logiciel de robot ?', 'Drivers, contrôle, perception, planification, décision, interface.'], ['Pourquoi l\'intégration continue ?', 'Détecter automatiquement les régressions à chaque modification.'], ['Sécuriser ROS 2 ?', 'SROS2 (chiffrement, authentification), réseau isolé, mises à jour.']],
+    },
+  ],
+};
