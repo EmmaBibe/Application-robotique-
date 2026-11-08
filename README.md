@@ -66,3 +66,14 @@ Après toute modification, régénérer la liste du cache hors ligne :
 ```bash
 node tools/build-sw.mjs
 ```
+
+## Application Android (APK)
+
+Le dossier `android/` contient une coquille Android minimale qui embarque l'application web et la fait tourner hors connexion. Pour reconstruire l'APK :
+
+```bash
+export ANDROID_HOME=/chemin/vers/android-sdk   # avec platforms;android-34 et build-tools;35.0.0
+./android/build-apk.sh                         # produit android/RoboMaster.apk
+```
+
+Le script n'utilise ni Gradle ni Android Studio : aapt2, javac, d8, zipalign et apksigner suffisent. La clé `android/robomaster.keystore` sert uniquement aux versions de test ; elle est conservée pour que chaque nouvelle APK s'installe par-dessus la précédente sans perdre la progression.

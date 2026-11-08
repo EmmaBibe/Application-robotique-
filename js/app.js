@@ -820,6 +820,6 @@ router();
 onboarding();
 checkBadges();
 
-if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+if ('serviceWorker' in navigator && location.protocol !== 'file:' && !navigator.userAgent.includes('RoboMasterApp')) {
   addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { /* hors ligne indisponible */ }));
 }

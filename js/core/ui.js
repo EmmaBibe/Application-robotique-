@@ -41,6 +41,8 @@ export function confirmBox(text, okLabel = 'Confirmer') {
 }
 
 export function download(name, content, type = 'application/json') {
+  // dans l'application Android, le fichier est écrit dans Téléchargements
+  if (window.RoboMasterNative) { window.RoboMasterNative.saveFile(name, content, type); return; }
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([content], { type }));
   a.download = name;
