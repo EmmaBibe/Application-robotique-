@@ -4,8 +4,8 @@ import { P, H, Tip, Warn, Future, Real, Table, Pipe, Think, Manual, Info } from 
 
 export const GUIDE = [
   H('Ce qu\'on étudie dans un Master de robotique'),
-  P('<p>Les intitulés varient d\'une université à l\'autre, mais on retrouve presque partout le même socle. Le tableau indique où chaque matière est préparée dans l\'application.</p>'),
-  Table(['Matière du Master', 'Contenu typique', 'Préparé dans'], [
+  P('<p>Les intitulés varient d\'une université à l\'autre, mais on retrouve presque partout le même socle. Le tableau indique où l\'application pose les bases de chaque matière.</p><p>Soyons clairs : l\'application te donne les fondations et l\'intuition, elle ne remplace pas les cours du Master. Certains sujets n\'y sont qu\'introduits, en particulier la dynamique des bras (méthodes de Lagrange et de Newton-Euler), la commande non linéaire et l\'optimisation : prévois de les approfondir avec les livres cités plus bas.</p>'),
+  Table(['Matière du Master', 'Contenu typique', 'Bases posées dans'], [
     ['Modélisation des robots', 'MGD, MGI, Denavit-Hartenberg, jacobienne, dynamique (Lagrange, Newton-Euler)', '<a href="#/m/bras">Bras manipulateurs</a>, <a href="#/m/maths">Maths</a>, <a href="#/m/physique">Physique</a>'],
     ['Automatique', 'fonctions de transfert, stabilité, PID, espace d\'état, commande optimale, commande non linéaire', '<a href="#/m/commande">Commande</a>'],
     ['Robotique mobile', 'cinématique, localisation, SLAM, planification, navigation', '<a href="#/m/mobile">Robots mobiles</a>, <a href="#/m/localisation">Localisation</a>, <a href="#/m/planification">Planification</a>'],

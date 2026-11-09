@@ -34,12 +34,13 @@ export const perception = {
         Table(['Caractéristique', 'Définition'], [
           ['Étendue de mesure', 'valeurs min et max mesurables (ex. 2 cm à 4 m)'],
           ['Résolution', 'plus petite variation détectable'],
-          ['Justesse (exactitude)', 'écart moyen entre la mesure et la vraie valeur (erreur systématique, biais)'],
+          ['Justesse', 'écart moyen entre la mesure et la vraie valeur (erreur systématique, biais)'],
           ['Fidélité (répétabilité)', 'dispersion des mesures répétées (erreur aléatoire, bruit)'],
+          ['Exactitude', 'qualité globale : un capteur exact est à la fois juste et fidèle'],
           ['Fréquence', 'nombre de mesures par seconde'],
           ['Latence', 'délai entre l\'événement et la mesure disponible'],
         ]),
-        Tip('Imagine des fléchettes. Toutes groupées mais loin du centre : fidèle mais pas juste (un biais, corrigeable par étalonnage). Éparpillées autour du centre : juste mais pas fidèle (du bruit, à filtrer). Groupées au centre : précis. Un biais se corrige par étalonnage ; le bruit se réduit par filtrage.', 'Justesse et fidélité'),
+        Tip('Imagine des fléchettes. Toutes groupées mais loin du centre : fidèle mais pas juste (un biais, corrigeable par étalonnage). Éparpillées autour du centre : juste mais pas fidèle (du bruit, à filtrer). Groupées au centre : exact (juste et fidèle). Un biais se corrige par étalonnage ; le bruit se réduit par filtrage.', 'Justesse et fidélité'),
         Sim('sensors'),
         Exo('e1', 'Un capteur indique 1,05 m pour une distance vraie de 1,00 m, et 2,10 m pour 2,00 m. L\'erreur est proportionnelle. Quel facteur de correction appliquer à la mesure ?', { answer: 0.952, tol: 0.003, sol: 'Vrai = mesure / 1,05, soit un facteur <b>0,952</b>. C\'est un étalonnage linéaire simple : on mesure des distances connues et on ajuste.' }),
         Code('c1', 'Étalonnage linéaire : à partir de deux points de référence (brut₁, vrai₁) et (brut₂, vrai₂), écris <code>etalonner(b1, v1, b2, v2, brut)</code> qui convertit une valeur brute en valeur vraie par interpolation linéaire.', {
@@ -75,7 +76,7 @@ export const perception = {
           tests: [[[0, 0, 0, 1, 0.01, 0.98], 0], [[0, 1, 0, 1, 0.01, 1], 0.01], [[0, 0, 1, 1, 0.01, 0.98], 0.015708], [[0.1, 0.5, 0.1, 0.99, 0.01, 0.98], 0.104914]],
           sol: 'function complementaire(angle, gyro, accY, accZ, dt, alpha) {\n  const angleAcc = Math.atan2(accY, accZ);\n  return alpha * (angle + gyro * dt) + (1 - alpha) * angleAcc;\n}',
         }),
-        Real('Les centrales inertielles des smartphones coûtent quelques euros et contiennent accéléromètre, gyroscope et souvent magnétomètre dans une puce de 3 mm. Elles exécutent parfois la fusion elles-mêmes. Les centrales de navigation des avions, elles, coûtent des centaines de milliers d\'euros et dérivent de moins d\'un mille nautique par heure.'),
+        Real('Les centrales inertielles des smartphones coûtent quelques euros et contiennent accéléromètre, gyroscope et souvent magnétomètre dans une puce de 3 mm. Elles exécutent parfois la fusion elles-mêmes. Les centrales de navigation des avions, elles, coûtent de l\'ordre de cent mille euros et plus, et dérivent d\'environ un mille nautique par heure seulement.'),
         Future('Les filtres modernes (Madgwick, Mahony, filtre de Kalman étendu) estiment l\'orientation complète en 3D avec des quaternions, et la fusion visuelle-inertielle (caméra + IMU) permet aux casques de réalité virtuelle et aux drones de se localiser sans GPS.'),
         Q('q1', 'Pourquoi ne pas utiliser seulement le gyroscope pour connaître l\'angle ?', ['Il est trop lent', 'Son intégration dérive avec le temps', 'Il ne mesure pas les rotations', 'Il est trop cher'], 1, 'Un petit biais de 0,1°/s devient 6° d\'erreur en une minute.'),
         Q('q2', 'Dans le filtre complémentaire avec α = 0,98, quel capteur a le plus de poids à chaque pas ?', ['L\'accéléromètre', 'Le gyroscope', 'Ils sont égaux', 'Le magnétomètre'], 1, '98 % pour l\'estimation propagée par le gyroscope, 2 % pour la correction de l\'accéléromètre.'),
@@ -84,7 +85,7 @@ export const perception = {
     },
     {
       id: 'kalman', title: 'Le filtre de Kalman', sub: 'La meilleure estimation possible', min: 35, level: 3,
-      why: 'Inventé pour le programme Apollo, le filtre de Kalman est l\'algorithme d\'estimation le plus utilisé au monde : GPS, avions, drones, voitures autonomes, robots. Le comprendre est un passage obligé du Master.',
+      why: 'Publié par Rudolf Kalman en 1960 et rendu célèbre par la navigation des missions Apollo, le filtre de Kalman est l\'un des algorithmes d\'estimation les plus utilisés : GPS, avions, drones, voitures autonomes, robots. Le comprendre est un passage obligé du Master.',
       objectives: ['Comprendre les deux étapes prédiction et correction', 'Interpréter le gain de Kalman', 'Régler Q et R', 'Implémenter un Kalman 1D'],
       blocks: [
         P('<p>Le filtre de Kalman maintient deux choses : une <strong>estimation</strong> x̂ et son <strong>incertitude</strong> P (une variance). À chaque pas :</p>'),
@@ -163,7 +164,7 @@ export const vision = {
         P('<p>Une <strong>convolution</strong> fait glisser un petit noyau (souvent 3×3) sur l\'image. En chaque pixel, on multiplie les voisins par les coefficients du noyau et on additionne. Selon les coefficients : flou, netteté, détection de contours.</p>'),
         Sim('vision', { title: 'Convolution, contours et seuillage' }),
         Pipe('Pipeline : trouver une pièce sur un tapis roulant', [
-          ['Acquisition', 'La caméra capture l\'image.', '640 × 480, couleur', 'Éclairage contrôlé : en industrie, la moitié du travail de vision, c\'est l\'éclairage.'],
+          ['Acquisition', 'La caméra capture l\'image.', '640 × 480, couleur', 'Éclairage contrôlé : en industrie, une grande partie de la réussite d\'un système de vision tient à l\'éclairage.'],
           ['Prétraitement', 'Conversion en gris et flou léger.', 'flou gaussien 5×5', 'Le flou supprime le bruit qui créerait de faux contours.'],
           ['Segmentation', 'Seuillage : pièce claire sur fond sombre.', 'pixels > 120 → blanc', 'Le seuil d\'Otsu le choisit automatiquement à partir de l\'histogramme.'],
           ['Morphologie', 'Érosion puis dilatation pour nettoyer.', 'suppression des petits points', 'Opérations qui « grignotent » puis « regonflent » les formes.'],
@@ -200,7 +201,7 @@ export const vision = {
         H('La vision 3D'),
         P('<p>Avec <strong>deux caméras</strong> séparées d\'une distance b (la base), un même point apparaît décalé d\'une disparité d entre les deux images. La profondeur s\'en déduit :</p>'),
         F('Z = f · b / d', 'plus le point est proche, plus la disparité est grande'),
-        P('<p>Les caméras de profondeur et les lidars 3D produisent des <strong>nuages de points</strong> : des millions de points (x, y, z). La bibliothèque PCL et Open3D permettent de les filtrer, de détecter des plans (sol, tables), de segmenter des objets et de les recaler entre eux (algorithme ICP).</p>'),
+        P('<p>Les caméras de profondeur et les lidars 3D produisent des <strong>nuages de points</strong> : des millions de points (x, y, z). Les bibliothèques PCL et Open3D permettent de les filtrer, de détecter des plans (sol, tables), de segmenter des objets et de les recaler entre eux (algorithme ICP).</p>'),
         Exo('e1', 'Caméra stéréo : f = 700 px, base b = 0,12 m, disparité mesurée d = 21 px. Profondeur ?', { answer: 4, unit: 'm', sol: 'Z = 700 × 0,12 / 21 = <b>4 m</b>.' }),
         Future('Les modèles de fondation pour la vision (segmentation universelle, modèles vision-langage) permettent de détecter un objet décrit en langage naturel (« la tasse bleue ébréchée ») sans entraînement spécifique. Ils commencent à remplacer les détecteurs entraînés pour une seule tâche.'),
         Q('q1', 'En vision stéréo, que se passe-t-il pour un point très lointain ?', ['La disparité devient très grande', 'La disparité tend vers zéro et la mesure de profondeur devient imprécise', 'Rien ne change', 'Il disparaît'], 1, 'Z = f·b/d : pour Z grand, d est petit, et une erreur d\'un pixel change énormément Z. Pour voir loin, on écarte les caméras.'),
@@ -222,7 +223,7 @@ export const localisation = {
   lessons: [
     {
       id: 'particulaire', title: 'Localisation probabiliste et filtre particulaire', sub: 'Mille hypothèses valent mieux qu\'une', min: 30, level: 3,
-      why: 'Quand un robot est perdu, il peut être à plusieurs endroits à la fois. Le filtre particulaire maintient toutes ces hypothèses et les fait converger. C\'est l\'algorithme de localisation le plus utilisé en intérieur (AMCL dans ROS).',
+      why: 'Quand un robot est perdu, il peut être à plusieurs endroits à la fois. Le filtre particulaire maintient toutes ces hypothèses et les fait converger. C\'est l\'une des méthodes de localisation les plus utilisées en intérieur (AMCL dans ROS).',
       objectives: ['Formuler la localisation comme un problème d\'estimation', 'Comprendre les étapes du filtre particulaire', 'Comprendre le rééchantillonnage', 'Savoir pourquoi on ajoute des particules aléatoires'],
       blocks: [
         P('<p>Au lieu d\'une seule estimation, on maintient un nuage de <strong>particules</strong> : chacune est une hypothèse de position. Là où il y a beaucoup de particules, le robot a de bonnes chances d\'être.</p>'),
@@ -236,7 +237,7 @@ export const localisation = {
         Sim('particles'),
         P('<p>Observe : au départ, les particules sont partout. Après quelques portes, plusieurs groupes subsistent (le couloir a des portes à des endroits similaires). Puis un seul groupe survit. Clique sur « Kidnapper » : le robot est téléporté, les particules ne correspondent plus... et le petit pourcentage de particules aléatoires permet de se remettre.</p>'),
         Defi('defi-particules', 'Localisation économe', 'Réduis le nombre de particules à 150 ou moins, et fais en sorte que le robot se localise (erreur < 3, certitude > 90 %) de façon stable. Un robot embarqué n\'a pas de puissance de calcul illimitée.', 'particles', { goal: true }),
-        Code('c1', 'Écris <code>normaliser(poids)</code> qui divise chaque poids par la somme totale (pour que la somme fasse 1), puis <code>neff</code> n\'est pas demandé. Les tests vérifient la normalisation.', {
+        Code('c1', 'Écris <code>normaliser(poids)</code> qui divise chaque poids par la somme totale, pour que la somme fasse 1. C\'est l\'étape qui suit la pondération dans un filtre particulaire.', {
           fn: 'normaliser',
           starter: 'function normaliser(poids) {\n  const somme = 0; // à calculer\n  return poids.map(w => w / somme);\n}',
           tests: [[[[1, 1, 2]], [0.25, 0.25, 0.5]], [[[0.2, 0.8]], [0.2, 0.8]], [[[5]], [1]]],
@@ -245,7 +246,7 @@ export const localisation = {
         Real('Dans ROS 2, AMCL (Adaptive Monte Carlo Localization) localise un robot sur une carte connue avec un lidar 2D. « Adaptatif » : il ajuste le nombre de particules, beaucoup quand le robot est perdu, peu quand il est sûr de lui.'),
         Q('q1', 'Pourquoi le filtre particulaire gère-t-il mieux qu\'un Kalman le robot complètement perdu ?', ['Il est plus rapide', 'Il peut représenter plusieurs hypothèses à la fois, pas une seule gaussienne', 'Il n\'a pas besoin de capteur', 'Il est plus précis dans tous les cas'], 1, 'Un Kalman représente une seule bosse gaussienne. Le nuage de particules peut avoir plusieurs groupes.'),
       ],
-      cards: [['Que représente une particule ?', 'Une hypothèse de position du robot.'], ['Les étapes du filtre particulaire ?', 'Prédiction, pondération par la mesure, rééchantillonnage, estimation.'], ['Pourquoi ajouter quelques particules aléatoires ?', 'Pour pouvoir se remettre d\'un kidnapping ou d\'une erreur.'], ['Nom du filtre particulaire de ROS ?', 'AMCL.']],
+      cards: [['Que représente une particule ?', 'Une hypothèse de position du robot.'], ['Les étapes du filtre particulaire ?', 'Prédiction, pondération par la mesure, rééchantillonnage, estimation.'], ['Pourquoi ajouter quelques particules aléatoires ?', 'Pour pouvoir se remettre d\'un kidnapping ou d\'une erreur.'], ['Implémentation de filtre particulaire la plus connue dans ROS ?', 'AMCL (Adaptive Monte Carlo Localization).']],
     },
     {
       id: 'cartes', title: 'Représenter le monde : les cartes', sub: 'Grilles d\'occupation et alternatives', min: 20, level: 2,
@@ -262,7 +263,7 @@ export const localisation = {
           ['Carte sémantique', 'objets et leur sens (« table », « porte »)', 'robots domestiques, interaction'],
           ['Représentations neuronales (NeRF, Gaussian splatting)', 'scène 3D encodée par un réseau ou des gaussiennes', 'recherche, jumeaux numériques'],
         ]),
-        Code('c1', 'Mise à jour en log-odds : écris <code>majCellule(l, occupe, lOcc, lLibre)</code> qui ajoute lOcc si la mesure dit « occupé », lLibre (négatif) sinon, et borne le résultat entre −5 et 5. Puis <code>versProba</code> n\'est pas demandé.', {
+        Code('c1', 'Mise à jour en log-odds : écris <code>majCellule(l, occupe, lOcc, lLibre)</code> qui ajoute lOcc si la mesure dit « occupé », lLibre (négatif) sinon, et borne le résultat entre −5 et 5.', {
           fn: 'majCellule',
           starter: 'function majCellule(l, occupe, lOcc, lLibre) {\n  return l;\n}',
           tests: [[[0, true, 0.85, -0.4], 0.85], [[0, false, 0.85, -0.4], -0.4], [[4.8, true, 0.85, -0.4], 5], [[-4.9, false, 0.85, -0.4], -5]],
@@ -284,15 +285,15 @@ export const localisation = {
           ['Arêtes d\'odométrie', 'Entre deux poses successives, une contrainte : « je me suis déplacé d\'environ 1 m ».', 'contrainte souple', 'Chaque contrainte a une incertitude.'],
           ['Mise en correspondance', 'On compare le scan actuel au précédent pour affiner le déplacement.', 'scan matching (ICP)', 'Bien plus précis que l\'odométrie des roues.'],
           ['Fermeture de boucle', 'Le robot reconnaît un endroit déjà visité !', 'pose 87 ≈ pose 3', 'C\'est l\'information la plus précieuse : elle révèle toute la dérive accumulée.'],
-          ['Optimisation', 'On ajuste toutes les poses pour satisfaire au mieux toutes les contraintes.', 'moindres carrés', 'Des bibliothèques comme g2o, GTSAM ou Ceres le font en quelques millisecondes.'],
+          ['Optimisation', 'On ajuste toutes les poses pour satisfaire au mieux toutes les contraintes.', 'moindres carrés', 'Des bibliothèques comme g2o, GTSAM ou Ceres le font, souvent en quelques millisecondes pour des graphes de taille courante.'],
           ['Carte', 'On reconstruit la carte avec les poses corrigées.', 'carte cohérente', 'La carte « se redresse » d\'un coup après une fermeture de boucle.'],
         ]),
         Table(['Famille', 'Outils', 'Capteurs'], [
           ['SLAM lidar 2D', 'slam_toolbox (ROS 2), Cartographer, GMapping (historique)', 'lidar 2D + odométrie'],
-          ['SLAM lidar 3D', 'LIO-SAM, FAST-LIO, KISS-ICP', 'lidar 3D + IMU'],
+          ['SLAM et odométrie lidar 3D', 'LIO-SAM, FAST-LIO, KISS-ICP (odométrie seule)', 'lidar 3D, souvent avec IMU'],
           ['SLAM visuel', 'ORB-SLAM3, RTAB-Map, VINS-Fusion', 'caméra mono, stéréo, RGB-D, + IMU'],
         ]),
-        Real('Les robots aspirateurs haut de gamme font du SLAM lidar ou visuel en temps réel avec un processeur de quelques watts. Les casques de réalité mixte aussi. Les voitures autonomes utilisent des cartes construites à l\'avance par SLAM, puis se localisent dessus.'),
+        Real('Les robots aspirateurs haut de gamme font du SLAM lidar ou visuel en temps réel avec un processeur de quelques watts. Les casques de réalité mixte aussi. Beaucoup de véhicules autonomes utilisent des cartes construites à l\'avance par SLAM, puis se localisent dessus.'),
         Future('Le SLAM sémantique ajoute du sens à la carte (« ceci est une cuisine, ceci une porte ouverte »), et les approches à base de champs neuronaux reconstruisent des scènes 3D photoréalistes. L\'objectif : des robots qui comprennent leur environnement comme nous, pas seulement sa géométrie.'),
         Q('q1', 'Qu\'est-ce que la fermeture de boucle en SLAM ?', ['Quand le robot s\'arrête', 'Quand le robot reconnaît un lieu déjà visité, ce qui permet de corriger la dérive accumulée', 'Une boucle infinie dans le code', 'Quand la batterie est vide'], 1, 'Reconnaître un lieu connu fournit une contrainte qui relie deux moments éloignés de la trajectoire.'),
         Think('t1', 'Ton robot fait du SLAM dans un long couloir parfaitement identique sur 50 m (murs lisses, aucune porte). Quels problèmes vois-tu ? Comment les résoudre ?', 'Le lidar voit toujours la même chose : impossible d\'estimer le déplacement le long du couloir par mise en correspondance (dégénérescence). Solutions : faire confiance à l\'odométrie et à l\'IMU dans ce cas, ajouter une caméra qui voit des textures, des amers artificiels (marqueurs, balises), ou des capteurs d\'une autre nature (Wi-Fi, UWB).'),
@@ -326,7 +327,7 @@ export const planification = {
         ]),
         F('f(n) = g(n) + h(n)', 'g : coût depuis le départ ; h : estimation du coût jusqu\'à l\'arrivée'),
         Sim('pathplan'),
-        Tip('Une heuristique est <b>admissible</b> si elle ne surestime jamais le vrai coût. La distance à vol d\'oiseau l\'est toujours. Avec une heuristique admissible, A* trouve le chemin optimal. Si tu la multiplies par un poids > 1 (essaie le curseur), A* va plus vite mais le chemin peut être plus long : c\'est le « weighted A* », un compromis très utilisé.', 'L\'heuristique'),
+        Tip('Une heuristique est <b>admissible</b> si elle ne surestime jamais le vrai coût. La distance à vol d\'oiseau l\'est dès que chaque déplacement coûte au moins sa longueur, ce qui est le cas ici. Avec une heuristique admissible, A* trouve le chemin optimal. Si tu la multiplies par un poids > 1 (essaie le curseur), A* va plus vite mais le chemin peut être plus long : c\'est le « weighted A* », un compromis très utilisé.', 'L\'heuristique'),
         Defi('defi-labyrinthe', 'Piéger l\'heuristique', 'Dessine des murs qui obligent A* (poids d\'heuristique ≤ 1) à explorer au moins 300 cases avant de trouver l\'arrivée, en partant d\'une carte vide, tout en laissant un chemin possible. Un vrai défi de créativité : comprends comment A* pense pour le tromper.', 'pathplan', { goal: 'maze' }, 80),
         Code('c1', 'Implémente un BFS sur grille. <code>bfs(grille, depart, arrivee)</code> : grille = tableau de chaînes ("." libre, "#" mur), depart et arrivee = [ligne, colonne]. Renvoie le nombre minimal de pas (4-connexité), ou -1 s\'il n\'y a pas de chemin.', {
           fn: 'bfs',
@@ -356,7 +357,7 @@ export const planification = {
         ]),
         Table(['Méthode', 'Principe', 'Atout'], [
           ['RRT', 'arbre qui pousse aléatoirement depuis le départ', 'simple, rapide pour une requête unique'],
-          ['RRT*', 'RRT qui recâble l\'arbre pour raccourcir', 'converge vers le chemin optimal'],
+          ['RRT*', 'RRT qui recâble l\'arbre pour raccourcir', 'tend vers le chemin optimal à mesure qu\'on ajoute des échantillons'],
           ['PRM', 'réseau de configurations aléatoires reliées, construit une fois', 'réutilisable pour de nombreuses requêtes'],
           ['Optimisation de trajectoire (CHOMP, TrajOpt)', 'déformer une trajectoire initiale pour l\'éloigner des obstacles', 'trajectoires lisses'],
         ]),
@@ -387,7 +388,7 @@ export const planification = {
           tests: [[[[{ v: 0.5, w: 0, distObstacle: 0.1, ecartChemin: 0 }, { v: 0.3, w: 0.5, distObstacle: 1, ecartChemin: 0.1 }]], [0.3, 0.5]], [[[{ v: 0.1, w: 0, distObstacle: 0.05, ecartChemin: 0 }]], [0, 0]], [[[{ v: 0.5, w: 0, distObstacle: 2, ecartChemin: 0.4 }, { v: 0.4, w: 0.2, distObstacle: 1.5, ecartChemin: 0 }]], [0.4, 0.2]]],
           sol: 'function meilleureCommande(cs) {\n  let best = null, bs = -Infinity;\n  for (const c of cs) {\n    if (c.distObstacle < 0.2) continue;\n    const s = c.v + 0.5 * c.distObstacle - 2 * c.ecartChemin;\n    if (s > bs) { bs = s; best = c; }\n  }\n  return best ? [best.v, best.w] : [0, 0];\n}',
         }),
-        Real('Nav2, la pile de navigation de ROS 2, orchestre tout cela avec un arbre de comportement : calculer le chemin global, le suivre avec un contrôleur local, et si le robot est bloqué, déclencher des comportements de récupération. Elle tourne sur des milliers de robots en entrepôt, hôpital et service.'),
+        Real('Nav2, la pile de navigation de ROS 2, orchestre tout cela avec un arbre de comportement : calculer le chemin global, le suivre avec un contrôleur local, et si le robot est bloqué, déclencher des comportements de récupération. Elle est utilisée sur de nombreux robots, en entrepôt, à l\'hôpital et dans les services.'),
         Q('q1', 'Pourquoi séparer planificateur global et contrôleur local ?', ['Pour économiser de la mémoire', 'Le global est lent mais voit loin ; le local est rapide et réagit aux obstacles imprévus', 'C\'est une obligation légale', 'Pour utiliser deux processeurs'], 1, 'Chacun fait ce qu\'il fait bien, à la fréquence adaptée.'),
       ],
       cards: [['Global vs local en navigation ?', 'Global : chemin complet, lent. Local : suivi et évitement réactif, rapide.'], ['Principe du DWA ?', 'Simuler les vitesses atteignables, écarter les collisions, choisir la mieux notée.'], ['Défaut des champs de potentiel ?', 'Les minima locaux.'], ['Pile de navigation de ROS 2 ?', 'Nav2.']],

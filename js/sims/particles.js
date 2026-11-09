@@ -20,7 +20,7 @@ export default function particles(root, opts = {}, api = {}) {
   button(bb2, 'Réinitialiser', init);
   button(bb2, 'Kidnapper le robot', () => { robot = Math.random() * LEN; });
   const ro = readout(f.ctrl, [['z', 'Capteur'], ['est', 'Position estimée'], ['real', 'Position réelle'], ['err', 'Erreur'], ['neff', 'Particules efficaces']]);
-  note(f.ctrl, 'Au départ, les particules (hypothèses) sont partout. À chaque pas : on les déplace comme le robot (prédiction), on les pondère selon ce que voit le capteur (correction), puis on tire au sort les plus probables (rééchantillonnage).');
+  note(f.ctrl, 'Au départ, les particules (hypothèses) sont partout. À chaque pas : on les déplace comme le robot (prédiction), on les pondère selon ce que voit le capteur (correction), puis on tire au sort un nouveau nuage en favorisant les plus probables (rééchantillonnage).');
 
   const isDoor = x => { x = ((x % LEN) + LEN) % LEN; return doors.some(([a, b]) => x >= a && x <= b); };
   function init() {

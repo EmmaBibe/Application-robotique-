@@ -60,7 +60,7 @@ export default function motion(root, opts = {}, api = {}) {
     for (let i = 0; i <= D; i++) { const xx = rx + (i / D) * rw; ctx.fillStyle = th.faint; ctx.fillRect(xx, ry + 24, 1, 6); text(ctx, `${i}`, xx, ry + 42, { color: th.faint, size: 10, align: 'center' }); }
     const cx = rx + (s.x / D) * rw;
     roundRect(ctx, cx - 22, ry - 4, 44, 22, 5); ctx.fillStyle = th.accent2; ctx.fill();
-    ctx.fillStyle = th.text; ctx.beginPath(); ctx.arc(cx - 12, ry + 20, 5, 0, 7); ctx.arc(cx + 12, ry + 20, 5, 0, 7); ctx.fill();
+    ctx.fillStyle = th.text; ctx.beginPath(); ctx.arc(cx - 12, ry + 20, 5, 0, 7); ctx.moveTo(cx + 17, ry + 20); ctx.arc(cx + 12, ry + 20, 5, 0, 7); ctx.fill();
     ctx.fillStyle = th.warn; ctx.fillRect(rx + rw - 2, ry - 12, 4, 34);
     // courbes
     const N = 160, xs = [], ys = { x: [], v: [], a: [] };

@@ -39,7 +39,7 @@ export default function rosgraph(root, opts = {}) {
   echo.style.margin = '0';
   echo.style.fontSize = '.78rem';
   f.ctrl.appendChild(echo);
-  note(f.ctrl, 'Touche une étiquette de topic pour voir un message type (<code>ros2 topic echo</code>). Touche un nœud pour le tuer : ses abonnés ne reçoivent plus rien et passent en orange, puis en rouge. C\'est pour ça qu\'on surveille les « heartbeats » en vrai.');
+  note(f.ctrl, 'Touche une étiquette de topic pour voir un message type (<code>ros2 topic echo</code>). Touche un nœud pour le tuer : ses abonnés ne reçoivent plus rien et passent en orange, puis en rouge. C\'est pour ça qu\'en vrai on surveille la « vivacité » (liveliness) des nœuds et l\'âge des derniers messages.');
 
   const cv = canvas(f.stage);
   const nodeAt = (p, W, H) => Object.entries(nodes).find(([, n]) => Math.abs(p.x - n.x * W) < (W < 620 ? 48 : 62) && Math.abs(p.y - n.y * H) < 16);

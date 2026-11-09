@@ -2,6 +2,17 @@ import { frame, canvas, theme, text, circle, slider, readout, segmented, loop, f
 
 // Loi d'Ohm en vrai : une pile, une résistance, une LED. Le courant circule
 // sous forme de particules dont la vitesse suit l'intensité.
+const COLORS = ['#000000', '#8b4513', '#e02020', '#ff8c00', '#f2d600', '#1fa43a', '#1f5fd6', '#8a2be2', '#808080', '#ffffff'];
+function resistorBands(R) {
+  // R = abc × 10^m, avec abc entre 100 et 999
+  let m = Math.floor(Math.log10(R)) - 2;
+  let abc = Math.round(R / 10 ** m);
+  if (abc >= 1000) { abc = Math.round(abc / 10); m++; }
+  const d = String(abc).split('').map(Number);
+  const mult = m === -1 ? '#d4af37' : m === -2 ? '#c0c0c0' : COLORS[m];
+  return [COLORS[d[0]], COLORS[d[1]], COLORS[d[2]], mult, '#8b4513'];
+}
+
 export default function ohm(root, opts = {}, api = {}) {
   const f = frame(root, { title: opts.title || 'Circuit : pile, résistance, LED', tag: 'Électronique', height: 340 });
   let mode = opts.mode || 'led';
@@ -76,8 +87,8 @@ export default function ohm(root, opts = {}, api = {}) {
     const rx = (x0 + x1) / 2 - 40;
     ctx.fillStyle = th.bg; ctx.fillRect(rx - 4, y0 - 14, 88, 28);
     roundRect(ctx, rx, y0 - 11, 80, 22, 6); ctx.fillStyle = '#c9a36b'; ctx.fill();
-    const bands = [['#8b4513', '#ff0000', '#ff8c00'], ['#000', '#ff8c00', '#ffd700']][0];
-    bands.forEach((col, i) => { ctx.fillStyle = col; ctx.fillRect(rx + 16 + i * 14, y0 - 11, 6, 22); });
+    // code couleur à 5 anneaux : 3 chiffres significatifs, multiplicateur, tolérance (1 %)
+    resistorBands(R).forEach((col, i) => { ctx.fillStyle = col; ctx.fillRect(rx + 12 + i * 12 + (i === 4 ? 8 : 0), y0 - 11, 6, 22); });
     text(ctx, `R${mode === 'div' ? '1' : ''} = ${R} Ω`, rx + 40, y0 - 20, { color: th.text, align: 'center', size: 12, weight: 700 });
     // composant à droite
     const cy = (y0 + y1) / 2;

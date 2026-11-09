@@ -20,7 +20,7 @@ export default function sensors(root, opts = {}) {
   checkbox(f.ctrl, { label: 'Le robot tourne sur lui-même', value: spin, onChange: v => { spin = v; } });
   checkbox(f.ctrl, { label: 'Nuage de points (vue du robot)', value: showCloud, onChange: v => { showCloud = v; } });
   const ro = readout(f.ctrl, [['min', 'Obstacle le plus proche'], ['spec', 'Caractéristiques']]);
-  note(f.ctrl, 'Déplace le robot en le faisant glisser. Chaque capteur a ses angles morts : un ultrason a un cône large et flou, un infrarouge est précis mais court, un lidar voit tout autour mais coûte cher.');
+  note(f.ctrl, 'Déplace le robot en le faisant glisser. Chaque capteur a ses angles morts : un ultrason a un cône large et flou, un infrarouge est précis mais court, un lidar voit tout autour mais coûte plus cher et peine avec le verre.');
 
   function cast(ox, oy, a, maxR) {
     const dx = Math.cos(a), dy = Math.sin(a);

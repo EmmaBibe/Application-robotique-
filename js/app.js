@@ -129,12 +129,12 @@ const QUOTES = [
   ['Ce n\'est pas parce que c\'est difficile que nous n\'osons pas, c\'est parce que nous n\'osons pas que c\'est difficile.', 'Sénèque'],
   ['La théorie, c\'est quand on sait tout et que rien ne fonctionne. La pratique, c\'est quand tout fonctionne et que personne ne sait pourquoi. Ici, on réunit les deux.', 'adage d\'atelier'],
   ['Le meilleur moyen de prédire l\'avenir, c\'est de l\'inventer.', 'Alan Kay'],
-  ['Rien ne se perd, rien ne se crée, tout se transforme.', 'Lavoisier'],
+  ['Rien ne se perd, rien ne se crée, tout se transforme.', 'd\'après Lavoisier'],
   ['Tout ce qui peut mal tourner tournera mal. Alors prévois-le.', 'loi de Murphy, version ingénieur'],
   ['L\'imagination est plus importante que le savoir.', 'Albert Einstein'],
-  ['Un expert est quelqu\'un qui a commis toutes les erreurs possibles dans un domaine très restreint.', 'Niels Bohr'],
+  ['Un expert est quelqu\'un qui a commis toutes les erreurs possibles dans un domaine très restreint.', 'attribuée à Niels Bohr'],
   ['Fais simple, mais pas plus simple.', 'principe attribué à Einstein'],
-  ['Le succès, c\'est d\'aller d\'échec en échec sans perdre son enthousiasme.', 'Winston Churchill'],
+  ['Le succès, c\'est d\'aller d\'échec en échec sans perdre son enthousiasme.', 'souvent attribuée à Winston Churchill'],
 ];
 const dayIndex = () => Math.floor(Date.now() / 864e5);
 

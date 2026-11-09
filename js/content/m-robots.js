@@ -133,21 +133,21 @@ export const bras = {
         P('<p>Par le théorème d\'Al-Kashi dans le triangle épaule-coude-pince :</p>'),
         F('cos θ₂ = (x² + y² − L₁² − L₂²) / (2 L₁ L₂)'),
         F('θ₂ = ± acos(…) &nbsp;&nbsp;&nbsp; θ₁ = atan2(y, x) − atan2(L₂ sin θ₂, L₁ + L₂ cos θ₂)'),
-        P('<ul><li>Si |cos θ₂| > 1 : le point est hors d\'atteinte.</li><li>Le signe ± donne deux solutions : <strong>coude en haut</strong> ou <strong>coude en bas</strong>. Le robot choisit selon les obstacles, les butées ou la configuration la plus proche de l\'actuelle.</li></ul>'),
+        P('<ul><li>Si |cos θ₂| > 1 : le point est hors d\'atteinte.</li><li>Le signe ± donne deux solutions : <strong>coude en haut</strong> (θ₂ < 0 pour une cible devant le robot) ou <strong>coude en bas</strong> (θ₂ > 0). Le robot choisit selon les obstacles, les butées ou la configuration la plus proche de l\'actuelle.</li></ul>'),
         Sim('arm2r', { mode: 'inverse', title: 'Bras 2 axes : modèle inverse' }),
         Defi('defi-fk', 'À l\'ancienne', 'En mode direct, sans le modèle inverse, amène la pince sur la cible jaune à 3 cm près, uniquement avec les curseurs d\'angle. Tu comprendras pourquoi on a inventé le modèle inverse.', 'arm2r', { goal: 'fk', mode: 'direct' }),
-        Code('c1', 'Écris <code>mgi2R(L1, L2, x, y, coudeHaut)</code> qui renvoie <code>[t1, t2]</code> en radians, ou <code>null</code> si le point est inatteignable. coudeHaut = true donne θ₂ positif.', {
+        Code('c1', 'Écris <code>mgi2R(L1, L2, x, y, coudeHaut)</code> qui renvoie <code>[t1, t2]</code> en radians, ou <code>null</code> si le point est inatteignable. Convention : coudeHaut = true donne θ₂ négatif (pour une cible devant le robot, le coude passe alors au-dessus de la ligne épaule-pince).', {
           fn: 'mgi2R',
-          starter: 'function mgi2R(L1, L2, x, y, coudeHaut) {\n  const c2 = (x * x + y * y - L1 * L1 - L2 * L2) / (2 * L1 * L2);\n  if (c2 < -1 || c2 > 1) return null;\n  // s2 = ± racine(1 - c2²) selon coudeHaut\n  // t2 = atan2(s2, c2)\n  // t1 = atan2(y, x) - atan2(L2*s2, L1 + L2*c2)\n  return [0, 0];\n}',
-          tests: [[[1, 1, 2, 0, true], [0, 0]], [[1, 1, 3, 0, true], null], [[1, 1, 1, 1, true], [0, 1.570796]], [[1, 1, 1, 1, false], [1.570796, -1.570796]]],
-          sol: 'function mgi2R(L1, L2, x, y, haut) {\n  const c2 = (x * x + y * y - L1 * L1 - L2 * L2) / (2 * L1 * L2);\n  if (c2 < -1 || c2 > 1) return null;\n  const s2 = (haut ? 1 : -1) * Math.sqrt(1 - c2 * c2);\n  const t2 = Math.atan2(s2, c2);\n  const t1 = Math.atan2(y, x) - Math.atan2(L2 * s2, L1 + L2 * c2);\n  return [t1, t2];\n}',
+          starter: 'function mgi2R(L1, L2, x, y, coudeHaut) {\n  const c2 = (x * x + y * y - L1 * L1 - L2 * L2) / (2 * L1 * L2);\n  if (c2 < -1 || c2 > 1) return null;\n  // s2 = -racine(1 - c2²) si coudeHaut, +racine sinon\n  // t2 = atan2(s2, c2)\n  // t1 = atan2(y, x) - atan2(L2*s2, L1 + L2*c2)\n  return [0, 0];\n}',
+          tests: [[[1, 1, 2, 0, true], [0, 0]], [[1, 1, 3, 0, true], null], [[1, 1, 1, 1, true], [1.570796, -1.570796]], [[1, 1, 1, 1, false], [0, 1.570796]]],
+          sol: 'function mgi2R(L1, L2, x, y, haut) {\n  const c2 = (x * x + y * y - L1 * L1 - L2 * L2) / (2 * L1 * L2);\n  if (c2 < -1 || c2 > 1) return null;\n  const s2 = (haut ? -1 : 1) * Math.sqrt(1 - c2 * c2);\n  const t2 = Math.atan2(s2, c2);\n  const t1 = Math.atan2(y, x) - Math.atan2(L2 * s2, L1 + L2 * c2);\n  return [t1, t2];\n}',
         }),
         H('Et pour 6 axes ?'),
         P('<p>Pour certains bras (poignet « sphérique », dont les trois derniers axes se croisent en un point), on sépare position et orientation et on trouve une solution analytique : jusqu\'à 8 solutions. Pour les autres, on utilise des <strong>méthodes numériques</strong> itératives basées sur la jacobienne (leçon suivante) : on part d\'une estimation et on corrige petit à petit. Des bibliothèques comme KDL, TRAC-IK ou celles intégrées à MoveIt le font pour toi.</p>'),
         Q('q1', 'Combien de solutions a le MGI d\'un bras 2R pour un point strictement à l\'intérieur de l\'espace de travail ?', ['0', '1', '2', 'une infinité'], 2, 'Coude en haut et coude en bas.'),
         Q('q2', 'Si cos θ₂ calculé vaut 1,3, que se passe-t-il ?', ['θ₂ = 0', 'Le point est hors d\'atteinte', 'Il faut prendre la valeur absolue', 'Le robot est en singularité'], 1, 'Un cosinus ne peut dépasser 1 : le point est trop loin.'),
       ],
-      cards: [['Formule de cos θ₂ dans le MGI 2R ?', 'cos θ₂ = (x² + y² − L₁² − L₂²) / (2L₁L₂).'], ['Combien de solutions au MGI 2R en général ?', 'Deux (coude haut, coude bas), zéro si hors de portée.'], ['Comment résout-on le MGI d\'un bras complexe ?', 'Analytiquement si la structure le permet, sinon numériquement avec la jacobienne.']],
+      cards: [['Formule de cos θ₂ dans le MGI 2R ?', 'cos θ₂ = (x² + y² − L₁² − L₂²) / (2L₁L₂).'], ['Combien de solutions au MGI 2R en général ?', 'Deux (coude haut, coude bas), une seule à la limite de l\'espace de travail, zéro si hors de portée.'], ['Comment résout-on le MGI d\'un bras complexe ?', 'Analytiquement si la structure le permet, sinon numériquement avec la jacobienne.']],
     },
     {
       id: 'dh-jacobienne', title: 'Denavit-Hartenberg, jacobienne et singularités', sub: 'Les outils du Master', min: 30, level: 3,
@@ -174,7 +174,7 @@ export const bras = {
         H('Les singularités'),
         P('<p>Quand le déterminant de J s\'annule, le robot est en <strong>singularité</strong> : il perd la capacité de bouger dans certaines directions, et J⁻¹ explose. Concrètement, une petite vitesse demandée à l\'outil exige des vitesses articulaires infinies. Pour le 2R : det J = L₁L₂ sin θ₂, nul quand le bras est tendu (θ₂ = 0) ou replié (θ₂ = π).</p>'),
         Danger('Près d\'une singularité, un bras industriel commandé en cartésien peut faire des mouvements articulaires brusques et dangereux. Les contrôleurs détectent ces zones et ralentissent ou s\'arrêtent. C\'est pour ça qu\'on évite de programmer des trajectoires qui traversent des singularités.'),
-        Code('c1', 'Écris <code>detJ2R(L1, L2, t2)</code> qui renvoie le déterminant de la jacobienne du bras 2R, puis <code>estSingulier</code> n\'est pas demandé : vérifie juste la formule.', {
+        Code('c1', 'Écris <code>detJ2R(L1, L2, t2)</code> qui renvoie le déterminant de la jacobienne du bras 2R. Vérifie avec les tests qu\'il s\'annule bras tendu.', {
           fn: 'detJ2R',
           starter: 'function detJ2R(L1, L2, t2) {\n  return 0;\n}',
           tests: [[[1, 1, 0], 0], [[1, 0.5, Math.PI / 2], 0.5], [[0.8, 0.6, Math.PI / 6], 0.24]],
@@ -190,7 +190,7 @@ export const bras = {
       why: 'Un robot qui saute brutalement d\'une position à l\'autre secoue sa charge, use ses réducteurs et peut être dangereux. La génération de trajectoire crée des mouvements fluides, rapides et sûrs.',
       objectives: ['Distinguer chemin et trajectoire', 'Utiliser des profils de vitesse trapézoïdaux', 'Comprendre l\'interpolation polynomiale (cubique, quintique)', 'Choisir entre mouvement articulaire et cartésien'],
       blocks: [
-        P('<p>Le <strong>chemin</strong> est une courbe géométrique (par où passer). La <strong>trajectoire</strong> ajoute le temps (quand passer à chaque point). Deux grandes familles de mouvements :</p><ul><li><strong>Mouvement articulaire</strong> (MoveJ) : chaque axe va de son angle initial à son angle final ; l\'outil suit une courbe non maîtrisée. Rapide, sans singularité.</li><li><strong>Mouvement cartésien</strong> (MoveL) : l\'outil suit une ligne droite ; on calcule le MGI en chaque point. Indispensable pour souder, coller, insérer.</li></ul>'),
+        P('<p>Le <strong>chemin</strong> est une courbe géométrique (par où passer). La <strong>trajectoire</strong> ajoute le temps (quand passer à chaque point). Deux grandes familles de mouvements :</p><ul><li><strong>Mouvement articulaire</strong> (MoveJ) : chaque axe va de son angle initial à son angle final ; l\'outil suit une courbe non maîtrisée. Rapide, et sans risque de passer par une singularité en cours de route.</li><li><strong>Mouvement cartésien</strong> (MoveL) : l\'outil suit une ligne droite ; on calcule le MGI en chaque point. Indispensable pour souder, coller, insérer.</li></ul>'),
         H('Polynômes d\'interpolation'),
         P('<p>Pour aller de q₀ à q₁ en un temps T, partir et arriver à vitesse nulle, un polynôme de degré 3 suffit :</p>'),
         F('q(t) = q₀ + (q₁ − q₀) · (3s² − 2s³), &nbsp;&nbsp; s = t / T'),
@@ -252,7 +252,7 @@ export const commande = {
         F('τ · ẏ + y = K · u &nbsp;&nbsp;&nbsp;&nbsp; y(t) = K·u·(1 − e<sup>−t/τ</sup>)'),
         P('<p>Repères : à t = τ, la sortie atteint 63 % de sa valeur finale ; à t = 3τ, 95 % ; à t = 5τ, 99 %. Dans le simulateur PWM de l\'électronique, le moteur est justement modélisé comme un premier ordre.</p>'),
         H('Le second ordre'),
-        P('<p>Tu le connais déjà : c\'est le système masse-ressort-amortisseur. Pulsation propre ωₙ et amortissement ζ suffisent à décrire son comportement. Un moteur commandé en position par un régulateur proportionnel se comporte exactement ainsi.</p>'),
+        P('<p>Tu le connais déjà : c\'est le système masse-ressort-amortisseur. Pulsation propre ωₙ et amortissement ζ suffisent à décrire son comportement. Un moteur commandé en position par un régulateur proportionnel se comporte, en bonne approximation, exactement ainsi.</p>'),
         Sim('spring', { title: 'Rappel : le second ordre' }),
         H('La fonction de transfert'),
         P('<p>En Master, tu utiliseras la <strong>transformée de Laplace</strong>, qui transforme les équations différentielles en simples fractions de polynômes en s. Le premier ordre devient :</p>'),
@@ -273,7 +273,7 @@ export const commande = {
     },
     {
       id: 'pid', title: 'Le régulateur PID', sub: 'Présent, passé, futur', min: 35, level: 2,
-      why: 'Plus de 90 % des boucles de régulation industrielles sont des PID. C\'est l\'outil que tu utiliseras le plus souvent, du moteur de ton premier robot à la régulation de température d\'une usine.',
+      why: 'On estime que plus de 90 % des boucles de régulation industrielles sont des PID (ou des PI). C\'est l\'outil que tu utiliseras le plus souvent, du moteur de ton premier robot à la régulation de température d\'une usine.',
       objectives: ['Comprendre le rôle de chaque terme P, I, D', 'Mesurer dépassement, temps de montée, temps d\'établissement et erreur statique', 'Régler un PID méthodiquement', 'Implémenter un PID numérique avec anti-emballement'],
       blocks: [
         F('u(t) = K<sub>p</sub>·e(t) + K<sub>i</sub>·∫e(t)dt + K<sub>d</sub>·de/dt'),
@@ -305,7 +305,7 @@ export const commande = {
         Q('q1', 'Le robot atteint presque la consigne mais reste toujours 2 % en dessous, à cause d\'une charge. Quel terme ajouter ?', ['P', 'I', 'D', 'aucun'], 1, 'L\'intégrale accumule l\'erreur restante et augmente la commande jusqu\'à l\'annuler.'),
         Q('q2', 'La commande moteur devient très hachée quand tu augmentes Kd. Pourquoi ?', ['Le moteur est cassé', 'Le terme dérivé amplifie le bruit du capteur', 'Ki est trop faible', 'La consigne est trop haute'], 1, 'Dériver un signal bruité amplifie le bruit. On filtre la dérivée, ou on dérive la mesure plutôt que l\'erreur.'),
       ],
-      cards: [['Formule du PID ?', 'u = Kp·e + Ki·∫e dt + Kd·de/dt.'], ['Quel terme annule l\'erreur statique ?', 'L\'intégral (I).'], ['Inconvénient du terme dérivé ?', 'Il amplifie le bruit de mesure.'], ['Qu\'est-ce que l\'anti-emballement ?', 'Bloquer l\'intégration quand la commande est saturée.'], ['Ordre de réglage manuel classique ?', 'P, puis D, puis I.']],
+      cards: [['Formule du PID ?', 'u = Kp·e + Ki·∫e dt + Kd·de/dt.'], ['Quel terme annule l\'erreur statique ?', 'L\'intégral (I).'], ['Inconvénient du terme dérivé ?', 'Il amplifie le bruit de mesure.'], ['Qu\'est-ce que l\'anti-emballement ?', 'Bloquer l\'intégration quand la commande est saturée.'], ['Une méthode de réglage manuel courante d\'un PID ?', 'Régler P, puis D, puis I.']],
     },
     {
       id: 'commande-avancee', title: 'Au-delà du PID', sub: 'Espace d\'état, LQR, commande prédictive, apprentissage', min: 22, level: 3,

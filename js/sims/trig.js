@@ -7,7 +7,7 @@ export default function trig(root, opts = {}) {
   const s = slider(f.ctrl, { label: 'Angle θ', min: 0, max: 360, step: 1, value: angle, unit: '°', onInput: v => { angle = v; } });
   checkbox(f.ctrl, { label: 'Faire tourner (moteur)', value: false, onChange: v => { spin = v; } });
   const ro = readout(f.ctrl, [['deg', 'θ en degrés'], ['rad', 'θ en radians'], ['cos', 'cos θ'], ['sin', 'sin θ'], ['tan', 'tan θ']]);
-  note(f.ctrl, 'Le point sur le cercle, c\'est la pointe d\'un bras de longueur 1 qui tourne. Sa position horizontale vaut cos θ, sa hauteur vaut sin θ. Tout le reste de la robotique en découle.');
+  note(f.ctrl, 'Le point sur le cercle, c\'est la pointe d\'un bras de longueur 1 qui tourne. Sa position horizontale vaut cos θ, sa hauteur vaut sin θ. Une grande partie de la robotique s\'appuie dessus.');
 
   const cv = canvas(f.stage);
   const lp = loop(root, dt => {

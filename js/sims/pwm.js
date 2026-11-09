@@ -12,7 +12,7 @@ export default function pwm(root, opts = {}, api = {}) {
   slider(f.ctrl, { label: 'Tension batterie', min: 3, max: 24, step: 1, value: Vbat, unit: 'V', onInput: v => { Vbat = v; } });
   segmented(f.ctrl, { label: 'Pont en H', value: 1, options: [{ label: 'Avant', value: 1 }, { label: 'Arrière', value: -1 }, { label: 'Frein', value: 0 }], onChange: v => { dir = v; } });
   const ro = readout(f.ctrl, [['avg', 'Tension moyenne'], ['w', 'Vitesse moteur'], ['sw', 'Interrupteurs fermés']]);
-  note(f.ctrl, opts.goal === 'half' ? 'Défi : avec une batterie de 12 V, fais tourner le moteur en arrière avec une tension moyenne de 6 V.' : 'Le moteur, grâce à son inertie, « lisse » les créneaux : il ne voit que la moyenne. Ce lissage est un filtre passe-bas mécanique.');
+  note(f.ctrl, opts.goal === 'half' ? 'Défi : avec une batterie de 12 V, fais tourner le moteur en arrière avec une tension moyenne de 6 V.' : 'L\'inductance du moteur lisse le courant et son inertie lisse la vitesse : il réagit à la moyenne des créneaux. C\'est un filtre passe-bas, en partie électrique et en partie mécanique.');
 
   const cv = canvas(f.stage);
   const lp = loop(root, dt => {

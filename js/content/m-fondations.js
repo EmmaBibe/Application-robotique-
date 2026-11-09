@@ -18,7 +18,7 @@ export const demarrer = {
         Pipe('De la source au résultat : un robot aspirateur évite un pied de chaise', [
           ['Le monde', 'Un pied de chaise est à 30 cm devant le robot.', 'distance réelle : 0,30 m', 'Le point de départ, c\'est toujours une grandeur physique : une distance, une température, une couleur, une force. Le robot n\'y a pas accès directement.'],
           ['Capteur', 'Un capteur infrarouge envoie de la lumière et mesure ce qui revient.', 'tension : 1,8 V', 'Le capteur convertit la grandeur physique en grandeur électrique, presque toujours une tension. Ici, plus l\'obstacle est proche, plus la tension monte.'],
-          ['Conversion', 'Le convertisseur analogique-numérique transforme la tension en nombre.', 'valeur lue : 368 / 1023', 'Le microcontrôleur ne comprend que des nombres entiers. Sur 10 bits, 0 V donne 0 et 5 V donne 1023.'],
+          ['Conversion', 'Le convertisseur analogique-numérique transforme la tension en nombre.', 'valeur lue : 368 / 1023', 'Le microcontrôleur ne comprend que des nombres entiers. Sur 10 bits et avec une référence de 5 V, il y a 1024 niveaux : 0 V donne 0, et la valeur maximale 1023 correspond à environ 5 V.'],
           ['Traitement', 'Le programme filtre le bruit et convertit en distance.', 'distance estimée : 0,31 m', 'On lisse les mesures et on applique la courbe d\'étalonnage du capteur. On obtient une estimation, jamais la vérité exacte.'],
           ['Décision', 'Règle : si obstacle < 35 cm, tourner à droite.', 'commande : tourner', 'C\'est ici que vit « l\'intelligence » : une règle simple, un régulateur, un planificateur ou un réseau de neurones.'],
           ['Commande moteur', 'Le microcontrôleur envoie des signaux PWM au pont en H.', 'roue G : 60 %, roue D : 20 %', 'Le microcontrôleur ne fournit pas assez de courant pour un moteur. Un pont en H fait l\'intermédiaire, comme un interrupteur commandé.'],
@@ -33,7 +33,7 @@ export const demarrer = {
         ]),
         H('Les grandes familles'),
         P('<ul><li><strong>Bras manipulateurs</strong> : soudure automobile, chirurgie, préparation de commandes. Fixés au sol, très précis.</li><li><strong>Robots mobiles à roues</strong> : aspirateurs, chariots d\'entrepôt, robots livreurs, rovers martiens.</li><li><strong>Robots à pattes</strong> : quadrupèdes d\'inspection, humanoïdes. Ils passent là où les roues échouent (escaliers, éboulis).</li><li><strong>Drones</strong> aériens, sous-marins, de surface.</li><li><strong>Cobots</strong> : robots collaboratifs conçus pour travailler à côté d\'humains sans cage.</li><li><strong>Exosquelettes et prothèses</strong> : le robot est porté par l\'humain.</li><li><strong>Micro et nano-robots</strong>, robots souples, essaims : les frontières de la recherche.</li></ul>'),
-        Real('Un robot de soudure automobile répète la même trajectoire au dixième de millimètre près, 24 h sur 24. Un robot d\'entrepôt, lui, doit gérer des allées encombrées et des humains imprévisibles. Même boucle, contraintes opposées : l\'ingénieur adapte la solution au problème.'),
+        Real('Un robot de soudure automobile répète la même trajectoire à quelques centièmes de millimètre près, 24 h sur 24. Un robot d\'entrepôt, lui, doit gérer des allées encombrées et des humains imprévisibles. Même boucle, contraintes opposées : l\'ingénieur adapte la solution au problème.'),
         H('Les disciplines de la robotique'),
         P('<p>La robotique n\'est pas une science à part : c\'est un <strong>carrefour</strong>. Mécanique, électronique, informatique, automatique (la science de la commande), mathématiques, physique, et de plus en plus intelligence artificielle. Un bon roboticien n\'est pas expert en tout, mais il parle toutes ces langues et sait où chercher.</p>'),
         Q('q1', 'Qu\'est-ce qui distingue un robot d\'un grille-pain programmable ?', ['Le robot a un moteur électrique', 'Le robot mesure le monde et adapte son action à ce qu\'il mesure', 'Le robot coûte plus cher', 'Le robot a une forme humaine'], 1, 'C\'est la boucle fermée perception → décision → action qui fait le robot. Beaucoup de robots n\'ont aucune forme humaine.'),
@@ -94,7 +94,7 @@ export const demarrer = {
         ]),
         Tip('La technique Feynman : prends une notion, explique-la par écrit comme à un ami de 12 ans. Chaque fois que tu bloques ou que tu utilises un mot savant sans pouvoir le définir, tu viens de trouver ce que tu ne comprends pas encore. Retourne au cours, puis réexplique.', 'Explique pour comprendre'),
         H('Le climat de travail'),
-        P('<ul><li><strong>Sessions courtes et sans interruption</strong> : 25 minutes de concentration totale, puis 5 minutes de pause (bouton chronomètre en haut de l\'écran). Le téléphone hors de vue, notifications coupées.</li><li><strong>Le sommeil</strong> n\'est pas du temps perdu : c\'est pendant la nuit que le cerveau consolide ce que tu as appris. Une nuit courte la veille d\'un examen coûte plus qu\'elle ne rapporte.</li><li><strong>La régularité bat l\'intensité</strong> : 20 minutes par jour pendant un mois valent mieux que 10 heures un dimanche.</li><li><strong>Bouger</strong> : une marche de 10 minutes améliore la concentration qui suit.</li><li><strong>Un lieu dédié</strong>, rangé, bien éclairé. Le cerveau associe le lieu à l\'activité.</li></ul>'),
+        P('<ul><li><strong>Sessions courtes et sans interruption</strong> : 25 minutes de concentration totale, puis 5 minutes de pause (bouton chronomètre en haut de l\'écran). Le téléphone hors de vue, notifications coupées.</li><li><strong>Le sommeil</strong> n\'est pas du temps perdu : c\'est pendant la nuit que le cerveau consolide ce que tu as appris. Une nuit courte la veille d\'un examen coûte plus qu\'elle ne rapporte.</li><li><strong>La régularité bat l\'intensité</strong> : 20 minutes par jour pendant un mois valent mieux que 10 heures un dimanche.</li><li><strong>Bouger</strong> : une courte marche aide souvent à retrouver de la concentration.</li><li><strong>Un lieu dédié</strong>, rangé, bien éclairé. Le cerveau associe le lieu à l\'activité.</li></ul>'),
         H('Quand tu bloques'),
         Pipe('La méthode de déblocage', [
           ['Reformuler', 'Écris le problème avec tes mots. Que cherche-t-on exactement ?', '« je cherche R pour avoir 15 mA »', 'Beaucoup de blocages viennent d\'une question mal comprise.'],
@@ -126,10 +126,10 @@ export const maths = {
   lessons: [
     {
       id: 'unites', title: 'Unités, puissances de 10 et ordres de grandeur', sub: 'Le premier réflexe de l\'ingénieur', min: 15, level: 1,
-      why: 'En 1999, la sonde Mars Climate Orbiter s\'est désintégrée parce qu\'une équipe calculait en livres-force et l\'autre en newtons. Les unités ne sont pas un détail.',
+      why: 'En 1999, la sonde Mars Climate Orbiter a été perdue en arrivant sur Mars parce qu\'un logiciel fournissait des impulsions en livres-force·seconde alors que l\'équipe de navigation attendait des newtons·seconde. Les unités ne sont pas un détail.',
       objectives: ['Utiliser les unités du Système international', 'Manipuler les préfixes (milli, micro, kilo, méga...)', 'Convertir sans erreur', 'Estimer un ordre de grandeur pour vérifier un résultat'],
       blocks: [
-        H('Les unités de base'),
+        H('Les unités du Système international'),
         Table(['Grandeur', 'Unité SI', 'Symbole', 'Exemple en robotique'], [
           ['Longueur', 'mètre', 'm', 'longueur d\'un bras : 0,8 m'],
           ['Masse', 'kilogramme', 'kg', 'charge utile : 5 kg'],
@@ -138,6 +138,7 @@ export const maths = {
           ['Température', 'kelvin', 'K', 'échauffement d\'un moteur'],
           ['Angle', 'radian', 'rad', 'angle d\'une articulation : 1,57 rad (90°)'],
         ]),
+        P('<p>Les cinq premières font partie des sept unités de base du SI (avec la mole et la candela). Le radian, lui, est une unité dérivée : c\'est un rapport de deux longueurs (arc / rayon).</p>'),
         P('<p>Les autres unités en découlent : la <strong>force</strong> en newtons (N = kg·m/s²), l\'<strong>énergie</strong> en joules (J = N·m), la <strong>puissance</strong> en watts (W = J/s), la <strong>tension</strong> en volts (V = W/A), le <strong>couple</strong> en newton-mètres (N·m).</p>'),
         H('Les préfixes'),
         Table(['Préfixe', 'Symbole', 'Facteur', 'Exemple'], [
@@ -149,7 +150,7 @@ export const maths = {
         P('<p>Avant tout calcul, demande-toi : <em>à peu près combien ?</em> Si tu calcules qu\'un petit robot de 2 kg a besoin d\'un moteur de 5 000 W, l\'ordre de grandeur te crie qu\'il y a une erreur : un sèche-cheveux consomme 2 000 W.</p>'),
         Table(['Repère', 'Ordre de grandeur'], [
           ['Courant d\'une LED', '10 à 20 mA'], ['Courant d\'un petit moteur de robot', '0,1 à 2 A'], ['Tension d\'un microcontrôleur', '3,3 V ou 5 V'],
-          ['Batterie de robot mobile', '7,4 à 48 V'], ['Vitesse d\'un robot d\'intérieur', '0,3 à 1,5 m/s'], ['Précision d\'un bras industriel', '0,02 à 0,1 mm'],
+          ['Batterie de robot mobile', '7,4 à 48 V'], ['Vitesse d\'un robot d\'intérieur', '0,3 à 1,5 m/s'], ['Répétabilité d\'un bras industriel', '0,02 à 0,1 mm'],
           ['Fréquence d\'une boucle de commande moteur', '1 à 20 kHz'], ['Fréquence d\'un lidar', '10 à 20 tours par seconde'],
         ]),
         Exo('e1', 'Un capteur consomme 350 µA. Combien cela fait-il en milliampères ?', { answer: 0.35, unit: 'mA', tol: 0.001, sol: '350 µA = 350 × 10⁻⁶ A = 0,000 35 A = 0,35 × 10⁻³ A = <b>0,35 mA</b>.' }),
@@ -177,7 +178,7 @@ export const maths = {
         F('x = L · cos θ &nbsp;&nbsp;&nbsp; y = L · sin θ'),
         P('<p>Et dans l\'autre sens, si on connaît x et y, on retrouve la longueur avec <strong>Pythagore</strong> et l\'angle avec <strong>atan2</strong> :</p>'),
         F('L = √(x² + y²) &nbsp;&nbsp;&nbsp; θ = atan2(y, x)'),
-        Warn('N\'utilise jamais atan(y/x) pour retrouver un angle : la fonction ne fait pas la différence entre (1, 1) et (−1, −1), et plante quand x = 0. La fonction <code>atan2(y, x)</code>, disponible dans tous les langages, gère tous les cas et renvoie un angle entre −π et π.', 'atan2, pas atan'),
+        Warn('N\'utilise jamais atan(y/x) pour retrouver un angle : la fonction ne fait pas la différence entre (1, 1) et (−1, −1), et le calcul y/x divise par zéro quand x = 0. La fonction <code>atan2(y, x)</code>, disponible dans tous les langages, gère tous les cas et renvoie un angle entre −π et π.', 'atan2, pas atan'),
         Exo('e1', 'Convertis 45° en radians (3 décimales).', { answer: 0.785, tol: 0.002, unit: 'rad', sol: '45 × π / 180 = π/4 ≈ <b>0,785 rad</b>.' }),
         Exo('e2', 'Une roue de 5 cm de rayon fait 3 tours. Quelle distance le robot parcourt-il, en cm ?', { answer: 94.25, tol: 0.3, unit: 'cm', sol: '3 tours = 6π rad. Distance = 5 × 6π ≈ <b>94,2 cm</b>. C\'est le principe de l\'odométrie : compter les tours de roue pour estimer la distance.' }),
         Exo('e3', 'Un bras de 80 cm fait un angle de 30° avec l\'horizontale. À quelle hauteur est sa pointe, en cm ?', { answer: 40, unit: 'cm', tol: 0.1, sol: 'y = 80 × sin 30° = 80 × 0,5 = <b>40 cm</b>.' }),
@@ -231,7 +232,7 @@ export const maths = {
         P('<p>Un robot manipule plusieurs <strong>repères</strong> à la fois : le repère du monde (fixe), celui du robot (qui bouge avec lui), celui de la caméra, celui de la pince... Un même point a des coordonnées différentes dans chacun. Passer de l\'un à l\'autre est l\'opération la plus courante de la robotique.</p>'),
         H('Une matrice, c\'est un tableau de nombres'),
         P('<p>Multiplier une matrice 2×2 par un vecteur :</p>'),
-        F('<span class="mat"><span>a</span><span>b</span><span>c</span><span>d</span></span> · <span class="mat" style="grid-template-columns:1fr"><span>x</span><span>y</span></span> = <span class="mat" style="grid-template-columns:1fr"><span>a·x + b·y</span><span>c·x + d·y</span></span>', 'chaque ligne de la matrice « pondère » les composantes du vecteur', ),
+        F('<span class="mat" style="grid-template-columns:1fr 1fr"><span>a</span><span>b</span><span>c</span><span>d</span></span> · <span class="mat" style="grid-template-columns:1fr"><span>x</span><span>y</span></span> = <span class="mat" style="grid-template-columns:1fr"><span>a·x + b·y</span><span>c·x + d·y</span></span>', 'chaque ligne de la matrice « pondère » les composantes du vecteur', ),
         H('La matrice de rotation'),
         F('R(θ) = <span class="mat" style="grid-template-columns:1fr 1fr"><span>cos θ</span><span>−sin θ</span><span>sin θ</span><span>cos θ</span></span>', 'fait tourner n\'importe quel vecteur d\'un angle θ autour de l\'origine'),
         P('<p>Propriétés à connaître : elle conserve les longueurs, son inverse est sa transposée (R⁻¹ = Rᵀ), et tourner de θ₁ puis θ₂ revient à tourner de θ₁ + θ₂.</p>'),
@@ -289,8 +290,8 @@ export const maths = {
         P('<p>Mesure 100 fois la même distance avec un capteur ultrason : tu obtiendras 100 valeurs légèrement différentes. Ce <strong>bruit</strong> se décrit par deux nombres : la <strong>moyenne</strong> μ (autour de quoi les mesures se regroupent) et l\'<strong>écart-type</strong> σ (à quel point elles s\'éparpillent).</p>'),
         F('μ = (1/N) Σ xᵢ &nbsp;&nbsp;&nbsp; σ² = (1/N) Σ (xᵢ − μ)² &nbsp;&nbsp;&nbsp; σ = √σ²', 'moyenne, variance, écart-type'),
         H('La gaussienne'),
-        P('<p>Quand une erreur résulte de nombreuses petites causes indépendantes, ses valeurs suivent presque toujours une courbe en cloche : la <strong>loi normale</strong>, ou gaussienne. Environ 68 % des mesures tombent à moins de 1σ de la moyenne, 95 % à moins de 2σ, 99,7 % à moins de 3σ.</p>'),
-        Svg(`<svg viewBox="0 0 600 200" style="width:100%;height:auto" role="img" aria-label="Courbe en cloche avec les zones à 1, 2 et 3 écarts-types">
+        P('<p>Quand une erreur résulte de nombreuses petites causes indépendantes, ses valeurs suivent presque toujours une courbe en cloche : la <strong>loi normale</strong>, ou gaussienne. Environ 68 % des mesures tombent à moins de 1σ de la moyenne, 95 % (95,4 % exactement) à moins de 2σ, 99,7 % à moins de 3σ.</p>'),
+        Svg(`<svg viewBox="0 0 600 200" style="width:100%;height:auto" role="img" aria-label="Courbe en cloche avec les zones à 1 et 2 écarts-types">
           <defs><clipPath id="g1"><rect x="${300 - 75}" y="0" width="150" height="200"/></clipPath><clipPath id="g2"><rect x="${300 - 150}" y="0" width="300" height="200"/></clipPath></defs>
           ${(() => { let d = 'M 60 170'; for (let x = 60; x <= 540; x += 4) { const z = (x - 300) / 75; d += ` L ${x} ${170 - 140 * Math.exp(-z * z / 2)}`; } return `<path d="${d} L 540 170 Z" fill="currentColor" opacity=".08"/><path d="${d} L 540 170 Z" fill="var(--accent)" opacity=".2" clip-path="url(#g2)"/><path d="${d} L 540 170 Z" fill="var(--accent)" opacity=".35" clip-path="url(#g1)"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.5"/>`; })()}
           <line x1="40" y1="170" x2="560" y2="170" stroke="currentColor" opacity=".4"/>

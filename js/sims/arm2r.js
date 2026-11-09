@@ -43,7 +43,7 @@ export default function arm2r(root, opts = {}, api = {}) {
   function ik(x, y) {
     const c2 = (x * x + y * y - L1 * L1 - L2 * L2) / (2 * L1 * L2);
     if (c2 < -1 || c2 > 1) return null;
-    const s2v = (elbowUp ? 1 : -1) * Math.sqrt(1 - c2 * c2);
+    const s2v = (elbowUp ? -1 : 1) * Math.sqrt(1 - c2 * c2);
     const q2 = Math.atan2(s2v, c2);
     const q1 = Math.atan2(y, x) - Math.atan2(L2 * s2v, L1 + L2 * c2);
     return [deg(q1), deg(q2)];
@@ -56,7 +56,7 @@ export default function arm2r(root, opts = {}, api = {}) {
     ctx.fillStyle = th.faint; ctx.fillRect(0, o.y + 14, W, 2);
     if (showWs) {
       ctx.fillStyle = th.accent + '14';
-      ctx.beginPath(); ctx.arc(o.x, o.y, (L1 + L2) * s, 0, 7); ctx.arc(o.x, o.y, Math.abs(L1 - L2) * s, 0, 7, true); ctx.fill('evenodd');
+      ctx.beginPath(); ctx.arc(o.x, o.y, (L1 + L2) * s, 0, Math.PI * 2); ctx.moveTo(o.x + Math.abs(L1 - L2) * s, o.y); ctx.arc(o.x, o.y, Math.abs(L1 - L2) * s, 0, Math.PI * 2, true); ctx.fill('evenodd');
       ctx.strokeStyle = th.accent + '66'; ctx.setLineDash([4, 5]); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.arc(o.x, o.y, (L1 + L2) * s, 0, 7); ctx.stroke();
       ctx.beginPath(); ctx.arc(o.x, o.y, Math.abs(L1 - L2) * s, 0, 7); ctx.stroke(); ctx.setLineDash([]);
