@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serre 3D Lubumbashi</title>
+<style>
+:root{--fond:#0f1512;--panneau:rgba(20,28,24,.92);--texte:#e6efe8;--doux:#9fb0a5;--trait:#2e3c34;--vert:#5fbf85;--orange:#e6a446;--rouge:#e9776b;--bleu:#6aaee3;--jaune:#f0c540}
+:root[data-theme="light"]{--fond:#eef2ee;--panneau:rgba(255,255,255,.94);--texte:#1d2a22;--doux:#5d6b62;--trait:#d9e0da;--vert:#2f7d4f;--orange:#c77b12;--rouge:#b83a2e;--bleu:#2c6ea3;--jaune:#b58900}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--fond);color:var(--texte);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#scene{position:fixed;inset:0}
+.panneau{position:fixed;background:var(--panneau);border:1px solid var(--trait);border-radius:12px;padding:12px;backdrop-filter:blur(6px);z-index:3}
+#gauche{top:12px;left:12px;width:300px;max-height:calc(100% - 24px);overflow:auto}
+#droite{top:12px;right:12px;width:310px;max-height:calc(100% - 24px);overflow:auto}
+#bas{left:50%;transform:translateX(-50%);bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 24px)}
+h1{font-size:16px;margin:0 0 2px}
+h2{font-size:13px;margin:14px 0 6px;color:var(--doux);text-transform:uppercase;letter-spacing:.04em}
+.sous{color:var(--doux);font-size:12px}
+label{display:flex;align-items:center;gap:8px;margin:4px 0;cursor:pointer}
+input[type=range]{width:100%}
+select,button{font:inherit;color:var(--texte);background:transparent;border:1px solid var(--trait);border-radius:8px;padding:5px 9px;cursor:pointer}
+button.actif{background:var(--vert);border-color:var(--vert);color:#fff}
+.grille{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.kpi{border:1px solid var(--trait);border-radius:8px;padding:6px 8px}
+.kpi b{display:block;font-size:18px}
+.kpi span{font-size:11px;color:var(--doux)}
+ul{margin:4px 0;padding-left:18px}
+li{margin:2px 0}
+.etiquette{background:rgba(10,20,15,.85);color:#e6efe8;border:1px solid #5fbf85;border-radius:6px;padding:2px 6px;font-size:11px;white-space:nowrap;pointer-events:none}
+#fiche{display:none}
+#fiche.visible{display:block}
+.onglets{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+.onglets button{padding:4px 8px;font-size:12px}
+.cache{display:none}
+#aide{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:4;display:none}
+@media (max-width:820px){
+  #gauche{width:calc(100% - 24px);max-height:38%}
+  #droite{top:auto;bottom:70px;width:calc(100% - 24px);max-height:30%}
+}
+</style>
+</head>
+<body>
+<div id="scene"></div>
+
+<div id="gauche" class="panneau">
+  <h1>Serre pilote, Lubumbashi</h1>
+  <div class="sous">Maquette 3D vivante, pilotée par le même modèle climatique que le dossier. Cliquer sur un élément pour sa fiche.</div>
+
+  <h2>Afficher par domaine</h2>
+  <select id="domaine">
+    <option value="tout">Tout le projet</option>
+    <option value="agronomie">Agronomie (cultures, bassins)</option>
+    <option value="genie">Architecture et génie civil</option>
+    <option value="climat">Climat (ouvrants, écran, pad, extracteurs, stockage)</option>
+    <option value="eau">Eau et hydraulique</option>
+    <option value="elec">Électricité et énergie</option>
+    <option value="iiot">Capteurs et IIoT</option>
+  </select>
+  <label><input type="checkbox" id="c-couverture" checked> Film et parois</label>
+  <label><input type="checkbox" id="c-etiquettes" checked> Valeurs des capteurs</label>
+  <label><input type="checkbox" id="c-chaleur"> Carte de chaleur des compartiments</label>
+
+  <h2>Temps</h2>
+  <label>Mois <select id="mois"></select></label>
+  <label>Heure <input type="range" id="heure" min="0" max="23.9" step="0.1" value="10"></label>
+  <div class="sous" id="horloge"></div>
+  <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+    <button id="lecture">Lecture</button>
+    <button data-v="300" class="actif">x300</button><button data-v="1800">x1800</button><button data-v="7200">x7200</button>
+  </div>
+
+  <h2>Croissance des cultures</h2>
+  <label>Tomates, jour <input type="range" id="j-fruits" min="0" max="300" value="120"></label>
+  <label>Feuilles, jour <input type="range" id="j-feuilles" min="0" max="35" value="22"></label>
+  <label><input type="checkbox" id="c-croissance" checked> Avancer avec le temps</label>
+
+  <h2>Essayer sans un équipement</h2>
+  <label><input type="checkbox" id="e-stockage" checked> Stockage thermique</label>
+  <label><input type="checkbox" id="e-ecran" checked> Écran</label>
+  <label><input type="checkbox" id="e-pad" checked> Mur évaporatif</label>
+
+  <h2>Prendre la main</h2>
+  <label><input type="checkbox" id="manuel"> Mode manuel</label>
+  <div id="bloc-manuel" class="cache">
+    <label>Ouvrants <input type="range" id="m-ouvrant" min="0" max="100" value="30"></label>
+    <label>Écran <input type="range" id="m-ecran" min="0" max="100" value="0"></label>
+    <label>Extracteurs <input type="range" id="m-ext" min="0" max="2" value="0"></label>
+    <label><input type="checkbox" id="m-pad"> Pad humidifié</label>
+    <label>Stockage <select id="m-sto"><option value="arret">arrêt</option><option value="charge">charge</option><option value="decharge">restitution</option></select></label>
+  </div>
+</div>
+
+<div id="droite" class="panneau">
+  <div class="onglets">
+    <button data-o="climat" class="actif">Climat</button><button data-o="energie">Énergie</button><button data-o="finance">Finance</button>
+  </div>
+  <section id="o-climat">
+    <div class="grille" id="kpis"></div>
+    <h2>Ce que fait la serre</h2>
+    <ul id="raisons"></ul>
+  </section>
+  <section id="o-energie" class="cache">
+    <div class="grille" id="kpis-energie"></div>
+    <p class="sous">Configuration optimisée : 6 panneaux de 550 Wc sur l'annexe, batterie LiFePO4 10,2 kWh. Les délestages SNEL sont simulés.</p>
+  </section>
+  <section id="o-finance" class="cache">
+    <p class="sous">Ferme complète (pilote + extension à 1 000 m²), mêmes formules que le classeur Excel.</p>
+    <label>Prix obtenus <input type="range" id="f-prix" min="60" max="150" value="100"></label>
+    <label>Rendements <input type="range" id="f-rdt" min="60" max="150" value="100"></label>
+    <label>Coût de l'extension <input type="range" id="f-capex" min="60" max="140" value="100"></label>
+    <div class="grille" id="kpis-finance"></div>
+    <canvas id="tresorerie" width="560" height="240" style="width:100%;margin-top:8px"></canvas>
+    <div class="sous">Trésorerie cumulée sur 10 ans (après impôt)</div>
+  </section>
+  <div id="fiche" class="kpi" style="margin-top:12px"></div>
+</div>
+
+<div id="bas" class="panneau">
+  <button id="v-orbite" class="actif">Survol</button>
+  <button id="v-marche">Marcher dans la serre</button>
+  <button id="v-dessus">Vue de dessus</button>
+  <button id="v-export">Exporter en glTF</button>
+  <button id="v-theme">Thème</button>
+</div>
+<div id="aide" class="panneau">Déplacement : Z Q S D ou flèches · souris pour regarder · Échap pour sortir</div>
+
+<script type="importmap">
+{ "imports": { "three": "./lib/three/three.module.min.js", "three/addons/": "./lib/three/addons/" } }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/OrbitControls.js";
+import { PointerLockControls } from "three/addons/PointerLockControls.js";
+import { Sky } from "three/addons/Sky.js";
+import { CSS2DRenderer, CSS2DObject } from "three/addons/CSS2DRenderer.js";
+import { GLTFExporter } from "three/addons/GLTFExporter.js";
+import * as M from "./lib/modele.js";
+
+const $ = s => document.querySelector(s);
+const fmt = (x, d = 1) => (x == null || isNaN(x)) ? "-" : x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+
+// ================================================================ scène
+const conteneur = $("#scene");
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.55;
+conteneur.appendChild(renderer.domElement);
+const etiquettes = new CSS2DRenderer();
+etiquettes.setSize(innerWidth, innerHeight);
+Object.assign(etiquettes.domElement.style, { position: "fixed", inset: "0", pointerEvents: "none" });
+conteneur.appendChild(etiquettes.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 600);
+camera.position.set(-17, 11, 19);
+const orbite = new OrbitControls(camera, renderer.domElement);
+orbite.target.set(0, 2, 1);
+orbite.maxPolarAngle = Math.PI * 0.495;
+orbite.enableDamping = true;
+const marche = new PointerLockControls(camera, document.body);
+
+const ciel = new Sky();
+ciel.scale.setScalar(450);
+const u = ciel.material.uniforms;
+u.turbidity.value = 2.5; u.rayleigh.value = 1.2; u.mieCoefficient.value = 0.003; u.mieDirectionalG.value = 0.8;
+scene.fog = new THREE.Fog(0xc9d6dc, 70, 420);
+scene.add(ciel);
+const soleilLum = new THREE.DirectionalLight(0xfff3e0, 3);
+soleilLum.castShadow = true;
+soleilLum.shadow.mapSize.set(2048, 2048);
+Object.assign(soleilLum.shadow.camera, { left: -22, right: 22, top: 22, bottom: -22, near: 1, far: 120 });
+soleilLum.shadow.bias = -0.0005;
+scene.add(soleilLum, soleilLum.target);
+const ambiance = new THREE.HemisphereLight(0xcfe6ff, 0x8a6a45, 0.6);
+const lune = new THREE.DirectionalLight(0x9fb4e0, 0);
+lune.position.set(-20, 30, -10);
+scene.add(ambiance, lune);
+
+// ================================================================ matériaux
+function textureBruit(c1, c2, taille = 256, grain = 1400, rep = 8) {
+  const cv = document.createElement("canvas"); cv.width = cv.height = taille;
+  const x = cv.getContext("2d"); x.fillStyle = c1; x.fillRect(0, 0, taille, taille);
+  for (let i = 0; i < grain; i++) { x.fillStyle = Math.random() < 0.5 ? c2 : c1; x.globalAlpha = 0.25 + Math.random() * 0.5; const r = Math.random() * 3 + 0.5; x.fillRect(Math.random() * taille, Math.random() * taille, r, r); }
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+function textureFilet() {
+  const cv = document.createElement("canvas"); cv.width = cv.height = 64;
+  const x = cv.getContext("2d"); x.strokeStyle = "#dfe5e2"; x.lineWidth = 1;
+  for (let i = 0; i <= 64; i += 4) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, 64); x.stroke(); }
+  for (let i = 0; i <= 64; i += 8) { x.beginPath(); x.moveTo(0, i); x.lineTo(64, i); x.stroke(); }
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(40, 8); return t;
+}
+function texturePad() {
+  const cv = document.createElement("canvas"); cv.width = 128; cv.height = 64;
+  const x = cv.getContext("2d"); x.fillStyle = "#b9925e"; x.fillRect(0, 0, 128, 64); x.strokeStyle = "#8a6a3e"; x.lineWidth = 2;
+  for (let i = -64; i < 128; i += 8) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i + 64, 64); x.stroke(); x.beginPath(); x.moveTo(i + 64, 0); x.lineTo(i, 64); x.stroke(); }
+  const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(6, 2); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const mat = {
+  sol: new THREE.MeshStandardMaterial({ map: textureBruit("#9c6b45", "#7d5234", 256, 2500, 120), roughness: 1 }),
+  gravier: new THREE.MeshStandardMaterial({ map: textureBruit("#b9b3a8", "#8f897f", 256, 3000, 12), roughness: 1 }),
+  toile: new THREE.MeshStandardMaterial({ color: 0xf2f2ee, roughness: 0.9 }),
+  beton: new THREE.MeshStandardMaterial({ map: textureBruit("#c9c6bf", "#aaa69e", 256, 1500, 4), roughness: 0.95 }),
+  acier: new THREE.MeshStandardMaterial({ color: 0xbfc5c9, metalness: 0.85, roughness: 0.35 }),
+  film: new THREE.MeshStandardMaterial({ color: 0xf4f8f6, roughness: 0.5, transparent: true, opacity: 0.32, side: THREE.DoubleSide, depthWrite: false }),
+  poly: new THREE.MeshStandardMaterial({ color: 0xdfeef5, roughness: 0.25, metalness: 0.1, transparent: true, opacity: 0.38, side: THREE.DoubleSide, depthWrite: false }),
+  filet: new THREE.MeshStandardMaterial({ map: textureFilet(), transparent: true, opacity: 0.55, side: THREE.DoubleSide, depthWrite: false, color: 0xcfd5d2 }),
+  ecran: new THREE.MeshStandardMaterial({ color: 0xd8dde0, metalness: 0.6, roughness: 0.4, transparent: true, opacity: 0.85, side: THREE.DoubleSide }),
+  pad: new THREE.MeshStandardMaterial({ map: texturePad(), roughness: 0.95 }),
+  eau: new THREE.MeshStandardMaterial({ color: 0x3f7f96, roughness: 0.08, metalness: 0.2, transparent: true, opacity: 0.9 }),
+  radeau: new THREE.MeshStandardMaterial({ color: 0xf5f5f0, roughness: 0.8 }),
+  seau: new THREE.MeshStandardMaterial({ color: 0x1d1d1d, roughness: 0.7 }),
+  gouttiere: new THREE.MeshStandardMaterial({ color: 0xe8e8e8, roughness: 0.5, metalness: 0.3 }),
+  feuille: new THREE.MeshStandardMaterial({ color: 0x3f8f3a, roughness: 0.75, side: THREE.DoubleSide }),
+  feuilleClaire: new THREE.MeshStandardMaterial({ color: 0x7fc25a, roughness: 0.7 }),
+  tige: new THREE.MeshStandardMaterial({ color: 0x4f7d32, roughness: 0.8 }),
+  tomate: new THREE.MeshStandardMaterial({ color: 0xd2302a, roughness: 0.35 }),
+  poivron: new THREE.MeshStandardMaterial({ color: 0xe8b51e, roughness: 0.3 }),
+  mur: new THREE.MeshStandardMaterial({ color: 0xece3d0, roughness: 0.9 }),
+  tole: new THREE.MeshStandardMaterial({ color: 0x9aa3a8, metalness: 0.6, roughness: 0.45 }),
+  pv: new THREE.MeshStandardMaterial({ color: 0x14243f, metalness: 0.7, roughness: 0.18 }),
+  cuveNoire: new THREE.MeshStandardMaterial({ color: 0x151515, roughness: 0.6 }),
+  citerne: new THREE.MeshStandardMaterial({ color: 0x2d5f8a, roughness: 0.6 }),
+  ventilo: new THREE.MeshStandardMaterial({ color: 0x8f9499, metalness: 0.6, roughness: 0.4 }),
+  tuyauRouge: new THREE.MeshStandardMaterial({ color: 0xc0392b, emissive: 0x330000 }),
+  tuyauVert: new THREE.MeshStandardMaterial({ color: 0x2f9d62, emissive: 0x002a10 }),
+  tuyauBleu: new THREE.MeshStandardMaterial({ color: 0x2c6ea3, emissive: 0x001a33 }),
+  cable: new THREE.MeshStandardMaterial({ color: 0xf0c540, emissive: 0x332600 }),
+  capteur: new THREE.MeshStandardMaterial({ color: 0x5fbf85, emissive: 0x2f9d62, emissiveIntensity: 0.9 }),
+  armoire: new THREE.MeshStandardMaterial({ color: 0xd9d9d9, roughness: 0.5 }),
+  porte: new THREE.MeshStandardMaterial({ color: 0x6c7a80, roughness: 0.6 }),
+};
+
+// ================================================================ outils de construction
+const domaines = { agronomie: [], genie: [], climat: [], eau: [], elec: [], iiot: [], couverture: [] };
+const cliquables = [];
+function ajouter(obj, domaine, info) {
+  obj.traverse(o => { if (o.isMesh) { o.castShadow = o.material !== mat.film && o.material !== mat.filet && o.material !== mat.poly; o.receiveShadow = true; } });
+  if (domaine) (Array.isArray(domaine) ? domaine : [domaine]).forEach(d => domaines[d].push(obj));
+  if (info) { obj.userData.info = info; cliquables.push(obj); }
+  scene.add(obj);
+  return obj;
+}
+function boite(l, h, p, materiau) { return new THREE.Mesh(new THREE.BoxGeometry(l, h, p), materiau); }
+function placer(o, x, y, z) { o.position.set(x, y, z); return o; }
+function tube(points, rayon, materiau) {
+  const courbe = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)), false, "catmullrom", 0);
+  return new THREE.Mesh(new THREE.TubeGeometry(courbe, Math.max(8, points.length * 12), rayon, 8, false), materiau);
+}
+
+// Repère : x = est, y = haut, z = sud. Serre centrée en (0,0), faîtage est-ouest.
+const CH = 4.0, FA = 6.0; // chéneau, faîtage
+// profil de l'arc gothique, de z=-5 (nord) à z=+5 (sud)
+function profilArc(n = 24) {
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, s = t < 0.5 ? t * 2 : (1 - t) * 2; // 0 au mur, 1 au faîtage
+    const z = -5 + 10 * t;
+    const y = CH + (FA - CH) * Math.sin(s * Math.PI / 2) ** 0.75;
+    pts.push([z, y]);
+  }
+  return pts;
+}
+const PROFIL = profilArc();
+
+// ================================================================ terrain
+const sol = new THREE.Mesh(new THREE.PlaneGeometry(900, 900), mat.sol);
+sol.rotation.x = -Math.PI / 2; sol.receiveShadow = true; scene.add(sol);
+const bande = new THREE.Mesh(new THREE.PlaneGeometry(16, 16), mat.gravier);
+bande.rotation.x = -Math.PI / 2; bande.position.y = 0.01; bande.receiveShadow = true;
+ajouter(bande, "genie", { titre: "Bande sanitaire", texte: "3 m de gravier nu autour de la serre : pas d'adventices hôtes de ravageurs, pas de poussière de sol contaminé.", cout: "Inclus au terrassement (1 500 $)" });
+const solInt = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), mat.toile);
+solInt.rotation.x = -Math.PI / 2; solInt.position.y = 0.02; solInt.receiveShadow = true;
+ajouter(solInt, "genie", { titre: "Sol de la serre", texte: "Plateforme compactée, géotextile, 10 cm de gravier, toile tissée blanche qui renvoie la lumière vers le bas des plantes. Aucun contact des cultures avec le sol.", cout: "≈ 1 000 $" });
+const allee = boite(1.2, 0.06, 10, mat.beton); placer(allee, 0, 0.03, 0);
+ajouter(allee, "genie", { titre: "Allée centrale", texte: "Béton, 1,2 m de large, du sas au mur nord, traverse la cloison par une porte à fermeture automatique.", cout: "Inclus à la dalle" });
+// longrine
+for (const [l, p, x, z] of [[10.3, 0.25, 0, -5], [10.3, 0.25, 0, 5], [0.25, 10.3, -5, 0], [0.25, 10.3, 5, 0]]) {
+  ajouter(placer(boite(l, 0.3, p, mat.beton), x, 0.15, z), "genie", { titre: "Longrine périphérique", texte: "Béton 20 x 30 cm reliant les plots : appui des parois, barrière contre rongeurs, insectes rampants et ruissellement.", cout: "Fondations : 1 500 $" });
+}
+
+// ================================================================ structure
+const structure = new THREE.Group();
+for (const x of [-5, -2.5, 0, 2.5, 5]) {
+  structure.add(tube(PROFIL.map(([z, y]) => [x, y, z]), 0.035, mat.acier));
+  structure.add(placer(boite(0.08, CH, 0.08, mat.acier), x, CH / 2, -5));
+  structure.add(placer(boite(0.08, CH, 0.08, mat.acier), x, CH / 2, 5));
+}
+for (const i of [3, 7, 12, 17, 21]) { const [z, y] = PROFIL[i]; structure.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 10, 6).rotateZ(Math.PI / 2), mat.acier), 0, y, z)); }
+for (const z of [-5, 5]) structure.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 10, 8).rotateZ(Math.PI / 2), mat.gouttiere), 0, CH + 0.02, z));
+structure.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 10, 4).rotateZ(Math.PI / 2), mat.acier), 0, 3.8, -4.2));
+ajouter(structure, "genie", { titre: "Structure acier galvanisé", texte: "Chapelle gothique de 10 m de portée, 5 arcs Ø 60 mm espacés de 2,5 m, poteaux 80 x 80 mm, chéneau à 4,0 m, faîtage à 6,0 m. Calculée pour des rafales de 28 m/s.", cout: "5 000 $ (structure) + 1 500 $ (fondations)" });
+
+// ================================================================ couverture
+function surfaceToit() {
+  const g = new THREE.BufferGeometry(), pos = [], idx = [];
+  const nx = 2;
+  PROFIL.forEach(([z, y]) => { for (let i = 0; i < nx; i++) pos.push(-5 + 10 * i / (nx - 1), y + 0.01, z); });
+  for (let j = 0; j < PROFIL.length - 1; j++) { const a = j * nx, b = a + nx; idx.push(a, b, a + 1, a + 1, b, b + 1); }
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals(); return g;
+}
+const toit = new THREE.Mesh(surfaceToit(), mat.film); toit.renderOrder = 2;
+ajouter(toit, ["couverture", "genie"], { titre: "Film de toiture diffusant", texte: "Polyéthylène 200 µm, 50 % de lumière diffuse, anti-goutte, traité UV et IR. Transmission ≈ 85 %. À remplacer tous les 4 à 5 ans.", cout: "900 $" });
+function formePignon() {
+  const s = new THREE.Shape(); s.moveTo(-5, 0); PROFIL.forEach(([z, y]) => s.lineTo(z, y)); s.lineTo(5, 0); s.lineTo(-5, 0); return s;
+}
+for (const x of [-5, 5]) {
+  const p = new THREE.Mesh(new THREE.ShapeGeometry(formePignon()), mat.poly);
+  p.rotation.y = x < 0 ? Math.PI / 2 : -Math.PI / 2; p.position.x = x; p.renderOrder = 2;
+  if (x > 0) p.scale.x = -1;
+  ajouter(p, ["couverture", "genie"], { titre: x < 0 ? "Pignon ouest" : "Pignon est", texte: "Polycarbonate alvéolaire 8 mm en partie basse (chocs, effraction), film en partie haute. " + (x < 0 ? "Porte les deux extracteurs." : "Porte les deux murs évaporatifs."), cout: "Pignons + cloison : 1 400 $" });
+}
+// parois latérales : partie fixe + ouvrant enroulable + filet
+const ouvrantsLat = [];
+for (const z of [-5, 5]) {
+  const basse = placer(new THREE.Mesh(new THREE.PlaneGeometry(10, 0.8), mat.poly), 0, 0.4, z);
+  const haute = placer(new THREE.Mesh(new THREE.PlaneGeometry(10, 1.7), mat.film), 0, 3.15, z);
+  const filet = placer(new THREE.Mesh(new THREE.PlaneGeometry(10, 1.5), mat.filet), 0, 1.55, z + (z < 0 ? -0.04 : 0.04));
+  const rideau = placer(new THREE.Mesh(new THREE.PlaneGeometry(10, 1.5), mat.film), 0, 1.55, z);
+  [basse, haute, rideau].forEach(m => m.renderOrder = 2);
+  ajouter(basse, "couverture"); ajouter(haute, "couverture");
+  ajouter(filet, ["climat", "couverture"], { titre: "Filet anti-insectes 50 mesh", texte: "Mailles 0,27 x 0,77 mm : arrête aleurodes, Tuta absoluta, mineuses et pucerons. Réduit le débit d'air de moitié environ, d'où des ouvrants larges (40 % de la surface au sol).", cout: "Avec les ouvrants : 1 800 $" });
+  ajouter(rideau, ["climat", "couverture"], { titre: "Ouvrant latéral " + (z < 0 ? "nord" : "sud"), texte: "10 x 1,5 m, enrouleur motorisé 24 V avec fins de course. Ouverture proportionnelle à la température ; fermeture automatique par vent fort ou pluie.", cout: "1 800 $ pour tous les ouvrants" });
+  ouvrantsLat.push({ rideau, z, comp: z < 0 ? "fruits" : "feuilles" });
+}
+// ouvrants de toiture
+const ouvrantsToit = [];
+for (const cote of [-1, 1]) {
+  const [z1, y1] = PROFIL[cote < 0 ? 9 : 15], [z2, y2] = PROFIL[cote < 0 ? 11 : 13];
+  const pivot = new THREE.Group(); pivot.position.set(0, Math.max(y1, y2) + 0.02, cote < 0 ? z2 : z2);
+  const volet = new THREE.Mesh(new THREE.PlaneGeometry(10, Math.hypot(z2 - z1, y2 - y1) + 0.15), mat.film);
+  volet.rotation.x = -Math.PI / 2 + cote * Math.atan2(Math.abs(y2 - y1), Math.abs(z2 - z1));
+  volet.position.z = cote < 0 ? -0.45 : 0.45; volet.renderOrder = 3;
+  pivot.add(volet);
+  ajouter(pivot, ["climat", "couverture"], { titre: "Ouvrant de toiture " + (cote < 0 ? "fruits" : "feuilles"), texte: "Un par versant, donc un par compartiment, 10 x 1 m avec filet. L'air chaud sort par le haut : c'est l'ouvrant le plus efficace.", cout: "Inclus aux ouvrants" });
+  ouvrantsToit.push({ pivot, cote, comp: cote < 0 ? "fruits" : "feuilles" });
+}
+// cloison
+const cloison = new THREE.Mesh(new THREE.PlaneGeometry(10, 1), mat.film);
+{ const g = new THREE.ShapeGeometry((() => { const s = new THREE.Shape(); s.moveTo(-5, 0); s.lineTo(-5, FA); s.lineTo(5, FA); s.lineTo(5, 0); return s; })()); cloison.geometry = g; }
+cloison.renderOrder = 2;
+ajouter(cloison, ["couverture", "genie"], { titre: "Cloison entre compartiments", texte: "Double film sur cadre, du sol au faîtage, avec porte battante. Sépare l'air, les insectes et les circuits d'eau des fruits et des feuilles.", cout: "Inclus aux pignons" });
+
+// écran (deux sections)
+const ecrans = {};
+for (const [comp, z0] of [["fruits", -5], ["feuilles", 0]]) {
+  const e = new THREE.Mesh(new THREE.PlaneGeometry(9.9, 5), mat.ecran);
+  e.rotation.x = -Math.PI / 2; e.position.set(0, CH - 0.05, z0 + 2.5);
+  const g = new THREE.Group(); g.add(e);
+  ajouter(g, "climat", { titre: "Écran " + comp, texte: "Tissé aluminisé, 50 % d'ombrage, ≈ 45 % d'économie d'énergie la nuit. Fermé à 70 % par soleil fort, à 100 % les nuits fraîches.", cout: "1 200 $ les deux sections" });
+  ecrans[comp] = { e, z0 };
+}
+
+// murs évaporatifs (pignon est) et extracteurs (pignon ouest)
+const pads = {}, ventilos = {};
+for (const [comp, zc] of [["fruits", -2.5], ["feuilles", 2.5]]) {
+  const p = placer(new THREE.Mesh(new THREE.BoxGeometry(0.1, 1.5, 4.6), mat.pad.clone()), 5.05, 1.1, zc);
+  ajouter(p, "climat", { titre: "Mur évaporatif " + comp, texte: "Cellulose 100 mm, 5 x 1,5 m, protégé par un filet. Par air sec, l'air entre refroidi de 8 à 10 °C (32,5 °C dehors → 22,7 °C). Consomme 140 à 280 L/j en saison chaude.", cout: "2 500 $ pour les deux murs et extracteurs" });
+  pads[comp] = p;
+  const v = new THREE.Group(); v.position.set(-5.08, 1.6, zc);
+  const cadre = new THREE.Mesh(new THREE.TorusGeometry(0.65, 0.06, 8, 32), mat.ventilo); cadre.rotation.y = Math.PI / 2; v.add(cadre);
+  const helice = new THREE.Group();
+  for (let i = 0; i < 6; i++) { const pale = boite(0.02, 0.55, 0.16, mat.ventilo); pale.position.y = 0.3; const b = new THREE.Group(); b.add(pale); b.rotation.x = i * Math.PI / 3; helice.add(b); }
+  v.add(helice);
+  ajouter(v, "climat", { titre: "Extracteur " + comp, texte: "Ø 1,25 m, 0,55 kW, 9 000 à 10 000 m³/h. Deux vitesses. Ne tourne qu'en mode évaporatif, serre fermée.", cout: "Inclus" });
+  ventilos[comp] = helice;
+}
+
+// stockage thermique
+const cuves = new THREE.Group();
+for (const z of [-4.3, -3.4, -1.0]) cuves.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 1.5, 24), mat.cuveNoire), -4.4, 0.75, z));
+const aero = placer(boite(0.6, 0.6, 0.4, mat.armoire), -4.4, 2.6, -2.2); cuves.add(aero);
+ajouter(cuves, "climat", { titre: "Stockage thermique", texte: "3 cuves noires de 2 m³ et un aérotherme. Le jour, l'air trop chaud réchauffe l'eau ; la nuit, l'eau rend sa chaleur. Juillet : +3,9 °C de minimale, sans combustible.", cout: "1 600 $" });
+
+// brassage
+for (const [x, z] of [[-2.5, -3], [2.5, -1.8], [-2.5, 1.8], [2.5, 3]]) {
+  const b = new THREE.Group(); b.position.set(x, 3.4, z);
+  const c = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.3, 16), mat.ventilo); c.rotation.z = Math.PI / 2; b.add(c);
+  ajouter(b, "climat", { titre: "Ventilateur de brassage", texte: "45 W. Homogénéise l'air, évite les poches humides autour des feuilles la nuit (botrytis, nécrose marginale des laitues).", cout: "400 $ les quatre" });
+}
+
+// ================================================================ cultures
+const DUMMY = new THREE.Object3D();
+// fruits : doubles rangs est-ouest de part et d'autre de l'allée
+const rangs = [];
+for (const z of [-4.2, -2.6, -1.0]) for (const cote of [-1, 1]) rangs.push({ z, cote, type: z === -1.0 ? (cote < 0 ? "piment" : "poivron") : "tomate" });
+const plantsFruits = [];
+const gouttieres = new THREE.Group();
+rangs.forEach(r => {
+  const x0 = r.cote < 0 ? -4.6 : 0.8, x1 = r.cote < 0 ? -0.8 : 4.6;
+  for (const dz of [-0.25, 0.25]) {
+    gouttieres.add(placer(boite(x1 - x0, 0.08, 0.22, mat.gouttiere), (x0 + x1) / 2, 0.35, r.z + dz));
+    for (let x = x0 + 0.25; x < x1; x += 0.5) plantsFruits.push({ x, z: r.z + dz, type: r.type, ph: Math.random() * 6.28 });
+  }
+});
+ajouter(gouttieres, "agronomie", { titre: "Gouttières de drainage", texte: "Les seaux posent dessus ; le drainage est collecté, filtré à 50 µm, désinfecté aux UV-C et réutilisé.", cout: "Substrat fruits : 1 800 $" });
+const nPF = plantsFruits.length;
+const seaux = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.15, 0.12, 0.3, 12), mat.seau, nPF);
+const tiges = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.012, 0.016, 1, 6), mat.tige, nPF);
+const NF = 14, nFeuilles = nPF * NF;
+const geoFeuille = new THREE.PlaneGeometry(0.34, 0.2);
+const feuillesF = new THREE.InstancedMesh(geoFeuille, mat.feuille, nFeuilles);
+const NFR = 8;
+const fruitsT = new THREE.InstancedMesh(new THREE.SphereGeometry(0.04, 10, 8), mat.tomate, nPF * NFR);
+const fruitsP = new THREE.InstancedMesh(new THREE.SphereGeometry(0.045, 10, 8), mat.poivron, nPF * NFR);
+[seaux, tiges, feuillesF, fruitsT, fruitsP].forEach(m => { m.castShadow = true; m.receiveShadow = true; });
+const groupeFruits = new THREE.Group(); groupeFruits.add(seaux, tiges, feuillesF, fruitsT, fruitsP);
+ajouter(groupeFruits, "agronomie", { titre: "Compartiment fruits (50 m²)", texte: "Tomates ronde et cerise palissées à 3,8 m, poivrons et piments. Seaux hollandais à perlite, goutte-à-goutte déclenché par la somme de rayonnement. Rendement médian : 25 kg/m² de tomate.", cout: "CA brut médian du compartiment : ≈ 2 200 $/an" });
+
+function majFruits(jour) {
+  // hauteur : 0,15 m au repiquage, puis ≈ 2,5 cm/j jusqu'au fil (3,8 m)
+  let iF = 0, iT = 0, iP = 0;
+  plantsFruits.forEach((p, i) => {
+    const max = p.type === "tomate" ? 3.7 : p.type === "poivron" ? 1.9 : 1.4;
+    const h = Math.min(max, 0.15 + jour * (p.type === "tomate" ? 0.025 : 0.012));
+    DUMMY.position.set(p.x, 0.35, p.z); DUMMY.rotation.set(0, 0, 0); DUMMY.scale.set(1, 1, 1); DUMMY.updateMatrix(); seaux.setMatrixAt(i, DUMMY.matrix);
+    DUMMY.position.set(p.x, 0.5 + h / 2, p.z); DUMMY.scale.set(1, h, 1); DUMMY.updateMatrix(); tiges.setMatrixAt(i, DUMMY.matrix);
+    const effeuillage = p.type === "tomate" && jour > 90 ? Math.min(0.45, (jour - 90) / 200) : 0;
+    for (let k = 0; k < NF; k++) {
+      const f = k / NF, y = 0.5 + h * (effeuillage + f * (1 - effeuillage));
+      const vis = jour > 3 ? 1 : 0;
+      const t = (p.type === "tomate" ? 1.0 : 0.75) * vis * Math.min(1, 0.35 + jour / 40);
+      DUMMY.position.set(p.x + Math.cos(p.ph + k * 2.4) * 0.17 * t, y, p.z + Math.sin(p.ph + k * 2.4) * 0.17 * t);
+      DUMMY.rotation.set(-0.9 + Math.sin(k) * 0.3, p.ph + k * 2.4, 0.2);
+      DUMMY.scale.set(t, t, t); DUMMY.updateMatrix(); feuillesF.setMatrixAt(iF++, DUMMY.matrix);
+    }
+    const debutFruits = p.type === "tomate" ? 75 : 95;
+    for (let k = 0; k < NFR; k++) {
+      const age = jour - debutFruits - k * 6;
+      const s = age > 0 ? Math.min(1, age / 25) : 0;
+      const yF = 0.5 + h * (0.25 + 0.06 * k) - (p.type === "tomate" ? 0 : 0.1);
+      DUMMY.position.set(p.x + Math.cos(p.ph + k) * 0.12, Math.min(yF, 0.5 + h - 0.2), p.z + Math.sin(p.ph + k) * 0.12);
+      DUMMY.rotation.set(0, 0, 0);
+      const sc = p.type === "piment" ? [s * 0.6, s * 1.6, s * 0.6] : [s, s, s];
+      DUMMY.scale.set(...sc); DUMMY.updateMatrix();
+      if (p.type === "tomate") fruitsT.setMatrixAt(iT++, DUMMY.matrix); else fruitsP.setMatrixAt(iP++, DUMMY.matrix);
+    }
+  });
+  fruitsT.count = iT; fruitsP.count = iP;
+  [seaux, tiges, feuillesF, fruitsT, fruitsP].forEach(m => m.instanceMatrix.needsUpdate = true);
+  // couleur des fruits : vert -> rouge
+  mat.tomate.color.setHSL(Math.max(0, 0.28 - Math.max(0, jour - 100) / 300), 0.7, 0.45);
+}
+
+// feuilles : deux bassins à radeaux
+const bassins = {};
+const plantsFeuilles = [];
+for (const [nom, x0] of [["frais", 0.8], ["tempere", -4.8]]) {
+  const g = new THREE.Group();
+  g.add(placer(boite(4.0, 0.25, 4.2, mat.beton), x0 + 2, 0.12, 2.7));
+  const eau = placer(new THREE.Mesh(new THREE.PlaneGeometry(3.9, 4.1), mat.eau.clone()), x0 + 2, 0.24, 2.7); eau.rotation.x = -Math.PI / 2; g.add(eau);
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) g.add(placer(boite(0.95, 0.035, 1.0, mat.radeau), x0 + 0.5 + i * 1.0, 0.27, 0.65 + j * 1.03));
+  for (let i = 0; i < 18; i++) for (let j = 0; j < 19; j++) plantsFeuilles.push({ x: x0 + 0.17 + i * 0.205, z: 0.75 + j * 0.205, bassin: nom, ph: Math.random() * 6 });
+  ajouter(g, "agronomie", nom === "frais"
+    ? { titre: "Bassin frais (16,8 m²)", texte: "Laitue, chou de Chine, épinard. 4,2 m³ d'eau à 25 cm, aérée en permanence (O2 > 6 mg/L), refroidie sous 21-22 °C contre le Pythium. Tient des heures sans courant.", cout: "Bassins : 1 800 $ ; feuilles ≈ 64 % du chiffre d'affaires" }
+    : { titre: "Bassin tempéré (16,8 m²)", texte: "Céleri, aromatiques, oignon vert, poireau, amarante. Solution jusqu'à 24-26 °C.", cout: "Bassins : 1 800 $" });
+  bassins[nom] = eau;
+}
+const salades = new THREE.InstancedMesh(new THREE.SphereGeometry(0.1, 10, 8), mat.feuilleClaire, plantsFeuilles.length);
+salades.castShadow = true;
+ajouter(salades, "agronomie", { titre: "Radeaux de culture", texte: "Polystyrène extrudé alimentaire, 20 à 25 plants par m². Récolte d'un radeau entier ; lavage et désinfection avant réutilisation.", cout: "Laitue médiane : 200 têtes/m²/an à 1 $" });
+function majFeuilles(jour) {
+  plantsFeuilles.forEach((p, i) => {
+    const decal = (p.x * 3 + p.z * 2) % 1; // lots décalés : radeaux à des stades différents
+    const j = (jour + decal * 35) % 35;
+    const s = 0.15 + Math.min(1, j / 30) * 0.95;
+    DUMMY.position.set(p.x, 0.3 + 0.05 * s, p.z); DUMMY.rotation.set(0, p.ph, 0);
+    DUMMY.scale.set(s, 0.55 * s, s); DUMMY.updateMatrix(); salades.setMatrixAt(i, DUMMY.matrix);
+  });
+  salades.instanceMatrix.needsUpdate = true;
+}
+
+// ================================================================ sas, annexe, site
+const sas = placer(boite(1.5, 2.4, 2, mat.poly), 0, 1.2, 6);
+ajouter(sas, "genie", { titre: "Couloir-sas", texte: "2 x 1,5 m, double porte à contacts (alarme si les deux sont ouvertes), rideau à lanières, piège englué, légère surpression, passe-plat vers le conditionnement.", cout: "Inclus à l'annexe" });
+const annexe = new THREE.Group();
+annexe.add(placer(boite(10, 2.8, 3, mat.mur), 0, 1.4, 8.5));
+const toitAnnexe = boite(10.4, 0.08, 3.4, mat.tole); toitAnnexe.position.set(0, 3.0, 8.5); toitAnnexe.rotation.x = -12 * Math.PI / 180; annexe.add(toitAnnexe);
+annexe.add(placer(boite(1.0, 2.1, 0.06, mat.porte), -3.5, 1.05, 10.02));
+annexe.add(placer(boite(1.2, 2.1, 0.06, mat.porte), 3.5, 1.05, 10.02));
+ajouter(annexe, "genie", { titre: "Annexe 10 x 3 m", texte: "D'ouest en est : local technique (énergie, armoires, fertirrigation), vestiaire et lavage, pépinière LED (zone propre), conditionnement et chambre froide 3 m³. Toiture à 12° vers le nord qui porte les panneaux.", cout: "3 500 $ + chambre froide 1 500 $" });
+const panneaux = new THREE.Group();
+for (let i = 0; i < 6; i++) {
+  const p = boite(1.13, 0.04, 2.28, mat.pv); p.position.set(-4.0 + i * 1.6, 3.12, 8.5); p.rotation.x = -12 * Math.PI / 180; panneaux.add(p);
+}
+ajouter(panneaux, "elec", { titre: "Champ solaire 3,3 kWc", texte: "6 modules de 550 Wc, orientés au nord, inclinés à 12°. Couvrent toutes les charges vitales et ≈ 70 % de la consommation (≈ 21 kWh/j). Le réseau SNEL et le groupe ne sont que des appoints.", cout: "Énergie complète : 6 900 $" });
+const citerne = placer(new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.35, 1.9, 32), mat.citerne), -9, 0.95, -1);
+ajouter(citerne, "eau", { titre: "Citerne d'eau de pluie 10 m³", texte: "La toiture collecte ≈ 100 m³/an ; avec 10 m³ de stockage, la pluie couvre 35 à 45 % des besoins. Premier flot rejeté, citerne opaque.", cout: "2 500 $ avec filtration" });
+const mat2 = new THREE.Group();
+mat2.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 9, 8), mat.acier), 7.5, 4.5, 6.5));
+ajouter(mat2, "elec", { titre: "Paratonnerre", texte: "Mât dédié dominant serre et annexe, descente séparée, boucle de terre en cuivre 35 mm² (R < 10 Ω). Le Katanga est l'une des zones les plus foudroyées d'Afrique.", cout: "Inclus aux protections (1 000 $)" });
+const meteoMat = new THREE.Group();
+meteoMat.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 3, 6), mat.acier), 8, 1.5, -7));
+meteoMat.add(placer(boite(0.3, 0.2, 0.3, mat.armoire), 8, 3.05, -7));
+ajouter(meteoMat, ["iiot", "climat"], { titre: "Station météo", texte: "Vent (ultrasons), pluie, température, humidité, rayonnement. Commande directe des sécurités : ouvrants limités à 30 % au-delà de 10 m/s, fermés au-delà de 14 m/s.", cout: "450 $ + pyranomètre 220 $" });
+
+// ================================================================ réseaux (eau, électricité)
+ajouter(tube([[-3.4, 0.6, 7], [-3.4, 0.6, 6.4], [-0.9, 0.6, 6.4], [-0.9, 0.6, 5], [-0.7, 0.6, 0], [-0.7, 0.6, -4.4], [-4.5, 0.6, -4.4]], 0.035, mat.tuyauRouge), "eau",
+  { titre: "Circuit fruits", texte: "Cuve de 500 L (local technique) → pompe 0,37 kW → filtre à disques → goutte-à-goutte 2 L/h. Le drainage revient par les gouttières, filtre 50 µm, UV-C, puis réutilisation.", cout: "Station 2 circuits : 2 500 $" });
+for (const x of [-2.6, -1.0, 1.0, 2.6]) {
+  ajouter(tube([[-0.7, 0.6, -4.4 + 0], [x > 0 ? 0.8 : -0.8, 0.6, -4.4]].map(p => p), 0.02, mat.tuyauRouge), "eau");
+}
+ajouter(tube([[-3.2, 0.5, 7], [-3.2, 0.5, 6.6], [0.9, 0.5, 6.6], [0.9, 0.5, 5], [0.9, 0.3, 4.9], [2.8, 0.3, 4.9]], 0.035, mat.tuyauVert), "eau",
+  { titre: "Circuit feuilles", texte: "Dosage A/B/acide par bassin, filtration et UV en dérivation, refroidisseur de 500 W sur le bassin frais. Jamais relié au circuit fruits.", cout: "Inclus" });
+ajouter(tube([[-0.9, 0.3, 4.9], [-2.8, 0.3, 4.9]], 0.035, mat.tuyauVert), "eau");
+ajouter(tube([[-5.1, 4.0, -5.1], [-7.5, 3.5, -5.1], [-8.2, 2.0, -2.0], [-8.4, 1.9, -1.0]], 0.05, mat.tuyauBleu), "eau",
+  { titre: "Eau de pluie", texte: "Chéneaux de 125 mm, filtre à feuilles, premier flot, citerne. Eau très peu minéralisée, idéale pour l'hydroponie et le pad (pas de tartre).", cout: "Inclus à la citerne" });
+ajouter(tube([[-7.6, 0.4, -1], [-6, 0.4, 5.5], [-3.6, 0.4, 7]], 0.04, mat.tuyauBleu), "eau");
+ajouter(tube([[-3.8, 2.6, 7], [-3.8, 2.6, 6.2], [-0.6, 2.6, 6.2], [-0.6, 3.6, 5], [-0.6, 3.6, -4.5], [-4.4, 3.6, -4.5], [-4.4, 2.9, -2.2]], 0.03, mat.cable), "elec",
+  { titre: "Distribution électrique", texte: "TGBT dans le local technique, différentiels 30 mA, départs par priorité commandés par l'automate (délestage). Tout équipement en serre en IP65, commande en 24 V.", cout: "1 200 $" });
+ajouter(tube([[-0.6, 3.6, 2], [4.6, 3.6, 2], [4.9, 1.9, 2.5]], 0.025, mat.cable), "elec");
+ajouter(tube([[-0.6, 3.6, -2], [-4.9, 2.3, -2.5]], 0.025, mat.cable), "elec");
+const armoire = placer(boite(0.6, 0.8, 0.25, mat.armoire), -0.8, 1.6, -4.8);
+ajouter(armoire, ["elec", "iiot"], { titre: "Armoire automate fruits (AUT-F)", texte: "ESP32 industriel sur rail DIN, 24 V, module 16 relais / 16 entrées en Modbus. Passe seul en mode autonome si le serveur se tait plus de 2 minutes.", cout: "Supervision complète : 6 100 $" });
+const armoireL = placer(boite(0.6, 0.8, 0.25, mat.armoire), 0.8, 1.6, 4.8);
+ajouter(armoireL, ["elec", "iiot"], { titre: "Armoire automate feuilles (AUT-L)", texte: "Climat du compartiment, aération et dosage des bassins, refroidisseur, LED de germination. Le surpresseur des bassins est câblé pour tourner même en cas de panne de l'automate.", cout: "Inclus" });
+
+// ================================================================ capteurs
+const capteurs = [];
+function capteur(nom, x, y, z, lire, texte) {
+  const s = placer(new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), mat.capteur), x, y, z);
+  const div = document.createElement("div"); div.className = "etiquette";
+  const lab = new CSS2DObject(div); lab.position.set(0, 0.25, 0); s.add(lab);
+  ajouter(s, "iiot", { titre: nom, texte, cout: "Voir donnees/liste_capteurs_actionneurs.csv" });
+  capteurs.push({ nom, div, lire, lab });
+}
+
+// ================================================================ simulation
+let E = M.nouvelEtat(10);
+let lecture = false, vitesse = 300, jourFruits = 120, jourFeuilles = 22;
+capteur("T/HR fruits", 2.5, 2.2, -2.6, () => `${fmt(E.comp.fruits.t)} °C · ${fmt(M.hrDepuisW(E.comp.fruits.t, E.comp.fruits.w), 0)} %`, "Capteur capacitif sous abri ventilé, au milieu de la culture. Sans abri ventilé, l'erreur au soleil atteint 3 à 5 °C.");
+capteur("T/HR feuilles", -2.5, 1.2, 2.5, () => `${fmt(E.comp.feuilles.t)} °C · ${fmt(M.hrDepuisW(E.comp.feuilles.t, E.comp.feuilles.w), 0)} %`, "Idem, compartiment feuilles.");
+capteur("Bassin frais", 3, 0.45, 4.6, () => `${fmt(E.tsol.frais)} °C · O2 ${fmt(Math.max(4, 14.6 - 0.33 * E.tsol.frais))} mg/L`, "PT1000 + sonde optique d'oxygène dissous. Alarme sous 5 mg/L, consigne de solution sous 21-22 °C.");
+capteur("Cuve de stockage", -4.4, 1.7, -4.3, () => `${fmt(E.tsto)} °C`, "Température de l'eau du stockage thermique.");
+capteur("Météo", 8, 3.4, -7, () => { const m = M.meteo(E.mois, E.h); return `${fmt(m.t)} °C · ${fmt(m.g, 0)} W/m² · ${fmt(m.vent)} m/s`; }, "Station météo du site.");
+capteur("Énergie", 0, 3.6, 10.2, () => `PV ${fmt(E.pv / 1000, 2)} kW · batterie ${fmt(E.soc, 0)} %`, "Lecture de l'onduleur et du BMS.");
+
+const moisSel = $("#mois");
+for (let m = 1; m <= 12; m++) moisSel.add(new Option(M.NOMS_MOIS[m], m));
+moisSel.value = 10;
+function demarrer() {
+  const h = +$("#heure").value;
+  const equip = E.equip, manuel = E.manuel;
+  E = M.nouvelEtat(+moisSel.value);
+  E.equip = equip; E.manuel = manuel;
+  M.avancer(E, 2 * 86400 + (h - 6) * 3600);
+}
+moisSel.onchange = demarrer;
+$("#heure").oninput = e => { const cible = +e.target.value; let d = cible - E.h; if (d < 0) d += 24; M.avancer(E, d * 3600); };
+$("#lecture").onclick = () => { lecture = !lecture; $("#lecture").textContent = lecture ? "Pause" : "Lecture"; $("#lecture").classList.toggle("actif", lecture); };
+document.querySelectorAll("[data-v]").forEach(b => b.onclick = () => { vitesse = +b.dataset.v; document.querySelectorAll("[data-v]").forEach(x => x.classList.toggle("actif", x === b)); });
+for (const k of ["stockage", "ecran", "pad"]) $("#e-" + k).onchange = e => { E.equip[k] = e.target.checked; };
+function lireManuel() {
+  E.manuel = $("#manuel").checked ? { ouvrant: +$("#m-ouvrant").value, ecran: +$("#m-ecran").value, ext: +$("#m-ext").value, pad: $("#m-pad").checked, sto: $("#m-sto").value, haf: true } : null;
+  $("#bloc-manuel").classList.toggle("cache", !E.manuel);
+}
+["manuel", "m-ouvrant", "m-ecran", "m-ext", "m-pad", "m-sto"].forEach(id => $("#" + id).addEventListener("input", lireManuel));
+$("#j-fruits").oninput = e => { jourFruits = +e.target.value; majFruits(jourFruits); };
+$("#j-feuilles").oninput = e => { jourFeuilles = +e.target.value; majFeuilles(jourFeuilles); };
+
+// ================================================================ affichage
+function domaineVisible(d) {
+  const tous = Object.values(domaines).flat();
+  tous.forEach(o => o.visible = true);
+  if (d !== "tout") {
+    const garder = new Set(domaines[d]);
+    tous.forEach(o => { if (!garder.has(o)) o.visible = false; });
+    // repères discrets pour se situer
+    domaines.genie.forEach(o => { if (o === structure || o === allee || o === solInt) o.visible = true; });
+  }
+  if (!$("#c-couverture").checked) domaines.couverture.forEach(o => o.visible = false);
+  capteurs.forEach(c => c.lab.visible = $("#c-etiquettes").checked && c.lab.parent.visible);
+}
+$("#domaine").onchange = e => domaineVisible(e.target.value);
+$("#c-couverture").onchange = () => domaineVisible($("#domaine").value);
+$("#c-etiquettes").onchange = () => domaineVisible($("#domaine").value);
+
+const chaleur = {};
+for (const [comp, zc] of [["fruits", -2.5], ["feuilles", 2.5]]) {
+  const p = new THREE.Mesh(new THREE.PlaneGeometry(9.8, 4.9), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.45, depthWrite: false, toneMapped: false }));
+  p.rotation.x = -Math.PI / 2; p.position.set(0, 0.06, zc); p.visible = false; scene.add(p); chaleur[comp] = p;
+}
+$("#c-chaleur").onchange = e => Object.values(chaleur).forEach(p => p.visible = e.target.checked);
+function couleurEcart(t, c, jour) {
+  const bas = jour ? c.tj - 2 : c.tn - 1, haut = c.tj + c.ea + 1;
+  if (t < bas) return new THREE.Color(0x3b8fd0).lerp(new THREE.Color(0x2f9d62), Math.max(0, 1 - (bas - t) / 5));
+  if (t > haut) return new THREE.Color(0xe6a446).lerp(new THREE.Color(0xd23c2c), Math.min(1, (t - haut) / 6));
+  return new THREE.Color(0x2f9d62);
+}
+
+const positionsEcran = { fruits: 0, feuilles: 0 }, positionsOuvrant = { fruits: 0, feuilles: 0 };
+function majActionneurs(dt) {
+  for (const comp of ["fruits", "feuilles"]) {
+    const c = E.comp[comp].cmd;
+    positionsOuvrant[comp] += (c.ouvrant - positionsOuvrant[comp]) * Math.min(1, dt * 1.5);
+    positionsEcran[comp] += (c.ecran - positionsEcran[comp]) * Math.min(1, dt * 1.2);
+    const { e, z0 } = ecrans[comp];
+    const f = Math.max(0.001, positionsEcran[comp] / 100);
+    e.scale.y = f; e.position.z = z0 + 2.5 * f; e.visible = f > 0.01;
+    pads[comp].material.color.set(c.pad ? 0x6b5233 : 0xffffff);
+    ventilos[comp].rotation.x += dt * (c.ext || 0) * 14;
+  }
+  ouvrantsLat.forEach(o => { const f = 1 - positionsOuvrant[o.comp] / 100; o.rideau.scale.y = Math.max(0.02, f); o.rideau.position.y = 0.8 + 1.5 * f / 2 + 1.5 * (1 - f); });
+  ouvrantsToit.forEach(o => { o.pivot.rotation.x = o.cote * -0.8 * positionsOuvrant[o.comp] / 100; });
+  const m = M.meteo(E.mois, E.h), jour = m.g > 5;
+  for (const comp of ["fruits", "feuilles"]) chaleur[comp].material.color.copy(couleurEcart(E.comp[comp].t, M.CONSIGNES[comp], jour));
+}
+
+function majSoleil() {
+  const s = M.soleil(E.mois, E.h);
+  const v = new THREE.Vector3(s.x, s.y, s.z).normalize();
+  u.sunPosition.value.copy(v);
+  soleilLum.position.copy(v.clone().multiplyScalar(60)); soleilLum.target.position.set(0, 0, 2);
+  const el = Math.max(0, s.elevation);
+  soleilLum.intensity = el > 0 ? 0.5 + 2.6 * Math.sin(el * Math.PI / 180) : 0;
+  ambiance.intensity = el > 0 ? 0.35 + 0.5 * Math.sin(el * Math.PI / 180) : 0.9;
+  ambiance.color.set(el > 0 ? 0xcfe6ff : 0x6f86b8);
+  lune.intensity = el > 0 ? 0 : 0.6;
+  renderer.toneMappingExposure = el > 0 ? 0.5 : 0.6;
+  scene.fog.color.set(el > 2 ? 0xc9d6dc : el > -6 ? 0x5a6a80 : 0x141c28);
+  ciel.visible = el > -6;
+  scene.background = el > -6 ? null : new THREE.Color(0x0b1220);
+  soleilLum.color.setHSL(0.1, 0.6, el < 12 ? 0.6 : 0.9);
+}
+
+function panneaux_() {
+  const m = M.meteo(E.mois, E.h), jour = m.g > 5;
+  const hh = Math.floor(E.h), mm = Math.floor((E.h - hh) * 60);
+  const s = M.soleil(E.mois, E.h);
+  $("#horloge").textContent = `${M.NOMS_MOIS[E.mois]}, ${String(hh).padStart(2, "0")} h ${String(mm).padStart(2, "0")} · soleil à ${fmt(Math.max(0, s.elevation), 0)}° · jour ${E.jour}`;
+  if (!$("#o-climat").classList.contains("cache")) {
+    const f = E.comp.fruits, l = E.comp.feuilles;
+    const hf = M.hrDepuisW(f.t, f.w), hl = M.hrDepuisW(l.t, l.w);
+    $("#kpis").innerHTML = [
+      ["Fruits", `${fmt(f.t)} °C`, `${fmt(hf, 0)} % HR · DPV ${fmt(M.dpv(f.t, hf), 2)}`],
+      ["Feuilles", `${fmt(l.t)} °C`, `${fmt(hl, 0)} % HR · DPV ${fmt(M.dpv(l.t, hl), 2)}`],
+      ["Dehors", `${fmt(m.t)} °C`, `${fmt(m.hr, 0)} % HR${m.pluie ? " · pluie" : ""}`],
+      ["Soleil", `${fmt(m.g, 0)} W/m²`, jour ? "jour" : "nuit"],
+      ["Ouvrants", `${fmt(f.cmd.ouvrant, 0)} %`, f.mode === "evaporatif" ? "mode évaporatif" : "ventilation naturelle"],
+      ["Écran", `${fmt(f.cmd.ecran, 0)} %`, f.cmd.ecran >= 95 ? "isolation" : f.cmd.ecran > 0 ? "ombrage" : "ouvert"],
+      ["Stockage", `${fmt(E.tsto)} °C`, f.cmd.sto === "charge" ? "en charge" : f.cmd.sto === "decharge" ? "restitue" : "au repos"],
+      ["Eau du jour", `${fmt(E.eau.transp + E.eau.pad, 0)} L`, `pad ${fmt(E.eau.pad, 0)} L`],
+    ].map(([a, b, c]) => `<div class="kpi"><span>${a}</span><b>${b}</b><span>${c}</span></div>`).join("");
+    $("#raisons").innerHTML = [...new Set([...f.cmd.raisons, ...l.cmd.raisons])].map(r => `<li>${r}</li>`).join("");
+  }
+  if (!$("#o-energie").classList.contains("cache")) {
+    $("#kpis-energie").innerHTML = [
+      ["Solaire", `${fmt(E.pv / 1000, 2)} kW`, "6 x 550 Wc"], ["Consommation", `${fmt(E.charge / 1000, 2)} kW`, "toutes charges"],
+      ["Batterie", `${fmt(E.soc, 0)} %`, "10,2 kWh LiFePO4"], ["Réseau SNEL", E.reseau ? "présent" : "absent", E.reseau ? "recharge si < 60 %" : "délestage"],
+      ["Groupe", E.groupe ? "en marche" : "arrêté", "démarre sous 15 %"], ["Délestage", E.soc < 35 && !E.reseau ? "actif" : "non", "fonctions vitales protégées"],
+    ].map(([a, b, c]) => `<div class="kpi"><span>${a}</span><b>${b}</b><span>${c}</span></div>`).join("");
+  }
+  capteurs.forEach(c => c.div.textContent = `${c.nom} : ${c.lire()}`);
+}
+
+// ================================================================ finance
+function majFinance() {
+  const r = M.finance({ prix: $("#f-prix").value / 100, rendement: $("#f-rdt").value / 100, capex2Facteur: $("#f-capex").value / 100 });
+  const ton = r.van >= 0 ? "var(--vert)" : r.ebeCroisiere >= 0 ? "var(--orange)" : "var(--rouge)";
+  $("#kpis-finance").innerHTML = [
+    ["EBE de croisière", `${fmt(r.ebeCroisiere, 0)} $`, "par an"],
+    ["VAN à 12 %", `<span style="color:${ton}">${fmt(r.van, 0)} $</span>`, "sur 10 ans"],
+    ["TRI", r.tri == null ? "négatif" : `${fmt(r.tri * 100)} %`, "sur 10 ans"],
+    ["Retour", r.retour == null ? "> 10 ans" : `année ${r.retour}`, "trésorerie positive"],
+    ["Besoin max.", `${fmt(r.creux, 0)} $`, "creux de trésorerie"],
+    ["Indice", fmt($("#f-prix").value * $("#f-rdt").value / 10000, 2), "prix x rendement"],
+  ].map(([a, b, c]) => `<div class="kpi"><span>${a}</span><b>${b}</b><span>${c}</span></div>`).join("");
+  const cv = $("#tresorerie"), x = cv.getContext("2d"), W = cv.width, H = cv.height;
+  x.clearRect(0, 0, W, H);
+  const min = Math.min(...r.cumul, 0), max = Math.max(...r.cumul, 0);
+  const y = v => H - 20 - (H - 40) * (v - min) / (max - min || 1);
+  x.strokeStyle = "#8a9a90"; x.beginPath(); x.moveTo(30, y(0)); x.lineTo(W - 10, y(0)); x.stroke();
+  r.cumul.forEach((v, i) => { const bx = 34 + i * (W - 50) / 11; x.fillStyle = v >= 0 ? "#5fbf85" : "#e9776b"; x.fillRect(bx, Math.min(y(0), y(v)), (W - 50) / 11 - 6, Math.abs(y(v) - y(0))); x.fillStyle = "#9fb0a5"; x.font = "14px system-ui"; x.fillText(i, bx + 6, H - 4); });
+}
+["f-prix", "f-rdt", "f-capex"].forEach(id => $("#" + id).oninput = majFinance);
+
+document.querySelectorAll(".onglets button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".onglets button").forEach(x => x.classList.toggle("actif", x === b));
+  ["climat", "energie", "finance"].forEach(o => $("#o-" + o).classList.toggle("cache", o !== b.dataset.o));
+  if (b.dataset.o === "finance") majFinance();
+  panneaux_();
+});
+
+// ================================================================ interaction
+const rayon = new THREE.Raycaster(), souris = new THREE.Vector2();
+renderer.domElement.addEventListener("click", ev => {
+  if (marche.isLocked) return;
+  souris.set(ev.clientX / innerWidth * 2 - 1, -ev.clientY / innerHeight * 2 + 1);
+  rayon.setFromCamera(souris, camera);
+  const vis = cliquables.filter(o => o.visible);
+  const hits = rayon.intersectObjects(vis, true);
+  for (const h of hits) {
+    let o = h.object; while (o && !o.userData.info) o = o.parent;
+    if (!o) continue;
+    if (!o.visible || [...domaines.couverture].includes(o) && hits.length > 1 && $("#domaine").value !== "genie" && hits.indexOf(h) === 0 && hits[1]) { continue; }
+    const i = o.userData.info;
+    $("#fiche").innerHTML = `<b>${i.titre}</b><p style="margin:6px 0">${i.texte}</p><span>${i.cout || ""}</span>`;
+    $("#fiche").classList.add("visible");
+    break;
+  }
+});
+
+const touches = {};
+addEventListener("keydown", e => touches[e.code] = true);
+addEventListener("keyup", e => touches[e.code] = false);
+function vue(mode) {
+  ["v-orbite", "v-marche", "v-dessus"].forEach(id => $("#" + id).classList.toggle("actif", id === "v-" + mode));
+  if (mode === "marche") { camera.position.set(0, 1.65, 4.5); camera.lookAt(0, 1.65, -5); marche.lock(); orbite.enabled = false; }
+  else { if (marche.isLocked) marche.unlock(); orbite.enabled = true; }
+  if (mode === "dessus") { camera.position.set(0, 32, 2.5); orbite.target.set(0, 0, 2.5); }
+  if (mode === "orbite") { camera.position.set(-17, 11, 19); orbite.target.set(0, 2, 1); }
+}
+$("#v-orbite").onclick = () => vue("orbite");
+$("#v-marche").onclick = () => vue("marche");
+$("#v-dessus").onclick = () => vue("dessus");
+marche.addEventListener("lock", () => $("#aide").style.display = "block");
+marche.addEventListener("unlock", () => { $("#aide").style.display = "none"; orbite.enabled = true; ["v-orbite", "v-marche", "v-dessus"].forEach(id => $("#" + id).classList.toggle("actif", id === "v-orbite")); orbite.target.set(camera.position.x, 1.5, camera.position.z - 3); });
+$("#v-theme").onclick = () => { const r = document.documentElement; r.dataset.theme = r.dataset.theme === "light" ? "dark" : "light"; };
+$("#v-export").onclick = () => {
+  new GLTFExporter().parse(scene, res => {
+    const blob = new Blob([res], { type: "model/gltf-binary" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "serre_lubumbashi.glb"; a.click();
+  }, err => alert("Export impossible : " + err), { binary: true, onlyVisible: true });
+};
+addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); etiquettes.setSize(innerWidth, innerHeight); });
+
+// ================================================================ boucle
+demarrer();
+majFruits(jourFruits); majFeuilles(jourFeuilles); domaineVisible("tout");
+let precedent = performance.now(), cumulAffichage = 0, cumulCroissance = 0;
+function boucle(t) {
+  const dt = Math.min(0.1, (t - precedent) / 1000); precedent = t;
+  if (lecture) {
+    const sec = Math.max(60, Math.round(dt * vitesse / 60) * 60);
+    M.avancer(E, sec);
+    $("#heure").value = E.h.toFixed(1);
+    if ($("#c-croissance").checked) {
+      cumulCroissance += sec / 86400;
+      if (cumulCroissance >= 0.25) {
+        jourFruits = Math.min(300, jourFruits + cumulCroissance); jourFeuilles = (jourFeuilles + cumulCroissance) % 35; cumulCroissance = 0;
+        $("#j-fruits").value = jourFruits; $("#j-feuilles").value = jourFeuilles; majFruits(jourFruits); majFeuilles(jourFeuilles);
+      }
+    }
+  }
+  if (marche.isLocked) {
+    const v = 2.2 * dt;
+    if (touches.KeyW || touches.KeyZ || touches.ArrowUp) marche.moveForward(v);
+    if (touches.KeyS || touches.ArrowDown) marche.moveForward(-v);
+    if (touches.KeyA || touches.KeyQ || touches.ArrowLeft) marche.moveRight(-v);
+    if (touches.KeyD || touches.ArrowRight) marche.moveRight(v);
+    camera.position.x = Math.max(-15, Math.min(15, camera.position.x));
+    camera.position.z = Math.max(-15, Math.min(15, camera.position.z));
+    camera.position.y = 1.65;
+  } else orbite.update();
+  majActionneurs(dt); majSoleil();
+  cumulAffichage += dt; if (cumulAffichage > 0.25) { panneaux_(); cumulAffichage = 0; }
+  renderer.render(scene, camera); etiquettes.render(scene, camera);
+  requestAnimationFrame(boucle);
+}
+requestAnimationFrame(boucle);
+window.__serre = { get E() { return E; }, scene };
+</script>
+</body>
+</html>

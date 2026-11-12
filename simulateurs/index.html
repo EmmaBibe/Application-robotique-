@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulateurs de la serre</title>
+<style>
+:root{--fond:#f4f6f3;--carte:#fff;--texte:#1d2a22;--doux:#5d6b62;--trait:#d9e0da;--vert:#2f7d4f}
+@media (prefers-color-scheme: dark){:root{--fond:#121814;--carte:#1b231e;--texte:#e3ebe5;--doux:#9aa89f;--trait:#2d3a32;--vert:#5fbf85}}
+body{margin:0;background:var(--fond);color:var(--texte);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:900px;margin:0 auto;padding:32px 16px}
+h1{margin:0 0 4px;font-size:26px}
+p.sous{color:var(--doux);margin:0 0 24px}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+a.carte{display:block;background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:18px;color:inherit;text-decoration:none}
+a.carte:hover{border-color:var(--vert)}
+a.carte b{display:block;font-size:18px;margin-bottom:6px;color:var(--vert)}
+ul{color:var(--doux);padding-left:18px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Simulateurs de la serre pilote</h1>
+  <p class="sous">Voir, manipuler et éprouver le projet avant d'investir. Tout fonctionne hors ligne, dans un navigateur récent.</p>
+  <div class="grille">
+    <a class="carte" href="serre_3d_autonome.html">
+      <b>Maquette 3D vivante</b>
+      Toute la serre en 3D : structure, couverture, cultures qui poussent, bassins, réseaux d'eau et d'électricité, capteurs avec leurs valeurs. Soleil réel de Lubumbashi selon le mois et l'heure. Le climat intérieur est calculé en direct ; les ouvrants, l'écran, le pad et les extracteurs bougent en conséquence.
+      <ul>
+        <li>Affichage par domaine ou tout ensemble</li>
+        <li>Mode manuel : vous pilotez, la serre réagit</li>
+        <li>Retirer un équipement pour voir ce qu'il apporte</li>
+        <li>Marcher dans les allées à hauteur d'homme</li>
+        <li>Finance : prix et rendements en direct</li>
+        <li>Export glTF pour un rendu photoréaliste dans Blender</li>
+      </ul>
+    </a>
+    <a class="carte" href="../logiciel/dashboard/index.html">
+      <b>Supervision</b>
+      L'écran de travail du technicien : plan vivant, raisons de chaque décision, alarmes, lots de la graine à la récolte, énergie et eau, export des données pour la recherche.
+    </a>
+  </div>
+</main>
+</body>
+</html>

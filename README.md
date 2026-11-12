@@ -9,7 +9,8 @@ Le dossier couvre l'agronomie, l'architecture et le génie civil, la thermique, 
 1. **`docs/00_synthese_decisionnelle.md`** : la réponse à la question « faut-il se lancer ? », en cinq pages.
 2. **`Etude_faisabilite_serre_Lubumbashi.docx`** : le dossier complet en un seul document, imprimable.
 3. **`finance/modele_financier_serre_lubumbashi.xlsx`** : le modèle financier, à mettre à jour avec vos propres prix et rendements.
-4. **`logiciel/dashboard/index.html`** : le démonstrateur de l'interface de supervision (s'ouvre dans un navigateur, sans internet).
+4. **`simulateurs/index.html`** : les simulateurs, dont la maquette 3D vivante de toute la serre (s'ouvre d'un double-clic, sans internet).
+5. **`logiciel/dashboard/index.html`** : le démonstrateur de l'interface de supervision.
 
 ## En bref
 
@@ -52,6 +53,7 @@ donnees/                       Données et paramètres (CSV, JSON)
   calendrier_production.csv     planning hebdomadaire des semis, repiquages et récoltes
   registre_risques.csv
   enquete_prix_modele.csv       grille d'enquête de marché
+simulateurs/                   Maquette 3D vivante et noyau de simulation du navigateur
 finance/
   modele_financier_serre_lubumbashi.xlsx
   generer_modele.py
