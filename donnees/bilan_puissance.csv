@@ -1,0 +1,15 @@
+charge,puissance_W,heures_j,energie_kWh_j,part_nuit,priorite_delestage
+"Automates, capteurs, serveur local, routeur 4G, caméras",60,24,1.44,0.5,0
+Surpresseur d'aération des bassins (radeaux),80,24,1.92,0.5,0
+Pompe d'irrigation goutte-à-goutte (fruits),370,1.5,0.56,0.0,1
+Recirculation drainage + UV-C (fruits),160,6,0.96,0.2,1
+Filtration + UV-C bassins (feuilles),150,6,0.9,0.3,1
+Ventilateurs de brassage (4 x 45 W),180,12,2.16,0.6,1
+Moteurs d'ouvrants et d'écran,250,0.8,0.2,0.3,1
+Chambre froide 6 m3 (moyenne),900,3.0,2.7,0.4,2
+Éclairage LED de germination,200,14,2.8,0.3,3
+Osmoseur et pompe de transfert,400,1.0,0.4,0.0,3
+"Éclairage, prises, divers",150,3.0,0.45,0.5,3
+Extracteurs 2 x 550 W + pompe pad 100 W,1200,saisonnier,voir bilan mensuel,0,2
+Aérothermes 2 x 150 W + pompe stockage 80 W,380,saisonnier,voir bilan mensuel,0.8,1
+Refroidisseur de solution 500 W,500,saisonnier,voir bilan mensuel,0,2

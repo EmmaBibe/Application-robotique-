@@ -1,0 +1,51 @@
+repere,zone,type,grandeur,technologie,interface,plage_precision,quantite_optimisee,quantite_complete,prix_unitaire_usd,remarque
+TH-F1,fruits,capteur,temperature et humidite air,capteur capacitif sous abri ventile,Modbus RTU,-40 a 80 degC +/-0.3 ; 0-100 % +/-2 %,1,2,90,abri ventile obligatoire (sinon erreur de 3 a 5 degC au soleil)
+TH-L1,feuilles,capteur,temperature et humidite air,capteur capacitif sous abri ventile,Modbus RTU,idem,1,2,90,
+TH-P1,pepiniere,capteur,temperature et humidite air,capteur capacitif,Modbus RTU,idem,1,1,60,
+CO2-F1,fruits,capteur,CO2,NDIR double faisceau,Modbus RTU,0-2000 ppm +/-50 ppm,1,1,180,
+CO2-L1,feuilles,capteur,CO2,NDIR,Modbus RTU,idem,0,1,180,
+PAR-F1,fruits,capteur,rayonnement photosynthetique,quantum PAR,0-10 V ou Modbus,0-2500 umol/m2/s,1,1,250,complete : capteur de reference type Apogee
+PYR-EXT,exterieur,capteur,rayonnement global,pyranometre thermopile classe C,Modbus RTU,0-1800 W/m2,1,1,220,sert au declenchement de l'irrigation
+MET-EXT,exterieur,capteur,station meteo,ultrasons vent + pluie + T/HR,Modbus RTU,vent 0-40 m/s,1,1,450,securite vent et pluie
+TF-F1,fruits,capteur,temperature de feuille,thermometre infrarouge,Modbus RTU,0-60 degC +/-0.5,0,2,160,DPV feuille et risque de condensation
+EC-F1,fruits,capteur,conductivite solution,sonde 4 electrodes,Modbus RTU,0-10 mS/cm,1,2,220,cuve de solution ; complete : une de plus sur le drainage
+PH-F1,fruits,capteur,pH solution,electrode gel industrielle,Modbus RTU,0-14 +/-0.05,1,2,200,electrode a remplacer tous les 12 a 18 mois
+EC-L1,feuilles,capteur,conductivite bassins,sonde 4 electrodes,Modbus RTU,0-10 mS/cm,2,2,220,une par bassin
+PH-L1,feuilles,capteur,pH bassins,electrode gel industrielle,Modbus RTU,0-14,2,2,200,une par bassin
+DO-L1,feuilles,capteur,oxygene dissous,optique luminescente,Modbus RTU,0-20 mg/L,1,2,450,optique : pas de membrane ni d'electrolyte a changer
+TS-L1,feuilles,capteur,temperature de solution,sonde PT1000 inox,Modbus RTU,0-50 degC,2,2,40,
+TS-F1,fruits,capteur,temperature de solution,PT1000,Modbus RTU,0-50 degC,1,1,40,
+TS-STO,fruits,capteur,temperature du stockage thermique,PT1000,Modbus RTU,0-80 degC,1,2,40,
+SUB-F1,fruits,capteur,humidite et CE du substrat,capteur TDR/FDR,SDI-12 ou Modbus,0-100 % ; 0-20 dS/m,1,2,300,
+BAL-F1,fruits,capteur,balance de drainage,auget basculeur (optimisee) ou pesee de 6 seaux (complete),impulsion ou Modbus,resolution 5 mL,1,1,120,complete : pesee continue 400 USD
+SEVE-F1,fruits,capteur,flux de seve et diametre de tige,dendrometre et jauge thermique,Modbus,micrometre,0,2,600,mode recherche
+DEB-01,eau,capteur,debit eau d'appoint,debitmetre a impulsions,impulsion,1 L/impulsion,3,4,45,
+NIV-01,eau,capteur,niveau citerne et cuves,capteur de pression immerge 4-20 mA,4-20 mA,0-3 m,5,6,70,
+POR-01,sas,capteur,ouverture des portes,contact magnetique,entree TOR,-,2,3,10,
+SEC-01,local technique,capteur,inondation et fuite acide,detecteur de fuite,entree TOR,-,1,2,25,
+ENE-01,energie,capteur,etat onduleur et batterie,lecture directe onduleur et BMS,Modbus RTU/CAN,-,1,1,0,inclus dans l'onduleur
+ENE-02,energie,capteur,sous-comptage par depart,compteur d'energie rail DIN,Modbus RTU,classe 1,2,5,45,
+CAM-F1,fruits,camera,suivi visuel et time-lapse,camera IP 4 MP IR,Ethernet PoE,-,1,2,70,
+CAM-L1,feuilles,camera,suivi visuel,camera IP 4 MP,Ethernet PoE,-,1,1,70,
+CAM-PIEGE,fruits,camera,comptage des insectes sur piege englue,camera fixe macro + eclairage,Ethernet PoE,-,0,1,120,mode recherche
+CAM-EXT,exterieur,camera,securite,camera IP exterieure IR,Ethernet PoE,-,0,1,90,
+ACT-OUV,serre,actionneur,ouvrants toiture et lateraux,motoreducteur 24 V avec fins de course,relais,-,4,4,250,inclus au lot serre
+ACT-ECR,serre,actionneur,ecran,motoreducteur 230 V,relais,-,2,2,350,inclus au lot serre
+ACT-EXT,serre,actionneur,extracteurs,moteur 0.55 kW deux vitesses,contacteur,-,2,2,0,inclus au lot climat
+ACT-PAD,serre,actionneur,pompe du pad,pompe 100 W,relais,-,1,2,0,inclus au lot climat
+ACT-HAF,serre,actionneur,brassage,ventilateur 45 W,relais,-,4,4,0,inclus au lot climat
+ACT-STO,serre,actionneur,aerothermes et pompe stockage,ventilateur + pompe,relais,-,1,2,0,inclus au lot climat
+ACT-DOS,eau,actionneur,pompes doseuses A B acide,peristaltique 24 V,sortie impulsion,0-10 L/h,6,6,0,inclus au lot fertirrigation
+ACT-IRR,eau,actionneur,pompe irrigation et electrovannes,pompe 0.37 kW + EV 24 V,contacteur + relais,-,1,1,0,inclus au lot fertirrigation
+ACT-CO2,fruits,actionneur,electrovanne CO2,EV 24 V + detendeur,relais,-,0,1,150,
+AUT-F,fruits,automate,automate de zone fruits,ESP32 industriel rail DIN 24 V 8 E/S isolees + RS485 + Ethernet,Ethernet,-,1,1,180,
+AUT-L,feuilles,automate,automate de zone feuilles,idem,Ethernet,-,1,1,180,
+AUT-E,local technique,automate,automate eau et energie,idem,Ethernet,-,1,1,180,
+EXT-ES,local technique,automate,modules d'entrees-sorties supplementaires,module relais/E-S Modbus,Modbus RTU,-,2,3,60,
+SRV-01,local technique,serveur,serveur local de supervision,mini-PC industriel sans ventilateur ou Raspberry Pi 5 + SSD 256 Go,Ethernet,-,1,1,250,
+UPS-01,local technique,energie,alimentation secourue 24 V,alimentation rail DIN + batterie tampon,-,-,1,1,120,
+NET-01,local technique,reseau,commutateur PoE industriel,8 ports PoE,Ethernet,-,1,1,120,
+NET-02,local technique,reseau,routeur 4G double SIM,routeur industriel,Ethernet,-,1,1,180,deux operateurs pour la redondance
+NET-03,local technique,reseau,point d'acces Wi-Fi,AP exterieur IP65,Ethernet PoE,-,1,1,70,tablettes et telephones
+HMI-01,annexe,interface,tablette de supervision murale,tablette 10 pouces en support mural,Wi-Fi,-,1,2,200,
+OUT-01,laboratoire,instrument,CE-metre et pH-metre de poche + tampons,instrument portable,-,-,1,1,150,controle croise hebdomadaire des sondes

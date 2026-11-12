@@ -1,0 +1,13 @@
+mois,t_max_moy_C,t_min_moy_C,pluie_mm,hr_moy_pct,rayonnement_global_kWh_m2_j,duree_jour_h,saison
+1,27.0,16.5,245,82,5.0,12.8,pluies
+2,27.2,16.5,225,82,5.1,12.5,pluies
+3,27.3,16.0,205,80,5.3,12.2,pluies
+4,27.5,14.0,55,72,5.6,11.8,transition
+5,26.8,10.5,5,60,5.6,11.5,seche_fraiche
+6,25.5,7.5,0,52,5.4,11.3,seche_fraiche
+7,25.8,7.0,0,47,5.7,11.4,seche_fraiche
+8,28.5,9.5,1,40,6.3,11.7,seche_chaude
+9,31.5,13.0,5,36,6.6,12.0,seche_chaude
+10,32.5,16.0,30,42,6.4,12.4,seche_chaude
+11,29.5,17.0,160,68,5.4,12.7,pluies
+12,27.2,16.8,255,80,4.9,12.9,pluies

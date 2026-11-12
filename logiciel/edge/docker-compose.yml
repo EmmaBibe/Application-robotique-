@@ -1,0 +1,84 @@
+# Pile de supervision locale de la serre.
+# Démarrage : docker compose up -d   (depuis ce dossier)
+# Avant la première mise en route : copier .env.exemple en .env et changer tous les mots de passe.
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0.18
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto/acl:/mosquitto/config/acl:ro
+      - ./mosquitto/passwd:/mosquitto/config/passwd:ro
+      - mosquitto-data:/mosquitto/data
+
+  influxdb:
+    image: influxdb:2.7.10
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_UTILISATEUR}
+      DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUX_MOT_DE_PASSE}
+      DOCKER_INFLUXDB_INIT_ORG: serre
+      DOCKER_INFLUXDB_INIT_BUCKET: mesures
+      DOCKER_INFLUXDB_INIT_RETENTION: 90d
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUX_JETON}
+    volumes:
+      - influx-data:/var/lib/influxdb2
+
+  telegraf:
+    image: telegraf:1.32.3
+    restart: unless-stopped
+    depends_on: [mosquitto, influxdb]
+    environment:
+      INFLUX_JETON: ${INFLUX_JETON}
+      MQTT_MOT_DE_PASSE_TELEGRAF: ${MQTT_MOT_DE_PASSE_TELEGRAF}
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+
+  grafana:
+    image: grafana/grafana-oss:11.3.1
+    restart: unless-stopped
+    depends_on: [influxdb]
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_MOT_DE_PASSE}
+      GF_USERS_DEFAULT_LANGUAGE: fr-FR
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+  regulation-fruits:
+    build:
+      context: ../..
+      dockerfile: logiciel/Dockerfile
+    restart: unless-stopped
+    depends_on: [mosquitto]
+    command: ["python", "-m", "serre_core.service", "--broker", "mosquitto", "--compartiment", "fruits",
+              "--utilisateur", "regulation", "--mot-de-passe", "${MQTT_MOT_DE_PASSE_REGULATION}"]
+
+  regulation-feuilles:
+    build:
+      context: ../..
+      dockerfile: logiciel/Dockerfile
+    restart: unless-stopped
+    depends_on: [mosquitto]
+    command: ["python", "-m", "serre_core.service", "--broker", "mosquitto", "--compartiment", "feuilles",
+              "--utilisateur", "regulation", "--mot-de-passe", "${MQTT_MOT_DE_PASSE_REGULATION}"]
+
+  interface:
+    image: nginx:1.27.3-alpine
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ../dashboard:/usr/share/nginx/html:ro
+
+volumes:
+  mosquitto-data:
+  influx-data:
+  grafana-data:

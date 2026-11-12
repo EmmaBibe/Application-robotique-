@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 780" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <rect width="900" height="780" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="bold">Plan de masse du pilote (parcelle de travail 30 x 25 m, 1 m = 24 px)</text>
+  <g transform="translate(810,90)"><path d="M0,-25 L10,10 L0,3 L-10,10Z" fill="#333"/><text y="-30" text-anchor="middle" font-weight="bold">N</text></g>
+  <!-- parcelle 30 x 25 m : 720 x 600 px, origine (90,80) -->
+  <rect x="90" y="80" width="720" height="600" fill="#f6f3ea" stroke="#555" stroke-width="2" stroke-dasharray="10 6"/>
+  <text x="100" y="100" fill="#555">clôture 2,2 m</text>
+  <!-- bande sanitaire 3 m autour de la serre -->
+  <rect x="258" y="128" width="384" height="384" fill="#e5e5e5"/>
+  <text x="450" y="146" text-anchor="middle" font-size="11" fill="#555">bande sanitaire gravillonnée 3 m</text>
+  <!-- serre 10x10 = 240 px, à (330,200) -->
+  <rect x="330" y="200" width="240" height="240" fill="#e7f2e8" stroke="#2f5d3a" stroke-width="3"/>
+  <line x1="330" y1="320" x2="570" y2="320" stroke="#2f5d3a" stroke-dasharray="6 4"/>
+  <text x="450" y="262" text-anchor="middle" font-weight="bold">SERRE 10 x 10 m</text><text x="450" y="282" text-anchor="middle" font-size="11">fruits (nord)</text><text x="450" y="380" text-anchor="middle" font-size="11">feuilles (sud)</text>
+  <!-- sas -->
+  <rect x="432" y="440" width="36" height="48" fill="#fff6e0" stroke="#a87a1e"/>
+  <!-- annexe 10 x 3 = 240 x 72 à y=488 -->
+  <rect x="330" y="488" width="240" height="72" fill="#f7f1e6" stroke="#7a5a1e" stroke-width="2"/>
+  <text x="450" y="520" text-anchor="middle" font-weight="bold">ANNEXE 10 x 3 m</text><text x="450" y="538" text-anchor="middle" font-size="11">panneaux solaires en toiture</text>
+  <!-- citerne ouest -->
+  <circle cx="225" cy="320" r="40" fill="#cfe6f3" stroke="#1f5f86"/><text x="225" y="316" text-anchor="middle" font-size="11">citerne</text><text x="225" y="332" text-anchor="middle" font-size="11">eau de pluie</text>
+  <!-- forage -->
+  <circle cx="180" cy="470" r="10" fill="#2c6ea3"/><text x="180" y="495" text-anchor="middle" font-size="11">forage (option)</text>
+  <!-- PV sol option -->
+  <rect x="640" y="560" width="120" height="60" fill="#c8d6ea" stroke="#1f3f6b"/><text x="700" y="595" text-anchor="middle" font-size="11">PV au sol (complète)</text>
+  <!-- aire livraison -->
+  <rect x="330" y="585" width="240" height="70" fill="#ececec" stroke="#999"/><text x="450" y="625" text-anchor="middle">aire de livraison et parking</text>
+  <rect x="420" y="676" width="60" height="8" fill="#555"/><text x="450" y="702" text-anchor="middle">portail</text>
+  <!-- mât paratonnerre -->
+  <circle cx="610" cy="470" r="6" fill="#b83a2e"/><text x="620" y="474" font-size="11">mât paratonnerre</text>
+  <!-- station météo -->
+  <rect x="690" y="190" width="14" height="14" fill="#e0a400"/><text x="712" y="202" font-size="11">station météo</text>
+  <!-- extension -->
+  <rect x="650" y="230" width="150" height="180" fill="none" stroke="#2f5d3a" stroke-dasharray="4 4"/>
+  <text x="725" y="310" text-anchor="middle" font-size="11" fill="#2f5d3a">réserve foncière</text><text x="725" y="326" text-anchor="middle" font-size="11" fill="#2f5d3a">extension (suite</text><text x="725" y="342" text-anchor="middle" font-size="11" fill="#2f5d3a">sur 2 500 m²)</text>
+  <text x="450" y="760" text-anchor="middle" font-size="11" fill="#555">Aucun arbre ni bâtiment haut à moins de 20 m au nord, à l'est et à l'ouest. Pas de cultures de solanacées ou de choux à moins de 50 m.</text>
+  <text x="60" y="320" font-size="11" fill="#555">OUEST</text><text x="820" y="460" font-size="11" fill="#555">EST</text>
+</svg>

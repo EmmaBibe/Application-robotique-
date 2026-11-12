@@ -1,0 +1,4 @@
+date,enqueteur,acheteur,type_acheteur,quartier,produit,origine_actuelle,calibre_ou_presentation,unite,prix_achat_actuel_CDF,prix_achat_actuel_USD,prix_rayon_CDF,volume_hebdomadaire,frequence_livraison_souhaitee,exigences_qualite,delai_paiement_jours,interet_produit_analyse_sans_metaux,interet_contrat_annuel,contact,remarques
+2026-12-01,,Exemple Supermarche,supermarche,,Tomate ronde,Afrique du Sud,120-150 g en vrac,kg,,,,,,,,oui/non,oui/non,,
+2026-12-01,,Exemple Hotel,hotel,,Laitue batavia,Zambie,tete 250-350 g,tete,,,,,,,,oui/non,oui/non,,
+2026-12-01,,Exemple Cantine miniere,restauration collective,,Poivron rouge,Afrique du Sud,carton 5 kg,kg,,,,,,,,oui/non,oui/non,,

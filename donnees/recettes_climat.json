@@ -1,0 +1,131 @@
+{
+  "version": "1.0",
+  "unites": {
+    "t": "degC",
+    "hr": "%",
+    "dpv": "kPa",
+    "co2": "ppm",
+    "dli": "mol/m2/j",
+    "ec": "mS/cm",
+    "duree": "jours depuis l'etape precedente"
+  },
+  "notes": "Valeurs de depart issues de la litterature horticole (WUR, Cornell CEA, guides semenciers) et ajustees au contexte d'altitude de Lubumbashi. A recaler apres deux cycles avec les donnees mesurees.",
+  "cultures": {
+    "tomate": {
+      "compartiment": "fruits",
+      "systeme": "substrat_goutte_a_goutte",
+      "stades": [
+        {"nom": "germination", "duree_j": 5, "t_jour": 25, "t_nuit": 23, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.5, "dli": 8, "ec": 0.8, "ph": 5.8, "t_solution_max": 25},
+        {"nom": "plantule", "duree_j": 25, "t_jour": 22, "t_nuit": 18, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 0.9, "dli": 14, "ec": 1.8, "ph": 5.8, "t_solution_max": 24},
+        {"nom": "vegetatif", "duree_j": 25, "t_jour": 22, "t_nuit": 16, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.1, "co2_ppm": 600, "dli": 20, "ec": 2.6, "ph": 5.8, "t_solution_max": 25},
+        {"nom": "production", "duree_j": 260, "t_jour": 22, "t_nuit": 15, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.2, "co2_ppm": 700, "dli": 25, "ec": 3.0, "ph": 5.8, "t_solution_max": 25}
+      ]
+    },
+    "poivron": {
+      "compartiment": "fruits",
+      "systeme": "substrat_goutte_a_goutte",
+      "stades": [
+        {"nom": "germination", "duree_j": 8, "t_jour": 27, "t_nuit": 25, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.5, "dli": 8, "ec": 0.8, "ph": 5.8},
+        {"nom": "plantule", "duree_j": 35, "t_jour": 24, "t_nuit": 20, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 0.9, "dli": 13, "ec": 1.8, "ph": 5.8},
+        {"nom": "vegetatif", "duree_j": 30, "t_jour": 24, "t_nuit": 18, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.1, "co2_ppm": 600, "dli": 18, "ec": 2.4, "ph": 5.8},
+        {"nom": "production", "duree_j": 240, "t_jour": 24, "t_nuit": 17, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.2, "co2_ppm": 700, "dli": 22, "ec": 2.8, "ph": 5.8}
+      ]
+    },
+    "piment": {
+      "compartiment": "fruits",
+      "systeme": "substrat_goutte_a_goutte",
+      "stades": [
+        {"nom": "germination", "duree_j": 10, "t_jour": 28, "t_nuit": 26, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.5, "dli": 8, "ec": 0.8, "ph": 5.8},
+        {"nom": "plantule", "duree_j": 35, "t_jour": 25, "t_nuit": 20, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 1.0, "dli": 13, "ec": 1.8, "ph": 5.8},
+        {"nom": "vegetatif", "duree_j": 30, "t_jour": 26, "t_nuit": 18, "t_ventilation_ecart": 3, "hr_max": 80, "dpv_min": 0.6, "dpv_max": 1.3, "dli": 18, "ec": 2.2, "ph": 6.0},
+        {"nom": "production", "duree_j": 270, "t_jour": 26, "t_nuit": 17, "t_ventilation_ecart": 3, "hr_max": 80, "dpv_min": 0.6, "dpv_max": 1.4, "co2_ppm": 600, "dli": 22, "ec": 2.6, "ph": 6.0}
+      ]
+    },
+    "amarante": {
+      "compartiment": "feuilles",
+      "systeme": "radeau_flottant",
+      "stades": [
+        {"nom": "germination", "duree_j": 4, "t_jour": 28, "t_nuit": 25, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.6, "dli": 10, "ec": 0.6, "ph": 6.0, "t_solution_max": 26},
+        {"nom": "plantule", "duree_j": 12, "t_jour": 26, "t_nuit": 20, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.2, "dli": 15, "ec": 1.4, "ph": 6.0, "t_solution_max": 26},
+        {"nom": "croissance", "duree_j": 45, "t_jour": 27, "t_nuit": 18, "t_ventilation_ecart": 4, "hr_max": 85, "dpv_min": 0.6, "dpv_max": 1.5, "dli": 18, "ec": 1.8, "ph": 6.2, "t_solution_max": 26}
+      ]
+    },
+    "chou_chine": {
+      "compartiment": "feuilles",
+      "systeme": "radeau_flottant",
+      "remarque": "pe-tsai (pomme) ou pak-choi (feuilles). Eviter plus de 10 nuits sous 12 degC en phase jeune : risque de montaison.",
+      "stades": [
+        {"nom": "germination", "duree_j": 4, "t_jour": 22, "t_nuit": 20, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.6, "dli": 10, "ec": 0.6, "ph": 6.0, "t_solution_max": 22},
+        {"nom": "plantule", "duree_j": 18, "t_jour": 20, "t_nuit": 15, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 0.9, "dli": 13, "ec": 1.4, "ph": 6.0, "t_solution_max": 22},
+        {"nom": "croissance", "duree_j": 35, "t_jour": 20, "t_nuit": 14, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.0, "dli": 15, "ec": 2.0, "ph": 6.0, "t_solution_max": 22}
+      ]
+    },
+    "chou_pomme": {
+      "compartiment": "feuilles",
+      "systeme": "radeau_flottant",
+      "stades": [
+        {"nom": "germination", "duree_j": 5, "t_jour": 22, "t_nuit": 18, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.6, "dli": 10, "ec": 0.6, "ph": 6.2},
+        {"nom": "plantule", "duree_j": 25, "t_jour": 20, "t_nuit": 14, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 0.9, "dli": 13, "ec": 1.5, "ph": 6.2},
+        {"nom": "croissance", "duree_j": 75, "t_jour": 20, "t_nuit": 12, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.0, "dli": 16, "ec": 2.2, "ph": 6.2, "t_solution_max": 22}
+      ]
+    },
+    "epinard": {
+      "compartiment": "feuilles",
+      "systeme": "radeau_flottant",
+      "remarque": "Tres sensible a Pythium au-dessus de 22 degC de solution. Varietes a jours longs tardives (montaison lente).",
+      "stades": [
+        {"nom": "germination", "duree_j": 7, "t_jour": 18, "t_nuit": 16, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.6, "dli": 10, "ec": 0.6, "ph": 6.2, "t_solution_max": 21},
+        {"nom": "plantule", "duree_j": 14, "t_jour": 18, "t_nuit": 14, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 0.9, "dli": 12, "ec": 1.4, "ph": 6.2, "t_solution_max": 21},
+        {"nom": "croissance", "duree_j": 28, "t_jour": 18, "t_nuit": 12, "t_ventilation_ecart": 2, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 0.9, "dli": 14, "ec": 2.0, "ph": 6.2, "t_solution_max": 21}
+      ]
+    },
+    "celeri": {
+      "compartiment": "feuilles",
+      "systeme": "radeau_flottant",
+      "remarque": "Germination a la lumiere, lente. Plus de 10 jours sous 12 degC en jeune age provoquent la montaison.",
+      "stades": [
+        {"nom": "germination", "duree_j": 14, "t_jour": 21, "t_nuit": 18, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.5, "dli": 8, "ec": 0.6, "ph": 6.2, "t_solution_max": 22},
+        {"nom": "plantule", "duree_j": 42, "t_jour": 20, "t_nuit": 16, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 0.9, "dli": 12, "ec": 1.5, "ph": 6.2, "t_solution_max": 22},
+        {"nom": "croissance", "duree_j": 70, "t_jour": 20, "t_nuit": 14, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 1.0, "dli": 15, "ec": 2.2, "ph": 6.2, "t_solution_max": 22}
+      ]
+    },
+    "poireau": {
+      "compartiment": "feuilles",
+      "systeme": "radeau_flottant",
+      "stades": [
+        {"nom": "germination", "duree_j": 10, "t_jour": 20, "t_nuit": 16, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.6, "dli": 10, "ec": 0.6, "ph": 6.3},
+        {"nom": "plantule", "duree_j": 50, "t_jour": 18, "t_nuit": 14, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 1.0, "dli": 13, "ec": 1.5, "ph": 6.3},
+        {"nom": "croissance", "duree_j": 80, "t_jour": 20, "t_nuit": 12, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.1, "dli": 16, "ec": 2.0, "ph": 6.3, "t_solution_max": 23}
+      ]
+    },
+    "oignon_vert": {
+      "compartiment": "feuilles",
+      "systeme": "radeau_flottant",
+      "remarque": "Forme recommandee pour l'oignon en serre (cebette, botte). Pas de dependance a la photoperiode.",
+      "stades": [
+        {"nom": "germination", "duree_j": 8, "t_jour": 20, "t_nuit": 16, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.6, "dli": 10, "ec": 0.6, "ph": 6.3},
+        {"nom": "plantule", "duree_j": 25, "t_jour": 20, "t_nuit": 14, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 1.0, "dli": 13, "ec": 1.4, "ph": 6.3},
+        {"nom": "croissance", "duree_j": 35, "t_jour": 22, "t_nuit": 13, "t_ventilation_ecart": 3, "hr_max": 85, "dpv_min": 0.5, "dpv_max": 1.2, "dli": 15, "ec": 1.8, "ph": 6.3, "t_solution_max": 24}
+      ]
+    },
+    "oignon_bulbe": {
+      "compartiment": "essai",
+      "systeme": "substrat_sac",
+      "remarque": "Varietes de jours courts (11 a 12 h) obligatoires a 11,7 degS. Non retenu en production serre : faible valeur au m2.",
+      "stades": [
+        {"nom": "germination", "duree_j": 10, "t_jour": 20, "t_nuit": 16, "hr_max": 95, "dpv_min": 0.2, "dpv_max": 0.6, "dli": 10, "ec": 0.6, "ph": 6.3},
+        {"nom": "plantule", "duree_j": 45, "t_jour": 18, "t_nuit": 12, "hr_max": 85, "dpv_min": 0.4, "dpv_max": 1.0, "dli": 14, "ec": 1.5, "ph": 6.3},
+        {"nom": "bulbaison", "duree_j": 70, "t_jour": 25, "t_nuit": 15, "t_ventilation_ecart": 3, "hr_max": 75, "dpv_min": 0.7, "dpv_max": 1.5, "dli": 20, "ec": 2.0, "ph": 6.3}
+      ]
+    },
+    "ail": {
+      "compartiment": "essai",
+      "systeme": "substrat_sac",
+      "remarque": "Caieux pre-refrigeres 5 a 6 semaines a 4-5 degC en chambre froide avant plantation pour declencher la bulbaison.",
+      "stades": [
+        {"nom": "vegetatif", "duree_j": 70, "t_jour": 18, "t_nuit": 10, "hr_max": 80, "dpv_min": 0.5, "dpv_max": 1.2, "dli": 15, "ec": 1.6, "ph": 6.3},
+        {"nom": "bulbaison", "duree_j": 60, "t_jour": 25, "t_nuit": 14, "t_ventilation_ecart": 3, "hr_max": 70, "dpv_min": 0.8, "dpv_max": 1.6, "dli": 20, "ec": 1.8, "ph": 6.3}
+      ]
+    }
+  }
+}

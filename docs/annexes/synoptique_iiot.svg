@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <rect width="1000" height="700" fill="#ffffff"/>
+  <defs><marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10z" fill="#555"/></marker></defs>
+  <text x="500" y="30" text-anchor="middle" font-size="18" font-weight="bold">Synoptique de supervision et de contrôle</text>
+  <!-- niveau supervision -->
+  <rect x="30" y="55" width="940" height="150" rx="10" fill="#eef4fb" stroke="#2c6ea3"/>
+  <text x="45" y="78" font-weight="bold" fill="#2c6ea3">NIVEAU SUPERVISION : serveur local (mini-PC industriel, SSD, alimentation secourue)</text>
+  <g font-size="12">
+    <rect x="50" y="95" width="140" height="44" rx="6" fill="#fff" stroke="#2c6ea3"/><text x="120" y="122" text-anchor="middle">Courtier MQTT</text>
+    <rect x="205" y="95" width="160" height="44" rx="6" fill="#fff" stroke="#2c6ea3"/><text x="285" y="114" text-anchor="middle">Régulation Python</text><text x="285" y="130" text-anchor="middle" font-size="11">recettes, climat, irrigation</text>
+    <rect x="380" y="95" width="140" height="44" rx="6" fill="#fff" stroke="#2c6ea3"/><text x="450" y="114" text-anchor="middle">InfluxDB</text><text x="450" y="130" text-anchor="middle" font-size="11">via Telegraf</text>
+    <rect x="535" y="95" width="140" height="44" rx="6" fill="#fff" stroke="#2c6ea3"/><text x="605" y="114" text-anchor="middle">Interface web</text><text x="605" y="130" text-anchor="middle" font-size="11">+ Grafana</text>
+    <rect x="690" y="95" width="125" height="44" rx="6" fill="#fff" stroke="#2c6ea3"/><text x="752" y="114" text-anchor="middle">Alertes</text><text x="752" y="130" text-anchor="middle" font-size="11">sirène, SMS</text>
+    <rect x="830" y="95" width="125" height="44" rx="6" fill="#fff" stroke="#2c6ea3"/><text x="892" y="114" text-anchor="middle">Synchro distante</text><text x="892" y="130" text-anchor="middle" font-size="11">si internet</text>
+    <text x="500" y="185" text-anchor="middle" fill="#555">Commutateur PoE industriel · routeur 4G double SIM · point d'accès Wi-Fi (tablettes, téléphones) · VPN sortant uniquement</text>
+  </g>
+  <!-- liaisons ethernet -->
+  <g stroke="#555" stroke-width="2"><line x1="180" y1="205" x2="180" y2="260"/><line x1="500" y1="205" x2="500" y2="260"/><line x1="820" y1="205" x2="820" y2="260"/></g>
+  <text x="510" y="238" fill="#555" font-size="12">Ethernet / MQTT (consignes avec durée de validité, mesures toutes les 30 s)</text>
+  <!-- niveau zone -->
+  <rect x="30" y="260" width="940" height="140" rx="10" fill="#eef7f0" stroke="#2f7d4f"/>
+  <text x="45" y="283" font-weight="bold" fill="#2f7d4f">NIVEAU ZONE : automates ESP32 industriels (rail DIN, 24 V), mode autonome si le serveur se tait plus de 2 min</text>
+  <g font-size="12">
+    <rect x="70" y="300" width="230" height="80" rx="8" fill="#fff" stroke="#2f7d4f"/><text x="185" y="322" text-anchor="middle" font-weight="bold">AUT-F · Fruits</text>
+    <text x="185" y="342" text-anchor="middle" font-size="11">climat, stockage thermique,</text><text x="185" y="357" text-anchor="middle" font-size="11">irrigation, dosage circuit fruits</text>
+    <rect x="385" y="300" width="230" height="80" rx="8" fill="#fff" stroke="#2f7d4f"/><text x="500" y="322" text-anchor="middle" font-weight="bold">AUT-L · Feuilles + pépinière</text>
+    <text x="500" y="342" text-anchor="middle" font-size="11">climat, aération et dosage des</text><text x="500" y="357" text-anchor="middle" font-size="11">bassins, refroidisseur, LED</text>
+    <rect x="700" y="300" width="230" height="80" rx="8" fill="#fff" stroke="#2f7d4f"/><text x="815" y="322" text-anchor="middle" font-weight="bold">AUT-E · Eau et énergie</text>
+    <text x="815" y="342" text-anchor="middle" font-size="11">citerne, osmoseur, onduleur,</text><text x="815" y="357" text-anchor="middle" font-size="11">délestage, groupe, sas, météo</text>
+  </g>
+  <g stroke="#555" stroke-width="2" stroke-dasharray="6 4"><line x1="185" y1="400" x2="185" y2="450"/><line x1="500" y1="400" x2="500" y2="450"/><line x1="815" y1="400" x2="815" y2="450"/></g>
+  <text x="510" y="432" fill="#555" font-size="12">RS485 Modbus RTU (capteurs, module 16 relais / 16 entrées), 4-20 mA, impulsions</text>
+  <!-- niveau terrain -->
+  <rect x="30" y="450" width="940" height="225" rx="10" fill="#fbf6ec" stroke="#a87a1e"/>
+  <text x="45" y="473" font-weight="bold" fill="#a87a1e">NIVEAU TERRAIN</text>
+  <g font-size="11.5">
+    <text x="60" y="500" font-weight="bold">Capteurs fruits</text>
+    <text x="60" y="518">T/HR sous abri ventilé, CO2 NDIR, PAR</text><text x="60" y="534">CE, pH, T solution, substrat</text><text x="60" y="550">balance / auget de drainage</text><text x="60" y="566">T cuve de stockage, T feuille*</text>
+    <text x="60" y="592" font-weight="bold">Actionneurs fruits</text>
+    <text x="60" y="610">ouvrants, écran, pad, extracteur</text><text x="60" y="626">brassage, aérotherme, irrigation</text><text x="60" y="642">pompes doseuses A/B/acide, CO2*</text>
+    <text x="375" y="500" font-weight="bold">Capteurs feuilles</text>
+    <text x="375" y="518">T/HR, CO2*, CE et pH par bassin</text><text x="375" y="534">O2 dissous optique, T solution</text><text x="375" y="550">T/HR pépinière</text>
+    <text x="375" y="592" font-weight="bold">Actionneurs feuilles</text>
+    <text x="375" y="610">ouvrants, écran, pad, extracteur</text><text x="375" y="626">surpresseur + secours 24 V</text><text x="375" y="642">refroidisseur, LED, tapis chauffants</text>
+    <text x="690" y="500" font-weight="bold">Eau, énergie, site</text>
+    <text x="690" y="518">station météo (vent, pluie, T/HR)</text><text x="690" y="534">pyranomètre, niveaux, débitmètres</text><text x="690" y="550">onduleur et BMS, sous-compteurs</text><text x="690" y="566">contacts de portes, fuites</text>
+    <text x="690" y="592" font-weight="bold">Actionneurs</text>
+    <text x="690" y="610">contacteurs de délestage,</text><text x="690" y="626">démarrage du groupe, osmoseur,</text><text x="690" y="642">pompes de transfert</text>
+    <text x="500" y="668" text-anchor="middle" fill="#555">* configuration complète</text>
+  </g>
+</svg>

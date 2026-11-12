@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 860" font-family="Arial, Helvetica, sans-serif" font-size="13">
+  <rect width="900" height="860" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="bold">Plan de la serre pilote et de l'annexe (échelle : 1 m = 50 px)</text>
+  <text x="450" y="50" text-anchor="middle" fill="#555">Emprise serre 10 x 10 m, faîtage est-ouest. Cotes en mètres.</text>
+  <!-- nord -->
+  <g transform="translate(820,95)"><path d="M0,-25 L10,10 L0,3 L-10,10Z" fill="#333"/><text y="-30" text-anchor="middle" font-weight="bold">N</text></g>
+  <!-- serre : x 200..700, y 90..590 -->
+  <rect x="200" y="90" width="500" height="500" fill="#f3f8f3" stroke="#2f5d3a" stroke-width="3"/>
+  <!-- cloison -->
+  <line x1="200" y1="340" x2="700" y2="340" stroke="#2f5d3a" stroke-width="2" stroke-dasharray="10 5"/>
+  <text x="705" y="344" fill="#2f5d3a">cloison (sous le faîtage)</text>
+  <!-- allée centrale 1,2 m -->
+  <rect x="420" y="90" width="60" height="500" fill="#e2e2e2"/>
+  <text x="450" y="470" text-anchor="middle" transform="rotate(-90 450 470)" fill="#444">allée centrale béton 1,2 m</text>
+  <rect x="430" y="334" width="40" height="12" fill="#ffffff" stroke="#555"/><text x="450" y="330" text-anchor="middle" font-size="11">porte</text>
+  <!-- compartiment fruits : rangs est-ouest -->
+  <text x="300" y="112" text-anchor="middle" font-weight="bold" fill="#8a2b2b">COMPARTIMENT FRUITS 50 m²</text>
+  <g fill="#c96b6b" opacity="0.8">
+    <rect x="235" y="135" width="175" height="14"/><rect x="235" y="155" width="175" height="14"/>
+    <rect x="235" y="215" width="175" height="14"/><rect x="235" y="235" width="175" height="14"/>
+    <rect x="490" y="135" width="195" height="14"/><rect x="490" y="155" width="195" height="14"/>
+    <rect x="490" y="215" width="195" height="14"/><rect x="490" y="235" width="195" height="14"/>
+    <rect x="490" y="295" width="195" height="14"/>
+  </g>
+  <text x="560" y="200" text-anchor="middle" font-size="11" fill="#555">doubles rangs de seaux hollandais, entraxe 1,6 m</text>
+  <!-- stockage thermique -->
+  <g fill="#333"><circle cx="245" cy="300" r="12"/><circle cx="272" cy="300" r="12"/><circle cx="299" cy="300" r="12"/></g>
+  <text x="318" y="304" font-size="11">cuves de stockage thermique 3 x 2 m³</text>
+  <!-- compartiment feuilles -->
+  <text x="300" y="362" text-anchor="middle" font-weight="bold" fill="#1f5f86">COMPARTIMENT FEUILLES 50 m²</text>
+  <rect x="215" y="380" width="200" height="190" fill="#cfe6f3" stroke="#1f5f86"/>
+  <text x="315" y="470" text-anchor="middle">Bassin frais</text><text x="315" y="488" text-anchor="middle" font-size="11">4,0 x 4,2 m, 25 cm d'eau</text>
+  <rect x="485" y="380" width="200" height="190" fill="#cfe6f3" stroke="#1f5f86"/>
+  <text x="585" y="470" text-anchor="middle">Bassin tempéré</text><text x="585" y="488" text-anchor="middle" font-size="11">4,0 x 4,2 m, 25 cm d'eau</text>
+  <!-- pad est (droite = est ? ) : convention : est à droite -->
+  <rect x="700" y="105" width="10" height="220" fill="#3b8fd0"/><rect x="700" y="355" width="10" height="220" fill="#3b8fd0"/>
+  <text x="730" y="220" font-size="12" transform="rotate(90 730 220)" text-anchor="middle">mur évaporatif fruits 5 x 1,5 m (pignon est)</text>
+  <text x="730" y="465" font-size="12" transform="rotate(90 730 465)" text-anchor="middle">mur évaporatif feuilles 5 x 1,5 m</text>
+  <!-- extracteurs ouest (gauche) -->
+  <g fill="#ffffff" stroke="#333" stroke-width="2"><circle cx="200" cy="215" r="22"/><circle cx="200" cy="465" r="22"/></g>
+  <text x="200" y="219" text-anchor="middle" font-size="10">EXT</text><text x="200" y="469" text-anchor="middle" font-size="10">EXT</text>
+  <text x="165" y="340" font-size="12" transform="rotate(-90 165 340)" text-anchor="middle">pignon ouest : un extracteur de 1,25 m par compartiment</text>
+  <!-- ouvrants latéraux -->
+  <line x1="200" y1="86" x2="700" y2="86" stroke="#3b8fd0" stroke-width="6"/>
+  <text x="450" y="80" text-anchor="middle" font-size="11" fill="#1f5f86">ouvrant latéral nord 10 x 1,5 m + filet 50 mesh</text>
+  <line x1="200" y1="594" x2="420" y2="594" stroke="#3b8fd0" stroke-width="6"/><line x1="480" y1="594" x2="700" y2="594" stroke="#3b8fd0" stroke-width="6"/>
+  <!-- couloir sas -->
+  <rect x="412" y="590" width="76" height="100" fill="#fff6e0" stroke="#a87a1e" stroke-width="2"/>
+  <text x="450" y="635" text-anchor="middle" font-size="11">couloir-sas</text><text x="450" y="650" text-anchor="middle" font-size="11">2,0 x 1,5 m</text>
+  <!-- annexe 10 x 3 m : x 200..700, y 690..840 -->
+  <rect x="200" y="690" width="500" height="150" fill="#f7f1e6" stroke="#7a5a1e" stroke-width="3"/>
+  <line x1="350" y1="690" x2="350" y2="840" stroke="#7a5a1e" stroke-width="2"/>
+  <line x1="425" y1="690" x2="425" y2="840" stroke="#7a5a1e" stroke-width="2"/>
+  <line x1="550" y1="690" x2="550" y2="840" stroke="#7a5a1e" stroke-width="2"/>
+  <text x="275" y="760" text-anchor="middle" font-weight="bold">Local technique</text><text x="275" y="777" text-anchor="middle" font-size="11">énergie, armoires,</text><text x="275" y="792" text-anchor="middle" font-size="11">fertirrigation, serveur</text>
+  <text x="387" y="760" text-anchor="middle" font-weight="bold" font-size="12">Vestiaire</text><text x="387" y="777" text-anchor="middle" font-size="11">lavage,</text><text x="387" y="792" text-anchor="middle" font-size="11">pédiluve</text>
+  <text x="487" y="760" text-anchor="middle" font-weight="bold" font-size="12">Pépinière</text><text x="487" y="777" text-anchor="middle" font-size="11">germination LED</text><text x="487" y="792" text-anchor="middle" font-size="11">zone propre</text>
+  <text x="625" y="750" text-anchor="middle" font-weight="bold">Conditionnement</text>
+  <rect x="640" y="770" width="50" height="60" fill="#dfeff7" stroke="#1f5f86"/><text x="665" y="804" text-anchor="middle" font-size="10">froid</text>
+  <text x="590" y="805" text-anchor="middle" font-size="11">passe-plat</text>
+  <text x="450" y="858" text-anchor="middle" font-size="11" fill="#555">Annexe 10 x 3 m, toiture monopente vers le nord à 12° portant les panneaux solaires</text>
+  <!-- cotes -->
+  <g stroke="#777"><line x1="200" y1="610" x2="200" y2="625"/><line x1="700" y1="610" x2="700" y2="625"/><line x1="200" y1="618" x2="400" y2="618"/><line x1="500" y1="618" x2="700" y2="618"/></g>
+  <text x="300" y="613" text-anchor="middle" font-size="11">10,0 m</text>
+  <g stroke="#777"><line x1="760" y1="90" x2="775" y2="90"/><line x1="760" y1="590" x2="775" y2="590"/><line x1="768" y1="90" x2="768" y2="590"/><line x1="760" y1="340" x2="775" y2="340"/></g>
+  <text x="790" y="215">5,0 m</text><text x="790" y="465">5,0 m</text>
+  <text x="40" y="215" font-size="11" fill="#555">OUEST</text><text x="820" y="560" font-size="11" fill="#555">EST</text>
+</svg>

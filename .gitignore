@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+logiciel/edge/.env
+logiciel/edge/mosquitto/passwd
+logiciel/firmware/noeud_zone/src/secrets.h
+logiciel/firmware/noeud_zone/.pio/

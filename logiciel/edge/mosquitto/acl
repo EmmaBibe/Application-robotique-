@@ -1,0 +1,30 @@
+# Chaque automate n'écrit que dans sa zone et ne lit que ses consignes.
+user aut-fruits
+topic write serre/lub1/fruits/mesure/#
+topic write serre/lub1/fruits/etat/#
+topic write serre/lub1/fruits/disponibilite
+topic read  serre/lub1/fruits/consigne
+
+user aut-feuilles
+topic write serre/lub1/feuilles/mesure/#
+topic write serre/lub1/feuilles/etat/#
+topic write serre/lub1/feuilles/disponibilite
+topic read  serre/lub1/feuilles/consigne
+
+user aut-eau-energie
+topic write serre/lub1/eau/#
+topic write serre/lub1/energie/#
+topic write serre/lub1/meteo/#
+topic write serre/lub1/sas/#
+
+user regulation
+topic read  serre/lub1/#
+topic write serre/lub1/+/consigne
+topic write serre/lub1/+/alarme
+topic write serre/lub1/regulation/#
+
+user telegraf
+topic read  serre/lub1/#
+
+user interface
+topic read  serre/lub1/#

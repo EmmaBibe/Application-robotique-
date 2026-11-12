@@ -1,0 +1,16 @@
+variante,mois,t_min_int,t_max_int,heures_sup_30,heures_inf_12,heures_hr_sup_90
+retenue,1,17.9,30.2,0.3,0.0,11.2
+retenue,7,13.7,28.1,0.0,0.0,3.9
+retenue,10,17.8,29.1,0.0,0.0,1.3
+sans_stockage,1,17.9,31.5,1.4,0.0,11.3
+sans_stockage,7,9.8,28.1,0.0,5.2,4.4
+sans_stockage,10,17.8,29.7,0.0,0.0,1.8
+sans_ecran,1,17.5,30.2,0.3,0.0,11.2
+sans_ecran,7,12.6,28.2,0.0,0.0,3.7
+sans_ecran,10,17.4,30.1,0.4,0.0,1.3
+sans_pad,1,17.9,31.2,5.1,0.0,11.0
+sans_pad,7,13.6,28.5,0.0,0.0,3.7
+sans_pad,10,17.8,34.5,8.2,0.0,1.2
+serre_simple,1,17.3,32.0,5.1,0.0,11.1
+serre_simple,7,8.6,31.3,3.1,6.6,7.7
+serre_simple,10,17.0,37.6,8.2,0.0,1.8

@@ -1,0 +1,5 @@
+Le fichier passwd n'est pas fourni (il contient les empreintes des mots de passe).
+Le créer sur le serveur avec :
+  docker run --rm -it -v "$PWD":/m eclipse-mosquitto:2.0.18 mosquitto_passwd -c /m/passwd aut-fruits
+puis ajouter les autres comptes sans l'option -c :
+  aut-feuilles, aut-eau-energie, regulation, telegraf, interface

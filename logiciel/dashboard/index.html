@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serre pilote Lubumbashi</title>
+<style>
+:root{
+  --fond:#f4f6f3;--carte:#ffffff;--texte:#1d2a22;--doux:#5d6b62;--trait:#d9e0da;
+  --vert:#2f7d4f;--vert-clair:#e3f1e8;--orange:#c77b12;--orange-clair:#fbefd9;--rouge:#b83a2e;--rouge-clair:#f8e1de;
+  --bleu:#2c6ea3;--bleu-clair:#e2eef8;--jaune:#d9a400;--serre:#eef5ef;--bassin:#cfe6f3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --fond:#121814;--carte:#1b231e;--texte:#e3ebe5;--doux:#9aa89f;--trait:#2d3a32;
+    --vert:#5fbf85;--vert-clair:#1f3327;--orange:#e6a446;--orange-clair:#3a2d17;--rouge:#e9776b;--rouge-clair:#3d201d;
+    --bleu:#6aaee3;--bleu-clair:#1a2d3c;--jaune:#f0c540;--serre:#18241c;--bassin:#1d3442;
+  }
+}
+:root[data-theme="dark"]{
+  --fond:#121814;--carte:#1b231e;--texte:#e3ebe5;--doux:#9aa89f;--trait:#2d3a32;
+  --vert:#5fbf85;--vert-clair:#1f3327;--orange:#e6a446;--orange-clair:#3a2d17;--rouge:#e9776b;--rouge-clair:#3d201d;
+  --bleu:#6aaee3;--bleu-clair:#1a2d3c;--jaune:#f0c540;--serre:#18241c;--bassin:#1d3442;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fond);color:var(--texte);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--trait);background:var(--carte);position:sticky;top:0;z-index:5}
+h1{font-size:18px;margin:0}
+.sous{color:var(--doux);font-size:13px}
+.commandes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select,button{font:inherit;color:var(--texte);background:var(--fond);border:1px solid var(--trait);border-radius:8px;padding:6px 10px;cursor:pointer}
+button.actif{background:var(--vert);color:#fff;border-color:var(--vert)}
+.pastille{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-weight:600;font-size:13px}
+.ok{background:var(--vert-clair);color:var(--vert)}.att{background:var(--orange-clair);color:var(--orange)}.crit{background:var(--rouge-clair);color:var(--rouge)}
+nav{display:flex;gap:4px;padding:8px 16px;overflow-x:auto}
+nav button{border:none;background:none;padding:8px 12px;border-radius:8px;white-space:nowrap}
+nav button.actif{background:var(--vert-clair);color:var(--vert)}
+main{padding:0 16px 32px;max-width:1280px;margin:0 auto}
+.grille{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px}
+@media (max-width:900px){.grille{grid-template-columns:1fr}}
+.carte{background:var(--carte);border:1px solid var(--trait);border-radius:14px;padding:14px}
+.carte h2{font-size:15px;margin:0 0 10px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.kpi{border:1px solid var(--trait);border-radius:10px;padding:8px 10px}
+.kpi .v{font-size:22px;font-weight:650}
+.kpi .l{font-size:12px;color:var(--doux)}
+.kpi .c{font-size:12px;color:var(--doux)}
+svg text{fill:var(--texte);font-family:inherit}
+.raisons{margin:0;padding-left:18px}
+.raisons li{margin:3px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--trait);vertical-align:top}
+th{color:var(--doux);font-weight:600;font-size:12px}
+.barre{height:8px;border-radius:4px;background:var(--trait);overflow:hidden;min-width:80px}
+.barre>span{display:block;height:100%;background:var(--vert)}
+canvas{width:100%;height:190px;display:block}
+.legende{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--doux);margin-top:6px}
+.legende i{display:inline-block;width:12px;height:3px;margin-right:4px;vertical-align:middle}
+.cache{display:none}
+.fiche{border-left:3px solid var(--vert);padding-left:12px;margin-top:12px}
+.frise{display:flex;gap:2px;margin:8px 0}
+.frise div{flex:1;height:22px;border-radius:4px;font-size:11px;display:flex;align-items:center;justify-content:center;color:#fff;overflow:hidden;white-space:nowrap}
+.flux{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;font-size:13px}
+.flux div{border:1px solid var(--trait);border-radius:10px;padding:8px}
+.flux b{display:block;font-size:18px}
+.petit{font-size:12px;color:var(--doux)}
+.alarme{padding:8px 10px;border-radius:8px;margin-bottom:6px;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Serre pilote Lubumbashi</h1>
+    <div class="sous" id="horloge">-</div>
+  </div>
+  <div class="commandes">
+    <label class="sous" for="mois">Saison</label>
+    <select id="mois">
+      <option value="1">Janvier (pluies)</option><option value="4">Avril (transition)</option>
+      <option value="7">Juillet (sèche fraîche)</option><option value="10" selected>Octobre (sèche chaude)</option>
+    </select>
+    <span class="sous">Vitesse</span>
+    <button data-v="60">x60</button><button data-v="600" class="actif">x600</button><button data-v="3000">x3000</button>
+    <span id="etat" class="pastille ok">Tout va bien</span>
+  </div>
+</header>
+<nav id="onglets">
+  <button class="actif" data-o="vue">Vue d'ensemble</button>
+  <button data-o="lots">Cultures et lots</button>
+  <button data-o="energie">Énergie et eau</button>
+  <button data-o="recherche">Recherche</button>
+</nav>
+<main>
+<section id="o-vue">
+  <div class="grille">
+    <div class="carte">
+      <h2>Plan vivant <span class="petit">(couleur : écart à la consigne de température ; cliquer sur un compartiment)</span></h2>
+      <svg id="plan" viewBox="0 0 520 470" role="img" aria-label="Plan de la serre"></svg>
+      <div class="legende"><span><i style="background:var(--bleu)"></i>trop froid</span><span><i style="background:var(--vert)"></i>dans la consigne</span><span><i style="background:var(--orange)"></i>trop chaud</span><span>Hachures : écran fermé ; traits pleins sur les murs : ouvrants ouverts</span></div>
+    </div>
+    <div style="display:grid;gap:16px;align-content:start">
+      <div class="carte">
+        <h2 id="titre-comp">Compartiment fruits</h2>
+        <div class="kpis" id="kpis"></div>
+      </div>
+      <div class="carte">
+        <h2>Pourquoi la serre fait ce qu'elle fait</h2>
+        <ul class="raisons" id="raisons"></ul>
+      </div>
+      <div class="carte">
+        <h2>Alarmes</h2>
+        <div id="alarmes"></div>
+      </div>
+    </div>
+  </div>
+  <div class="carte" style="margin-top:16px">
+    <h2>Dernières 24 heures</h2>
+    <canvas id="courbe" width="1200" height="380"></canvas>
+    <div class="legende">
+      <span><i style="background:var(--rouge)"></i>T intérieure fruits</span>
+      <span><i style="background:var(--vert)"></i>T intérieure feuilles</span>
+      <span><i style="background:var(--doux)"></i>T extérieure</span>
+      <span><i style="background:var(--bleu)"></i>HR intérieure (échelle de droite)</span>
+      <span><i style="background:var(--jaune)"></i>Rayonnement</span>
+    </div>
+  </div>
+</section>
+
+<section id="o-lots" class="cache">
+  <div class="carte">
+    <h2>Lots en culture, de la graine à la récolte</h2>
+    <table id="table-lots"><thead><tr><th>Lot</th><th>Culture</th><th>Emplacement</th><th>Stade</th><th>Avancement</th><th>Récolte prévue</th></tr></thead><tbody></tbody></table>
+    <div id="fiche" class="fiche petit">Cliquer sur un lot pour ouvrir sa fiche.</div>
+  </div>
+</section>
+
+<section id="o-energie" class="cache">
+  <div class="grille">
+    <div class="carte">
+      <h2>Flux d'énergie en ce moment</h2>
+      <div class="flux" id="flux"></div>
+      <p class="petit" id="delestage"></p>
+      <canvas id="courbe-energie" width="1000" height="360"></canvas>
+      <div class="legende"><span><i style="background:var(--jaune)"></i>Production solaire (kW)</span><span><i style="background:var(--rouge)"></i>Consommation (kW)</span><span><i style="background:var(--vert)"></i>Batterie (%), échelle de droite</span><span><i style="background:var(--doux)"></i>Réseau SNEL présent</span></div>
+    </div>
+    <div class="carte">
+      <h2>Eau du jour</h2>
+      <div class="kpis" id="eau"></div>
+      <p class="petit">Configuration optimisée : 3,3 kWc, batterie LiFePO4 10,2 kWh, réseau SNEL en appoint (délestages simulés), citerne d'eau de pluie de 10 m³.</p>
+    </div>
+  </div>
+</section>
+
+<section id="o-recherche" class="cache">
+  <div class="carte">
+    <h2>Mode recherche</h2>
+    <p>Chaque mesure simulée est enregistrée toutes les 5 minutes. L'export fournit un fichier CSV daté, avec unités, prêt pour un tableur, R ou Python. Dans l'installation réelle, les mêmes exports sont alimentés par la base de mesures et rattachés aux essais déclarés (modalités, répartition sur le plan, mesures manuelles).</p>
+    <button id="export">Exporter les données (CSV)</button>
+    <p class="petit" id="nb-points"></p>
+    <h2 style="margin-top:18px">Essais en cours</h2>
+    <table><thead><tr><th>Essai</th><th>Modalités</th><th>Variables suivies</th><th>Fin prévue</th></tr></thead>
+    <tbody>
+      <tr><td>Variétés de tomate ronde</td><td>Variété A / variété B, 2 blocs</td><td>Rendement, calibre, °Brix, nécrose apicale</td><td>Juin</td></tr>
+      <tr><td>Épinard et refroidissement de solution</td><td>Bassin frais 20 °C / bassin tempéré 24 °C</td><td>Poids frais, racines brunes (%), O2 dissous</td><td>8 semaines</td></tr>
+      <tr><td>Densité de laitue sur radeau</td><td>18 / 22 / 26 trous par m²</td><td>Poids par tête, têtes vendables par m², nécrose marginale</td><td>3 cycles</td></tr>
+    </tbody></table>
+  </div>
+</section>
+</main>
+
+<script>
+"use strict";
+// ---------------------------------------------------------------- données
+const CLIMAT = { // t_max, t_min, hr_moy, rayonnement kWh/m2/j, duree du jour
+  1:[27.0,16.5,82,5.0,12.8], 4:[27.5,14.0,72,5.6,11.8], 7:[25.8,7.0,47,5.7,11.4], 10:[32.5,16.0,42,6.4,12.4]
+};
+const CONS = { // consignes simplifiées (jour, nuit, ecart aeration, hr max)
+  fruits:{tj:22,tn:15,ea:3,hr:85,nom:"Compartiment fruits"},
+  feuilles:{tj:20,tn:13,ea:3,hr:85,nom:"Compartiment feuilles"}
+};
+const RECETTES = {
+  tomate:[["Germination",5,"#9c6ade"],["Plantule",25,"#4a90c2"],["Végétatif",25,"#2f9d62"],["Production",260,"#d1495b"]],
+  poivron:[["Germination",8,"#9c6ade"],["Plantule",35,"#4a90c2"],["Végétatif",30,"#2f9d62"],["Production",240,"#d1495b"]],
+  piment:[["Germination",10,"#9c6ade"],["Plantule",35,"#4a90c2"],["Végétatif",30,"#2f9d62"],["Production",270,"#d1495b"]],
+  laitue:[["Germination",3,"#9c6ade"],["Pépinière",18,"#4a90c2"],["Radeau",30,"#2f9d62"]],
+  "chou de Chine":[["Germination",4,"#9c6ade"],["Pépinière",18,"#4a90c2"],["Radeau",28,"#2f9d62"]],
+  "épinard":[["Germination",7,"#9c6ade"],["Pépinière",14,"#4a90c2"],["Radeau",28,"#2f9d62"]],
+  "céleri":[["Germination",14,"#9c6ade"],["Pépinière",42,"#4a90c2"],["Radeau",70,"#2f9d62"]],
+  amarante:[["Germination",4,"#9c6ade"],["Pépinière",12,"#4a90c2"],["Radeau, coupes",45,"#2f9d62"]],
+  basilic:[["Germination",6,"#9c6ade"],["Pépinière",18,"#4a90c2"],["Radeau, coupes",42,"#2f9d62"]]
+};
+// âge des lots en jours au début de la simulation
+const LOTS = [
+  ["T-26-01","tomate","Fruits, rangs 1 à 3 est",92,"Hybride grappe HR ToBRFV/TYLCV, lot de semences 24-118"],
+  ["T-26-02","tomate","Fruits, rangs 1 à 2 ouest (cerise)",92,"Cerise HR ToBRFV, lot 24-131"],
+  ["P-26-01","poivron","Fruits, rangs 4 à 5",130,"Blocky rouge, lot 23-877"],
+  ["PI-26-01","piment","Fruits, rang 6",132,"Habanero rouge, semences maison sélectionnées"],
+  ["L-46","laitue","Bassin frais, radeaux 1 à 4",38,"Batavia été, lot 25-020"],
+  ["L-47","laitue","Bassin frais, radeaux 5 à 8",31,"Batavia été, lot 25-020"],
+  ["C-45","chou de Chine","Bassin frais, radeaux 9 à 11",36,"Pak-choï baby, lot 25-007"],
+  ["E-44","épinard","Bassin frais, radeaux 12 à 13",30,"Essai refroidissement de solution"],
+  ["CE-40","céleri","Bassin tempéré, radeaux 1 à 4",96,"Céleri-branche vert, lot 24-310"],
+  ["A-46","amarante","Bassin tempéré, radeaux 5 à 8",40,"Amarante verte locale"],
+  ["B-45","basilic","Bassin tempéré, radeaux 9 à 10",33,"Basilic résistant au mildiou"]
+];
+
+// ---------------------------------------------------------------- outils
+const $ = s => document.querySelector(s);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const psat = t => 0.6108*Math.exp(17.27*t/(t+237.3));
+const dpv = (t,hr) => Math.max(0,psat(t)*(1-hr/100));
+const w = (t,hr) => 0.622*psat(t)*hr/100/(87.5-psat(t)*hr/100);
+const hrDepuisW = (t,wv) => Math.min(100,Math.max(0,100*(wv*87.5/(0.622+wv))/psat(t)));
+const fmt = (x,d=1) => (x==null||isNaN(x))?"-":x.toLocaleString("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d});
+
+// ---------------------------------------------------------------- météo
+function meteo(mois,h){
+  const [tmax,tmin,hrm,ray,dj]=CLIMAT[mois];
+  const lever=12-dj/2, coucher=12+dj/2;
+  let t;
+  if(h>=lever&&h<=14.5) t=tmin+(tmax-tmin)*Math.sin(Math.PI/2*(h-lever)/(14.5-lever));
+  else { const duree=24-(14.5-lever); const x=((h-14.5+24)%24)/duree; t=tmin+(tmax-tmin)*Math.pow(1-x,1.6); }
+  const tm=(tmax+tmin)/2, wa=w(tm,hrm);
+  const hr=hrDepuisW(t,wa);
+  const g=(h>lever&&h<coucher)? ray*1000*Math.PI/(2*dj)*Math.sin(Math.PI*(h-lever)/dj)*(0.85+0.15*Math.sin(h*7.3)) : 0;
+  const vent=1.5+2*Math.max(0,Math.sin(Math.PI*(h-9)/10));
+  return {t,hr,g:Math.max(0,g),vent,pluie: mois===1 && h>15 && h<17};
+}
+
+// ---------------------------------------------------------------- modèle et régulation
+function nouvelEtat(mois){
+  const [tmax,tmin]=CLIMAT[mois];
+  const tm=(tmax+tmin)/2;
+  return { h:0, jour:1, mois,
+    comp:{ fruits:{t:tm+2,w:w(tm,70),mode:"naturel",cmd:{}}, feuilles:{t:tm+1,w:w(tm,72),mode:"naturel",cmd:{}} },
+    tsto:22, soc:70, reseau:true, groupe:false, jourLots:-1, prochainDelestage:8+Math.random()*6, histo:[], energie:[], eauJour:{pluie:0,appoint:0,transp:0,pad:0},
+    tsol:{frais:20.5,tempere:22.5}, o2:7.6, ec:{fruits:2.9,frais:1.8,tempere:1.8}, ph:{fruits:5.9,frais:6.0,tempere:6.1}
+  };
+}
+
+function reguler(E,nom,m){
+  const c=CONS[nom], s=E.comp[nom], jour=m.g>5;
+  const tChauffe=jour?c.tj:c.tn, tAere=c.tj+c.ea;
+  const hr=hrDepuisW(s.t,s.w);
+  const cmd={ouvrant:0,ecran:0,ext:0,pad:false,haf:false,sto:"arret",raisons:[]};
+  let max=100;
+  if(m.vent>=14){max=0;cmd.raisons.push("vent violent : ouvrants fermés");}
+  else if(m.vent>=10){max=30;cmd.raisons.push("vent fort : ouvrants limités à 30 %");}
+  if(m.pluie){max=Math.min(max,20);cmd.raisons.push("pluie : ouvrants limités à 20 %");}
+  if(s.mode==="naturel"){ if(s.t>tAere+3 && m.hr<65 && jour) s.mode="evaporatif"; }
+  else if(s.t<tAere || m.hr>70 || !jour) s.mode="naturel";
+  if(s.mode==="evaporatif"){
+    cmd.pad=true; cmd.ext=s.t>tAere+5?2:1; cmd.raisons.push("air extérieur sec : refroidissement par le mur évaporatif, serre fermée");
+  } else {
+    let o=Math.max(0,Math.min(100,(s.t-tAere)/4*100));
+    if(o>0) cmd.raisons.push(`aération proportionnelle : ${fmt(s.t)} °C pour une consigne de ${tAere} °C`);
+    if(hr>c.hr && s.t>tChauffe){o=Math.max(o,10);cmd.raisons.push("humidité haute : aération minimale de 10 %");}
+    cmd.ouvrant=Math.min(o,max);
+  }
+  if(jour && m.g>650 && s.t>tAere-1){cmd.ecran=70;cmd.raisons.push("rayonnement fort : écran d'ombrage fermé à 70 %");}
+  if(!jour && m.t<tChauffe+5){cmd.ecran=hr>92?95:100;cmd.raisons.push(hr>92?"nuit : écran thermique entrouvert pour évacuer l'humidité":"nuit fraîche : écran thermique fermé");}
+  if(s.t<tChauffe && E.tsto>s.t+2){cmd.sto="decharge";cmd.raisons.push("trop froid : la chaleur stockée dans l'eau est restituée");}
+  else if(!jour && hr>c.hr && E.tsto>s.t+3 && s.t<tChauffe+4){cmd.sto="decharge";cmd.ouvrant=Math.max(cmd.ouvrant,5);cmd.raisons.push("nuit humide : léger réchauffage par déstockage pour faire baisser l'HR");}
+  else if(jour && s.t>c.tj+3 && E.tsto<s.t-3 && nom==="fruits"){cmd.sto="charge";cmd.raisons.push("excès de chaleur : stockage dans la cuve d'eau pour la nuit");}
+  cmd.haf = hr>c.hr-5 || cmd.ecran>=95 || cmd.sto!=="arret";
+  if(cmd.haf) cmd.raisons.push("brassage de l'air pour éviter les poches humides");
+  if(!cmd.raisons.length) cmd.raisons.push("conditions dans la consigne : rien à corriger");
+  s.cmd=cmd;
+}
+
+function pasModele(E,nom,m,dt){
+  const s=E.comp[nom], cmd=s.cmd, jour=m.g>5;
+  let tau=0.7; if(cmd.ecran>0&&jour) tau*=1-0.5*cmd.ecran/100;
+  const qsol=tau*m.g, hr=hrDepuisW(s.t,s.w), def=dpv(s.t,hr);
+  const lat=0.45*qsol+25*def, e=lat/2.45e6;
+  let u=4; if(cmd.ecran>=95&&!jour) u*=0.6;
+  const qparoi=u*3.14*(s.t-m.t), qciel=jour?0:10*(cmd.ecran>=95?0.4:1);
+  let debit, tin, win; const wext=w(m.t,m.hr);
+  if(cmd.pad){ debit=0.023*cmd.ext;
+    const th=m.t*Math.atan(0.151977*Math.sqrt(m.hr+8.313659))+Math.atan(m.t+m.hr)-Math.atan(m.hr-1.676331)+0.00391838*Math.pow(m.hr,1.5)*Math.atan(0.023101*m.hr)-4.686035;
+    tin=m.t-0.8*(m.t-th); const h=1.006*m.t+wext*(2501+1.86*m.t); win=(h-1.006*tin)/(2501+1.86*tin);
+    E.eauJour.pad+=debit*1.02*(win-wext)*50*dt;
+  } else { debit=cmd.ouvrant/100*(0.012+0.004*m.vent)*0.6; tin=m.t; win=wext; }
+  debit+=0.0008;
+  const qvent=debit*1.02*1006*(s.t-tin);
+  let qsto=0;
+  if(cmd.sto==="decharge") qsto=1200*(E.tsto-s.t)/100; else if(cmd.sto==="charge") qsto=-1200*(s.t-E.tsto)/100;
+  if(nom==="fruits") E.tsto-=(qsto*100+10*(E.tsto-20))*dt/(6*1000*4186);
+  const inertie = nom==="feuilles"? 95e3 : 60e3; // les bassins donnent de l'inertie au compartiment feuilles
+  const qsolNet=3*((CLIMAT[E.mois][0]+CLIMAT[E.mois][1])/2+2-s.t);
+  s.t+=(qsol-lat+qsolNet+qsto-qparoi-qciel-qvent)*dt/inertie;
+  s.w+=(e*dt-debit*1.02*(s.w-win)*dt)/(5.83*1.02);
+  const wsp=w((s.t+m.t)/2,100); if(s.w>wsp*1.02) s.w-=(s.w-wsp*1.02)*0.05;
+  s.w=Math.min(s.w,w(s.t,100));
+  E.eauJour.transp+=e*50*dt;
+}
+
+function charges(E){
+  const f=E.comp.fruits.cmd, l=E.comp.feuilles.cmd;
+  let p=60+80; // automates + aération bassins
+  p+=((f.haf?1:0)+(l.haf?1:0))*90;
+  p+=((f.ext||0)+(l.ext||0))*550*0.5 + (f.pad||l.pad?100:0);
+  p+=f.sto!=="arret"?380:0;
+  p+=(E.h>8&&E.h<17)?260:0;           // irrigation, UV, filtration en journée
+  p+=E.h>10&&E.h<15&&E.tsol.frais>21?500:0; // refroidisseur de solution
+  p+=80;                                // chambre froide 3 m³ (moyenne sur 24 h)
+  p+=(E.h>6&&E.h<20)?200:0;             // LED de germination
+  return p;
+}
+
+function pasEnergie(E,m,dt){
+  const pv=3300*m.g/1000*0.8;
+  let charge=charges(E);
+  if(E.soc<35 && !E.reseau) charge-=Math.min(charge-140,450+((E.comp.fruits.cmd.ext||0)+(E.comp.feuilles.cmd.ext||0))*275);
+  if(!E.reseau && E.soc<15) E.groupe=true;
+  if(E.reseau || E.soc>40) E.groupe=false;
+  let bilan=pv-charge+(E.reseau&&E.soc<60?2000:0)+(E.groupe?2500:0);
+  E.soc=Math.max(5,Math.min(100,E.soc+bilan*dt/3600/10240*100*(bilan>0?0.95:1/0.95)));
+  E.pv=pv; E.charge=charge;
+  if(E.h>=E.prochainDelestage){E.reseau=!E.reseau; E.prochainDelestage=(E.h+(E.reseau?4+Math.random()*8:6+Math.random()*6))%24;}
+}
+
+// ---------------------------------------------------------------- simulation
+let E=nouvelEtat(10), vitesse=600, dernier=performance.now(), compSel="fruits";
+function avancer(secondes){
+  const pas=60;
+  for(let s=0;s<secondes;s+=pas){
+    const m=meteo(E.mois,E.h);
+    if(Math.round(E.h*60)%5===0){reguler(E,"fruits",m);reguler(E,"feuilles",m);}
+    pasModele(E,"fruits",m,pas); pasModele(E,"feuilles",m,pas); pasEnergie(E,m,pas);
+    E.tsol.frais+=((E.comp.feuilles.t-1.5)-E.tsol.frais)*pas/36000 - (E.tsol.frais>20.5&&m.g>100?0.0004*pas:0);
+    E.tsol.tempere+=((E.comp.feuilles.t+0.5)-E.tsol.tempere)*pas/30000;
+    E.o2=Math.max(4,Math.min(9,14.6-0.33*E.tsol.frais));
+    E.ec.fruits+= (Math.random()-0.5)*0.002; E.ph.fruits+=(Math.random()-0.5)*0.002;
+    E.h+=pas/3600;
+    if(E.h>=24){E.h-=24;E.jour++;E.eauJour={pluie:0,appoint:0,transp:0,pad:0};}
+    if(Math.round(E.h*60)%5===0) enregistrer(m);
+  }
+}
+function enregistrer(m){
+  const f=E.comp.fruits,l=E.comp.feuilles;
+  E.histo.push({j:E.jour,h:E.h,text:m.t,hrext:m.hr,g:m.g,tf:f.t,hrf:hrDepuisW(f.t,f.w),tl:l.t,hrl:hrDepuisW(l.t,l.w),
+    tsto:E.tsto,ouv:f.cmd.ouvrant,ecr:f.cmd.ecran,mode:f.mode,soc:E.soc,pv:E.pv,charge:E.charge,reseau:E.reseau});
+  if(E.histo.length>288*4) E.histo.shift();
+}
+
+// ---------------------------------------------------------------- affichage : plan
+function couleurEcart(t,c,jour){
+  const bas=jour?c.tj-2:c.tn-1, haut=c.tj+c.ea+1;
+  if(t<bas) return css("--bleu"); if(t>haut) return css("--orange"); return css("--vert");
+}
+function dessinerPlan(){
+  const m=meteo(E.mois,E.h), jour=m.g>5, f=E.comp.fruits, l=E.comp.feuilles;
+  const cf=couleurEcart(f.t,CONS.fruits,jour), cl=couleurEcart(l.t,CONS.feuilles,jour);
+  const ouvF=f.cmd.ouvrant>0, ouvL=l.cmd.ouvrant>0;
+  const rangs=[0,1,2,3,4].map(i=>`<rect x="70" y="${70+i*30}" width="150" height="10" rx="3" fill="${css('--vert')}" opacity="0.55"/><rect x="300" y="${70+i*30}" width="150" height="10" rx="3" fill="${css('--vert')}" opacity="0.55"/>`).join("");
+  const hach=(y,on)=>on?`<rect x="40" y="${y}" width="440" height="180" fill="url(#hach)"/>`:"";
+  const ext=(y,on,n)=>`<g transform="translate(24,${y})"><circle r="16" fill="${css('--carte')}" stroke="${css('--doux')}"/><g class="${on?'tourne':''}"><path d="M0,-12 L4,0 L0,12 L-4,0Z" fill="${on?css('--bleu'):css('--doux')}"/><path d="M-12,0 L0,4 L12,0 L0,-4Z" fill="${on?css('--bleu'):css('--doux')}"/></g></g>`;
+  $("#plan").innerHTML=`
+  <defs><pattern id="hach" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="8" stroke="${css('--doux')}" stroke-width="1.2" opacity="0.5"/></pattern></defs>
+  <text x="260" y="22" text-anchor="middle" font-size="12">NORD</text>
+  <rect x="40" y="40" width="440" height="180" rx="6" fill="${cf}" opacity="0.18" stroke="${cf}" stroke-width="2" style="cursor:pointer" data-c="fruits"/>
+  <rect x="40" y="225" width="440" height="180" rx="6" fill="${cl}" opacity="0.18" stroke="${cl}" stroke-width="2" style="cursor:pointer" data-c="feuilles"/>
+  ${rangs}
+  <rect x="235" y="40" width="50" height="365" fill="${css('--trait')}" opacity="0.7"/>
+  <text x="260" y="232" text-anchor="middle" font-size="10" fill="${css('--doux')}">porte</text>
+  <rect x="62" y="250" width="160" height="135" rx="4" fill="${css('--bassin')}"/><text x="142" y="322" text-anchor="middle" font-size="12">Bassin frais ${fmt(E.tsol.frais)} °C</text>
+  <rect x="298" y="250" width="160" height="135" rx="4" fill="${css('--bassin')}"/><text x="378" y="322" text-anchor="middle" font-size="12">Bassin tempéré ${fmt(E.tsol.tempere)} °C</text>
+  ${hach(40,f.cmd.ecran>=60)}${hach(225,l.cmd.ecran>=60)}
+  <line x1="40" y1="38" x2="480" y2="38" stroke="${ouvF?css('--bleu'):css('--trait')}" stroke-width="${ouvF?5:2}"/>
+  <line x1="40" y1="407" x2="480" y2="407" stroke="${ouvL?css('--bleu'):css('--trait')}" stroke-width="${ouvL?5:2}"/>
+  <rect x="482" y="60" width="8" height="140" fill="${f.cmd.pad?css('--bleu'):css('--trait')}"/><rect x="482" y="245" width="8" height="140" fill="${l.cmd.pad?css('--bleu'):css('--trait')}"/>
+  <text x="9" y="230" font-size="11" transform="rotate(-90 9 230)" text-anchor="middle">extracteurs (ouest)</text>
+  ${ext(130,f.cmd.ext>0)}${ext(315,l.cmd.ext>0)}
+  <text x="505" y="230" font-size="11" transform="rotate(90 505 230)" text-anchor="middle">murs évaporatifs (est)</text>
+  <text x="60" y="58" font-size="13" font-weight="600">Fruits ${fmt(f.t)} °C · ${fmt(hrDepuisW(f.t,f.w),0)} %</text>
+  <text x="60" y="243" font-size="13" font-weight="600">Feuilles ${fmt(l.t)} °C · ${fmt(hrDepuisW(l.t,l.w),0)} %</text>
+  ${f.cmd.sto!=="arret"?`<text x="60" y="212" font-size="11" fill="${css('--orange')}">stockage thermique : ${f.cmd.sto==="charge"?"charge":"restitution"} (cuve ${fmt(E.tsto)} °C)</text>`:`<text x="60" y="212" font-size="11" fill="${css('--doux')}">cuve de stockage ${fmt(E.tsto)} °C</text>`}
+  <rect x="200" y="414" width="120" height="38" rx="4" fill="none" stroke="${css('--doux')}" stroke-dasharray="4 3"/><text x="260" y="437" text-anchor="middle" font-size="11">sas vers l'annexe</text>
+  <text x="260" y="468" text-anchor="middle" font-size="11" fill="${css('--doux')}">SUD</text>`;
+  $("#plan").querySelectorAll("[data-c]").forEach(r=>r.onclick=()=>{compSel=r.dataset.c;rafraichir();});
+}
+
+function kpis(){
+  const m=meteo(E.mois,E.h), s=E.comp[compSel], c=CONS[compSel], hr=hrDepuisW(s.t,s.w), jour=m.g>5;
+  const sol = compSel==="fruits"? [["CE solution",fmt(E.ec.fruits,2),"mS/cm","consigne 3,0"],["pH",fmt(E.ph.fruits,2),"","consigne 5,8"]]
+    : [["Bassin frais",fmt(E.tsol.frais),"°C","max 21-22 °C"],["O2 dissous",fmt(E.o2),"mg/L","min 6"]];
+  const items=[["Température",fmt(s.t),"°C",`consigne ${jour?c.tj:c.tn} à ${c.tj+c.ea} °C`],["Humidité",fmt(hr,0),"%",`max ${c.hr} %`],
+    ["DPV",fmt(dpv(s.t,hr),2),"kPa","0,5 à 1,2"],["Extérieur",fmt(m.t),"°C",`${fmt(m.hr,0)} % HR, vent ${fmt(m.vent)} m/s`],
+    ["Rayonnement",fmt(m.g,0),"W/m²",jour?"jour":"nuit"],["Ouvrants",fmt(s.cmd.ouvrant||0,0),"%",s.mode==="evaporatif"?"mode évaporatif":"ventilation naturelle"],
+    ["Écran",fmt(s.cmd.ecran||0,0),"%",(s.cmd.ecran||0)>=95?"isolation":(s.cmd.ecran||0)>0?"ombrage":"ouvert"],...sol];
+  $("#titre-comp").textContent=c.nom;
+  $("#kpis").innerHTML=items.map(([l,v,u,cc])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${v} <span class="petit">${u}</span></div><div class="c">${cc}</div></div>`).join("");
+  $("#raisons").innerHTML=(s.cmd.raisons||[]).map(r=>`<li>${r}</li>`).join("");
+}
+
+function alarmes(){
+  const out=[], f=E.comp.fruits, l=E.comp.feuilles;
+  if(f.t>35||l.t>35) out.push(["crit","Température au-dessus de 35 °C"]);
+  if(f.t<8||l.t<8) out.push(["crit","Température sous 8 °C"]);
+  if(hrDepuisW(f.t,f.w)>92) out.push(["att","Compartiment fruits : HR > 92 %, risque de botrytis et mildiou"]);
+  if(E.tsol.frais>22) out.push(["att","Bassin frais au-dessus de 22 °C : risque Pythium"]);
+  if(E.o2<6) out.push(["att","Oxygène dissous bas dans le bassin frais"]);
+  if(E.soc<25) out.push([E.soc<12?"crit":"att",`Batterie à ${fmt(E.soc,0)} %`]);
+  if(!E.reseau) out.push(["info","Réseau SNEL absent (délestage) : fonctionnement sur solaire et batterie"]);
+  $("#alarmes").innerHTML=out.length?out.map(([n,t])=>`<div class="alarme ${n==="crit"?"crit":n==="att"?"att":"ok"}">${t}</div>`).join(""):`<div class="alarme ok">Aucune alarme</div>`;
+  const pire=out.some(a=>a[0]==="crit")?"crit":out.some(a=>a[0]==="att")?"att":"ok";
+  const p=$("#etat"); p.className="pastille "+pire; p.textContent=pire==="crit"?"Alarme critique":pire==="att"?"À surveiller":"Tout va bien";
+}
+
+// ---------------------------------------------------------------- courbes
+function tracer(canvas,series,droite){
+  const ctx=canvas.getContext("2d"), W=canvas.width, H=canvas.height, pad=40;
+  ctx.clearRect(0,0,W,H);
+  const d=E.histo.slice(-288); if(d.length<2) return;
+  ctx.strokeStyle=css("--trait"); ctx.fillStyle=css("--doux"); ctx.font="20px system-ui"; ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad+(H-2*pad)*i/4;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(W-pad,y);ctx.stroke();}
+  series.forEach(s=>{
+    ctx.strokeStyle=s.c; ctx.lineWidth=s.e||3; ctx.beginPath();
+    d.forEach((p,i)=>{const x=pad+(W-2*pad)*i/(d.length-1); const v=s.f(p); const y=H-pad-(H-2*pad)*(v-s.min)/(s.max-s.min); i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.stroke();
+  });
+  ctx.fillStyle=css("--doux");
+  ctx.fillText(`${series[0].min}`,4,H-pad); ctx.fillText(`${series[0].max}`,4,pad+8);
+  if(droite){ctx.fillText(droite[1],W-pad+4,pad+8);ctx.fillText(droite[0],W-pad+4,H-pad);}
+}
+function courbes(){
+  tracer($("#courbe"),[
+    {c:css("--jaune"),f:p=>p.g/1000*40,min:0,max:40,e:2},
+    {c:css("--doux"),f:p=>p.text,min:0,max:40},
+    {c:css("--bleu"),f:p=>p.hrf*0.4,min:0,max:40,e:2},
+    {c:css("--vert"),f:p=>p.tl,min:0,max:40},
+    {c:css("--rouge"),f:p=>p.tf,min:0,max:40}],["0 %","100 %"]);
+  if(!$("#o-energie").classList.contains("cache")){
+    tracer($("#courbe-energie"),[
+      {c:css("--doux"),f:p=>p.reseau?0.3:0,min:0,max:4,e:6},
+      {c:css("--jaune"),f:p=>p.pv/1000,min:0,max:4},
+      {c:css("--rouge"),f:p=>p.charge/1000,min:0,max:4},
+      {c:css("--vert"),f:p=>p.soc/25,min:0,max:4}],["0 %","100 %"]);
+  }
+}
+
+// ---------------------------------------------------------------- lots, énergie
+function lots(){
+  const tb=$("#table-lots tbody");
+  tb.innerHTML=LOTS.map(([id,cult,lieu,age0],i)=>{
+    const st=RECETTES[cult], age=age0+(E.jour-1), total=st.reduce((a,s)=>a+s[1],0);
+    let cum=0, nom=st[st.length-1][0]; for(const s of st){ if(age<cum+s[1]){nom=s[0];break;} cum+=s[1]; }
+    const pct=Math.min(100,100*age/total), reste=Math.max(0,total-age);
+    const recolte = cult==="tomate"||cult==="poivron"||cult==="piment" ? (nom==="Production"?"en récolte":`dans ${Math.max(0,st.slice(0,3).reduce((a,s)=>a+s[1],0)+30-age)} j`) : (reste?`dans ${reste} j`:"à récolter");
+    return `<tr data-i="${i}" style="cursor:pointer"><td>${id}</td><td>${cult}</td><td>${lieu}</td><td>${nom}</td><td><div class="barre"><span style="width:${pct}%"></span></div></td><td>${recolte}</td></tr>`;
+  }).join("");
+  tb.querySelectorAll("tr").forEach(tr=>tr.onclick=()=>fiche(+tr.dataset.i));
+}
+function fiche(i){
+  const [id,cult,lieu,age0,info]=LOTS[i], st=RECETTES[cult], age=age0+(E.jour-1), total=st.reduce((a,s)=>a+s[1],0);
+  const comp = /Fruits/.test(lieu)?"fruits":"feuilles";
+  const d=E.histo.slice(-288), tmoy=d.length?d.reduce((a,p)=>a+(comp==="fruits"?p.tf:p.tl),0)/d.length:NaN;
+  const dli=d.length?d.reduce((a,p)=>a+p.g*0.7*2.1*300/1e6*(p.ecr>0?0.65:1),0):NaN;
+  const hh=d.length?d.filter(p=>(comp==="fruits"?p.hrf:p.hrl)>90).length*5/60:0;
+  $("#fiche").innerHTML=`<h2>${id} · ${cult}</h2><div>${info}</div><div class="petit">${lieu} · âge ${age} jours</div>
+    <div class="frise">${st.map(s=>`<div style="background:${s[2]};flex:${s[1]}">${s[0]}</div>`).join("")}</div>
+    <div class="barre"><span style="width:${Math.min(100,100*age/total)}%"></span></div>
+    <p>Climat vécu sur les dernières 24 h : température moyenne ${fmt(tmoy)} °C, lumière reçue ≈ ${fmt(dli,0)} mol/m², ${fmt(hh)} h au-dessus de 90 % d'HR.</p>
+    <p class="petit">Dans l'installation réelle, cette fiche regroupe aussi les photos datées, les observations de ravageurs, les interventions, la solution reçue et les pesées de récolte, et s'ouvre par le code QR du radeau ou de la rangée.</p>`;
+}
+function energie(){
+  $("#flux").innerHTML=`<div>Solaire<b>${fmt(E.pv/1000,2)} kW</b></div><div>Batterie<b>${fmt(E.soc,0)} %</b></div><div>Consommation<b>${fmt(E.charge/1000,2)} kW</b></div>
+    <div>Réseau SNEL<b>${E.reseau?"présent":"absent"}</b></div><div>Groupe<b>${E.groupe?"en marche":"arrêté"}</b></div><div>Stock thermique<b>${fmt(E.tsto)} °C</b></div>`;
+  $("#delestage").textContent = E.soc<35&&!E.reseau ? "Délestage actif : chambre froide et extracteurs suspendus, fonctions vitales maintenues." : "Aucun délestage.";
+  $("#eau").innerHTML=[["Transpiration",fmt(E.eauJour.transp,0),"L"],["Mur évaporatif",fmt(E.eauJour.pad,0),"L"],["Citerne",fmt(Math.max(10,64-E.jour*0.4),0),"%"]]
+    .map(([l,v,u])=>`<div class="kpi"><div class="l">${l} (depuis minuit)</div><div class="v">${v} <span class="petit">${u}</span></div></div>`).join("");
+}
+
+// ---------------------------------------------------------------- boucle
+function rafraichir(){
+  const hh=Math.floor(E.h), mm=Math.floor((E.h-hh)*60);
+  const noms={1:"janvier",4:"avril",7:"juillet",10:"octobre"};
+  $("#horloge").textContent=`Jour ${E.jour} de simulation, ${noms[E.mois]}, ${String(hh).padStart(2,"0")} h ${String(mm).padStart(2,"0")} · données simulées`;
+  dessinerPlan(); kpis(); alarmes(); courbes();
+  if(!$("#o-lots").classList.contains("cache") && E.jourLots!==E.jour){ lots(); E.jourLots=E.jour; }
+  if(!$("#o-energie").classList.contains("cache")) energie();
+  $("#nb-points").textContent=`${E.histo.length} enregistrements disponibles`;
+}
+function boucle(t){
+  const dt=Math.min(1,(t-dernier)/1000); dernier=t;
+  avancer(Math.round(dt*vitesse/60)*60||60);
+  rafraichir();
+  requestAnimationFrame(boucle);
+}
+function demarrer(mois){
+  E=nouvelEtat(mois); E.h=6;
+  // préchauffage du modèle : deux journées simulées
+  avancer(2*86400); E.histo=E.histo.slice(-288); E.jour=1;
+}
+$("#mois").onchange=e=>demarrer(+e.target.value);
+document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{vitesse=+b.dataset.v;document.querySelectorAll("[data-v]").forEach(x=>x.classList.toggle("actif",x===b));});
+document.querySelectorAll("#onglets button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#onglets button").forEach(x=>x.classList.toggle("actif",x===b));
+  ["vue","lots","energie","recherche"].forEach(o=>$("#o-"+o).classList.toggle("cache",o!==b.dataset.o));
+  E.jourLots=-1;
+  rafraichir();
+});
+$("#export").onclick=()=>{
+  const ent="jour;heure;t_ext_C;hr_ext_pct;rayonnement_W_m2;t_fruits_C;hr_fruits_pct;t_feuilles_C;hr_feuilles_pct;t_stockage_C;ouvrants_pct;ecran_pct;mode;soc_pct;pv_W;charge_W;reseau";
+  const lignes=E.histo.map(p=>[p.j,fmt(p.h,2),fmt(p.text),fmt(p.hrext,0),fmt(p.g,0),fmt(p.tf),fmt(p.hrf,0),fmt(p.tl),fmt(p.hrl,0),fmt(p.tsto),fmt(p.ouv,0),fmt(p.ecr,0),p.mode,fmt(p.soc,0),fmt(p.pv,0),fmt(p.charge,0),p.reseau?1:0].join(";"));
+  const blob=new Blob([ent+"\n"+lignes.join("\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="serre_lubumbashi_mesures.csv"; a.click();
+};
+const style=document.createElement("style"); style.textContent="@keyframes rot{to{transform:rotate(360deg)}}.tourne{animation:rot 1s linear infinite}"; document.head.appendChild(style);
+demarrer(10);
+requestAnimationFrame(boucle);
+</script>
+</body>
+</html>
