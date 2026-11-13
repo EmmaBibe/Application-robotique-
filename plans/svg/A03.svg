@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420.0mm" height="297.0mm" viewBox="0 0 420.0 297.0" font-family="DejaVu Sans, Arial, sans-serif"><defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker><marker id="fc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#4a4a4a"/></marker><pattern id="hach" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2" stroke="#8a8a8a" stroke-width="0.25"/></pattern><pattern id="beton" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.3" fill="#8a8a8a"/><circle cx="3" cy="2.6" r="0.25" fill="#8a8a8a"/></pattern></defs><rect width="420.0" height="297.0" fill="#fff"/><rect x="20.00" y="215.00" width="380.00" height="20.00" rx="0" fill="url(#hach)" stroke="none" stroke-width="0"/>
+<line x1="20.00" y1="215.00" x2="400.00" y2="215.00" stroke="#1a1a1a" stroke-width="0.7"/>
+<path d="M80.00,215.00 L80.00,135.00 L80.00,135.00 L85.00,129.07 L90.00,125.05 L95.00,121.57 L100.00,118.42 L105.00,115.54 L110.00,112.88 L115.00,110.42 L120.00,108.15 L125.00,106.06 L130.00,104.16 L135.00,102.43 L140.00,100.88 L145.00,99.51 L150.00,98.32 L155.00,97.31 L160.00,96.48 L165.00,95.83 L170.00,95.37 L175.00,95.09 L180.00,95.00 L185.00,95.09 L190.00,95.37 L195.00,95.83 L200.00,96.48 L205.00,97.31 L210.00,98.32 L215.00,99.51 L220.00,100.88 L225.00,102.43 L230.00,104.16 L235.00,106.06 L240.00,108.15 L245.00,110.42 L250.00,112.88 L255.00,115.54 L260.00,118.42 L265.00,121.57 L270.00,125.05 L275.00,129.07 L280.00,135.00 L280.00,135.00 L280.00,215.00" fill="none" stroke="#2f7d4f" stroke-width="0.9" stroke-linejoin="round"/>
+<line x1="180.00" y1="215.00" x2="180.00" y2="95.00" stroke="#1a1a1a" stroke-width="0.4" stroke-dasharray="3,1.5"/>
+<line x1="81.00" y1="135.00" x2="279.00" y2="135.00" stroke="#4a4a4a" stroke-width="0.35" stroke-dasharray="1,1"/>
+<text x="184.00" y="133.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">écran d&#x27;ombrage / thermique</text>
+<line x1="160.00" y1="96.00" x2="172.00" y2="95.00" stroke="#1f6fb2" stroke-width="1.4"/>
+<line x1="188.00" y1="95.00" x2="200.00" y2="96.00" stroke="#1f6fb2" stroke-width="1.4"/>
+<line x1="80.00" y1="195.00" x2="80.00" y2="165.00" stroke="#1f6fb2" stroke-width="1.4"/>
+<line x1="280.00" y1="195.00" x2="280.00" y2="165.00" stroke="#1f6fb2" stroke-width="1.4"/>
+<text x="283.00" y="179.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">ouvrant latéral nord 10 x 1,5 m + filet 50 mesh</text>
+<text x="180.00" y="89.00" font-size="1.9" text-anchor="middle" fill="#1a1a1a">ouvrants de toiture (un par versant)</text>
+<rect x="92.00" y="206.00" width="80.00" height="9.00" rx="0" fill="#dceef8" stroke="#1a1a1a" stroke-width="0.4"/>
+<circle cx="97.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<circle cx="106.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<circle cx="115.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<circle cx="124.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<circle cx="133.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<circle cx="142.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<circle cx="151.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<circle cx="160.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<circle cx="169.00" cy="203.00" r="3.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<text x="132.00" y="221.00" font-size="1.9" text-anchor="middle" fill="#1a1a1a">bassin à radeaux (25 cm d&#x27;eau, semi-enterré)</text>
+<line x1="192.00" y1="139.00" x2="272.00" y2="139.00" stroke="#4a4a4a" stroke-width="0.25"/>
+<rect x="198.00" y="203.00" width="8.00" height="12.00" rx="0" fill="#333" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="202.00" y1="203.00" x2="202.00" y2="139.00" stroke="#2f7d4f" stroke-width="1.6"/>
+<rect x="218.00" y="203.00" width="8.00" height="12.00" rx="0" fill="#333" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="222.00" y1="203.00" x2="222.00" y2="139.00" stroke="#2f7d4f" stroke-width="1.6"/>
+<rect x="238.00" y="203.00" width="8.00" height="12.00" rx="0" fill="#333" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="242.00" y1="203.00" x2="242.00" y2="139.00" stroke="#2f7d4f" stroke-width="1.6"/>
+<rect x="258.00" y="203.00" width="8.00" height="12.00" rx="0" fill="#333" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="262.00" y1="203.00" x2="262.00" y2="139.00" stroke="#2f7d4f" stroke-width="1.6"/>
+<text x="232.00" y="221.00" font-size="1.9" text-anchor="middle" fill="#1a1a1a">seaux hollandais, palissage sur fil à 3,80 m</text>
+<path d="M16.00,215.00 L16.00,155.00 L64.00,165.00 L64.00,215.00" fill="#f7f1e6" stroke="#1a1a1a" stroke-width="0.6" stroke-linejoin="round"/>
+<text x="40.00" y="191.00" font-size="2.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">annexe</text>
+<line x1="14.00" y1="152.00" x2="66.00" y2="163.00" stroke="#1f6fb2" stroke-width="1.2"/>
+<text x="40.00" y="147.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a">PV 12°</text>
+<rect x="64.00" y="167.00" width="16.00" height="48.00" rx="0" fill="#fff3d6" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="72.00" y="163.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a">sas</text>
+<rect x="76.00" y="215.00" width="8.00" height="16.00" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="77.00" y="213.00" width="6.00" height="8.00" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="276.00" y="215.00" width="8.00" height="16.00" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="277.00" y="213.00" width="6.00" height="8.00" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="86.00" y="227.00" font-size="1.8" text-anchor="start" fill="#1a1a1a">plot BA 40 x 40 x 80 + longrine 20 x 30</text>
+<line x1="80.00" y1="215.00" x2="80.00" y2="238.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="280.00" y1="215.00" x2="280.00" y2="238.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="80.0" y1="237" x2="280.0" y2="237" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="180.00" y="236.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a">10,00</text>
+<line x1="180.00" y1="215.00" x2="181.50" y2="215.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="180.00" y1="175.00" x2="181.50" y2="175.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="180.0" y1="215" x2="180.0" y2="175.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="179.00" y="195.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 179.00 195.00)"></text>
+<line x1="280.00" y1="215.00" x2="297.50" y2="215.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="280.00" y1="135.00" x2="297.50" y2="135.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="296.0" y1="215" x2="296.0" y2="135.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="295.00" y="175.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 295.00 175.00)">4,00</text>
+<line x1="296.00" y1="215.00" x2="309.50" y2="215.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="296.00" y1="95.00" x2="309.50" y2="95.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="308.0" y1="215" x2="308.0" y2="95.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="307.00" y="155.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 307.00 155.00)">6,00</text>
+<line x1="80.00" y1="215.00" x2="80.00" y2="246.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="180.00" y1="215.00" x2="180.00" y2="246.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="80.0" y1="245" x2="180.0" y2="245" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="130.00" y="244.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a">5,00</text>
+<text x="180.00" y="94.00" font-size="1.9" text-anchor="middle" fill="#1a1a1a">faîtage +6,00</text>
+<text x="78.00" y="134.00" font-size="1.9" text-anchor="end" fill="#1a1a1a">chéneau +4,00</text>
+<text x="78.00" y="217.50" font-size="1.9" text-anchor="end" fill="#1a1a1a">± 0,00</text>
+<text x="130.00" y="115.00" font-size="2.6" text-anchor="middle" fill="#1a1a1a" font-weight="700">FEUILLES (sud)</text>
+<text x="230.00" y="115.00" font-size="2.6" text-anchor="middle" fill="#1a1a1a" font-weight="700">FRUITS (nord)</text>
+<text x="300.00" y="30.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Notes</text>
+<text x="300.00" y="34.20" font-size="2.1" text-anchor="start" fill="#1a1a1a">Structure acier galvanisé à chaud (275 g/m²) :</text>
+<text x="300.00" y="37.25" font-size="2.1" text-anchor="start" fill="#1a1a1a">  arcs Ø 60 x 2 mm tous les 2,50 m,</text>
+<text x="300.00" y="40.29" font-size="2.1" text-anchor="start" fill="#1a1a1a">  poteaux 80 x 80 x 2 mm, pannes Ø 32 mm,</text>
+<text x="300.00" y="43.34" font-size="2.1" text-anchor="start" fill="#1a1a1a">  contreventements en croix aux travées d&#x27;extrémité.</text>
+<text x="300.00" y="46.38" font-size="2.1" text-anchor="start" fill="#1a1a1a">Charges : rafale 28 m/s (q ≈ 0,42 kPa),</text>
+<text x="300.00" y="49.43" font-size="2.1" text-anchor="start" fill="#1a1a1a">  cultures palissées 15 kg/m², écran 5 kg/m².</text>
+<text x="300.00" y="52.47" font-size="2.1" text-anchor="start" fill="#1a1a1a">Référentiel : EN 13031-1 (serres de production).</text>
+<text x="300.00" y="55.52" font-size="2.1" text-anchor="start" fill="#1a1a1a">Couverture : film PE diffusant 200 µm, profils</text>
+<text x="300.00" y="58.56" font-size="2.1" text-anchor="start" fill="#1a1a1a">  alu à ressort ; pignons PC 8 mm en partie basse.</text>
+<text x="300.00" y="61.61" font-size="2.1" text-anchor="start" fill="#1a1a1a">Ensoleillement : midi juin 55° au nord,</text>
+<text x="300.00" y="64.65" font-size="2.1" text-anchor="start" fill="#1a1a1a">  midi décembre 78° au sud.</text>
+<rect x="10.00" y="10.00" width="400.00" height="277.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.7"/>
+<rect x="15.00" y="15.00" width="390.00" height="267.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="39.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<text x="39.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<line x1="63.75" y1="10.00" x2="63.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="63.75" y1="282.00" x2="63.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="88.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<text x="88.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<line x1="112.50" y1="10.00" x2="112.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="112.50" y1="282.00" x2="112.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="136.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<text x="136.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<line x1="161.25" y1="10.00" x2="161.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="161.25" y1="282.00" x2="161.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="185.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<text x="185.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<line x1="210.00" y1="10.00" x2="210.00" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="210.00" y1="282.00" x2="210.00" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="234.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<text x="234.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<line x1="258.75" y1="10.00" x2="258.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="258.75" y1="282.00" x2="258.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="283.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<text x="283.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<line x1="307.50" y1="10.00" x2="307.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="307.50" y1="282.00" x2="307.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="331.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<text x="331.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<line x1="356.25" y1="10.00" x2="356.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="356.25" y1="282.00" x2="356.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="380.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="380.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="12.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<text x="407.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<line x1="10.00" y1="59.50" x2="15.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="59.50" x2="410.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<text x="407.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<line x1="10.00" y1="104.00" x2="15.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="104.00" x2="410.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<text x="407.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<line x1="10.00" y1="148.50" x2="15.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="148.50" x2="410.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<text x="407.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<line x1="10.00" y1="193.00" x2="15.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="193.00" x2="410.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<text x="407.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<line x1="10.00" y1="237.50" x2="15.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="237.50" x2="410.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<text x="407.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<rect x="230.00" y="244.00" width="175.00" height="38.00" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="230.00" y1="253.00" x2="405.00" y2="253.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="230.00" y1="268.00" x2="405.00" y2="268.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="345.00" y1="268.00" x2="345.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="375.00" y1="268.00" x2="375.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="290.00" y1="268.00" x2="290.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="233.00" y="250.20" font-size="3.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Serre pilote en environnement contrôlé - Lubumbashi</text>
+<text x="233.00" y="259.00" font-size="4.2" text-anchor="start" fill="#2f7d4f" font-weight="700">Coupe transversale A-A (nord-sud)</text>
+<text x="233.00" y="265.00" font-size="2.6" text-anchor="start" fill="#4a4a4a">Lot architecture et structure - configuration optimisée</text>
+<text x="233.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Maître d&#x27;ouvrage</text>
+<text x="233.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">Projet serre Lubumbashi</text>
+<text x="292.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Échelle</text>
+<text x="292.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">1:50</text>
+<text x="318.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Date</text>
+<text x="318.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<text x="347.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Format / indice</text>
+<text x="347.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">A3  -  A</text>
+<text x="377.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Planche</text>
+<text x="390.00" y="278.50" font-size="6.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">A03</text></svg>

@@ -1,0 +1,54 @@
+Repères,Quantité,Valeur,Empreinte,Référence fabricant,Fonction,Bloc
+J1,1,24V DC,"TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/2-5,08 (1715721)",Entrée 24 V DC (alimentation secourue de l'armoire),Alimentation 24 V
+F1,1,"1,5 A",Fuse_1812_4532Metric,Littelfuse 1812L150/33DR,"Fusible réarmable 1,5 A / 33 V",Alimentation 24 V
+D1,1,SS54,D_SMA,Vishay SS54-E3/61T,Protection contre l'inversion de polarité (Schottky 5 A / 40 V),Alimentation 24 V
+D2,1,SMBJ33A,D_SMB,Littelfuse SMBJ33A,Écrêteur de surtensions 33 V / 600 W,Alimentation 24 V
+C1,1,47µF 50V,CP_Elec_8x10,Panasonic EEE-FK1H470P,"Réservoir d'entrée, électrolytique aluminium faible ESR",Alimentation 24 V
+C2 C11,2,100nF 50V,C_0805_2012Metric,Murata GRM21BR71H104KA01L,Découplage 24 V ; Découplage 24 V des bobines,Alimentation 24 V
+U1,1,R-78E3.3-1.0,Converter_DCDC_RECOM_R-78E-0.5_THT,RECOM R-78E3.3-1.0,"Convertisseur à découpage 24 V -> 3,3 V / 1 A (rendement 90 %)",Alimentation 24 V
+C3,1,22µF 10V,C_1206_3216Metric,Murata GRM31CR61A226KE19L,"Sortie 3,3 V (X5R)",Alimentation 24 V
+C4 C6 C9 C10 C41 C42,6,100nF,C_0603_1608Metric,Yageo CC0603KRX7R9BB104,"Découplage 3,3 V ; Découplage ESP32 ; Découplage du transceiver ; Découplage MCP23017 ; Filtre passe-bas",Alimentation 24 V
+U2,1,ESP32-WROOM-32E,ESP32-WROOM-32D,Espressif ESP32-WROOM-32E-N4,"Module Wi-Fi/Bluetooth ESP32, 4 Mo de flash, antenne intégrée",Microcontrôleur ESP32
+C5 C8,2,10µF,C_0805_2012Metric,Murata GRM21BR61A106KE19L,"Découplage ESP32 ; Réservoir 3,3 V du module Ethernet",Microcontrôleur ESP32
+R1 R2 R6 R7 R21 R22 R23 R24 R25 R26 R27 R28,12,10k,R_0805_2012Metric,Yageo RC0805FR-0710KL,"Rappel de la broche EN ; Rappel de la broche BOOT ; Récepteur actif au démarrage ; Rappel au 3,3 V de l'entrée ; Rappel RESET du MCP23017",Microcontrôleur ESP32
+C7,1,1µF,C_0603_1608Metric,Murata GRM188R61E105KA12D,Retard de démarrage (EN),Microcontrôleur ESP32
+SW1,1,RESET,SW_PUSH_6mm,TE 1-1825910-0,Bouton de redémarrage,Microcontrôleur ESP32
+SW2,1,BOOT,SW_PUSH_6mm,TE 1-1825910-0,Bouton de mise en programmation,Microcontrôleur ESP32
+J2,1,PROG,PinHeader_1x06_P2.54mm_Vertical,Samtec TSW-106-07-G-S,"Programmation (adaptateur USB-série 3,3 V)",Microcontrôleur ESP32
+J3,1,W5500,PinSocket_2x05_P2.54mm_Vertical,Samtec SSW-105-01-G-D,"Embase du module Ethernet W5500 (SPI, RJ45 intégré)",Ethernet (module W5500)
+U3,1,MAX3485,SOIC-8_3.9x4.9mm_P1.27mm,Analog Devices MAX3485ESA+,"Émetteur-récepteur RS485 3,3 V, 10 Mbit/s",Bus RS485 (Modbus RTU)
+R4 R5,2,680,R_0805_2012Metric,Yageo RC0805FR-07680RL,Polarisation de repos,Bus RS485 (Modbus RTU)
+R3,1,120,R_1206_3216Metric,Yageo RC1206FR-07120RL,Terminaison de ligne 120 ohms,Bus RS485 (Modbus RTU)
+JP1,1,TERM,PinHeader_1x02_P2.54mm_Vertical,Samtec TSW-102-07-G-S,Cavalier de terminaison (fermé en bout de ligne),Bus RS485 (Modbus RTU)
+D3,1,SM712,SOT-23,Semtech SM712.TCT,Protection asymétrique RS485 (-7/+12 V),Bus RS485 (Modbus RTU)
+J4,1,RS485,"TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/3-5,08 (1715734)",Bus Modbus vers les capteurs,Bus RS485 (Modbus RTU)
+R11 R12 R13 R14 R15 R16 R17 R18,8,"4,7k",R_1206_3216Metric,Yageo RC1206FR-074K7L,Limitation de courant entrée,Entrées 24 V isolées
+D11 D12 D13 D14 D15 D16 D17 D18 D51,9,verte,LED_0805_2012Metric,Würth 150080GS75000,Voyant entrée ; Voyant ALIM,Entrées 24 V isolées
+U11 U12 U13 U14 U15 U16 U17 U18,8,PC817,DIP-4_W7.62mm,Sharp PC817X2NSZ9F,Optocoupleur entrée,Entrées 24 V isolées
+D21 D22 D23 D24 D25 D26 D27 D28,8,1N4148W,D_SOD-123,Diodes Inc. 1N4148W-7-F,Protection contre l'inversion de l'entrée,Entrées 24 V isolées
+C21 C22 C23 C24 C25 C26 C27 C28,8,10nF,C_0603_1608Metric,Yageo CC0603KRX7R9BB103,Filtre anti-rebond entrée,Entrées 24 V isolées
+J5,1,IN1-4,"TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/5-5,08 (1715750)",Entrées 1 à 4 et commun,Entrées 24 V isolées
+J6,1,IN5-8,"TerminalBlock_Phoenix_MKDS-1,5-5-5.08_1x05_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/5-5,08 (1715750)",Entrées 5 à 8 et commun,Entrées 24 V isolées
+U4,1,MCP23017,SOIC-28W_7.5x17.9mm_P1.27mm,Microchip MCP23017-E/SO,Extension 16 E/S I2C (adresse 0x20),Extension d'E/S et pilotage
+R8 R9 R31 R32 R33 R34 R35 R36,8,"4,7k",R_0805_2012Metric,Yageo RC0805FR-074K7L,Rappel I2C SDA ; Rappel I2C SCL ; Limitation du voyant de sortie,Extension d'E/S et pilotage
+U5,1,ULN2003A,SOIC-16_3.9x9.9mm_P1.27mm,TI ULN2003ADR,"Réseau de 7 Darlington 500 mA, diodes de roue libre intégrées",Extension d'E/S et pilotage
+K1 K2 K3 K4 K5 K6,6,SRD-24VDC-SL-C,Relay_SPDT_SANYOU_SRD_Series_Form_C,Songle SRD-24VDC-SL-C,"Relais de sortie, bobine 24 V, contact inverseur 10 A / 250 V AC",Sorties relais 230 V
+J7,1,OUT1,"TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/3-5,08 (1715734)",Contacts du relais 1 (NO / COM / NC),Sorties relais 230 V
+D31 D32 D33 D34 D35 D36 D53,7,jaune,LED_0805_2012Metric,Würth 150080YS75000,Voyant de sortie ; Voyant AUTONOME,Sorties relais 230 V
+J8,1,OUT2,"TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/3-5,08 (1715734)",Contacts du relais 2 (NO / COM / NC),Sorties relais 230 V
+J9,1,OUT3,"TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/3-5,08 (1715734)",Contacts du relais 3 (NO / COM / NC),Sorties relais 230 V
+J10,1,OUT4,"TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/3-5,08 (1715734)",Contacts du relais 4 (NO / COM / NC),Sorties relais 230 V
+J11,1,OUT5,"TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/3-5,08 (1715734)",Contacts du relais 5 (NO / COM / NC),Sorties relais 230 V
+J12,1,OUT6,"TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/3-5,08 (1715734)",Contacts du relais 6 (NO / COM / NC),Sorties relais 230 V
+BZ1,1,24V,Buzzer_12x9.5RM7.6,CUI CEM-1224S,"Buzzer d'alarme locale 24 V, 85 dB",Sorties relais 230 V
+F2,1,100 mA,Fuse_1206_3216Metric,Bourns MF-NSMF010-2,Protection de l'alimentation des boucles,Entrées 4-20 mA
+J13,1,AI1,"TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/2-5,08 (1715721)",Boucle 4-20 mA n° 1 (capteur deux fils),Entrées 4-20 mA
+R41 R42,2,"120 0,1%",R_1206_3216Metric,Panasonic ERA-8AEB121V,Shunt de mesure,Entrées 4-20 mA
+R43 R44 R51 R52 R53 R54,6,1k,R_0805_2012Metric,Yageo RC0805FR-071KL,Limitation vers l'ADC ; Limitation du voyant alim ; Limitation du voyant marche ; Limitation du voyant autonome ; Limitation du voyant défaut,Entrées 4-20 mA
+D41 D42,2,PESD3V3,D_SOD-323,Nexperia PESD3V3S1UB,Protection ESD de l'entrée analogique,Entrées 4-20 mA
+J14,1,AI2,"TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal","Phoenix Contact MKDS 1,5/2-5,08 (1715721)",Boucle 4-20 mA n° 2 (capteur deux fils),Entrées 4-20 mA
+D52,1,bleue,LED_0805_2012Metric,Würth 150080BS75000,Voyant MARCHE (clignote : programme actif),Voyants et extension
+D54,1,rouge,LED_0805_2012Metric,Würth 150080RS75000,Voyant DÉFAUT,Voyants et extension
+J15,1,I2C,JST_XH_B4B-XH-A_1x04_P2.50mm_Vertical,JST B4B-XH-A,"Extension I2C (afficheur, capteur local)",Voyants et extension
+H1 H2,2,M3,MountingHole_3.2mm_M3,Sans objet (trou de fixation),Trou de fixation M3 non métallisé,Voyants et extension
+H3 H4,2,M3,MountingHole_3.2mm_M3_Pad_Via,Sans objet (trou de fixation),Trou de fixation M3 relié à la masse,Voyants et extension

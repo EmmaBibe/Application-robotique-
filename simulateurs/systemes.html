@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulateur des systèmes</title>
+<style>
+:root{--fond:#f3f5f2;--carte:#fff;--texte:#1b2620;--doux:#5b6a61;--trait:#d6ddd8;--vert:#2f7d4f;--vert-c:#e3f1e8;--orange:#c77b12;--orange-c:#fbefd9;--rouge:#b83a2e;--rouge-c:#f8e1de;--bleu:#2c6ea3;--bleu-c:#e2eef8;--jaune:#c99a00;--violet:#7d4bb3;--eau:#4f97c9;--sol:#9f86c0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--fond:#111713;--carte:#19211c;--texte:#e3ebe5;--doux:#9aa89f;--trait:#2c3830;--vert:#5fbf85;--vert-c:#1f3327;--orange:#e6a446;--orange-c:#3a2d17;--rouge:#e9776b;--rouge-c:#3d201d;--bleu:#6aaee3;--bleu-c:#1a2d3c;--jaune:#f0c540;--violet:#b48ae6;--eau:#5fa8dc;--sol:#b9a2dc}}
+:root[data-theme="dark"]{--fond:#111713;--carte:#19211c;--texte:#e3ebe5;--doux:#9aa89f;--trait:#2c3830;--vert:#5fbf85;--vert-c:#1f3327;--orange:#e6a446;--orange-c:#3a2d17;--rouge:#e9776b;--rouge-c:#3d201d;--bleu:#6aaee3;--bleu-c:#1a2d3c;--jaune:#f0c540;--violet:#b48ae6;--eau:#5fa8dc;--sol:#b9a2dc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fond);color:var(--texte);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--carte);border-bottom:1px solid var(--trait);padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+h1{font-size:17px;margin:0}
+.sous{color:var(--doux);font-size:12px}
+.barre{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+select,button{font:inherit;color:var(--texte);background:var(--fond);border:1px solid var(--trait);border-radius:8px;padding:5px 9px;cursor:pointer}
+button.actif{background:var(--vert);color:#fff;border-color:var(--vert)}
+nav{display:flex;gap:4px;padding:8px 16px;overflow-x:auto;border-bottom:1px solid var(--trait);background:var(--carte)}
+nav button{border:none;background:none;white-space:nowrap}
+nav button.actif{background:var(--vert-c);color:var(--vert)}
+main{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:14px;padding:14px 16px;max-width:1500px;margin:0 auto}
+@media (max-width:980px){main{grid-template-columns:1fr}}
+.carte{background:var(--carte);border:1px solid var(--trait);border-radius:12px;padding:12px}
+.carte h2{font-size:14px;margin:0 0 8px}
+svg.schema{width:100%;height:auto;display:block}
+svg text{font-family:inherit;fill:var(--texte)}
+.tuyau{fill:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;opacity:.35}
+.tuyau.flux{opacity:1;stroke-dasharray:10 8;animation:dash .7s linear infinite}
+.tuyau.lent{animation-duration:1.6s}
+.fil{fill:none;stroke-width:3;opacity:.3}
+.fil.actif{opacity:1;stroke-dasharray:6 6;animation:dash .5s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-18}}
+.equip{cursor:pointer}
+.equip .corps{fill:var(--carte);stroke:var(--doux);stroke-width:2}
+.equip.on .corps{fill:var(--vert-c);stroke:var(--vert)}
+.equip.ko .corps{fill:var(--rouge-c);stroke:var(--rouge)}
+.equip.att .corps{fill:var(--orange-c);stroke:var(--orange)}
+.tag{font-size:11px;font-weight:600}
+.val{font-size:11px;fill:var(--doux)}
+.grand{font-size:13px;font-weight:600}
+.rot{transform-box:fill-box;transform-origin:center;animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:5px 6px;border-bottom:1px solid var(--trait);vertical-align:top;text-align:left}
+th{font-size:11px;color:var(--doux);font-weight:600}
+.pastille{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--trait);margin-right:6px;vertical-align:middle}
+.pastille.on{background:var(--vert);box-shadow:0 0 6px var(--vert)}
+#journal{max-height:280px;overflow:auto;font-size:12.5px}
+#journal div{padding:4px 0;border-bottom:1px solid var(--trait)}
+#journal b{font-variant-numeric:tabular-nums;margin-right:6px}
+.dom{font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:1px 6px;border-radius:6px;background:var(--bleu-c);color:var(--bleu);margin-right:6px}
+.dom.alarme{background:var(--rouge-c);color:var(--rouge)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-bottom:10px}
+.kpi{border:1px solid var(--trait);border-radius:8px;padding:6px 8px}
+.kpi b{display:block;font-size:17px}
+.kpi span{font-size:11px;color:var(--doux)}
+.pannes label{display:flex;gap:6px;align-items:center;margin:3px 0;font-size:13px}
+.fiche{font-size:13px;margin-top:8px;padding:8px;border-left:3px solid var(--vert);background:var(--vert-c);border-radius:6px;display:none}
+.fiche.visible{display:block}
+.jauge{height:8px;background:var(--trait);border-radius:4px;overflow:hidden}
+.jauge>span{display:block;height:100%}
+.cache{display:none}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Simulateur des systèmes de la serre</h1>
+    <div class="sous" id="horloge"></div>
+  </div>
+  <div class="barre">
+    <select id="mois"></select>
+    <button id="lecture" class="actif">Pause</button>
+    <button data-v="60">x60</button><button data-v="300" class="actif">x300</button><button data-v="1200">x1200</button>
+    <a href="serre_3d_autonome.html" style="margin-left:8px;color:var(--vert)">Maquette 3D</a>
+  </div>
+</header>
+<nav id="onglets">
+  <button data-d="ensemble" class="actif">Vue d'ensemble</button>
+  <button data-d="climat">Climat</button>
+  <button data-d="fertirrigation">Fertirrigation (fruits)</button>
+  <button data-d="bassins">Bassins (feuilles)</button>
+  <button data-d="eau">Eau</button>
+  <button data-d="electricite">Électricité</button>
+  <button data-d="iiot">Électronique et IIoT</button>
+  <button data-d="cultures">Cultures</button>
+</nav>
+<main>
+  <section class="carte">
+    <h2 id="titre-schema"></h2>
+    <div id="schema"></div>
+    <div id="fiche" class="fiche"></div>
+    <p class="sous" id="aide-schema">Cliquer sur un équipement pour sa fiche. Les tuyaux et les fils s'animent quand ils transportent de l'eau, de l'énergie ou des données.</p>
+  </section>
+  <aside style="display:grid;gap:14px;align-content:start">
+    <div class="carte"><div class="kpis" id="kpis"></div>
+      <h2>Qui fait quoi, et quand</h2>
+      <table><thead><tr><th>Condition</th><th>Action</th><th>Qui</th></tr></thead><tbody id="regles"></tbody></table>
+    </div>
+    <div class="carte pannes"><h2>Provoquer une panne</h2><div id="pannes"></div>
+      <p class="sous">Observez la réaction du système : alarmes, bascules de secours, mode autonome, journal.</p></div>
+    <div class="carte"><h2>Journal des événements</h2><div id="journal"></div></div>
+  </aside>
+</main>
+
+<script type="module">
+import * as M from "./lib/modele.js";
+import * as SYS from "./lib/systemes.js";
+import { SCHEMAS, FICHES } from "./lib/schemas.js";
+
+const $ = s => document.querySelector(s);
+const fmt = (x, d = 1) => (x == null || isNaN(x)) ? "-" : (+x).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+
+let E, domaine = "ensemble", lecture = true, vitesse = 300;
+function demarrer(mois) {
+  E = M.nouvelEtat(mois);
+  SYS.initialiser(E);
+  for (let i = 0; i < 24 * 60 * 1.2; i++) { M.avancer(E, 60); SYS.pas(E, 60); }
+  E.sys.journal = [];
+  const p = { ...E.sys.pannes };
+  document.querySelectorAll("#pannes input").forEach(c => { c.checked = false; });
+}
+const sel = $("#mois");
+for (let m = 1; m <= 12; m++) sel.add(new Option(M.NOMS_MOIS[m][0].toUpperCase() + M.NOMS_MOIS[m].slice(1), m));
+sel.value = 10;
+sel.onchange = () => demarrer(+sel.value);
+$("#lecture").onclick = () => { lecture = !lecture; $("#lecture").textContent = lecture ? "Pause" : "Lecture"; $("#lecture").classList.toggle("actif", lecture); };
+document.querySelectorAll("[data-v]").forEach(b => b.onclick = () => { vitesse = +b.dataset.v; document.querySelectorAll("[data-v]").forEach(x => x.classList.toggle("actif", x === b)); });
+
+$("#pannes").innerHTML = Object.entries(SYS.PANNES).map(([k, v]) => `<label><input type="checkbox" data-p="${k}"> ${v}</label>`).join("");
+document.querySelectorAll("#pannes input").forEach(c => c.onchange = () => { if (c.checked) E.sys.pannes[c.dataset.p] = true; else delete E.sys.pannes[c.dataset.p]; });
+
+function afficherSchema() {
+  const s = SCHEMAS[domaine];
+  $("#titre-schema").textContent = s.titre;
+  $("#schema").innerHTML = s.svg();
+  $("#fiche").classList.remove("visible");
+  document.querySelectorAll("#schema [data-id]").forEach(el => el.addEventListener("click", () => {
+    const f = FICHES[el.dataset.id];
+    if (!f) return;
+    $("#fiche").innerHTML = `<b>${el.dataset.id} · ${f[0]}</b><br>${f[1]}`;
+    $("#fiche").classList.add("visible");
+  }));
+}
+document.querySelectorAll("#onglets button").forEach(b => b.onclick = () => {
+  domaine = b.dataset.d;
+  document.querySelectorAll("#onglets button").forEach(x => x.classList.toggle("actif", x === b));
+  afficherSchema(); rafraichir();
+});
+
+const CLE_REGLES = { ensemble: null, climat: "climat", fertirrigation: "fertirrigation", bassins: "bassins", eau: "eau", electricite: "electricite", iiot: "iiot", cultures: null };
+function rafraichir() {
+  const hh = Math.floor(E.h), mm = Math.floor((E.h - hh) * 60);
+  const m = M.meteo(E.mois, E.h);
+  $("#horloge").textContent = `${M.NOMS_MOIS[E.mois]}, ${String(hh).padStart(2, "0")} h ${String(mm).padStart(2, "0")} · dehors ${fmt(m.t)} °C, ${fmt(m.hr, 0)} % HR, soleil ${fmt(m.g, 0)} W/m²${m.pluie ? ", pluie" : ""}`;
+  SCHEMAS[domaine].maj(E, fmt);
+  $("#kpis").innerHTML = SCHEMAS[domaine].kpis(E, fmt).map(([a, b, c]) => `<div class="kpi"><span>${a}</span><b>${b}</b><span>${c || ""}</span></div>`).join("");
+  const R = SYS.regles(E);
+  const cle = CLE_REGLES[domaine];
+  const lignes = cle ? R[cle] : domaine === "cultures" ? [] : Object.values(R).flat().filter(r => r[1]);
+  $("#regles").innerHTML = lignes.map(([cond, actif, action, qui]) => `<tr><td><span class="pastille ${actif ? "on" : ""}"></span>${cond}</td><td>${action}</td><td class="sous">${qui}</td></tr>`).join("")
+    || `<tr><td colspan="3" class="sous">Voir le tableau d'aptitude des cultures.</td></tr>`;
+  $("#journal").innerHTML = E.sys.journal.slice(0, 60).map(j => `<div><b>${j.t}</b><span class="dom ${j.domaine === "alarme" ? "alarme" : ""}">${j.domaine}</span>${j.texte}</div>`).join("") || `<div class="sous">Rien à signaler pour l'instant.</div>`;
+}
+
+let dernier = performance.now(), cumul = 0, cumulAff = 0;
+function boucle(t) {
+  const dt = Math.min(0.2, (t - dernier) / 1000); dernier = t;
+  if (lecture) {
+    cumul += dt * vitesse;
+    while (cumul >= 60) { M.avancer(E, 60); SYS.pas(E, 60); cumul -= 60; }
+  }
+  cumulAff += dt;
+  if (cumulAff > 0.3) { rafraichir(); cumulAff = 0; }
+  requestAnimationFrame(boucle);
+}
+demarrer(10);
+afficherSchema();
+rafraichir();
+requestAnimationFrame(boucle);
+window.__sim = { get E() { return E; } };
+</script>
+</body>
+</html>

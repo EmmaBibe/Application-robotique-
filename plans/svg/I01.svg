@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420.0mm" height="297.0mm" viewBox="0 0 420.0 297.0" font-family="DejaVu Sans, Arial, sans-serif"><defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker><marker id="fc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#4a4a4a"/></marker><pattern id="hach" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2" stroke="#8a8a8a" stroke-width="0.25"/></pattern><pattern id="beton" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.3" fill="#8a8a8a"/><circle cx="3" cy="2.6" r="0.25" fill="#8a8a8a"/></pattern></defs><rect width="420.0" height="297.0" fill="#fff"/><rect x="25.00" y="25.00" width="370.00" height="45.00" rx="2" fill="#eef4fb" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="30.00" y="31.00" font-size="2.5" text-anchor="start" fill="#1f6fb2" font-weight="700">NIVEAU SUPERVISION - local technique</text>
+<rect x="35.00" y="36.00" width="80.00" height="28.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="75.00" y="40.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">SRV-01 serveur local</text>
+<text x="75.00" y="43.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">mini-PC industriel, SSD 256 Go</text>
+<text x="75.00" y="46.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">192.168.10.2</text>
+<text x="75.00" y="49.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">Mosquitto, régulation, InfluxDB,</text>
+<text x="75.00" y="52.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">Grafana, interface web</text>
+<rect x="130.00" y="36.00" width="60.00" height="28.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="160.00" y="40.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">NET-02 routeur 4G</text>
+<text x="160.00" y="43.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">double SIM (2 opérateurs)</text>
+<text x="160.00" y="46.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">192.168.10.1 (passerelle)</text>
+<text x="160.00" y="49.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">VPN WireGuard sortant</text>
+<text x="160.00" y="52.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">SMS d&#x27;alarme</text>
+<rect x="205.00" y="36.00" width="60.00" height="28.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="235.00" y="40.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">NET-01 switch PoE</text>
+<text x="235.00" y="43.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">8 ports, rail DIN</text>
+<text x="235.00" y="46.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">VLAN 10 : automates</text>
+<text x="235.00" y="49.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">VLAN 20 : caméras</text>
+<text x="235.00" y="52.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">VLAN 30 : Wi-Fi</text>
+<rect x="280.00" y="36.00" width="50.00" height="28.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="305.00" y="40.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">NET-03 point d&#x27;accès</text>
+<text x="305.00" y="43.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">Wi-Fi IP65</text>
+<text x="305.00" y="46.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">192.168.30.0/24</text>
+<text x="305.00" y="49.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">tablettes, téléphones</text>
+<rect x="340.00" y="36.00" width="50.00" height="28.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="365.00" y="40.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">Caméras IP</text>
+<text x="365.00" y="43.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">CAM-F1 .20.11</text>
+<text x="365.00" y="46.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">CAM-L1 .20.12</text>
+<text x="365.00" y="49.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">(CAM-PIEGE, CAM-EXT)</text>
+<line x1="115.00" y1="50.00" x2="130.00" y2="50.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<line x1="190.00" y1="50.00" x2="205.00" y2="50.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<line x1="265.00" y1="50.00" x2="280.00" y2="50.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<line x1="330.00" y1="50.00" x2="340.00" y2="50.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<rect x="25.00" y="85.00" width="370.00" height="55.00" rx="2" fill="#eef7f0" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="30.00" y="91.00" font-size="2.5" text-anchor="start" fill="#2f7d4f" font-weight="700">NIVEAU ZONE - armoires de zone (cartes CAZ-1), Ethernet 100 Mbit/s, MQTT</text>
+<rect x="40.00" y="97.00" width="100.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="90.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-F - 192.168.10.11</text>
+<text x="90.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">compartiment fruits</text>
+<text x="90.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">climat, stockage thermique</text>
+<text x="90.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">irrigation, dosage fruits</text>
+<text x="90.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">module 16 relais @10</text>
+<line x1="90.00" y1="97.00" x2="90.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<rect x="160.00" y="97.00" width="100.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="210.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-L - 192.168.10.12</text>
+<text x="210.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">compartiment feuilles</text>
+<text x="210.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">climat, bassins, chiller</text>
+<text x="210.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">pépinière, LED</text>
+<text x="210.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">module 16 relais @10</text>
+<line x1="210.00" y1="97.00" x2="210.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<rect x="280.00" y="97.00" width="100.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="330.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-E - 192.168.10.13</text>
+<text x="330.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">local technique</text>
+<text x="330.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">eau, osmoseur, citerne</text>
+<text x="330.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">onduleur, délestage, groupe</text>
+<text x="330.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">sas, météo, arrêt d&#x27;urgence</text>
+<line x1="330.00" y1="97.00" x2="330.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<rect x="25.00" y="150.00" width="370.00" height="75.00" rx="2" fill="#fbf6ec" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="30.00" y="156.00" font-size="2.5" text-anchor="start" fill="#8a5a2b" font-weight="700">NIVEAU TERRAIN - un bus RS485 Modbus RTU par automate (9600 bauds, 8N1, câble LiYCY 2x2x0,5 blindé)</text>
+<text x="30.00" y="167.00" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-F</text>
+<line x1="48.00" y1="165.00" x2="390.00" y2="165.00" stroke="#8a5a2b" stroke-width="0.6"/>
+<line x1="58.00" y1="165.00" x2="58.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="55.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  TH-F1 T/HR</text>
+<line x1="100.00" y1="165.00" x2="100.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="97.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="98.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  CO2-F1</text>
+<line x1="142.00" y1="165.00" x2="142.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="139.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="140.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  EC-F1</text>
+<line x1="184.00" y1="165.00" x2="184.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="181.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="182.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  PH-F1</text>
+<line x1="226.00" y1="165.00" x2="226.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="223.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="224.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  TS-F1</text>
+<line x1="268.00" y1="165.00" x2="268.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="265.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="266.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  TS-STO</text>
+<line x1="310.00" y1="165.00" x2="310.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="307.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="308.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@8  SUB-F1</text>
+<line x1="352.00" y1="165.00" x2="352.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="349.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="350.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
+<text x="390.00" y="163.50" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
+<text x="30.00" y="186.00" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-L</text>
+<line x1="48.00" y1="184.00" x2="390.00" y2="184.00" stroke="#8a5a2b" stroke-width="0.6"/>
+<line x1="58.00" y1="184.00" x2="58.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="55.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  TH-L1 T/HR</text>
+<line x1="100.00" y1="184.00" x2="100.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="97.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="98.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  TH-P1 pépinière</text>
+<line x1="142.00" y1="184.00" x2="142.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="139.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="140.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  EC-B1</text>
+<line x1="184.00" y1="184.00" x2="184.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="181.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="182.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  PH-B1</text>
+<line x1="226.00" y1="184.00" x2="226.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="223.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="224.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  EC-B2</text>
+<line x1="268.00" y1="184.00" x2="268.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="265.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="266.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@6  DO-B1 O2</text>
+<line x1="310.00" y1="184.00" x2="310.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="307.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="308.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  PH-B2</text>
+<line x1="352.00" y1="184.00" x2="352.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="349.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="350.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
+<text x="390.00" y="182.50" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
+<text x="30.00" y="205.00" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-E</text>
+<line x1="48.00" y1="203.00" x2="390.00" y2="203.00" stroke="#8a5a2b" stroke-width="0.6"/>
+<line x1="58.00" y1="203.00" x2="58.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="55.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  MET-EXT météo</text>
+<line x1="100.00" y1="203.00" x2="100.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="97.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="98.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  PYR-EXT</text>
+<line x1="142.00" y1="203.00" x2="142.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="139.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="140.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  OND-1 onduleur</text>
+<line x1="184.00" y1="203.00" x2="184.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="181.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="182.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  ENE-02 compteur</text>
+<line x1="226.00" y1="203.00" x2="226.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="223.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="224.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  ENE-03 compteur</text>
+<line x1="268.00" y1="203.00" x2="268.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="265.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="266.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@6  NIV citerne</text>
+<line x1="310.00" y1="203.00" x2="310.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="307.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="308.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  NIV tampon</text>
+<line x1="352.00" y1="203.00" x2="352.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="349.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="350.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
+<text x="390.00" y="201.50" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
+<text x="25.00" y="236.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Règles</text>
+<text x="25.00" y="240.20" font-size="2.05" text-anchor="start" fill="#1a1a1a">Sujets MQTT : serre/lub1/&lt;zone&gt;/mesure/&lt;grandeur&gt;, /etat/actionneurs, /consigne (avec validite_s = 120), /alarme, /disponibilite (dernière volonté).</text>
+<text x="25.00" y="243.17" font-size="2.05" text-anchor="start" fill="#1a1a1a">Comptes MQTT distincts par automate (listes d&#x27;accès), aucun port ouvert depuis internet, accès distant uniquement par VPN initié depuis le site.</text>
+<text x="25.00" y="246.14" font-size="2.05" text-anchor="start" fill="#1a1a1a">Si un automate ne reçoit plus de consigne pendant 120 s, il applique sa régulation de repli et allume son voyant AUTO (voir I02).</text>
+<rect x="10.00" y="10.00" width="400.00" height="277.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.7"/>
+<rect x="15.00" y="15.00" width="390.00" height="267.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="39.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<text x="39.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<line x1="63.75" y1="10.00" x2="63.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="63.75" y1="282.00" x2="63.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="88.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<text x="88.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<line x1="112.50" y1="10.00" x2="112.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="112.50" y1="282.00" x2="112.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="136.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<text x="136.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<line x1="161.25" y1="10.00" x2="161.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="161.25" y1="282.00" x2="161.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="185.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<text x="185.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<line x1="210.00" y1="10.00" x2="210.00" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="210.00" y1="282.00" x2="210.00" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="234.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<text x="234.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<line x1="258.75" y1="10.00" x2="258.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="258.75" y1="282.00" x2="258.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="283.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<text x="283.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<line x1="307.50" y1="10.00" x2="307.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="307.50" y1="282.00" x2="307.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="331.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<text x="331.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<line x1="356.25" y1="10.00" x2="356.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="356.25" y1="282.00" x2="356.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="380.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="380.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="12.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<text x="407.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<line x1="10.00" y1="59.50" x2="15.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="59.50" x2="410.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<text x="407.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<line x1="10.00" y1="104.00" x2="15.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="104.00" x2="410.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<text x="407.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<line x1="10.00" y1="148.50" x2="15.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="148.50" x2="410.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<text x="407.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<line x1="10.00" y1="193.00" x2="15.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="193.00" x2="410.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<text x="407.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<line x1="10.00" y1="237.50" x2="15.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="237.50" x2="410.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<text x="407.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<rect x="230.00" y="244.00" width="175.00" height="38.00" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="230.00" y1="253.00" x2="405.00" y2="253.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="230.00" y1="268.00" x2="405.00" y2="268.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="345.00" y1="268.00" x2="345.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="375.00" y1="268.00" x2="375.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="290.00" y1="268.00" x2="290.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="233.00" y="250.20" font-size="3.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Serre pilote en environnement contrôlé - Lubumbashi</text>
+<text x="233.00" y="259.00" font-size="4.2" text-anchor="start" fill="#2f7d4f" font-weight="700">Architecture réseau, bus de terrain et plan d&#x27;adressage</text>
+<text x="233.00" y="265.00" font-size="2.6" text-anchor="start" fill="#4a4a4a">Lot automatisme / IIoT</text>
+<text x="233.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Maître d&#x27;ouvrage</text>
+<text x="233.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">Projet serre Lubumbashi</text>
+<text x="292.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Échelle</text>
+<text x="292.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="318.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Date</text>
+<text x="318.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<text x="347.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Format / indice</text>
+<text x="347.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">A3  -  A</text>
+<text x="377.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Planche</text>
+<text x="390.00" y="278.50" font-size="6.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">I01</text></svg>

@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420.0mm" height="297.0mm" viewBox="0 0 420.0 297.0" font-family="DejaVu Sans, Arial, sans-serif"><defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker><marker id="fc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#4a4a4a"/></marker><pattern id="hach" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2" stroke="#8a8a8a" stroke-width="0.25"/></pattern><pattern id="beton" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.3" fill="#8a8a8a"/><circle cx="3" cy="2.6" r="0.25" fill="#8a8a8a"/></pattern></defs><rect width="420.0" height="297.0" fill="#fff"/><rect x="40.00" y="40.00" width="133.00" height="133.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.3" stroke-dasharray="2,1.5"/>
+<rect x="38.00" y="38.00" width="137.00" height="137.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.6"/>
+<rect x="42.00" y="42.00" width="129.00" height="129.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.6"/>
+<text x="106.50" y="35.00" font-size="2.0" text-anchor="middle" fill="#1a1a1a">longrine périphérique BA 20 x 30 cm, 4 HA 10, cadres HA 6 / 20 cm</text>
+<rect x="37.30" y="37.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="37.30" y="170.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="70.55" y="37.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="70.55" y="170.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="103.80" y="37.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="103.80" y="170.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="137.05" y="37.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="137.05" y="170.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="170.30" y="37.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="170.30" y="170.30" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="37.30" y="70.55" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="170.30" y="70.55" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="37.30" y="103.80" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="170.30" y="103.80" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="37.30" y="137.05" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="170.30" y="137.05" width="5.40" height="5.40" rx="0" fill="url(#beton)" stroke="#1a1a1a" stroke-width="0.5"/>
+<text x="106.50" y="106.50" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">18 plots BA 40 x 40 x 80 cm, platines galvanisées scellées</text>
+<text x="106.50" y="110.50" font-size="1.9" text-anchor="middle" fill="#1a1a1a">béton C25/30, enrobage 4 cm, semelle sur sol compacté</text>
+<line x1="40.00" y1="173.00" x2="40.00" y2="182.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="73.25" y1="173.00" x2="73.25" y2="182.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="40.0" y1="181.0" x2="73.25" y2="181.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="56.62" y="180.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a">2,50</text>
+<line x1="73.25" y1="173.00" x2="73.25" y2="182.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="106.50" y1="173.00" x2="106.50" y2="182.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="73.25" y1="181.0" x2="106.5" y2="181.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="89.88" y="180.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a">2,50</text>
+<line x1="106.50" y1="173.00" x2="106.50" y2="182.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="139.75" y1="173.00" x2="139.75" y2="182.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="106.5" y1="181.0" x2="139.75" y2="181.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="123.12" y="180.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a">2,50</text>
+<line x1="139.75" y1="173.00" x2="139.75" y2="182.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="173.00" y1="173.00" x2="173.00" y2="182.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="139.75" y1="181.0" x2="173.0" y2="181.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="156.38" y="180.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a">2,50</text>
+<line x1="173.00" y1="40.00" x2="184.50" y2="40.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="173.00" y1="173.00" x2="184.50" y2="173.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="183.0" y1="40" x2="183.0" y2="173.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="182.00" y="106.50" font-size="2.4" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 182.00 106.50)">10,00</text>
+<path d="M230.00,200.00 L230.00,152.00 L230.00,152.00 L233.00,148.44 L236.00,146.03 L239.00,143.94 L242.00,142.05 L245.00,140.32 L248.00,138.73 L251.00,137.25 L254.00,135.89 L257.00,134.64 L260.00,133.49 L263.00,132.46 L266.00,131.53 L269.00,130.70 L272.00,129.99 L275.00,129.38 L278.00,128.89 L281.00,128.50 L284.00,128.22 L287.00,128.06 L290.00,128.00 L293.00,128.06 L296.00,128.22 L299.00,128.50 L302.00,128.89 L305.00,129.38 L308.00,129.99 L311.00,130.70 L314.00,131.53 L317.00,132.46 L320.00,133.49 L323.00,134.64 L326.00,135.89 L329.00,137.25 L332.00,138.73 L335.00,140.32 L338.00,142.05 L341.00,143.94 L344.00,146.03 L347.00,148.44 L350.00,152.00 L350.00,152.00 L350.00,200.00" fill="none" stroke="#2f7d4f" stroke-width="0.8" stroke-linejoin="round"/>
+<line x1="220.00" y1="200.00" x2="360.00" y2="200.00" stroke="#1a1a1a" stroke-width="0.6"/>
+<rect x="233.00" y="178.40" width="54.00" height="18.00" rx="0" fill="#1f6fb233" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="293.00" y="178.40" width="54.00" height="18.00" rx="0" fill="#1f6fb233" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="260.00" y="188.00" font-size="1.9" text-anchor="middle" fill="#1a1a1a">pad feuilles</text>
+<text x="320.00" y="188.00" font-size="1.9" text-anchor="middle" fill="#1a1a1a">pad fruits</text>
+<rect x="230.00" y="170.00" width="120.00" height="30.00" rx="0" fill="none" stroke="#4a4a4a" stroke-width="0.25" stroke-dasharray="1,1"/>
+<text x="290.00" y="166.60" font-size="1.8" text-anchor="middle" fill="#1a1a1a">polycarbonate 8 mm jusqu&#x27;à 2,50 m, film au-dessus</text>
+<line x1="230.00" y1="200.00" x2="230.00" y2="152.00" stroke="#4a4a4a" stroke-width="0.3"/>
+<line x1="260.00" y1="200.00" x2="260.00" y2="134.00" stroke="#4a4a4a" stroke-width="0.3"/>
+<line x1="290.00" y1="200.00" x2="290.00" y2="134.00" stroke="#4a4a4a" stroke-width="0.3"/>
+<line x1="320.00" y1="200.00" x2="320.00" y2="134.00" stroke="#4a4a4a" stroke-width="0.3"/>
+<line x1="350.00" y1="200.00" x2="350.00" y2="152.00" stroke="#4a4a4a" stroke-width="0.3"/>
+<text x="290.00" y="206.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">Élévation du pignon est (1:83)</text>
+<text x="230.00" y="30.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Notes</text>
+<text x="230.00" y="34.20" font-size="2.1" text-anchor="start" fill="#1a1a1a">Prescriptions génie civil :</text>
+<text x="230.00" y="37.25" font-size="2.1" text-anchor="start" fill="#1a1a1a">- étude de sol légère (portance, termites) avant exécution ;</text>
+<text x="230.00" y="40.29" font-size="2.1" text-anchor="start" fill="#1a1a1a">- fond de fouille propre, béton de propreté 5 cm ;</text>
+<text x="230.00" y="43.34" font-size="2.1" text-anchor="start" fill="#1a1a1a">- platines et tiges d&#x27;ancrage galvanisées, scellement chimique ;</text>
+<text x="230.00" y="46.38" font-size="2.1" text-anchor="start" fill="#1a1a1a">- traitement anti-termites du sol sous dalles et bassins ;</text>
+<text x="230.00" y="49.43" font-size="2.1" text-anchor="start" fill="#1a1a1a">- tolérances d&#x27;implantation ± 5 mm entre axes de plots ;</text>
+<text x="230.00" y="52.47" font-size="2.1" text-anchor="start" fill="#1a1a1a">- boucle de terre posée en fond de fouille avant coulage (E04).</text>
+<rect x="10.00" y="10.00" width="400.00" height="277.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.7"/>
+<rect x="15.00" y="15.00" width="390.00" height="267.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="39.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<text x="39.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<line x1="63.75" y1="10.00" x2="63.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="63.75" y1="282.00" x2="63.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="88.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<text x="88.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<line x1="112.50" y1="10.00" x2="112.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="112.50" y1="282.00" x2="112.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="136.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<text x="136.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<line x1="161.25" y1="10.00" x2="161.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="161.25" y1="282.00" x2="161.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="185.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<text x="185.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<line x1="210.00" y1="10.00" x2="210.00" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="210.00" y1="282.00" x2="210.00" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="234.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<text x="234.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<line x1="258.75" y1="10.00" x2="258.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="258.75" y1="282.00" x2="258.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="283.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<text x="283.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<line x1="307.50" y1="10.00" x2="307.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="307.50" y1="282.00" x2="307.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="331.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<text x="331.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<line x1="356.25" y1="10.00" x2="356.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="356.25" y1="282.00" x2="356.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="380.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="380.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="12.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<text x="407.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<line x1="10.00" y1="59.50" x2="15.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="59.50" x2="410.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<text x="407.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<line x1="10.00" y1="104.00" x2="15.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="104.00" x2="410.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<text x="407.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<line x1="10.00" y1="148.50" x2="15.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="148.50" x2="410.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<text x="407.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<line x1="10.00" y1="193.00" x2="15.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="193.00" x2="410.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<text x="407.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<line x1="10.00" y1="237.50" x2="15.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="237.50" x2="410.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<text x="407.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<rect x="230.00" y="244.00" width="175.00" height="38.00" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="230.00" y1="253.00" x2="405.00" y2="253.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="230.00" y1="268.00" x2="405.00" y2="268.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="345.00" y1="268.00" x2="345.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="375.00" y1="268.00" x2="375.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="290.00" y1="268.00" x2="290.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="233.00" y="250.20" font-size="3.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Serre pilote en environnement contrôlé - Lubumbashi</text>
+<text x="233.00" y="259.00" font-size="4.2" text-anchor="start" fill="#2f7d4f" font-weight="700">Plan des fondations et élévation du pignon est</text>
+<text x="233.00" y="265.00" font-size="2.6" text-anchor="start" fill="#4a4a4a">Lot génie civil</text>
+<text x="233.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Maître d&#x27;ouvrage</text>
+<text x="233.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">Projet serre Lubumbashi</text>
+<text x="292.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Échelle</text>
+<text x="292.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">1:75 / 1:50</text>
+<text x="318.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Date</text>
+<text x="318.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<text x="347.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Format / indice</text>
+<text x="347.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">A3  -  A</text>
+<text x="377.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Planche</text>
+<text x="390.00" y="278.50" font-size="6.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">A04</text></svg>

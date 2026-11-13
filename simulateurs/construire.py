@@ -25,7 +25,15 @@ MODULES = {
     "three/addons/GLTFExporter.js": LIB / "three" / "addons" / "GLTFExporter.js",
     "textureutils": LIB / "three" / "utils" / "TextureUtils.js",
     "modele": LIB / "modele.js",
+    "systemes": LIB / "systemes.js",
+    "schemas": LIB / "schemas.js",
 }
+
+
+def reecrire(code: str) -> str:
+    for nom in ("modele", "systemes", "schemas"):
+        code = code.replace(f'"./{nom}.js"', f'"{nom}"').replace(f'"./lib/{nom}.js"', f'"{nom}"')
+    return code
 
 
 def b64(texte: str) -> str:
@@ -37,11 +45,23 @@ def construire(source: str, sortie: str) -> None:
     sources = {}
     for nom, chemin in MODULES.items():
         code = chemin.read_text(encoding="utf-8")
-        code = code.replace("'./../utils/TextureUtils.js'", "'textureutils'")
+        code = reecrire(code.replace("'./../utils/TextureUtils.js'", "'textureutils'"))
         sources[nom] = b64(code)
 
     m = re.search(r'<script type="module">(.*?)</script>', html, re.S)
-    principal = m.group(1).replace('"./lib/modele.js"', '"modele"')
+    principal = reecrire(m.group(1))
+    import json as _json
+    for fichier in ("caz1_texture_dessus.png", "caz1_texture_dessous.png"):
+        f = LIB / fichier
+        if f.exists() and f"lib/{fichier}" in principal:
+            principal = principal.replace(f"lib/{fichier}", "data:image/png;base64," + base64.b64encode(f.read_bytes()).decode())
+    jf = LIB / "caz1_3d.json"
+    if jf.exists():
+        principal = principal.replace('await (await fetch("lib/caz1_3d.json")).json()', jf.read_text(encoding="utf-8"))
+    img = LIB / "caz1_dessus.png"
+    if img.exists():
+        uri = "data:image/png;base64," + base64.b64encode(img.read_bytes()).decode()
+        sources["schemas"] = b64(reecrire((LIB / "schemas.js").read_text(encoding="utf-8")).replace("lib/caz1_dessus.png", uri))
     sources["__principal__"] = b64(principal)
 
     chargeur = (
@@ -64,3 +84,6 @@ def construire(source: str, sortie: str) -> None:
 
 if __name__ == "__main__":
     construire("serre_3d.html", "serre_3d_autonome.html")
+    construire("systemes.html", "systemes_autonome.html")
+    if (LIB / "caz1_3d.json").exists():
+        construire("carte_3d.html", "carte_3d_autonome.html")

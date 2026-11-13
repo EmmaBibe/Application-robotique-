@@ -9,8 +9,10 @@ Le dossier couvre l'agronomie, l'architecture et le génie civil, la thermique, 
 1. **`docs/00_synthese_decisionnelle.md`** : la réponse à la question « faut-il se lancer ? », en cinq pages.
 2. **`Etude_faisabilite_serre_Lubumbashi.docx`** : le dossier complet en un seul document, imprimable.
 3. **`finance/modele_financier_serre_lubumbashi.xlsx`** : le modèle financier, à mettre à jour avec vos propres prix et rendements.
-4. **`simulateurs/index.html`** : les simulateurs, dont la maquette 3D vivante de toute la serre (s'ouvre d'un double-clic, sans internet).
-5. **`logiciel/dashboard/index.html`** : le démonstrateur de l'interface de supervision.
+4. **`simulateurs/index.html`** : les simulateurs (s'ouvrent d'un double-clic, sans internet) : maquette 3D vivante de toute la serre, simulateur des systèmes (schémas animés : qui fait quoi, quand, sous quelles conditions, avec pannes provocables), carte électronique en 3D.
+5. **`plans/Dossier_plans_et_schemas.pdf`** : 16 planches A3 (génie civil, P&ID, unifilaire, commande, câblage, réseau, logique, listes d'E/S et de câbles).
+6. **`electronique/Dossier_carte_CAZ-1.pdf`** : la carte automate de zone (schéma KiCad, circuit imprimé routé, nomenclature, Gerbers de fabrication dans `electronique/caz1/fabrication/`).
+7. **`logiciel/dashboard/index.html`** : le démonstrateur de l'interface de supervision.
 
 ## En bref
 
@@ -43,6 +45,7 @@ docs/                          Dossier d'étude (17 documents) et plans
   15_registre_risques.md
   16_feuille_de_route.md        phases et critères de décision
   17_sources.md
+  18_simulateurs_et_carte_electronique.md
   annexes/                      plan de masse, plan de la serre, coupe, synoptique, unifilaire, hydraulique (SVG et PNG)
 donnees/                       Données et paramètres (CSV, JSON)
   climat_lubumbashi_mensuel.csv
@@ -53,7 +56,11 @@ donnees/                       Données et paramètres (CSV, JSON)
   calendrier_production.csv     planning hebdomadaire des semis, repiquages et récoltes
   registre_risques.csv
   enquete_prix_modele.csv       grille d'enquête de marché
-simulateurs/                   Maquette 3D vivante et noyau de simulation du navigateur
+simulateurs/                   Maquette 3D, simulateur des systèmes, carte en 3D, moteurs de simulation
+plans/                         Générateur et dossier PDF des 16 planches A3
+electronique/caz1/             Carte CAZ-1 : conception.py (source unique), schéma et PCB KiCad, fabrication
+electronique/outils/           Routeur de pistes et utilitaires KiCad
+documents/                     Mise en page des PDF (WeasyPrint) et figures
 finance/
   modele_financier_serre_lubumbashi.xlsx
   generer_modele.py

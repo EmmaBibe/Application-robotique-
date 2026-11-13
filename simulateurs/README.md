@@ -6,9 +6,15 @@ Ouvrir `index.html` (double-clic), puis choisir un simulateur. Aucun serveur ni 
 |---|---|
 | `serre_3d_autonome.html` | Maquette 3D vivante, en un seul fichier (à ouvrir directement) |
 | `serre_3d.html` | Source de la maquette ; ne s'ouvre que via un petit serveur local (`python3 -m http.server` dans ce dossier, puis http://localhost:8000/serre_3d.html) |
+| `systemes_autonome.html` | Simulateur des systèmes (schémas animés par domaine), en un seul fichier |
+| `carte_3d_autonome.html` | Carte CAZ-1 en 3D, en un seul fichier |
+| `systemes.html`, `carte_3d.html` | Sources des deux pages précédentes (serveur local nécessaire, comme `serre_3d.html`) |
+| `lib/systemes.js` | Sous-systèmes : eau, fertirrigation, bassins, électricité et délestage, automatismes et mode autonome, pannes, aptitude des cultures, table des règles |
+| `lib/schemas.js` | Dessins des huit schémas et fiches des organes |
+| `lib/caz1_*.png`, `lib/caz1_3d.json` | Textures et volumes de la carte, produits par `electronique/caz1/fabriquer.py` |
 | `lib/modele.js` | Noyau de simulation : climat, régulation, soleil, énergie, finance. Mêmes hypothèses que le dossier et le classeur Excel |
 | `lib/three/` | Three.js 0.160 (licence MIT) et les extensions utilisées |
-| `construire.py` | Régénère `serre_3d_autonome.html` après une modification de `serre_3d.html` ou de `lib/modele.js` |
+| `construire.py` | Régénère les fichiers `*_autonome.html` après une modification des sources ou de `lib/` |
 
 ## Ce que l'on peut faire dans la maquette 3D
 
@@ -20,6 +26,14 @@ Ouvrir `index.html` (double-clic), puis choisir un simulateur. Aucun serveur ni 
 - **Tester une idée** : retirer le stockage thermique, l'écran ou le mur évaporatif et regarder ce que devient la température ; passer en mode manuel et piloter vous-même les ouvrants, l'écran, les extracteurs, le pad et le stockage.
 - **Chiffrer** : onglet Finance, curseurs prix, rendements et coût de l'extension ; EBE, VAN, TRI et trésorerie se recalculent avec les formules du classeur.
 - **Aller plus loin en rendu** : le bouton « Exporter en glTF » produit un fichier `.glb` qui s'ouvre dans Blender (gratuit) pour des images ou une vidéo photoréalistes.
+
+## Ce que l'on peut faire dans le simulateur des systèmes
+
+- **Choisir une vue** : ensemble, climat, fertirrigation, bassins, eau, électricité, électronique et IIoT, cultures.
+- **Suivre les flux** : les tuyaux et câbles en service s'animent dans le sens de circulation ; les organes à l'arrêt restent gris.
+- **Lire les raisons** : le tableau des règles indique, pour chaque actionneur, la condition qui l'a mis en marche (par exemple « somme de rayonnement > seuil » pour l'arrosage, « SOC < 30 % » pour le délestage).
+- **Provoquer une panne** et regarder la serre se défendre : bascule sur le surpresseur de secours, délestage, mode autonome des automates, alarmes et SMS.
+- **Évaluer les cultures** : score d'aptitude de 0 à 100 par culture, calculé sur la température, le DPV, la solution et l'oxygène, avec le facteur limitant affiché.
 
 ## Limites
 

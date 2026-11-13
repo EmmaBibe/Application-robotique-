@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420.0mm" height="297.0mm" viewBox="0 0 420.0 297.0" font-family="DejaVu Sans, Arial, sans-serif"><defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker><marker id="fc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#4a4a4a"/></marker><pattern id="hach" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2" stroke="#8a8a8a" stroke-width="0.25"/></pattern><pattern id="beton" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.3" fill="#8a8a8a"/><circle cx="3" cy="2.6" r="0.25" fill="#8a8a8a"/></pattern></defs><rect width="420.0" height="297.0" fill="#fff"/><rect x="30.00" y="30.00" width="30.00" height="14.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="45.00" y="34.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">SP-201</text>
+<text x="45.00" y="37.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">surpresseur 80 W</text>
+<rect x="30.00" y="52.00" width="30.00" height="14.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="45.00" y="56.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">SP-202</text>
+<text x="45.00" y="59.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">secours 24 V DC</text>
+<path d="M60.00,37.00 L80.00,37.00" fill="none" stroke="#2f8f8f" stroke-width="0.55" stroke-linejoin="round" marker-end="url(#fl)"/>
+<path d="M60.00,59.00 L80.00,59.00 L80.00,37.00" fill="none" stroke="#2f8f8f" stroke-width="0.55" stroke-linejoin="round"/>
+<path d="M67.00,34.00 L73.00,37.00 L67.00,40.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.4" stroke-linejoin="round"/>
+<line x1="73.00" y1="34.00" x2="73.00" y2="40.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<path d="M67.00,56.00 L73.00,59.00 L67.00,62.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.4" stroke-linejoin="round"/>
+<line x1="73.00" y1="56.00" x2="73.00" y2="62.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="92.00" y1="25.00" x2="92.00" y2="37.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="92.00" cy="25.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="87.80" y1="25.00" x2="96.20" y2="25.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="92.00" y="24.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">PSL</text>
+<text x="92.00" y="27.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">201</text>
+<path d="M80.00,37.00 L110.00,37.00 L110.00,120.00" fill="none" stroke="#2f8f8f" stroke-width="0.55" stroke-linejoin="round" marker-end="url(#fl)"/>
+<path d="M110.00,75.00 L260.00,75.00 L260.00,120.00" fill="none" stroke="#2f8f8f" stroke-width="0.55" stroke-linejoin="round" marker-end="url(#fl)"/>
+<rect x="60.00" y="120.00" width="120.00" height="50.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.6"/>
+<rect x="60.60" y="128.00" width="118.80" height="41.40" rx="0" fill="#1f6fb222" stroke="none" stroke-width="0"/>
+<rect x="64.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="72.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="83.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="91.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="102.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="110.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="121.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="129.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="140.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="148.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="159.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="167.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="72.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="94.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="116.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="138.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="160.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="120.00" y="150.00" font-size="2.6" text-anchor="middle" fill="#1a1a1a" font-weight="700">Bassin frais (B1)</text>
+<text x="120.00" y="154.00" font-size="1.9" text-anchor="middle" fill="#4a4a4a">4,0 x 4,2 m, 25 cm d&#x27;eau, liner EPDM, isolé</text>
+<line x1="72.00" y1="185.00" x2="72.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="72.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="67.80" y1="185.00" x2="76.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="72.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">AT</text>
+<text x="72.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">201</text>
+<line x1="96.00" y1="185.00" x2="96.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="96.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="91.80" y1="185.00" x2="100.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="96.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">TT</text>
+<text x="96.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">201</text>
+<line x1="120.00" y1="185.00" x2="120.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="120.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="115.80" y1="185.00" x2="124.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="120.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">CE</text>
+<text x="120.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">201</text>
+<line x1="144.00" y1="185.00" x2="144.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="144.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="139.80" y1="185.00" x2="148.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="144.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">pH</text>
+<text x="144.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">201</text>
+<line x1="168.00" y1="185.00" x2="168.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="168.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="163.80" y1="185.00" x2="172.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="168.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">LT</text>
+<text x="168.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">201</text>
+<text x="120.00" y="196.00" font-size="1.8" text-anchor="middle" fill="#4a4a4a">AT = oxygène dissous (optique)</text>
+<rect x="210.00" y="120.00" width="120.00" height="50.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.6"/>
+<rect x="210.60" y="128.00" width="118.80" height="41.40" rx="0" fill="#1f6fb222" stroke="none" stroke-width="0"/>
+<rect x="214.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="222.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="233.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="241.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="252.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="260.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="271.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="279.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="290.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="298.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="309.00" y="124.00" width="17.00" height="4.00" rx="0" fill="#f5f5f0" stroke="#1a1a1a" stroke-width="0.3"/>
+<circle cx="317.50" cy="122.00" r="2.20" fill="#7fc25a" stroke="#2f7d4f" stroke-width="0.3"/>
+<rect x="222.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="244.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="266.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="288.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="310.00" y="165.00" width="8.00" height="2.00" rx="0" fill="#ddd" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="270.00" y="150.00" font-size="2.6" text-anchor="middle" fill="#1a1a1a" font-weight="700">Bassin tempéré (B2)</text>
+<text x="270.00" y="154.00" font-size="1.9" text-anchor="middle" fill="#4a4a4a">4,0 x 4,2 m, 25 cm d&#x27;eau, liner EPDM, isolé</text>
+<line x1="222.00" y1="185.00" x2="222.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="222.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="217.80" y1="185.00" x2="226.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="222.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">AT</text>
+<text x="222.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">202</text>
+<line x1="246.00" y1="185.00" x2="246.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="246.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="241.80" y1="185.00" x2="250.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="246.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">TT</text>
+<text x="246.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">202</text>
+<line x1="270.00" y1="185.00" x2="270.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="270.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="265.80" y1="185.00" x2="274.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="270.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">CE</text>
+<text x="270.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">202</text>
+<line x1="294.00" y1="185.00" x2="294.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="294.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="289.80" y1="185.00" x2="298.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="294.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">pH</text>
+<text x="294.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">202</text>
+<line x1="318.00" y1="185.00" x2="318.00" y2="170.00" stroke="#555555" stroke-width="0.25" stroke-dasharray="1.2,0.8"/>
+<circle cx="318.00" cy="185.00" r="4.20" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="313.80" y1="185.00" x2="322.20" y2="185.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="318.00" y="184.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">LT</text>
+<text x="318.00" y="187.90" font-size="2.0" text-anchor="middle" fill="#1a1a1a">202</text>
+<text x="270.00" y="196.00" font-size="1.8" text-anchor="middle" fill="#4a4a4a">AT = oxygène dissous (optique)</text>
+<path d="M180.00,135.00 L195.00,135.00 L195.00,100.00" fill="none" stroke="#1f6fb2" stroke-width="0.55" stroke-linejoin="round" marker-end="url(#fl)"/>
+<rect x="180.00" y="85.00" width="30.00" height="14.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="195.00" y="89.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">CH-201</text>
+<text x="195.00" y="92.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">refroidisseur 500 W</text>
+<path d="M185.00,100.00 L185.00,160.00 L180.00,160.00" fill="none" stroke="#1f6fb2" stroke-width="0.55" stroke-linejoin="round" marker-end="url(#fl)"/>
+<rect x="332.00" y="136.50" width="16.00" height="7.00" rx="3.5" fill="#f1e9fa" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="340.00" y="141.00" font-size="2.4" text-anchor="middle" fill="#7d4bb3" font-weight="700">UV-C</text>
+<text x="340.00" y="147.50" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">UV-201</text>
+<circle cx="340.00" cy="160.00" r="4.00" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<path d="M337.30,157.05 L340.00,164.00 L342.70,157.05" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round"/>
+<text x="340.00" y="167.20" font-size="2.2" text-anchor="middle" fill="#1a1a1a" font-weight="700">P-205</text>
+<path d="M330.00,165.00 L336.00,160.00" fill="none" stroke="#1f6fb2" stroke-width="0.55" stroke-linejoin="round"/>
+<text x="370.00" y="150.00" font-size="1.8" text-anchor="start" fill="#4a4a4a">filtration 50 µm + UV</text>
+<text x="370.00" y="153.50" font-size="1.8" text-anchor="start" fill="#4a4a4a">en dérivation, 1 h sur 4</text>
+<text x="300.00" y="32.00" font-size="2.0" text-anchor="start" fill="#1a1a1a" font-weight="700">depuis H01 (T-002)</text>
+<path d="M300.00,37.00 L330.00,37.00 L330.00,60.00 L120.00,60.00" fill="none" stroke="#1f6fb2" stroke-width="0.55" stroke-linejoin="round"/>
+<path d="M147.00,57.00 L153.00,63.00 L153.00,57.00 L147.00,63.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.4" stroke-linejoin="round"/>
+<line x1="150.00" y1="60.00" x2="150.00" y2="54.50" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="147.80" y="50.50" width="4.40" height="4.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="150.00" y="53.40" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">S</text>
+<text x="150.00" y="66.50" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">EV-201</text>
+<path d="M287.00,57.00 L293.00,63.00 L293.00,57.00 L287.00,63.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.4" stroke-linejoin="round"/>
+<line x1="290.00" y1="60.00" x2="290.00" y2="54.50" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="287.80" y="50.50" width="4.40" height="4.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="290.00" y="53.40" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">S</text>
+<text x="290.00" y="66.50" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">EV-202</text>
+<path d="M150.00,63.00 L150.00,120.00" fill="none" stroke="#1f6fb2" stroke-width="0.55" stroke-linejoin="round" marker-end="url(#fl)"/>
+<path d="M290.00,63.00 L290.00,120.00" fill="none" stroke="#1f6fb2" stroke-width="0.55" stroke-linejoin="round" marker-end="url(#fl)"/>
+<circle cx="345.00" cy="95.00" r="3.50" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="345.00" y="96.10" font-size="3" text-anchor="middle" fill="#1a1a1a" font-weight="700">D</text>
+<text x="345.00" y="101.80" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">P-201/202</text>
+<circle cx="375.00" cy="95.00" r="3.50" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="375.00" y="96.10" font-size="3" text-anchor="middle" fill="#1a1a1a" font-weight="700">D</text>
+<text x="375.00" y="101.80" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">P-203/204</text>
+<text x="360.00" y="85.00" font-size="1.9" text-anchor="middle" fill="#4a4a4a">dosage A/B et acide par bassin</text>
+<text x="25.00" y="215.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Logique</text>
+<text x="25.00" y="219.20" font-size="2.05" text-anchor="start" fill="#1a1a1a">Aération permanente (charge prioritaire 0, jamais délestée) ; PSL-201 détecte la perte de débit d&#x27;air et démarre SP-202 sur le 24 V secouru.</text>
+<text x="25.00" y="222.17" font-size="2.05" text-anchor="start" fill="#1a1a1a">Bassin frais maintenu ≤ 20,5 °C par CH-201 en journée sur l&#x27;énergie solaire (Pythium au-delà de 22 °C). Bassin tempéré ≤ 24-26 °C sans refroidissement.</text>
+<text x="25.00" y="225.14" font-size="2.05" text-anchor="start" fill="#1a1a1a">Appoint par EV-201 / EV-202 quand LT &lt; 4 100 L ; correction CE (A+B) et pH (acide) comme H02. Vidange et désinfection en janvier et juillet.</text>
+<text x="25.00" y="228.12" font-size="2.05" text-anchor="start" fill="#1a1a1a">Sans électricité : les plantes tiennent plusieurs heures grâce au volume d&#x27;eau ; quelques jours avec SP-202 sur batterie.</text>
+<text x="330.00" y="30.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Légende</text>
+<line x1="330.00" y1="33.20" x2="340.00" y2="33.20" stroke="#1f6fb2" stroke-width="0.55"/>
+<text x="342.00" y="34.00" font-size="2.1" text-anchor="start" fill="#1a1a1a">eau brute / traitée</text>
+<line x1="330.00" y1="37.40" x2="340.00" y2="37.40" stroke="#7d4bb3" stroke-width="0.55"/>
+<text x="342.00" y="38.20" font-size="2.1" text-anchor="start" fill="#1a1a1a">solution nutritive</text>
+<line x1="330.00" y1="41.60" x2="340.00" y2="41.60" stroke="#8a5a2b" stroke-width="0.55"/>
+<text x="342.00" y="42.40" font-size="2.1" text-anchor="start" fill="#1a1a1a">drainage</text>
+<line x1="330.00" y1="45.80" x2="340.00" y2="45.80" stroke="#2f8f8f" stroke-width="0.55"/>
+<text x="342.00" y="46.60" font-size="2.1" text-anchor="start" fill="#1a1a1a">air (aération)</text>
+<line x1="330.00" y1="50.00" x2="340.00" y2="50.00" stroke="#555555" stroke-width="0.55" stroke-dasharray="1.2,0.8"/>
+<text x="342.00" y="50.80" font-size="2.1" text-anchor="start" fill="#1a1a1a">liaison de mesure / commande</text>
+<rect x="10.00" y="10.00" width="400.00" height="277.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.7"/>
+<rect x="15.00" y="15.00" width="390.00" height="267.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="39.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<text x="39.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<line x1="63.75" y1="10.00" x2="63.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="63.75" y1="282.00" x2="63.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="88.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<text x="88.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<line x1="112.50" y1="10.00" x2="112.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="112.50" y1="282.00" x2="112.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="136.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<text x="136.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<line x1="161.25" y1="10.00" x2="161.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="161.25" y1="282.00" x2="161.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="185.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<text x="185.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<line x1="210.00" y1="10.00" x2="210.00" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="210.00" y1="282.00" x2="210.00" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="234.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<text x="234.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<line x1="258.75" y1="10.00" x2="258.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="258.75" y1="282.00" x2="258.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="283.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<text x="283.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<line x1="307.50" y1="10.00" x2="307.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="307.50" y1="282.00" x2="307.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="331.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<text x="331.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<line x1="356.25" y1="10.00" x2="356.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="356.25" y1="282.00" x2="356.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="380.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="380.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="12.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<text x="407.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<line x1="10.00" y1="59.50" x2="15.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="59.50" x2="410.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<text x="407.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<line x1="10.00" y1="104.00" x2="15.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="104.00" x2="410.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<text x="407.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<line x1="10.00" y1="148.50" x2="15.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="148.50" x2="410.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<text x="407.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<line x1="10.00" y1="193.00" x2="15.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="193.00" x2="410.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<text x="407.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<line x1="10.00" y1="237.50" x2="15.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="237.50" x2="410.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<text x="407.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<rect x="230.00" y="244.00" width="175.00" height="38.00" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="230.00" y1="253.00" x2="405.00" y2="253.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="230.00" y1="268.00" x2="405.00" y2="268.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="345.00" y1="268.00" x2="345.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="375.00" y1="268.00" x2="375.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="290.00" y1="268.00" x2="290.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="233.00" y="250.20" font-size="3.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Serre pilote en environnement contrôlé - Lubumbashi</text>
+<text x="233.00" y="259.00" font-size="4.2" text-anchor="start" fill="#2f7d4f" font-weight="700">P&amp;ID : bassins à radeaux du compartiment feuilles</text>
+<text x="233.00" y="265.00" font-size="2.6" text-anchor="start" fill="#4a4a4a">Lot hydraulique - deux bassins indépendants de 4,2 m³</text>
+<text x="233.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Maître d&#x27;ouvrage</text>
+<text x="233.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">Projet serre Lubumbashi</text>
+<text x="292.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Échelle</text>
+<text x="292.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="318.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Date</text>
+<text x="318.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<text x="347.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Format / indice</text>
+<text x="347.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">A3  -  A</text>
+<text x="377.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Planche</text>
+<text x="390.00" y="278.50" font-size="6.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">H03</text></svg>

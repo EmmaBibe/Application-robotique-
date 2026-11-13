@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420.0mm" height="297.0mm" viewBox="0 0 420.0 297.0" font-family="DejaVu Sans, Arial, sans-serif"><defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker><marker id="fc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#4a4a4a"/></marker><pattern id="hach" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2" stroke="#8a8a8a" stroke-width="0.25"/></pattern><pattern id="beton" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.3" fill="#8a8a8a"/><circle cx="3" cy="2.6" r="0.25" fill="#8a8a8a"/></pattern></defs><rect width="420.0" height="297.0" fill="#fff"/><rect x="55.00" y="27.50" width="70.00" height="9.00" rx="2" fill="#eef6f0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="90.00" y="31.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Toutes les 5 min : lire mesures, météo,</text>
+<text x="90.00" y="34.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">consignes de la recette (culture, stade)</text>
+<path d="M90.00,36.50 L90.00,44.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<path d="M90.00,45.00 L120.00,52.00 L90.00,59.00 L60.00,52.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="90.00" y="52.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Vent ≥ 14 m/s ?</text>
+<path d="M120.00,52.00 L150.00,52.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="121.50" y="55.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="150.00" y="47.50" width="50.00" height="9.00" rx="0" fill="#fdeceb" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="175.00" y="52.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Ouvrants fermés</text>
+<path d="M90.00,59.00 L90.00,66.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="91.50" y="62.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<path d="M90.00,67.00 L120.00,74.00 L90.00,81.00 L60.00,74.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="90.00" y="74.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Pluie ou vent ≥ 10 ?</text>
+<path d="M120.00,74.00 L150.00,74.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="121.50" y="77.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="150.00" y="69.50" width="50.00" height="9.00" rx="0" fill="#fdf3e0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="175.00" y="74.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Ouvrants ≤ 20 / 30 %</text>
+<path d="M90.00,81.00 L90.00,88.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="91.50" y="84.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<path d="M90.00,90.00 L125.00,98.00 L90.00,106.00 L55.00,98.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="90.00" y="97.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">T &gt; consigne aération + 3 °C</text>
+<text x="90.00" y="100.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">et HR ext. &lt; 65 % et jour ?</text>
+<path d="M125.00,98.00 L150.00,98.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="126.50" y="101.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="150.00" y="92.00" width="60.00" height="12.00" rx="0" fill="#e3eef8" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="180.00" y="97.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">MODE ÉVAPORATIF : ouvrants</text>
+<text x="180.00" y="100.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">fermés, pad + extracteurs</text>
+<path d="M90.00,106.00 L90.00,114.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="91.50" y="109.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<rect x="55.00" y="117.00" width="70.00" height="10.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="90.00" y="121.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Ouverture = (T - consigne) / 4 °C</text>
+<text x="90.00" y="124.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">x 100 %, bornée par la météo</text>
+<path d="M90.00,127.00 L90.00,134.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<path d="M90.00,135.00 L120.00,142.00 L90.00,149.00 L60.00,142.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="90.00" y="142.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">HR &gt; HR max ?</text>
+<path d="M120.00,142.00 L150.00,142.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="121.50" y="145.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="150.00" y="137.50" width="50.00" height="9.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="175.00" y="142.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Ouvrants ≥ 10 %</text>
+<path d="M90.00,149.00 L90.00,156.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="91.50" y="152.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<path d="M90.00,157.00 L125.00,165.00 L90.00,173.00 L55.00,165.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="90.00" y="164.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Jour et soleil &gt; 650 W/m²</text>
+<text x="90.00" y="167.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">et serre chaude ?</text>
+<path d="M125.00,165.00 L150.00,165.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="126.50" y="168.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="150.00" y="160.50" width="50.00" height="9.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="175.00" y="165.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Écran 70 % (ombrage)</text>
+<path d="M90.00,173.00 L90.00,180.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="91.50" y="176.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<path d="M90.00,181.00 L125.00,189.00 L90.00,197.00 L55.00,189.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="90.00" y="188.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Nuit et T ext. &lt; consigne</text>
+<text x="90.00" y="191.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">chauffage + 5 °C ?</text>
+<path d="M125.00,189.00 L150.00,189.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="126.50" y="192.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="150.00" y="184.50" width="50.00" height="9.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="175.00" y="189.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Écran 100 % (95 % si HR &gt; 92)</text>
+<path d="M90.00,197.00 L90.00,204.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="91.50" y="200.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<rect x="55.00" y="207.00" width="70.00" height="10.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="90.00" y="212.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Stockage, brassage, CO2 (colonne de droite)</text>
+<path d="M90.00,217.00 L90.00,224.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<rect x="55.00" y="225.50" width="70.00" height="9.00" rx="2" fill="#eef6f0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="90.00" y="230.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Publier consigne + raisons (validité 120 s)</text>
+<path d="M300.00,33.00 L340.00,40.00 L300.00,47.00 L260.00,40.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="300.00" y="39.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">T &lt; consigne chauffage et</text>
+<text x="300.00" y="42.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">cuve &gt; T + 2 °C ?</text>
+<path d="M340.00,40.00 L360.00,40.00 L360.00,52.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="341.50" y="43.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="349.00" y="53.50" width="46.00" height="9.00" rx="0" fill="#fdf3e0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="372.00" y="58.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Restitution AE-101</text>
+<path d="M300.00,47.00 L300.00,56.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="301.50" y="50.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<path d="M300.00,58.00 L340.00,66.00 L300.00,74.00 L260.00,66.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="300.00" y="65.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Nuit, HR &gt; max, cuve &gt; T + 3 °C</text>
+<text x="300.00" y="68.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">et T &lt; consigne + 4 ?</text>
+<path d="M340.00,66.00 L360.00,66.00 L360.00,76.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="341.50" y="69.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="349.00" y="77.00" width="46.00" height="10.00" rx="0" fill="#fdf3e0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="372.00" y="81.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Déshumidification :</text>
+<text x="372.00" y="84.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">restitution + 5 %</text>
+<path d="M300.00,74.00 L300.00,84.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="301.50" y="77.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<path d="M300.00,86.00 L340.00,94.00 L300.00,102.00 L260.00,94.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="300.00" y="93.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Jour et T &gt; consigne jour + 3</text>
+<text x="300.00" y="96.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">et cuve &lt; T - 3 ?</text>
+<path d="M340.00,94.00 L360.00,94.00 L360.00,104.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="341.50" y="97.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="349.00" y="105.50" width="46.00" height="9.00" rx="0" fill="#fdf3e0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="372.00" y="110.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Charge du stock</text>
+<path d="M300.00,102.00 L300.00,124.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="301.50" y="105.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<path d="M300.00,125.00 L340.00,132.00 L300.00,139.00 L260.00,132.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="300.00" y="131.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">HR &gt; max - 5, écran fermé,</text>
+<text x="300.00" y="134.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">DPV bas ou stockage actif ?</text>
+<path d="M340.00,132.00 L360.00,132.00 L360.00,142.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="341.50" y="135.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="349.00" y="143.50" width="46.00" height="9.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="372.00" y="148.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Brassage VB en marche</text>
+<path d="M300.00,139.00 L300.00,158.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="301.50" y="142.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">non</text>
+<path d="M300.00,160.00 L340.00,168.00 L300.00,176.00 L260.00,168.00 Z" fill="#fff" stroke="#1a1a1a" stroke-width="0.45" stroke-linejoin="round"/>
+<text x="300.00" y="167.35" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Ouvrants ≤ 10 %, soleil &gt; 150</text>
+<text x="300.00" y="170.25" font-size="2.0" text-anchor="middle" fill="#1a1a1a">et CO2 &lt; consigne ?</text>
+<path d="M340.00,168.00 L360.00,168.00 L360.00,178.00" fill="none" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round" marker-end="url(#fl)"/>
+<text x="341.50" y="171.20" font-size="1.8" text-anchor="start" fill="#4a4a4a">oui</text>
+<rect x="349.00" y="179.50" width="46.00" height="9.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="372.00" y="184.80" font-size="2.0" text-anchor="middle" fill="#1a1a1a">Injection CO2 (option)</text>
+<text x="250.00" y="205.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Compléments</text>
+<text x="250.00" y="209.20" font-size="2.0" text-anchor="start" fill="#1a1a1a">Intégration de température (nuit) : la consigne de chauffage baisse</text>
+<text x="250.00" y="212.10" font-size="2.0" text-anchor="start" fill="#1a1a1a">jusqu&#x27;à 1,5 °C si la moyenne des dernières 24 h dépasse la cible.</text>
+<text x="250.00" y="215.00" font-size="2.0" text-anchor="start" fill="#1a1a1a">Énergie : si KM2 est délesté, le mode évaporatif est suspendu</text>
+<text x="250.00" y="217.90" font-size="2.0" text-anchor="start" fill="#1a1a1a">et les ouvrants s&#x27;ouvrent au maximum (serre_core/service.py).</text>
+<text x="250.00" y="220.80" font-size="2.0" text-anchor="start" fill="#1a1a1a">Repli automate (sans serveur) : aération par seuils, fermeture</text>
+<text x="250.00" y="223.70" font-size="2.0" text-anchor="start" fill="#1a1a1a">vent/pluie, écran et restitution la nuit, aération des bassins.</text>
+<rect x="10.00" y="10.00" width="400.00" height="277.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.7"/>
+<rect x="15.00" y="15.00" width="390.00" height="267.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="39.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<text x="39.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<line x1="63.75" y1="10.00" x2="63.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="63.75" y1="282.00" x2="63.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="88.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<text x="88.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<line x1="112.50" y1="10.00" x2="112.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="112.50" y1="282.00" x2="112.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="136.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<text x="136.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<line x1="161.25" y1="10.00" x2="161.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="161.25" y1="282.00" x2="161.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="185.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<text x="185.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<line x1="210.00" y1="10.00" x2="210.00" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="210.00" y1="282.00" x2="210.00" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="234.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<text x="234.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<line x1="258.75" y1="10.00" x2="258.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="258.75" y1="282.00" x2="258.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="283.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<text x="283.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<line x1="307.50" y1="10.00" x2="307.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="307.50" y1="282.00" x2="307.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="331.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<text x="331.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<line x1="356.25" y1="10.00" x2="356.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="356.25" y1="282.00" x2="356.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="380.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="380.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="12.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<text x="407.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<line x1="10.00" y1="59.50" x2="15.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="59.50" x2="410.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<text x="407.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<line x1="10.00" y1="104.00" x2="15.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="104.00" x2="410.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<text x="407.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<line x1="10.00" y1="148.50" x2="15.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="148.50" x2="410.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<text x="407.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<line x1="10.00" y1="193.00" x2="15.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="193.00" x2="410.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<text x="407.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<line x1="10.00" y1="237.50" x2="15.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="237.50" x2="410.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<text x="407.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<rect x="230.00" y="244.00" width="175.00" height="38.00" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="230.00" y1="253.00" x2="405.00" y2="253.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="230.00" y1="268.00" x2="405.00" y2="268.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="345.00" y1="268.00" x2="345.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="375.00" y1="268.00" x2="375.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="290.00" y1="268.00" x2="290.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="233.00" y="250.20" font-size="3.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Serre pilote en environnement contrôlé - Lubumbashi</text>
+<text x="233.00" y="259.00" font-size="4.2" text-anchor="start" fill="#2f7d4f" font-weight="700">Logique de régulation climatique (organigramme)</text>
+<text x="233.00" y="265.00" font-size="2.6" text-anchor="start" fill="#4a4a4a">Lot automatisme - code : logiciel/serre_core/climat.py</text>
+<text x="233.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Maître d&#x27;ouvrage</text>
+<text x="233.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">Projet serre Lubumbashi</text>
+<text x="292.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Échelle</text>
+<text x="292.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="318.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Date</text>
+<text x="318.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<text x="347.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Format / indice</text>
+<text x="347.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">A3  -  A</text>
+<text x="377.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Planche</text>
+<text x="390.00" y="278.50" font-size="6.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">I02</text></svg>

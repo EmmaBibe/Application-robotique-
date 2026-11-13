@@ -5,3 +5,5 @@ logiciel/edge/.env
 logiciel/edge/mosquitto/passwd
 logiciel/firmware/noeud_zone/src/secrets.h
 logiciel/firmware/noeud_zone/.pio/
+*.kicad_prl
+fp-info-cache

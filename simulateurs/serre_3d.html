@@ -93,7 +93,7 @@ li{margin:2px 0}
 
 <div id="droite" class="panneau">
   <div class="onglets">
-    <button data-o="climat" class="actif">Climat</button><button data-o="energie">Énergie</button><button data-o="finance">Finance</button>
+    <button data-o="climat" class="actif">Climat</button><button data-o="energie">Énergie</button><button data-o="finance">Finance</button><button data-o="cultures">Cultures</button><button data-o="pannes">Pannes</button>
   </div>
   <section id="o-climat">
     <div class="grille" id="kpis"></div>
@@ -113,6 +113,8 @@ li{margin:2px 0}
     <canvas id="tresorerie" width="560" height="240" style="width:100%;margin-top:8px"></canvas>
     <div class="sous">Trésorerie cumulée sur 10 ans (après impôt)</div>
   </section>
+  <section id="o-cultures" class="cache"><p class="sous">Conditions vécues par chaque culture (loi du minimum : le facteur le plus défavorable fixe le score).</p><div id="tab-cultures"></div></section>
+  <section id="o-pannes" class="cache"><p class="sous">Provoquez une panne et regardez la serre réagir. Le détail des schémas est dans le <a href="systemes.html" style="color:var(--vert)">simulateur des systèmes</a>.</p><div id="liste-pannes"></div><h2>Journal</h2><div id="journal3d" class="sous" style="max-height:220px;overflow:auto"></div></section>
   <div id="fiche" class="kpi" style="margin-top:12px"></div>
 </div>
 
@@ -136,6 +138,7 @@ import { Sky } from "three/addons/Sky.js";
 import { CSS2DRenderer, CSS2DObject } from "three/addons/CSS2DRenderer.js";
 import { GLTFExporter } from "three/addons/GLTFExporter.js";
 import * as M from "./lib/modele.js";
+import * as SYS from "./lib/systemes.js";
 
 const $ = s => document.querySelector(s);
 const fmt = (x, d = 1) => (x == null || isNaN(x)) ? "-" : x.toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -250,7 +253,9 @@ function boite(l, h, p, materiau) { return new THREE.Mesh(new THREE.BoxGeometry(
 function placer(o, x, y, z) { o.position.set(x, y, z); return o; }
 function tube(points, rayon, materiau) {
   const courbe = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(...p)), false, "catmullrom", 0);
-  return new THREE.Mesh(new THREE.TubeGeometry(courbe, Math.max(8, points.length * 12), rayon, 8, false), materiau);
+  const m = new THREE.Mesh(new THREE.TubeGeometry(courbe, Math.max(8, points.length * 12), rayon, 8, false), materiau);
+  m.userData.courbe = courbe;
+  return m;
 }
 
 // Repère : x = est, y = haut, z = sud. Serre centrée en (0,0), faîtage est-ouest.
@@ -520,6 +525,37 @@ ajouter(armoire, ["elec", "iiot"], { titre: "Armoire automate fruits (AUT-F)", t
 const armoireL = placer(boite(0.6, 0.8, 0.25, mat.armoire), 0.8, 1.6, 4.8);
 ajouter(armoireL, ["elec", "iiot"], { titre: "Armoire automate feuilles (AUT-L)", texte: "Climat du compartiment, aération et dosage des bassins, refroidisseur, LED de germination. Le surpresseur des bassins est câblé pour tourner même en cas de panne de l'automate.", cout: "Inclus" });
 
+// ================================================================ flux animés (particules dans les tuyaux et câbles)
+const FLUX = [];
+function flux(motif, couleur, actif, n = 14, vitesse = 0.25) {
+  const tubes = scene.children.filter(o => o.isMesh && o.userData.courbe && o.material === motif.mat && (motif.filtre ? motif.filtre(o) : true));
+  for (const t of tubes) {
+    const geo = new THREE.SphereGeometry(motif.r || 0.06, 8, 6);
+    const im = new THREE.InstancedMesh(geo, new THREE.MeshBasicMaterial({ color: couleur, toneMapped: false }), n);
+    scene.add(im);
+    const L = t.userData.courbe.getLength();
+    if (!(L > 0.2)) { scene.remove(im); continue; }
+    FLUX.push({ courbe: t.userData.courbe, im, n, actif, vitesse: Math.min(2, vitesse / L * 6), phase: 0, tube: t });
+  }
+}
+function majFlux(dt) {
+  const d = new THREE.Object3D();
+  for (const f of FLUX) {
+    const on = f.actif() && f.tube.visible;
+    f.im.visible = on;
+    if (!on) continue;
+    f.phase = (f.phase + (isFinite(dt) ? dt : 0) * f.vitesse) % 1;
+    if (!isFinite(f.phase)) f.phase = 0;
+    for (let k = 0; k < f.n; k++) {
+      const u = Math.min(0.999, (f.phase + k / f.n) % 1);
+      const pt = f.courbe.getPointAt(Math.max(0, u));
+      if (!pt) continue;
+      d.position.copy(pt); d.updateMatrix(); f.im.setMatrixAt(k, d.matrix);
+    }
+    f.im.instanceMatrix.needsUpdate = true;
+  }
+}
+
 // ================================================================ capteurs
 const capteurs = [];
 function capteur(nom, x, y, z, lire, texte) {
@@ -548,10 +584,13 @@ function demarrer() {
   const equip = E.equip, manuel = E.manuel;
   E = M.nouvelEtat(+moisSel.value);
   E.equip = equip; E.manuel = manuel;
-  M.avancer(E, 2 * 86400 + (h - 6) * 3600);
+  SYS.initialiser(E);
+  const total = 2 * 86400 + (h - 6) * 3600;
+  for (let t = 0; t < total; t += 60) { M.avancer(E, 60); SYS.pas(E, 60); }
+  document.querySelectorAll("#liste-pannes input").forEach(c => c.checked = false);
 }
 moisSel.onchange = demarrer;
-$("#heure").oninput = e => { const cible = +e.target.value; let d = cible - E.h; if (d < 0) d += 24; M.avancer(E, d * 3600); };
+$("#heure").oninput = e => { const cible = +e.target.value; let d = cible - E.h; if (d < 0) d += 24; for (let t = 0; t < d * 3600; t += 60) { M.avancer(E, 60); SYS.pas(E, 60); } };
 $("#lecture").onclick = () => { lecture = !lecture; $("#lecture").textContent = lecture ? "Pause" : "Lecture"; $("#lecture").classList.toggle("actif", lecture); };
 document.querySelectorAll("[data-v]").forEach(b => b.onclick = () => { vitesse = +b.dataset.v; document.querySelectorAll("[data-v]").forEach(x => x.classList.toggle("actif", x === b)); });
 for (const k of ["stockage", "ecran", "pad"]) $("#e-" + k).onchange = e => { E.equip[k] = e.target.checked; };
@@ -681,7 +720,7 @@ function majFinance() {
 
 document.querySelectorAll(".onglets button").forEach(b => b.onclick = () => {
   document.querySelectorAll(".onglets button").forEach(x => x.classList.toggle("actif", x === b));
-  ["climat", "energie", "finance"].forEach(o => $("#o-" + o).classList.toggle("cache", o !== b.dataset.o));
+  ["climat", "energie", "finance", "cultures", "pannes"].forEach(o => $("#o-" + o).classList.toggle("cache", o !== b.dataset.o));
   if (b.dataset.o === "finance") majFinance();
   panneaux_();
 });
@@ -730,14 +769,26 @@ $("#v-export").onclick = () => {
 addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); etiquettes.setSize(innerWidth, innerHeight); });
 
 // ================================================================ boucle
+flux({ mat: mat.tuyauRouge }, 0xff8a7a, () => E.sys && E.sys.fruits.irrRestant > 0 && !E.sys.pannes.pompeIrr, 10, 0.5);
+flux({ mat: mat.tuyauVert }, 0x8affb0, () => E.sys && (E.sys.bassins.frais.ev || E.sys.bassins.tempere.ev || E.sys.fruits.remplissage), 10, 0.4);
+flux({ mat: mat.tuyauBleu }, 0x9fd6ff, () => E.sys && (M.meteo(E.mois, E.h).pluie || E.sys.eau.pTransfert), 12, 0.4);
+flux({ mat: mat.cable }, 0xfff27a, () => E.pv > 50 || E.reseau || E.groupe, 16, 0.8);
+$("#liste-pannes").innerHTML = Object.entries(SYS.PANNES).map(([k, v]) => `<label><input type="checkbox" data-p="${k}"> ${v}</label>`).join("");
+document.querySelectorAll("#liste-pannes input").forEach(c => c.onchange = () => { if (c.checked) E.sys.pannes[c.dataset.p] = true; else delete E.sys.pannes[c.dataset.p]; });
+function majCultures() {
+  const coul = sc => sc >= 80 ? "var(--vert)" : sc >= 50 ? "var(--orange)" : "var(--rouge)";
+  $("#tab-cultures").innerHTML = Object.keys(SYS.CULTURES).map(k => SYS.aptitude(E, k)).map(r => `<div class="kpi" style="margin-bottom:6px"><span>${r.nom}</span>
+    <b style="color:${coul(r.score)}">${r.score} / 100</b><span>${r.limitant ? "limité par " + r.limitant[0] + " : " + r.limitant[2] : "conditions favorables"}</span></div>`).join("");
+  $("#journal3d").innerHTML = E.sys.journal.slice(0, 30).map(j => `<div><b>${j.t}</b> ${j.texte}</div>`).join("");
+}
 demarrer();
 majFruits(jourFruits); majFeuilles(jourFeuilles); domaineVisible("tout");
 let precedent = performance.now(), cumulAffichage = 0, cumulCroissance = 0;
 function boucle(t) {
-  const dt = Math.min(0.1, (t - precedent) / 1000); precedent = t;
+  const dt = Math.max(0, Math.min(0.1, (t - precedent) / 1000)); precedent = t;
   if (lecture) {
     const sec = Math.max(60, Math.round(dt * vitesse / 60) * 60);
-    M.avancer(E, sec);
+    for (let t = 0; t < sec; t += 60) { M.avancer(E, 60); SYS.pas(E, 60); }
     $("#heure").value = E.h.toFixed(1);
     if ($("#c-croissance").checked) {
       cumulCroissance += sec / 86400;
@@ -757,8 +808,8 @@ function boucle(t) {
     camera.position.z = Math.max(-15, Math.min(15, camera.position.z));
     camera.position.y = 1.65;
   } else orbite.update();
-  majActionneurs(dt); majSoleil();
-  cumulAffichage += dt; if (cumulAffichage > 0.25) { panneaux_(); cumulAffichage = 0; }
+  majActionneurs(dt); majSoleil(); majFlux(dt);
+  cumulAffichage += dt; if (cumulAffichage > 0.25) { panneaux_(); if (!$("#o-cultures").classList.contains("cache") || !$("#o-pannes").classList.contains("cache")) majCultures(); cumulAffichage = 0; }
   renderer.render(scene, camera); etiquettes.render(scene, camera);
   requestAnimationFrame(boucle);
 }

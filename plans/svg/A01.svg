@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420.0mm" height="297.0mm" viewBox="0 0 420.0 297.0" font-family="DejaVu Sans, Arial, sans-serif"><defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker><marker id="fc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#4a4a4a"/></marker><pattern id="hach" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2" stroke="#8a8a8a" stroke-width="0.25"/></pattern><pattern id="beton" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.3" fill="#8a8a8a"/><circle cx="3" cy="2.6" r="0.25" fill="#8a8a8a"/></pattern></defs><rect width="420.0" height="297.0" fill="#fff"/><rect x="60.00" y="40.00" width="150.00" height="125.00" rx="0" fill="#fbfaf6" stroke="#1a1a1a" stroke-width="0.5" stroke-dasharray="4,2"/>
+<text x="62.00" y="38.00" font-size="2.0" text-anchor="start" fill="#4a4a4a">Clôture grillagée h = 2,20 m sur poteaux béton</text>
+<rect x="95.00" y="50.00" width="80.00" height="80.00" rx="0" fill="url(#hach)" stroke="none" stroke-width="0"/>
+<rect x="95.00" y="50.00" width="80.00" height="80.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25" stroke-dasharray="1.5,1"/>
+<rect x="110.00" y="65.00" width="50.00" height="50.00" rx="0" fill="#eef6ef" stroke="#1a1a1a" stroke-width="0.8"/>
+<line x1="110.00" y1="90.00" x2="160.00" y2="90.00" stroke="#1a1a1a" stroke-width="0.3" stroke-dasharray="2,1"/>
+<text x="135.00" y="80.00" font-size="3" text-anchor="middle" fill="#1a1a1a" font-weight="700">SERRE</text>
+<text x="135.00" y="84.00" font-size="2" text-anchor="middle" fill="#1a1a1a">compartiment fruits</text>
+<text x="135.00" y="105.00" font-size="2" text-anchor="middle" fill="#1a1a1a">compartiment feuilles</text>
+<rect x="131.25" y="115.00" width="7.50" height="10.00" rx="0" fill="#fff3d6" stroke="#1a1a1a" stroke-width="0.5"/>
+<rect x="110.00" y="125.00" width="50.00" height="15.00" rx="0" fill="#f7f1e6" stroke="#1a1a1a" stroke-width="0.8"/>
+<text x="135.00" y="134.00" font-size="2.6" text-anchor="middle" fill="#1a1a1a" font-weight="700">ANNEXE</text>
+<circle cx="90.00" cy="90.00" r="7.00" fill="#e0eef8" stroke="#1a1a1a" stroke-width="0.5"/>
+<text x="90.00" y="91.00" font-size="2" text-anchor="middle" fill="#1a1a1a" font-weight="700">CI-001</text>
+<circle cx="80.00" cy="120.00" r="2.00" fill="#1f6fb2" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="80.00" y="125.00" font-size="1.9" text-anchor="middle" fill="#1a1a1a">forage</text>
+<rect x="172.50" y="127.50" width="25.00" height="12.50" rx="0" fill="#dfe7f2" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="185.00" y="135.00" font-size="1.9" text-anchor="middle" fill="#1a1a1a">PV sol (option)</text>
+<rect x="180.00" y="55.00" width="2.00" height="2.00" rx="0" fill="#d9a400" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="184.00" y="57.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">station météo</text>
+<circle cx="172.50" cy="120.00" r="1.50" fill="#fff" stroke="#c0392b" stroke-width="0.5"/>
+<text x="175.50" y="121.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">mât paratonnerre</text>
+<rect x="110.00" y="145.00" width="50.00" height="17.50" rx="0" fill="#efefef" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="135.00" y="155.00" font-size="2" text-anchor="middle" fill="#1a1a1a">aire de livraison et stationnement</text>
+<rect x="130.00" y="164.00" width="10.00" height="2.00" rx="0" fill="#333" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="135.00" y="170.00" font-size="2" text-anchor="middle" fill="#1a1a1a">portail 4 m</text>
+<rect x="167.50" y="70.00" width="37.50" height="45.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.3" stroke-dasharray="2,1.5"/>
+<text x="186.25" y="92.50" font-size="2" text-anchor="middle" fill="#2f7d4f">réserve</text>
+<text x="186.25" y="96.00" font-size="2" text-anchor="middle" fill="#2f7d4f">extension</text>
+<line x1="60.00" y1="165.00" x2="60.00" y2="176.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="210.00" y1="165.00" x2="210.00" y2="176.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="60" y1="175.0" x2="210.0" y2="175.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="135.00" y="174.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a">30,00</text>
+<line x1="210.00" y1="40.00" x2="221.50" y2="40.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="210.00" y1="165.00" x2="221.50" y2="165.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="220.0" y1="40" x2="220.0" y2="165.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="219.00" y="102.50" font-size="2.4" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 219.00 102.50)">25,00</text>
+<line x1="110.00" y1="65.00" x2="110.00" y2="57.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="160.00" y1="65.00" x2="160.00" y2="57.50" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="110.0" y1="59.0" x2="160.0" y2="59.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="135.00" y="58.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a">10,00</text>
+<line x1="110.00" y1="65.00" x2="102.50" y2="65.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="110.00" y1="115.00" x2="102.50" y2="115.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="104.0" y1="65.0" x2="104.0" y2="115.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="103.00" y="90.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 103.00 90.00)">10,00</text>
+<line x1="110.00" y1="115.00" x2="102.50" y2="115.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="110.00" y1="125.00" x2="102.50" y2="125.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="104.0" y1="115.0" x2="104.0" y2="125.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="103.00" y="120.00" font-size="2.4" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 103.00 120.00)">2,00</text>
+<line x1="110.00" y1="125.00" x2="102.50" y2="125.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="110.00" y1="140.00" x2="102.50" y2="140.00" stroke="#4a4a4a" stroke-width="0.18"/>
+<line x1="104.0" y1="125.0" x2="104.0" y2="140.0" stroke="#4a4a4a" stroke-width="0.2" marker-start="url(#fc)" marker-end="url(#fc)"/>
+<text x="103.00" y="132.50" font-size="2.4" text-anchor="middle" fill="#1a1a1a" transform="rotate(-90 103.00 132.50)">3,00</text>
+<path d="M200.00,44.00 L203.00,52.00 L200.00,50.00 L197.00,52.00 Z" fill="#1a1a1a" stroke="#1a1a1a" stroke-width="0.35" stroke-linejoin="round"/>
+<text x="200.00" y="42.00" font-size="3" text-anchor="middle" fill="#1a1a1a" font-weight="700">N</text>
+<text x="235.00" y="40.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Notes</text>
+<text x="235.00" y="44.20" font-size="2.1" text-anchor="start" fill="#1a1a1a">Implantation :</text>
+<text x="235.00" y="47.25" font-size="2.1" text-anchor="start" fill="#1a1a1a">- faîtage de la serre orienté est-ouest ; murs évaporatifs au pignon est</text>
+<text x="235.00" y="50.29" font-size="2.1" text-anchor="start" fill="#1a1a1a">  (vents dominants de saison sèche E - SE), extracteurs au pignon ouest ;</text>
+<text x="235.00" y="53.34" font-size="2.1" text-anchor="start" fill="#1a1a1a">- annexe au sud, à 2 m : ombre portée nulle sur la serre (soleil au</text>
+<text x="235.00" y="56.38" font-size="2.1" text-anchor="start" fill="#1a1a1a">  nord du zénith dix mois sur douze ; 78° au plus bas vers le sud) ;</text>
+<text x="235.00" y="59.43" font-size="2.1" text-anchor="start" fill="#1a1a1a">- bande sanitaire de 3 m en gravier nu autour de la serre ;</text>
+<text x="235.00" y="62.47" font-size="2.1" text-anchor="start" fill="#1a1a1a">- aucun arbre ni bâtiment haut à moins de 20 m au N, à l&#x27;E et à l&#x27;O ;</text>
+<text x="235.00" y="65.52" font-size="2.1" text-anchor="start" fill="#1a1a1a">- pas de culture de solanacées ni de crucifères à moins de 50 m.</text>
+<text x="235.00" y="68.56" font-size="2.1" text-anchor="start" fill="#1a1a1a"></text>
+<text x="235.00" y="71.61" font-size="2.1" text-anchor="start" fill="#1a1a1a">Réseaux enterrés : eau (PE-HD 32), câble SNEL (U1000R2V sous fourreau</text>
+<text x="235.00" y="74.65" font-size="2.1" text-anchor="start" fill="#1a1a1a">TPC rouge Ø 63), boucle de terre en fond de fouille, pluvial vers</text>
+<text x="235.00" y="77.70" font-size="2.1" text-anchor="start" fill="#1a1a1a">citerne et puits d&#x27;infiltration ; profondeur 0,6 m minimum.</text>
+<text x="235.00" y="80.74" font-size="2.1" text-anchor="start" fill="#1a1a1a"></text>
+<text x="235.00" y="83.78" font-size="2.1" text-anchor="start" fill="#1a1a1a">Terrain : plateforme compactée, pente 1 % vers l&#x27;ouest ;</text>
+<text x="235.00" y="86.83" font-size="2.1" text-anchor="start" fill="#1a1a1a">élimination des termitières dans un rayon de 20 m.</text>
+<rect x="10.00" y="10.00" width="400.00" height="277.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.7"/>
+<rect x="15.00" y="15.00" width="390.00" height="267.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="39.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<text x="39.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<line x1="63.75" y1="10.00" x2="63.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="63.75" y1="282.00" x2="63.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="88.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<text x="88.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<line x1="112.50" y1="10.00" x2="112.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="112.50" y1="282.00" x2="112.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="136.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<text x="136.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<line x1="161.25" y1="10.00" x2="161.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="161.25" y1="282.00" x2="161.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="185.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<text x="185.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<line x1="210.00" y1="10.00" x2="210.00" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="210.00" y1="282.00" x2="210.00" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="234.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<text x="234.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<line x1="258.75" y1="10.00" x2="258.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="258.75" y1="282.00" x2="258.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="283.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<text x="283.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<line x1="307.50" y1="10.00" x2="307.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="307.50" y1="282.00" x2="307.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="331.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<text x="331.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<line x1="356.25" y1="10.00" x2="356.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="356.25" y1="282.00" x2="356.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="380.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="380.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="12.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<text x="407.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<line x1="10.00" y1="59.50" x2="15.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="59.50" x2="410.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<text x="407.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<line x1="10.00" y1="104.00" x2="15.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="104.00" x2="410.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<text x="407.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<line x1="10.00" y1="148.50" x2="15.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="148.50" x2="410.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<text x="407.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<line x1="10.00" y1="193.00" x2="15.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="193.00" x2="410.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<text x="407.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<line x1="10.00" y1="237.50" x2="15.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="237.50" x2="410.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<text x="407.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<rect x="230.00" y="244.00" width="175.00" height="38.00" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="230.00" y1="253.00" x2="405.00" y2="253.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="230.00" y1="268.00" x2="405.00" y2="268.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="345.00" y1="268.00" x2="345.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="375.00" y1="268.00" x2="375.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="290.00" y1="268.00" x2="290.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="233.00" y="250.20" font-size="3.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Serre pilote en environnement contrôlé - Lubumbashi</text>
+<text x="233.00" y="259.00" font-size="4.2" text-anchor="start" fill="#2f7d4f" font-weight="700">Plan de masse</text>
+<text x="233.00" y="265.00" font-size="2.6" text-anchor="start" fill="#4a4a4a">Lot architecture - parcelle de travail 30 x 25 m</text>
+<text x="233.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Maître d&#x27;ouvrage</text>
+<text x="233.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">Projet serre Lubumbashi</text>
+<text x="292.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Échelle</text>
+<text x="292.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">1:200</text>
+<text x="318.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Date</text>
+<text x="318.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<text x="347.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Format / indice</text>
+<text x="347.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">A3  -  A</text>
+<text x="377.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Planche</text>
+<text x="390.00" y="278.50" font-size="6.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">A01</text></svg>

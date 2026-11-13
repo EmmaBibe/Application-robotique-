@@ -1,0 +1,489 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420.0mm" height="297.0mm" viewBox="0 0 420.0 297.0" font-family="DejaVu Sans, Arial, sans-serif"><defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker><marker id="fc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#4a4a4a"/></marker><pattern id="hach" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2" stroke="#8a8a8a" stroke-width="0.25"/></pattern><pattern id="beton" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.3" fill="#8a8a8a"/><circle cx="3" cy="2.6" r="0.25" fill="#8a8a8a"/></pattern></defs><rect width="420.0" height="297.0" fill="#fff"/><rect x="30.00" y="30.00" width="7.00" height="10.00" rx="0" fill="#e8eef8" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="30.00" y1="33.50" x2="37.00" y2="33.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="30.00" y1="36.50" x2="37.00" y2="36.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<rect x="39.00" y="30.00" width="7.00" height="10.00" rx="0" fill="#e8eef8" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="39.00" y1="33.50" x2="46.00" y2="33.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="39.00" y1="36.50" x2="46.00" y2="36.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="37.00" y1="35.00" x2="39.00" y2="35.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="48.00" y="30.00" width="7.00" height="10.00" rx="0" fill="#e8eef8" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="48.00" y1="33.50" x2="55.00" y2="33.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="48.00" y1="36.50" x2="55.00" y2="36.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="46.00" y1="35.00" x2="48.00" y2="35.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="57.00" y="30.00" width="7.00" height="10.00" rx="0" fill="#e8eef8" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="57.00" y1="33.50" x2="64.00" y2="33.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="57.00" y1="36.50" x2="64.00" y2="36.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="55.00" y1="35.00" x2="57.00" y2="35.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="66.00" y="30.00" width="7.00" height="10.00" rx="0" fill="#e8eef8" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="66.00" y1="33.50" x2="73.00" y2="33.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="66.00" y1="36.50" x2="73.00" y2="36.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="64.00" y1="35.00" x2="66.00" y2="35.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="75.00" y="30.00" width="7.00" height="10.00" rx="0" fill="#e8eef8" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="75.00" y1="33.50" x2="82.00" y2="33.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="75.00" y1="36.50" x2="82.00" y2="36.50" stroke="#4a4a4a" stroke-width="0.15"/>
+<line x1="73.00" y1="35.00" x2="75.00" y2="35.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="54.00" y="27.00" font-size="2.3" text-anchor="middle" fill="#1a1a1a" font-weight="700">Champ PV : 6 x 550 Wc en série (12 x 550 Wc)</text>
+<text x="54.00" y="45.00" font-size="1.9" text-anchor="middle" fill="#4a4a4a">Voc 300 V (313 V à 5 °C), Vmp 251 V, Isc 14 A - PV1-F 2 x 6 mm²</text>
+<line x1="30.00" y1="35.00" x2="26.00" y2="35.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="26.00" y1="35.00" x2="26.00" y2="52.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="83.00" y1="35.00" x2="88.00" y2="35.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="88.00" y1="35.00" x2="88.00" y2="52.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="20.00" y="52.00" width="75.00" height="26.00" rx="0.8" fill="#fafafa" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="57.50" y="56.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">Coffret DC (CDC)</text>
+<text x="57.50" y="59.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">sectionneur DC 1000 V 32 A (Q-DC)</text>
+<text x="57.50" y="62.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">parafoudre DC type 2 600 V (F-DC)</text>
+<text x="57.50" y="65.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">fusibles gPV 15 A sur + et -</text>
+<line x1="57.00" y1="78.00" x2="57.00" y2="92.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<text x="59.00" y="87.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">PV1-F 2 x 6 mm², 15 m</text>
+<rect x="110.00" y="22.00" width="52.00" height="18.00" rx="0.8" fill="#fafafa" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="136.00" y="26.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">Réseau SNEL 230 V</text>
+<text x="136.00" y="29.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">branchement monophasé, schéma TT</text>
+<line x1="136.00" y1="40.00" x2="136.00" y2="46.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="136.00" y1="46.00" x2="136.00" y2="49.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="136.00" y1="49.00" x2="138.60" y2="54.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="136.00" y1="55.00" x2="136.00" y2="58.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="135.00" y1="48.00" x2="137.00" y2="50.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="135.00" y1="50.00" x2="137.00" y2="48.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<ellipse cx="137.3" cy="52" rx="3.6" ry="1.5" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="140.50" y="49.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">QS</text>
+<text x="140.50" y="57.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">32 A 2P C, 30 mA (AGCP)</text>
+<line x1="152.00" y1="50.00" x2="152.00" y2="53.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="150.20" y="53.00" width="3.60" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<path d="M152.00,54.00 L152.00,58.00" fill="none" stroke="#1a1a1a" stroke-width="0.3" stroke-linejoin="round" marker-end="url(#fl)"/>
+<line x1="152.00" y1="59.00" x2="152.00" y2="62.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="149.50" y1="62.00" x2="154.50" y2="62.00" stroke="#2e7d32" stroke-width="0.4"/>
+<line x1="150.40" y1="62.90" x2="153.60" y2="62.90" stroke="#2e7d32" stroke-width="0.4"/>
+<line x1="151.30" y1="63.80" x2="152.70" y2="63.80" stroke="#2e7d32" stroke-width="0.4"/>
+<text x="155.00" y="55.50" font-size="2.1" text-anchor="start" fill="#1a1a1a" font-weight="700">F-AC1</text>
+<text x="155.00" y="58.60" font-size="1.8" text-anchor="start" fill="#4a4a4a">T1+T2 Iimp 12,5 kA</text>
+<line x1="136.00" y1="49.00" x2="152.00" y2="49.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="152.00" y1="49.00" x2="152.00" y2="50.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="136.00" y1="58.00" x2="136.00" y2="92.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<text x="138.00" y="72.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">U1000R2V 3G6 mm²</text>
+<rect x="185.00" y="22.00" width="52.00" height="18.00" rx="0.8" fill="#fafafa" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="211.00" y="26.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">Groupe électrogène</text>
+<text x="211.00" y="29.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">5 kVA essence, démarrage à distance</text>
+<line x1="211.00" y1="40.00" x2="211.00" y2="46.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="211.00" y1="46.00" x2="211.00" y2="49.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="211.00" y1="49.00" x2="213.60" y2="54.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="211.00" y1="55.00" x2="211.00" y2="58.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="210.00" y1="48.00" x2="212.00" y2="50.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="210.00" y1="50.00" x2="212.00" y2="48.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="215.50" y="49.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">QGE</text>
+<text x="215.50" y="57.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">25 A 2P C</text>
+<line x1="211.00" y1="58.00" x2="211.00" y2="70.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="211.00" y1="70.00" x2="160.00" y2="70.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="160.00" y1="70.00" x2="160.00" y2="92.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<text x="185.00" y="68.00" font-size="1.9" text-anchor="middle" fill="#4a4a4a">H07RN-F 3G4 mm²</text>
+<rect x="40.00" y="92.00" width="135.00" height="32.00" rx="0.8" fill="#eef6f0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="107.50" y="96.20" font-size="2.6" text-anchor="middle" fill="#1a1a1a" font-weight="700">OND-1 : onduleur hybride 48 V - 5 kW (8 kW)</text>
+<text x="107.50" y="99.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">2 MPPT 120-450 V, entrée réseau (AC IN), entrée groupe (GEN),</text>
+<text x="107.50" y="102.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">sortie secourue (AC OUT), contact sec de démarrage groupe, Modbus RS485 vers AUT-E</text>
+<text x="107.50" y="105.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">transfert &lt; 10 ms, chargeur 100 A, rendement 97 %</text>
+<text x="57.00" y="98.00" font-size="2.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">PV</text>
+<text x="136.00" y="98.00" font-size="2.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">AC IN</text>
+<text x="160.00" y="98.00" font-size="2.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">GEN</text>
+<line x1="70.00" y1="124.00" x2="70.00" y2="132.00" stroke="#1a1a1a" stroke-width="0.6"/>
+<line x1="70.00" y1="132.00" x2="70.00" y2="144.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="68.70" y="135.00" width="2.60" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="73.00" y="137.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">F-BAT</text>
+<text x="73.00" y="140.80" font-size="1.9" text-anchor="start" fill="#4a4a4a">125 A gG NH00</text>
+<line x1="70.00" y1="144.00" x2="70.00" y2="147.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="70.00" y1="147.00" x2="72.60" y2="152.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="70.00" y1="153.00" x2="70.00" y2="156.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="74.50" y="148.00" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q-BAT</text>
+<text x="74.50" y="155.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">sectionneur 160 A</text>
+<line x1="70.00" y1="156.00" x2="70.00" y2="162.00" stroke="#1a1a1a" stroke-width="0.6"/>
+<rect x="52.00" y="162.00" width="18.00" height="16.00" rx="0" fill="#fff7e0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="61.00" y="169.00" font-size="2.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">LiFePO4</text>
+<text x="61.00" y="172.50" font-size="1.8" text-anchor="middle" fill="#1a1a1a">51,2 V 100 Ah</text>
+<text x="61.00" y="175.80" font-size="1.8" text-anchor="middle" fill="#1a1a1a">5,12 kWh</text>
+<rect x="74.00" y="162.00" width="18.00" height="16.00" rx="0" fill="#fff7e0" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="83.00" y="169.00" font-size="2.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">LiFePO4</text>
+<text x="83.00" y="172.50" font-size="1.8" text-anchor="middle" fill="#1a1a1a">51,2 V 100 Ah</text>
+<text x="83.00" y="175.80" font-size="1.8" text-anchor="middle" fill="#1a1a1a">5,12 kWh</text>
+<line x1="61.00" y1="162.00" x2="83.00" y2="162.00" stroke="#1a1a1a" stroke-width="0.6"/>
+<text x="52.00" y="184.00" font-size="2.0" text-anchor="start" fill="#1a1a1a" font-weight="700">BAT-1 : 2 modules en parallèle = 10,2 kWh (4 = 20,5 kWh)</text>
+<text x="52.00" y="187.50" font-size="1.9" text-anchor="start" fill="#4a4a4a">BMS communicant (CAN) vers OND-1 - câbles H07V-K 35 mm², &lt; 2 m</text>
+<line x1="150.00" y1="124.00" x2="150.00" y2="134.00" stroke="#1a1a1a" stroke-width="0.6"/>
+<text x="152.00" y="131.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">AC OUT - U1000R2V 3G10 mm²</text>
+<line x1="150.00" y1="134.00" x2="150.00" y2="137.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="150.00" y1="137.00" x2="152.60" y2="142.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="150.00" y1="143.00" x2="150.00" y2="146.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="154.50" y="138.00" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">QG</text>
+<text x="154.50" y="145.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">interrupteur général 63 A 2P</text>
+<line x1="150.00" y1="146.00" x2="150.00" y2="150.00" stroke="#1a1a1a" stroke-width="0.6"/>
+<line x1="110.00" y1="150.00" x2="380.00" y2="150.00" stroke="#1a1a1a" stroke-width="0.8"/>
+<text x="300.00" y="147.50" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">TGBT - local technique (coffret IP65, 4 rangées)</text>
+<line x1="118.00" y1="150.00" x2="118.00" y2="153.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="116.20" y="153.00" width="3.60" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<path d="M118.00,154.00 L118.00,158.00" fill="none" stroke="#1a1a1a" stroke-width="0.3" stroke-linejoin="round" marker-end="url(#fl)"/>
+<line x1="118.00" y1="159.00" x2="118.00" y2="162.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="115.50" y1="162.00" x2="120.50" y2="162.00" stroke="#2e7d32" stroke-width="0.4"/>
+<line x1="116.40" y1="162.90" x2="119.60" y2="162.90" stroke="#2e7d32" stroke-width="0.4"/>
+<line x1="117.30" y1="163.80" x2="118.70" y2="163.80" stroke="#2e7d32" stroke-width="0.4"/>
+<text x="121.00" y="155.50" font-size="2.1" text-anchor="start" fill="#1a1a1a" font-weight="700">F-AC2</text>
+<text x="121.00" y="158.60" font-size="1.8" text-anchor="start" fill="#4a4a4a">T2 In 5 kA</text>
+<line x1="140.00" y1="150.00" x2="140.00" y2="153.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="140.00" y1="153.00" x2="142.60" y2="158.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="140.00" y1="159.00" x2="140.00" y2="162.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="139.00" y1="152.00" x2="141.00" y2="154.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="139.00" y1="154.00" x2="141.00" y2="152.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<ellipse cx="141.3" cy="156" rx="3.6" ry="1.5" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="144.50" y="153.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">ID1</text>
+<text x="144.50" y="161.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">25 A 30 mA type A</text>
+<text x="140.00" y="168.00" font-size="2.1" text-anchor="middle" fill="#2f7d4f" font-weight="700">VITAL (P0)</text>
+<line x1="140.00" y1="162.00" x2="140.00" y2="172.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="132.50" y1="172.00" x2="147.50" y2="172.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="132.50" y1="172.00" x2="132.50" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="132.50" y1="175.00" x2="132.50" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="132.50" y1="178.00" x2="135.10" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="132.50" y1="184.00" x2="132.50" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="131.50" y1="177.00" x2="133.50" y2="179.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="131.50" y1="179.00" x2="133.50" y2="177.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="137.00" y="178.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q1</text>
+<text x="137.00" y="186.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">2 A C</text>
+<line x1="132.50" y1="187.00" x2="132.50" y2="193.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="129.50" y="193.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="132.50" y="202.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<text x="132.50" y="205.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">Alim. 24 V secourue</text>
+<text x="132.50" y="207.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">automates, réseau</text>
+<line x1="147.50" y1="172.00" x2="147.50" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="147.50" y1="175.00" x2="147.50" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="147.50" y1="178.00" x2="150.10" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="147.50" y1="184.00" x2="147.50" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="146.50" y1="177.00" x2="148.50" y2="179.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="146.50" y1="179.00" x2="148.50" y2="177.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="152.00" y="178.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q2</text>
+<text x="152.00" y="186.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">6 A C</text>
+<line x1="147.50" y1="187.00" x2="147.50" y2="193.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="144.50" y="193.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="147.50" y="202.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<line x1="147.50" y1="200.00" x2="147.50" y2="209.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="147.50" y="211.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">Surpresseur SP-201</text>
+<text x="147.50" y="213.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">bassins</text>
+<line x1="200.00" y1="150.00" x2="200.00" y2="153.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="200.00" y1="153.00" x2="202.60" y2="158.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="200.00" y1="159.00" x2="200.00" y2="162.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="199.00" y1="152.00" x2="201.00" y2="154.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="199.00" y1="154.00" x2="201.00" y2="152.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<ellipse cx="201.3" cy="156" rx="3.6" ry="1.5" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="204.50" y="153.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">ID2</text>
+<text x="204.50" y="161.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">40 A 30 mA type A</text>
+<text x="200.00" y="168.00" font-size="2.1" text-anchor="middle" fill="#2f7d4f" font-weight="700">P1 via KM1</text>
+<line x1="200.00" y1="162.00" x2="200.00" y2="172.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="170.00" y1="172.00" x2="230.00" y2="172.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="170.00" y1="172.00" x2="170.00" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="170.00" y1="175.00" x2="170.00" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="170.00" y1="178.00" x2="172.60" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="170.00" y1="184.00" x2="170.00" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M168.6,178 A1.4,1.4 0 0 1 171.4,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="174.50" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM1</text>
+<line x1="170.00" y1="187.00" x2="170.00" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="170.00" y1="190.00" x2="172.60" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="170.00" y1="196.00" x2="170.00" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="169.00" y1="189.00" x2="171.00" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="169.00" y1="191.00" x2="171.00" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="173.20" y="191.00" width="3.00" height="3.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="174.70" y="193.30" font-size="1.6" text-anchor="middle" fill="#1a1a1a">I&gt;</text>
+<text x="174.50" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q3</text>
+<text x="174.50" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">10 A C + GV 2,5-4 A</text>
+<line x1="170.00" y1="199.00" x2="170.00" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<circle cx="170.00" cy="209.00" r="4.00" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="170.00" y="210.00" font-size="3" text-anchor="middle" fill="#1a1a1a" font-weight="700">M</text>
+<text x="170.00" y="211.80" font-size="1.5" text-anchor="middle" fill="#1a1a1a">1~</text>
+<text x="170.00" y="216.00" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">P-101</text>
+<text x="170.00" y="217.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">P-101 irrigation</text>
+<text x="170.00" y="219.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">0,37 kW</text>
+<line x1="185.00" y1="172.00" x2="185.00" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="185.00" y1="175.00" x2="185.00" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="185.00" y1="178.00" x2="187.60" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="185.00" y1="184.00" x2="185.00" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M183.6,178 A1.4,1.4 0 0 1 186.4,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="189.50" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM1</text>
+<line x1="185.00" y1="187.00" x2="185.00" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="185.00" y1="190.00" x2="187.60" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="185.00" y1="196.00" x2="185.00" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="184.00" y1="189.00" x2="186.00" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="184.00" y1="191.00" x2="186.00" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="189.50" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q4</text>
+<text x="189.50" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">6 A C</text>
+<line x1="185.00" y1="199.00" x2="185.00" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="182.00" y="205.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="185.00" y="214.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<line x1="185.00" y1="212.00" x2="185.00" y2="221.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="185.00" y="223.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">P-102 + UV</text>
+<text x="185.00" y="225.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">reprise, UV-101/201</text>
+<line x1="200.00" y1="172.00" x2="200.00" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="200.00" y1="175.00" x2="200.00" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="200.00" y1="178.00" x2="202.60" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="200.00" y1="184.00" x2="200.00" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M198.6,178 A1.4,1.4 0 0 1 201.4,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="204.50" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM1</text>
+<line x1="200.00" y1="187.00" x2="200.00" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="200.00" y1="190.00" x2="202.60" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="200.00" y1="196.00" x2="200.00" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="199.00" y1="189.00" x2="201.00" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="199.00" y1="191.00" x2="201.00" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="204.50" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q5</text>
+<text x="204.50" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">6 A C</text>
+<line x1="200.00" y1="199.00" x2="200.00" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="197.00" y="205.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="200.00" y="214.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<text x="200.00" y="217.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">Brassage + AE-101</text>
+<text x="200.00" y="219.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">VB, aérothermes, P-401</text>
+<line x1="215.00" y1="172.00" x2="215.00" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="215.00" y1="175.00" x2="215.00" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="215.00" y1="178.00" x2="217.60" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="215.00" y1="184.00" x2="215.00" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M213.6,178 A1.4,1.4 0 0 1 216.4,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="219.50" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM1</text>
+<line x1="215.00" y1="187.00" x2="215.00" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="215.00" y1="190.00" x2="217.60" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="215.00" y1="196.00" x2="215.00" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="214.00" y1="189.00" x2="216.00" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="214.00" y1="191.00" x2="216.00" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="219.50" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q6</text>
+<text x="219.50" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">10 A C</text>
+<line x1="215.00" y1="199.00" x2="215.00" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="212.00" y="205.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="215.00" y="214.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<line x1="215.00" y1="212.00" x2="215.00" y2="221.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="215.00" y="223.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">Moteurs 24 V + écran</text>
+<text x="215.00" y="225.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">bloc 24 V 20 A</text>
+<line x1="230.00" y1="172.00" x2="230.00" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="230.00" y1="175.00" x2="230.00" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="230.00" y1="178.00" x2="232.60" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="230.00" y1="184.00" x2="230.00" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M228.6,178 A1.4,1.4 0 0 1 231.4,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="234.50" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM1</text>
+<line x1="230.00" y1="187.00" x2="230.00" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="230.00" y1="190.00" x2="232.60" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="230.00" y1="196.00" x2="230.00" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="229.00" y1="189.00" x2="231.00" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="229.00" y1="191.00" x2="231.00" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="233.20" y="191.00" width="3.00" height="3.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="234.70" y="193.30" font-size="1.6" text-anchor="middle" fill="#1a1a1a">I&gt;</text>
+<text x="234.50" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q12</text>
+<text x="234.50" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">10 A C + GV 4-6 A</text>
+<line x1="230.00" y1="199.00" x2="230.00" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<circle cx="230.00" cy="209.00" r="4.00" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="230.00" y="210.00" font-size="3" text-anchor="middle" fill="#1a1a1a" font-weight="700">M</text>
+<text x="230.00" y="211.80" font-size="1.5" text-anchor="middle" fill="#1a1a1a">1~</text>
+<text x="230.00" y="216.00" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">P-001</text>
+<text x="230.00" y="217.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">P-001 / P-002</text>
+<text x="230.00" y="219.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">transfert, forage</text>
+<line x1="300.00" y1="150.00" x2="300.00" y2="153.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="300.00" y1="153.00" x2="302.60" y2="158.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="300.00" y1="159.00" x2="300.00" y2="162.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="299.00" y1="152.00" x2="301.00" y2="154.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="299.00" y1="154.00" x2="301.00" y2="152.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<ellipse cx="301.3" cy="156" rx="3.6" ry="1.5" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="304.50" y="153.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">ID3</text>
+<text x="304.50" y="161.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">40 A 30 mA type A</text>
+<text x="300.00" y="168.00" font-size="2.1" text-anchor="middle" fill="#2f7d4f" font-weight="700">P2 / P3 via KM2, KM3</text>
+<line x1="300.00" y1="162.00" x2="300.00" y2="172.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="262.50" y1="172.00" x2="337.50" y2="172.00" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="262.50" y1="172.00" x2="262.50" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="262.50" y1="175.00" x2="262.50" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="262.50" y1="178.00" x2="265.10" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="262.50" y1="184.00" x2="262.50" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M261.1,178 A1.4,1.4 0 0 1 263.9,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="267.00" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM2</text>
+<line x1="262.50" y1="187.00" x2="262.50" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="262.50" y1="190.00" x2="265.10" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="262.50" y1="196.00" x2="262.50" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="261.50" y1="189.00" x2="263.50" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="261.50" y1="191.00" x2="263.50" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<rect x="265.70" y="191.00" width="3.00" height="3.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="267.20" y="193.30" font-size="1.6" text-anchor="middle" fill="#1a1a1a">I&gt;</text>
+<text x="267.00" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q7</text>
+<text x="267.00" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">10 A C + 2 GV 2,5-4 A</text>
+<line x1="262.50" y1="199.00" x2="262.50" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<circle cx="262.50" cy="209.00" r="4.00" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="262.50" y="210.00" font-size="3" text-anchor="middle" fill="#1a1a1a" font-weight="700">M</text>
+<text x="262.50" y="211.80" font-size="1.5" text-anchor="middle" fill="#1a1a1a">1~</text>
+<text x="262.50" y="216.00" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">EX-101</text>
+<text x="262.50" y="217.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">EX-101 / EX-102</text>
+<text x="262.50" y="219.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">2 x 0,55 kW</text>
+<line x1="277.50" y1="172.00" x2="277.50" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="277.50" y1="175.00" x2="277.50" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="277.50" y1="178.00" x2="280.10" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="277.50" y1="184.00" x2="277.50" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M276.1,178 A1.4,1.4 0 0 1 278.9,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="282.00" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM2</text>
+<line x1="277.50" y1="187.00" x2="277.50" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="277.50" y1="190.00" x2="280.10" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="277.50" y1="196.00" x2="277.50" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="276.50" y1="189.00" x2="278.50" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="276.50" y1="191.00" x2="278.50" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="282.00" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q8</text>
+<text x="282.00" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">10 A C</text>
+<line x1="277.50" y1="199.00" x2="277.50" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="274.50" y="205.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="277.50" y="214.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<line x1="277.50" y1="212.00" x2="277.50" y2="221.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="277.50" y="223.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">P-301 + CH-201</text>
+<text x="277.50" y="225.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">pad, refroidisseur</text>
+<line x1="292.50" y1="172.00" x2="292.50" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="292.50" y1="175.00" x2="292.50" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="292.50" y1="178.00" x2="295.10" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="292.50" y1="184.00" x2="292.50" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M291.1,178 A1.4,1.4 0 0 1 293.9,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="297.00" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM2</text>
+<line x1="292.50" y1="187.00" x2="292.50" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="292.50" y1="190.00" x2="295.10" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="292.50" y1="196.00" x2="292.50" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="291.50" y1="189.00" x2="293.50" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="291.50" y1="191.00" x2="293.50" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="297.00" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q9</text>
+<text x="297.00" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">16 A C</text>
+<line x1="292.50" y1="199.00" x2="292.50" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="289.50" y="205.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="292.50" y="214.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<text x="292.50" y="217.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">Chambre froide</text>
+<text x="292.50" y="219.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">split 900 W</text>
+<line x1="307.50" y1="172.00" x2="307.50" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="307.50" y1="175.00" x2="307.50" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="307.50" y1="178.00" x2="310.10" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="307.50" y1="184.00" x2="307.50" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M306.1,178 A1.4,1.4 0 0 1 308.9,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="312.00" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM3</text>
+<line x1="307.50" y1="187.00" x2="307.50" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="307.50" y1="190.00" x2="310.10" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="307.50" y1="196.00" x2="307.50" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="306.50" y1="189.00" x2="308.50" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="306.50" y1="191.00" x2="308.50" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="312.00" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q10</text>
+<text x="312.00" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">6 A C</text>
+<line x1="307.50" y1="199.00" x2="307.50" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="304.50" y="205.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="307.50" y="214.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<line x1="307.50" y1="212.00" x2="307.50" y2="221.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="307.50" y="223.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">LED + tapis</text>
+<text x="307.50" y="225.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">pépinière</text>
+<line x1="322.50" y1="172.00" x2="322.50" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="322.50" y1="175.00" x2="322.50" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="322.50" y1="178.00" x2="325.10" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="322.50" y1="184.00" x2="322.50" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M321.1,178 A1.4,1.4 0 0 1 323.9,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="327.00" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM3</text>
+<line x1="322.50" y1="187.00" x2="322.50" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="322.50" y1="190.00" x2="325.10" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="322.50" y1="196.00" x2="322.50" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="321.50" y1="189.00" x2="323.50" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="321.50" y1="191.00" x2="323.50" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="327.00" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q11</text>
+<text x="327.00" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">10 A C</text>
+<line x1="322.50" y1="199.00" x2="322.50" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="319.50" y="205.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="322.50" y="214.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<text x="322.50" y="217.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">RO-001</text>
+<text x="322.50" y="219.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a">osmoseur</text>
+<line x1="337.50" y1="172.00" x2="337.50" y2="175.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="337.50" y1="175.00" x2="337.50" y2="178.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="337.50" y1="178.00" x2="340.10" y2="183.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="337.50" y1="184.00" x2="337.50" y2="187.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<path d="M336.1,178 A1.4,1.4 0 0 1 338.9,178" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="342.00" y="181.50" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">KM3</text>
+<line x1="337.50" y1="187.00" x2="337.50" y2="190.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="337.50" y1="190.00" x2="340.10" y2="195.50" stroke="#1a1a1a" stroke-width="0.4"/>
+<line x1="337.50" y1="196.00" x2="337.50" y2="199.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="336.50" y1="189.00" x2="338.50" y2="191.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<line x1="336.50" y1="191.00" x2="338.50" y2="189.00" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="342.00" y="190.20" font-size="2.2" text-anchor="start" fill="#1a1a1a" font-weight="700">Q13</text>
+<text x="342.00" y="198.20" font-size="1.9" text-anchor="start" fill="#4a4a4a">16 A C</text>
+<line x1="337.50" y1="199.00" x2="337.50" y2="205.00" stroke="#1a1a1a" stroke-width="0.4"/>
+<rect x="334.50" y="205.00" width="6.00" height="6.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="337.50" y="214.20" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700"></text>
+<line x1="337.50" y1="212.00" x2="337.50" y2="221.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="337.50" y="223.00" font-size="1.6" text-anchor="middle" fill="#1a1a1a">Prises, éclairage</text>
+<text x="337.50" y="225.40" font-size="1.45" text-anchor="middle" fill="#4a4a4a"></text>
+<text x="250.00" y="32.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Notes</text>
+<text x="250.00" y="36.20" font-size="2.1" text-anchor="start" fill="#1a1a1a">1. Schéma TT ; prise de terre &lt; 10 ohms (boucle à fond de fouille + piquets).</text>
+<text x="250.00" y="39.25" font-size="2.1" text-anchor="start" fill="#1a1a1a">2. Les charges vitales (P0) ont leur propre différentiel ID1 : un défaut</text>
+<text x="250.00" y="42.29" font-size="2.1" text-anchor="start" fill="#1a1a1a">   sur une pompe ne coupe jamais l&#x27;aération des bassins ni les automates.</text>
+<text x="250.00" y="45.34" font-size="2.1" text-anchor="start" fill="#1a1a1a">3. KM1, KM2, KM3 : contacteurs 25 A, bobines 24 V DC commandées par</text>
+<text x="250.00" y="48.38" font-size="2.1" text-anchor="start" fill="#1a1a1a">   AUT-E (délestage selon l&#x27;état de charge, voir planche E02).</text>
+<text x="250.00" y="51.43" font-size="2.1" text-anchor="start" fill="#1a1a1a">4. Sections : 1,5 mm² sous 10 A, 2,5 mm² sous 16 A ; chute de tension &lt; 3 %.</text>
+<text x="250.00" y="54.47" font-size="2.1" text-anchor="start" fill="#1a1a1a">5. Câbles en serre : H07RN-F ou U1000R2V sous gaine, équipements IP65.</text>
+<text x="250.00" y="57.52" font-size="2.1" text-anchor="start" fill="#1a1a1a">6. Repérage des câbles selon la liste T02, des borniers selon E03.</text>
+<text x="250.00" y="80.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Légende</text>
+<line x1="250.00" y1="83.20" x2="260.00" y2="83.20" stroke="#1a1a1a" stroke-width="0.55"/>
+<text x="262.00" y="84.00" font-size="2.1" text-anchor="start" fill="#1a1a1a">puissance AC</text>
+<line x1="250.00" y1="87.40" x2="260.00" y2="87.40" stroke="#c0392b" stroke-width="0.55" stroke-dasharray="2,1"/>
+<text x="262.00" y="88.20" font-size="2.1" text-anchor="start" fill="#1a1a1a">courant continu</text>
+<line x1="250.00" y1="91.60" x2="260.00" y2="91.60" stroke="#2e7d32" stroke-width="0.55"/>
+<text x="262.00" y="92.40" font-size="2.1" text-anchor="start" fill="#1a1a1a">terre / équipotentielle</text>
+<rect x="10.00" y="10.00" width="400.00" height="277.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.7"/>
+<rect x="15.00" y="15.00" width="390.00" height="267.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="39.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<text x="39.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<line x1="63.75" y1="10.00" x2="63.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="63.75" y1="282.00" x2="63.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="88.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<text x="88.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<line x1="112.50" y1="10.00" x2="112.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="112.50" y1="282.00" x2="112.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="136.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<text x="136.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<line x1="161.25" y1="10.00" x2="161.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="161.25" y1="282.00" x2="161.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="185.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<text x="185.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<line x1="210.00" y1="10.00" x2="210.00" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="210.00" y1="282.00" x2="210.00" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="234.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<text x="234.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<line x1="258.75" y1="10.00" x2="258.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="258.75" y1="282.00" x2="258.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="283.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<text x="283.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<line x1="307.50" y1="10.00" x2="307.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="307.50" y1="282.00" x2="307.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="331.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<text x="331.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<line x1="356.25" y1="10.00" x2="356.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="356.25" y1="282.00" x2="356.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="380.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="380.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="12.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<text x="407.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<line x1="10.00" y1="59.50" x2="15.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="59.50" x2="410.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<text x="407.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<line x1="10.00" y1="104.00" x2="15.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="104.00" x2="410.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<text x="407.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<line x1="10.00" y1="148.50" x2="15.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="148.50" x2="410.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<text x="407.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<line x1="10.00" y1="193.00" x2="15.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="193.00" x2="410.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<text x="407.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<line x1="10.00" y1="237.50" x2="15.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="237.50" x2="410.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<text x="407.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<rect x="230.00" y="244.00" width="175.00" height="38.00" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="230.00" y1="253.00" x2="405.00" y2="253.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="230.00" y1="268.00" x2="405.00" y2="268.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="345.00" y1="268.00" x2="345.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="375.00" y1="268.00" x2="375.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="290.00" y1="268.00" x2="290.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="233.00" y="250.20" font-size="3.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Serre pilote en environnement contrôlé - Lubumbashi</text>
+<text x="233.00" y="259.00" font-size="4.2" text-anchor="start" fill="#2f7d4f" font-weight="700">Schéma unifilaire général</text>
+<text x="233.00" y="265.00" font-size="2.6" text-anchor="start" fill="#4a4a4a">Lot électricité - configuration optimisée (complète entre parenthèses)</text>
+<text x="233.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Maître d&#x27;ouvrage</text>
+<text x="233.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">Projet serre Lubumbashi</text>
+<text x="292.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Échelle</text>
+<text x="292.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="318.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Date</text>
+<text x="318.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<text x="347.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Format / indice</text>
+<text x="347.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">A3  -  A</text>
+<text x="377.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Planche</text>
+<text x="390.00" y="278.50" font-size="6.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">E01</text></svg>

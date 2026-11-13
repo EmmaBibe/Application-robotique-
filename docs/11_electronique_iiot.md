@@ -17,7 +17,7 @@ Synoptique en annexe : `annexes/synoptique_iiot.svg`. Liste complète des capteu
 - Entrées tout-ou-rien (contacts de porte, fins de course, détecteurs de fuite), entrées 4-20 mA (niveaux), impulsions (débitmètres, auget de drainage).
 - Sorties relais et contacteurs pour les moteurs, impulsions pour les pompes doseuses.
 
-**Niveau zone** : trois automates à base d'ESP32 en boîtier industriel (rail DIN, alimentation 24 V, entrées optocouplées, port RS485, Ethernet filaire).
+**Niveau zone** : trois automates identiques, chacun construit sur la carte **CAZ-1** conçue pour le projet (ESP32, Ethernet, RS485, 8 entrées isolées, 6 relais, 2 entrées 4-20 mA ; schéma, circuit imprimé et dossier de fabrication au chapitre 18 et dans `electronique/caz1/`), complétée d'un module 16 relais Modbus pour les sorties non critiques. À défaut de cartes fabriquées, un automate ESP32 industriel du commerce (rail DIN, 24 V, RS485, Ethernet) remplit les mêmes fonctions avec le même micrologiciel.
 
 | Automate | Zone | Fonctions |
 |---|---|---|

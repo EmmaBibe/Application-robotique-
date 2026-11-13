@@ -1,0 +1,272 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420.0mm" height="297.0mm" viewBox="0 0 420.0 297.0" font-family="DejaVu Sans, Arial, sans-serif"><defs><marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="3.5" markerHeight="3.5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#1a1a1a"/></marker><marker id="fc" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto-start-reverse"><path d="M0,1 L10,5 L0,9 Z" fill="#4a4a4a"/></marker><pattern id="hach" width="2" height="2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="2" stroke="#8a8a8a" stroke-width="0.25"/></pattern><pattern id="beton" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.3" fill="#8a8a8a"/><circle cx="3" cy="2.6" r="0.25" fill="#8a8a8a"/></pattern></defs><rect width="420.0" height="297.0" fill="#fff"/><rect x="25.00" y="25.00" width="150.00" height="210.00" rx="0" fill="#fafafa" stroke="#1a1a1a" stroke-width="0.7"/>
+<text x="100.00" y="22.00" font-size="2.3" text-anchor="middle" fill="#1a1a1a" font-weight="700">Vue de face, porte ouverte</text>
+<rect x="30.00" y="45.00" width="140.00" height="7.00" rx="0" fill="#e0e0e0" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="30.00" y="95.00" width="140.00" height="7.00" rx="0" fill="#e0e0e0" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="30.00" y="145.00" width="140.00" height="7.00" rx="0" fill="#e0e0e0" stroke="#1a1a1a" stroke-width="0.3"/>
+<rect x="30.00" y="195.00" width="140.00" height="7.00" rx="0" fill="#e0e0e0" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="32.00" y="43.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">Rail 1 : protections</text>
+<rect x="32.00" y="39.00" width="18.00" height="18.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="41.00" y="49.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">Q-F</text>
+<rect x="52.00" y="39.00" width="9.00" height="18.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.50" y="49.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">F-24</text>
+<rect x="63.00" y="39.00" width="9.00" height="18.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="67.50" y="49.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">F-B1</text>
+<rect x="74.00" y="39.00" width="9.00" height="18.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="78.50" y="49.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">F-B2</text>
+<rect x="85.00" y="39.00" width="36.00" height="18.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="103.00" y="49.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">PS1 24 V 5 A</text>
+<rect x="123.00" y="39.00" width="18.00" height="18.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="132.00" y="49.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA-ANE</text>
+<text x="32.00" y="93.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">Rail 2 : automate et extension</text>
+<rect x="32.00" y="85.00" width="75.00" height="26.00" rx="0" fill="#eef6f0" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="69.50" y="97.00" font-size="2.1" text-anchor="middle" fill="#1a1a1a" font-weight="700">CAZ-1 (carte automate)</text>
+<text x="69.50" y="101.00" font-size="1.7" text-anchor="middle" fill="#1a1a1a">150 x 110 mm sur support rail</text>
+<rect x="110.00" y="85.00" width="58.00" height="26.00" rx="0" fill="#f7f3fb" stroke="#1a1a1a" stroke-width="0.4"/>
+<text x="139.00" y="97.00" font-size="2.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">Module 16 relais Modbus</text>
+<text x="139.00" y="101.00" font-size="1.7" text-anchor="middle" fill="#1a1a1a">adresse 10</text>
+<text x="32.00" y="143.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">Rail 3 : relais d&#x27;interface moteurs</text>
+<rect x="32.00" y="136.00" width="14.00" height="22.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="39.00" y="148.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA1</text>
+<rect x="49.00" y="136.00" width="14.00" height="22.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.00" y="148.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA2</text>
+<rect x="66.00" y="136.00" width="14.00" height="22.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="73.00" y="148.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA3</text>
+<rect x="83.00" y="136.00" width="14.00" height="22.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="90.00" y="148.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA4</text>
+<rect x="100.00" y="136.00" width="14.00" height="22.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="107.00" y="148.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA5</text>
+<rect x="117.00" y="136.00" width="14.00" height="22.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="124.00" y="148.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA6</text>
+<rect x="134.00" y="136.00" width="14.00" height="22.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="141.00" y="148.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA7</text>
+<rect x="151.00" y="136.00" width="14.00" height="22.00" rx="0" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="158.00" y="148.00" font-size="1.8" text-anchor="middle" fill="#1a1a1a" font-weight="700">KA8</text>
+<text x="32.00" y="193.00" font-size="1.9" text-anchor="start" fill="#4a4a4a">Rail 4 : borniers X1 (puissance) et X2 (signaux)</text>
+<rect x="31.00" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="35.10" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="39.20" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="43.30" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="47.40" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="51.50" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="55.60" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="59.70" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="63.80" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="67.90" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="72.00" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="76.10" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="80.20" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="84.30" y="186.00" width="3.60" height="18.00" rx="0" fill="#cfe3f5" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="88.40" y="186.00" width="3.60" height="18.00" rx="0" fill="#f5e6c8" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="92.50" y="186.00" width="3.60" height="18.00" rx="0" fill="#f5e6c8" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="96.60" y="186.00" width="3.60" height="18.00" rx="0" fill="#f5e6c8" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="100.70" y="186.00" width="3.60" height="18.00" rx="0" fill="#f5e6c8" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="104.80" y="186.00" width="3.60" height="18.00" rx="0" fill="#f5e6c8" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="108.90" y="186.00" width="3.60" height="18.00" rx="0" fill="#f5e6c8" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="113.00" y="186.00" width="3.60" height="18.00" rx="0" fill="#f5e6c8" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="117.10" y="186.00" width="3.60" height="18.00" rx="0" fill="#f5e6c8" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="121.20" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="125.30" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="129.40" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="133.50" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="137.60" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="141.70" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="145.80" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="149.90" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="154.00" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="158.10" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="162.20" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<rect x="166.30" y="186.00" width="3.60" height="18.00" rx="0" fill="#e3e3e3" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="100.00" y="212.00" font-size="1.9" text-anchor="middle" fill="#4a4a4a">goulottes 40 x 60 mm verticales et horizontales</text>
+<text x="100.00" y="228.00" font-size="1.9" text-anchor="middle" fill="#4a4a4a">presse-étoupes M20 / M25 en partie basse, aération filtrée</text>
+<rect x="190.00" y="25.00" width="168.00" height="5.60" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="191.20" y="28.92" font-size="2.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Borne</text>
+<text x="213.20" y="28.92" font-size="2.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Signal</text>
+<text x="239.20" y="28.92" font-size="2.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Fonction</text>
+<text x="309.20" y="28.92" font-size="2.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Caractéristiques</text>
+<text x="191.20" y="34.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:1-2</text>
+<text x="213.20" y="34.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">+24 V / 0 V</text>
+<text x="239.20" y="34.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">Alimentation CAZ-1</text>
+<text x="309.20" y="34.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">F-24 2 A</text>
+<line x1="190.00" y1="36.20" x2="358.00" y2="36.20" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="36.20" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="40.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:3-5</text>
+<text x="213.20" y="40.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">A / B / 0V</text>
+<text x="239.20" y="40.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">Bus RS485 capteurs</text>
+<text x="309.20" y="40.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">câble LiYCY 2x2x0,5 blindé</text>
+<line x1="190.00" y1="41.80" x2="358.00" y2="41.80" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="191.20" y="45.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:6</text>
+<text x="213.20" y="45.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">DI1</text>
+<text x="239.20" y="45.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">Fin de course ouvrant toit ouvert</text>
+<text x="309.20" y="45.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">24 V, NO</text>
+<line x1="190.00" y1="47.40" x2="358.00" y2="47.40" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="47.40" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="51.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:7</text>
+<text x="213.20" y="51.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">DI2</text>
+<text x="239.20" y="51.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">Fin de course ouvrant toit fermé</text>
+<text x="309.20" y="51.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">24 V, NO</text>
+<line x1="190.00" y1="53.00" x2="358.00" y2="53.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="191.20" y="56.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:8</text>
+<text x="213.20" y="56.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">DI3</text>
+<text x="239.20" y="56.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">Fin de course écran ouvert</text>
+<text x="309.20" y="56.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">24 V, NO</text>
+<line x1="190.00" y1="58.60" x2="358.00" y2="58.60" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="58.60" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="62.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:9</text>
+<text x="213.20" y="62.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">DI4</text>
+<text x="239.20" y="62.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">Fin de course écran fermé</text>
+<text x="309.20" y="62.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">24 V, NO</text>
+<line x1="190.00" y1="64.20" x2="358.00" y2="64.20" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="191.20" y="68.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:10</text>
+<text x="213.20" y="68.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">DI5</text>
+<text x="239.20" y="68.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">Anémomètre &gt; 14 m/s (KA-ANE)</text>
+<text x="309.20" y="68.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">24 V, NO</text>
+<line x1="190.00" y1="69.80" x2="358.00" y2="69.80" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="69.80" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="73.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:11</text>
+<text x="213.20" y="73.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">DI6</text>
+<text x="239.20" y="73.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">Défaut thermique extracteur</text>
+<text x="309.20" y="73.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">24 V, NC</text>
+<line x1="190.00" y1="75.40" x2="358.00" y2="75.40" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="191.20" y="79.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:12</text>
+<text x="213.20" y="79.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">DI7</text>
+<text x="239.20" y="79.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">Niveau bas bac du pad</text>
+<text x="309.20" y="79.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">24 V, NO</text>
+<line x1="190.00" y1="81.00" x2="358.00" y2="81.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="81.00" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="84.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:13</text>
+<text x="213.20" y="84.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">DI8</text>
+<text x="239.20" y="84.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">Débit irrigation (impulsions)</text>
+<text x="309.20" y="84.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">24 V, 10 Hz max</text>
+<line x1="190.00" y1="86.60" x2="358.00" y2="86.60" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="191.20" y="90.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:14-15</text>
+<text x="213.20" y="90.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">AI1</text>
+<text x="239.20" y="90.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">Pression réseau irrigation</text>
+<text x="309.20" y="90.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">4-20 mA, 0-6 bar</text>
+<line x1="190.00" y1="92.20" x2="358.00" y2="92.20" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="92.20" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="96.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">X2:16-17</text>
+<text x="213.20" y="96.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">AI2</text>
+<text x="239.20" y="96.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">Niveau cuve CU-101</text>
+<text x="309.20" y="96.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">4-20 mA, 0-1,5 m</text>
+<line x1="190.00" y1="97.80" x2="358.00" y2="97.80" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="191.20" y="101.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">X1:1-3</text>
+<text x="213.20" y="101.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">K1 NO/C/NC</text>
+<text x="239.20" y="101.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">Ouvrant toit : ouvrir (KA1)</text>
+<text x="309.20" y="101.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">230 V / 24 V</text>
+<line x1="190.00" y1="103.40" x2="358.00" y2="103.40" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="103.40" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="107.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">X1:4-6</text>
+<text x="213.20" y="107.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">K2 NO/C/NC</text>
+<text x="239.20" y="107.32" font-size="2.0" text-anchor="start" fill="#1a1a1a">Ouvrant toit : fermer (KA2)</text>
+<text x="309.20" y="107.32" font-size="2.0" text-anchor="start" fill="#1a1a1a"></text>
+<line x1="190.00" y1="109.00" x2="358.00" y2="109.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="191.20" y="112.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">X1:7-9</text>
+<text x="213.20" y="112.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">K3 NO/C/NC</text>
+<text x="239.20" y="112.92" font-size="2.0" text-anchor="start" fill="#1a1a1a">Ouvrant latéral : ouvrir (KA3)</text>
+<text x="309.20" y="112.92" font-size="2.0" text-anchor="start" fill="#1a1a1a"></text>
+<line x1="190.00" y1="114.60" x2="358.00" y2="114.60" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="114.60" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="118.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">X1:10-12</text>
+<text x="213.20" y="118.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">K4 NO/C/NC</text>
+<text x="239.20" y="118.52" font-size="2.0" text-anchor="start" fill="#1a1a1a">Ouvrant latéral : fermer (KA4)</text>
+<text x="309.20" y="118.52" font-size="2.0" text-anchor="start" fill="#1a1a1a"></text>
+<line x1="190.00" y1="120.20" x2="358.00" y2="120.20" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="191.20" y="124.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">X1:13-15</text>
+<text x="213.20" y="124.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">K5 NO/C/NC</text>
+<text x="239.20" y="124.12" font-size="2.0" text-anchor="start" fill="#1a1a1a">Extracteur vitesse 1</text>
+<text x="309.20" y="124.12" font-size="2.0" text-anchor="start" fill="#1a1a1a"></text>
+<line x1="190.00" y1="125.80" x2="358.00" y2="125.80" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="125.80" width="168.00" height="5.60" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="191.20" y="129.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">X1:16-18</text>
+<text x="213.20" y="129.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">K6 NO/C/NC</text>
+<text x="239.20" y="129.72" font-size="2.0" text-anchor="start" fill="#1a1a1a">Extracteur vitesse 2</text>
+<text x="309.20" y="129.72" font-size="2.0" text-anchor="start" fill="#1a1a1a"></text>
+<line x1="190.00" y1="131.40" x2="358.00" y2="131.40" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="190.00" y="25.00" width="168.00" height="106.40" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="212.00" y1="25.00" x2="212.00" y2="131.40" stroke="#8a8a8a" stroke-width="0.15"/>
+<line x1="238.00" y1="25.00" x2="238.00" y2="131.40" stroke="#8a8a8a" stroke-width="0.15"/>
+<line x1="308.00" y1="25.00" x2="308.00" y2="131.40" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="190.00" y="140.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Notes</text>
+<text x="190.00" y="144.20" font-size="2.0" text-anchor="start" fill="#1a1a1a">Règles de câblage :</text>
+<text x="190.00" y="147.10" font-size="2.0" text-anchor="start" fill="#1a1a1a">- séparer physiquement 230 V et 24 V (goulottes distinctes) ;</text>
+<text x="190.00" y="150.00" font-size="2.0" text-anchor="start" fill="#1a1a1a">- blindage RS485 relié à la terre d&#x27;un seul côté (armoire) ;</text>
+<text x="190.00" y="152.90" font-size="2.0" text-anchor="start" fill="#1a1a1a">- résistance de fin de ligne 120 ohms au dernier capteur (cavalier JP1) ;</text>
+<text x="190.00" y="155.80" font-size="2.0" text-anchor="start" fill="#1a1a1a">- couleurs : 24 V bleu foncé, 0 V bleu clair, 230 V marron/bleu/vert-jaune ;</text>
+<text x="190.00" y="158.70" font-size="2.0" text-anchor="start" fill="#1a1a1a">- chaque fil repéré aux deux bouts (bague) selon la borne X1/X2 ;</text>
+<text x="190.00" y="161.60" font-size="2.0" text-anchor="start" fill="#1a1a1a">- mise à la terre de la porte et du fond de l&#x27;armoire (tresse 6 mm²).</text>
+<text x="190.00" y="164.50" font-size="2.0" text-anchor="start" fill="#1a1a1a"></text>
+<text x="190.00" y="167.40" font-size="2.0" text-anchor="start" fill="#1a1a1a">Les armoires AUT-L (feuilles) et AUT-E (eau-énergie) suivent le même</text>
+<text x="190.00" y="170.30" font-size="2.0" text-anchor="start" fill="#1a1a1a">modèle ; leurs affectations d&#x27;entrées/sorties sont dans la liste T01.</text>
+<rect x="10.00" y="10.00" width="400.00" height="277.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.7"/>
+<rect x="15.00" y="15.00" width="390.00" height="267.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="39.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<text x="39.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">1</text>
+<line x1="63.75" y1="10.00" x2="63.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="63.75" y1="282.00" x2="63.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="88.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<text x="88.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">2</text>
+<line x1="112.50" y1="10.00" x2="112.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="112.50" y1="282.00" x2="112.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="136.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<text x="136.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">3</text>
+<line x1="161.25" y1="10.00" x2="161.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="161.25" y1="282.00" x2="161.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="185.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<text x="185.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">4</text>
+<line x1="210.00" y1="10.00" x2="210.00" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="210.00" y1="282.00" x2="210.00" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="234.38" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<text x="234.38" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">5</text>
+<line x1="258.75" y1="10.00" x2="258.75" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="258.75" y1="282.00" x2="258.75" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="283.12" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<text x="283.12" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">6</text>
+<line x1="307.50" y1="10.00" x2="307.50" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="307.50" y1="282.00" x2="307.50" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="331.88" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<text x="331.88" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">7</text>
+<line x1="356.25" y1="10.00" x2="356.25" y2="15.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="356.25" y1="282.00" x2="356.25" y2="287.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="380.62" y="13.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="380.62" y="285.60" font-size="2.6" text-anchor="middle" fill="#1a1a1a">8</text>
+<text x="12.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<text x="407.50" y="38.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">A</text>
+<line x1="10.00" y1="59.50" x2="15.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="59.50" x2="410.00" y2="59.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<text x="407.50" y="82.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">B</text>
+<line x1="10.00" y1="104.00" x2="15.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="104.00" x2="410.00" y2="104.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<text x="407.50" y="127.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">C</text>
+<line x1="10.00" y1="148.50" x2="15.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="148.50" x2="410.00" y2="148.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<text x="407.50" y="171.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">D</text>
+<line x1="10.00" y1="193.00" x2="15.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="193.00" x2="410.00" y2="193.00" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<text x="407.50" y="216.25" font-size="2.6" text-anchor="middle" fill="#1a1a1a">E</text>
+<line x1="10.00" y1="237.50" x2="15.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<line x1="405.00" y1="237.50" x2="410.00" y2="237.50" stroke="#1a1a1a" stroke-width="0.25"/>
+<text x="12.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<text x="407.50" y="260.75" font-size="2.6" text-anchor="middle" fill="#1a1a1a">F</text>
+<rect x="230.00" y="244.00" width="175.00" height="38.00" rx="0" fill="#f4f6f4" stroke="#1a1a1a" stroke-width="0.5"/>
+<line x1="230.00" y1="253.00" x2="405.00" y2="253.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="230.00" y1="268.00" x2="405.00" y2="268.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="345.00" y1="268.00" x2="345.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="375.00" y1="268.00" x2="375.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="290.00" y1="268.00" x2="290.00" y2="282.00" stroke="#1a1a1a" stroke-width="0.3"/>
+<text x="233.00" y="250.20" font-size="3.0" text-anchor="start" fill="#1a1a1a" font-weight="700">Serre pilote en environnement contrôlé - Lubumbashi</text>
+<text x="233.00" y="259.00" font-size="4.2" text-anchor="start" fill="#2f7d4f" font-weight="700">Câblage de l&#x27;armoire de zone AUT-F</text>
+<text x="233.00" y="265.00" font-size="2.6" text-anchor="start" fill="#4a4a4a">Lot automatisme - armoire IP65 600 x 400 x 200 mm, compartiment fruits</text>
+<text x="233.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Maître d&#x27;ouvrage</text>
+<text x="233.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">Projet serre Lubumbashi</text>
+<text x="292.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Échelle</text>
+<text x="292.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="318.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Date</text>
+<text x="318.00" y="276.50" font-size="2.6" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<text x="347.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Format / indice</text>
+<text x="347.00" y="276.50" font-size="2.8" text-anchor="start" fill="#1a1a1a">A3  -  A</text>
+<text x="377.00" y="272.00" font-size="2.0" text-anchor="start" fill="#8a8a8a">Planche</text>
+<text x="390.00" y="278.50" font-size="6.0" text-anchor="middle" fill="#1a1a1a" font-weight="700">E03</text></svg>

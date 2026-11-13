@@ -100,7 +100,17 @@ Le modèle financier est construit pour que ces valeurs mesurées remplacent les
 - Climat piloté par l'excès de chaleur du jour, stocké dans l'eau pour la nuit : pas de chauffage au gaz ni au charbon.
 - Supervision locale autonome (fonctionne sans internet), alertes SMS, tableau de bord qui montre la serre comme un organisme vivant : chaque lot de plantes, de la graine à la récolte, avec son climat, sa solution, ses photos et son historique. Un mode « recherche » permet de mener des essais comparatifs et d'exporter les données.
 
-## 6. Où trouver quoi
+## 6. Se mettre dans la serre avant d'investir
+
+Trois simulateurs, fonctionnant hors ligne, permettent d'éprouver la conception avant toute dépense (chapitre 18) :
+
+- **la maquette 3D vivante**, où l'on se promène dans les allées, où le soleil est à sa vraie place pour chaque mois et chaque heure, où les ouvrants, l'écran, le mur évaporatif et les extracteurs bougent selon le climat calculé, où l'eau et l'énergie circulent dans les tuyaux et les câbles ;
+- **le simulateur des systèmes**, qui montre, schéma par schéma (climat, fertirrigation, bassins, eau, électricité, électronique et IIoT), qui fait quoi, quand et sous quelles conditions, et comment la serre réagit à huit pannes que l'on peut provoquer ;
+- **la supervision**, l'écran que le technicien utilisera sur site.
+
+Ils sont complétés par un dossier de plans A3 de 16 planches (génie civil, P&ID, unifilaire, commande, câblage, réseau, logique, listes d'E/S et de câbles) et par le dossier de fabrication de la carte électronique des automates (schéma KiCad, circuit imprimé, Gerbers, nomenclature).
+
+## 7. Où trouver quoi
 
 | Besoin | Document |
 |---|---|
@@ -120,3 +130,4 @@ Le modèle financier est construit pour que ces valeurs mesurées remplacent les
 | Risques | `15_registre_risques.md` |
 | Planning et étapes de décision | `16_feuille_de_route.md` |
 | Sources | `17_sources.md` |
+| Simulateurs 2D et 3D, dossier de plans, carte électronique CAZ-1 | `18_simulateurs_et_carte_electronique.md` |
