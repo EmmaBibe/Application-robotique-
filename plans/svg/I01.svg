@@ -34,110 +34,144 @@
 <line x1="330.00" y1="50.00" x2="340.00" y2="50.00" stroke="#7d4bb3" stroke-width="0.7"/>
 <rect x="25.00" y="85.00" width="370.00" height="55.00" rx="2" fill="#eef7f0" stroke="#1a1a1a" stroke-width="0.4"/>
 <text x="30.00" y="91.00" font-size="2.5" text-anchor="start" fill="#2f7d4f" font-weight="700">NIVEAU ZONE - armoires de zone (cartes CAZ-1), Ethernet 100 Mbit/s, MQTT</text>
-<rect x="40.00" y="97.00" width="100.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
-<text x="90.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-F - 192.168.10.11</text>
-<text x="90.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">compartiment fruits</text>
-<text x="90.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">climat, stockage thermique</text>
-<text x="90.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">irrigation, dosage fruits</text>
-<text x="90.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">module 16 relais @10</text>
-<line x1="90.00" y1="97.00" x2="90.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
-<rect x="160.00" y="97.00" width="100.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
-<text x="210.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-L - 192.168.10.12</text>
-<text x="210.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">compartiment feuilles</text>
-<text x="210.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">climat, bassins, chiller</text>
-<text x="210.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">pépinière, LED</text>
-<text x="210.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">module 16 relais @10</text>
-<line x1="210.00" y1="97.00" x2="210.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
-<rect x="280.00" y="97.00" width="100.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
-<text x="330.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-E - 192.168.10.13</text>
-<text x="330.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">local technique</text>
-<text x="330.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">eau, osmoseur, citerne</text>
-<text x="330.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">onduleur, délestage, groupe</text>
-<text x="330.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">sas, météo, arrêt d&#x27;urgence</text>
-<line x1="330.00" y1="97.00" x2="330.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<rect x="32.00" y="97.00" width="84.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="74.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-F - 192.168.10.11</text>
+<text x="74.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">compartiment fruits</text>
+<text x="74.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">climat, stockage thermique</text>
+<text x="74.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">irrigation, dosage fruits</text>
+<text x="74.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">module 16 relais @10</text>
+<line x1="74.00" y1="97.00" x2="74.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<rect x="123.00" y="97.00" width="84.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="165.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-L - 192.168.10.12</text>
+<text x="165.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">compartiment feuilles</text>
+<text x="165.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">climat, bassins, chiller</text>
+<text x="165.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">pépinière, LED</text>
+<text x="165.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">module 16 relais @10</text>
+<line x1="165.00" y1="97.00" x2="165.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<rect x="214.00" y="97.00" width="84.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="256.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-E - 192.168.10.13</text>
+<text x="256.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">local technique</text>
+<text x="256.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">eau, osmoseur, citerne</text>
+<text x="256.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">onduleur, délestage, groupe</text>
+<text x="256.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">sas, météo, arrêt d&#x27;urgence</text>
+<line x1="256.00" y1="97.00" x2="256.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
+<rect x="305.00" y="97.00" width="84.00" height="36.00" rx="0.8" fill="#fff" stroke="#1a1a1a" stroke-width="0.45"/>
+<text x="347.00" y="101.20" font-size="2.4" text-anchor="middle" fill="#1a1a1a" font-weight="700">AUT-P - 192.168.10.14</text>
+<text x="347.00" y="104.30" font-size="1.9" text-anchor="middle" fill="#4a4a4a">unité aquacole (tranche 2)</text>
+<text x="347.00" y="107.40" font-size="1.9" text-anchor="middle" fill="#4a4a4a">oxygène, soufflantes</text>
+<text x="347.00" y="110.50" font-size="1.9" text-anchor="middle" fill="#4a4a4a">écloserie, chauffage</text>
+<text x="347.00" y="113.60" font-size="1.9" text-anchor="middle" fill="#4a4a4a">envoi d&#x27;eau vers les cultures</text>
+<line x1="347.00" y1="97.00" x2="347.00" y2="70.00" stroke="#7d4bb3" stroke-width="0.7"/>
 <rect x="25.00" y="150.00" width="370.00" height="75.00" rx="2" fill="#fbf6ec" stroke="#1a1a1a" stroke-width="0.4"/>
 <text x="30.00" y="156.00" font-size="2.5" text-anchor="start" fill="#8a5a2b" font-weight="700">NIVEAU TERRAIN - un bus RS485 Modbus RTU par automate (9600 bauds, 8N1, câble LiYCY 2x2x0,5 blindé)</text>
-<text x="30.00" y="167.00" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-F</text>
-<line x1="48.00" y1="165.00" x2="390.00" y2="165.00" stroke="#8a5a2b" stroke-width="0.6"/>
-<line x1="58.00" y1="165.00" x2="58.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="55.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="56.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  TH-F1 T/HR</text>
-<line x1="100.00" y1="165.00" x2="100.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="97.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="98.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  CO2-F1</text>
-<line x1="142.00" y1="165.00" x2="142.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="139.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="140.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  EC-F1</text>
-<line x1="184.00" y1="165.00" x2="184.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="181.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="182.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  PH-F1</text>
-<line x1="226.00" y1="165.00" x2="226.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="223.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="224.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  TS-F1</text>
-<line x1="268.00" y1="165.00" x2="268.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="265.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="266.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  TS-STO</text>
-<line x1="310.00" y1="165.00" x2="310.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="307.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="308.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@8  SUB-F1</text>
-<line x1="352.00" y1="165.00" x2="352.00" y2="169.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="349.00" y="169.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="350.50" y="174.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
-<text x="390.00" y="163.50" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
-<text x="30.00" y="186.00" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-L</text>
-<line x1="48.00" y1="184.00" x2="390.00" y2="184.00" stroke="#8a5a2b" stroke-width="0.6"/>
-<line x1="58.00" y1="184.00" x2="58.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="55.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="56.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  TH-L1 T/HR</text>
-<line x1="100.00" y1="184.00" x2="100.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="97.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="98.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  TH-P1 pépinière</text>
-<line x1="142.00" y1="184.00" x2="142.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="139.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="140.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  EC-B1</text>
-<line x1="184.00" y1="184.00" x2="184.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="181.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="182.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  PH-B1</text>
-<line x1="226.00" y1="184.00" x2="226.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="223.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="224.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  EC-B2</text>
-<line x1="268.00" y1="184.00" x2="268.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="265.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="266.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@6  DO-B1 O2</text>
-<line x1="310.00" y1="184.00" x2="310.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="307.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="308.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  PH-B2</text>
-<line x1="352.00" y1="184.00" x2="352.00" y2="188.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="349.00" y="188.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="350.50" y="193.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
-<text x="390.00" y="182.50" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
-<text x="30.00" y="205.00" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-E</text>
-<line x1="48.00" y1="203.00" x2="390.00" y2="203.00" stroke="#8a5a2b" stroke-width="0.6"/>
-<line x1="58.00" y1="203.00" x2="58.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="55.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="56.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  MET-EXT météo</text>
-<line x1="100.00" y1="203.00" x2="100.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="97.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="98.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  PYR-EXT</text>
-<line x1="142.00" y1="203.00" x2="142.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="139.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="140.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  OND-1 onduleur</text>
-<line x1="184.00" y1="203.00" x2="184.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="181.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="182.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  ENE-02 compteur</text>
-<line x1="226.00" y1="203.00" x2="226.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="223.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="224.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  ENE-03 compteur</text>
-<line x1="268.00" y1="203.00" x2="268.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="265.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="266.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@6  NIV citerne</text>
-<line x1="310.00" y1="203.00" x2="310.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="307.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="308.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  NIV tampon</text>
-<line x1="352.00" y1="203.00" x2="352.00" y2="207.00" stroke="#8a5a2b" stroke-width="0.35"/>
-<rect x="349.00" y="207.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
-<text x="350.50" y="212.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
-<text x="390.00" y="201.50" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
+<text x="30.00" y="165.00" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-F</text>
+<line x1="48.00" y1="163.00" x2="390.00" y2="163.00" stroke="#8a5a2b" stroke-width="0.6"/>
+<line x1="58.00" y1="163.00" x2="58.00" y2="167.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="55.00" y="167.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.50" y="172.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  TH-F1 T/HR</text>
+<line x1="100.00" y1="163.00" x2="100.00" y2="167.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="97.00" y="167.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="98.50" y="172.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  CO2-F1</text>
+<line x1="142.00" y1="163.00" x2="142.00" y2="167.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="139.00" y="167.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="140.50" y="172.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  EC-F1</text>
+<line x1="184.00" y1="163.00" x2="184.00" y2="167.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="181.00" y="167.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="182.50" y="172.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  PH-F1</text>
+<line x1="226.00" y1="163.00" x2="226.00" y2="167.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="223.00" y="167.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="224.50" y="172.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  TS-F1</text>
+<line x1="268.00" y1="163.00" x2="268.00" y2="167.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="265.00" y="167.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="266.50" y="172.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  TS-STO</text>
+<line x1="310.00" y1="163.00" x2="310.00" y2="167.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="307.00" y="167.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="308.50" y="172.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@8  SUB-F1</text>
+<line x1="352.00" y1="163.00" x2="352.00" y2="167.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="349.00" y="167.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="350.50" y="172.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
+<text x="390.00" y="161.50" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
+<text x="30.00" y="180.50" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-L</text>
+<line x1="48.00" y1="178.50" x2="390.00" y2="178.50" stroke="#8a5a2b" stroke-width="0.6"/>
+<line x1="58.00" y1="178.50" x2="58.00" y2="182.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="55.00" y="182.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.50" y="187.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  TH-L1 T/HR</text>
+<line x1="100.00" y1="178.50" x2="100.00" y2="182.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="97.00" y="182.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="98.50" y="187.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  TH-P1 pépinière</text>
+<line x1="142.00" y1="178.50" x2="142.00" y2="182.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="139.00" y="182.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="140.50" y="187.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  EC-B1</text>
+<line x1="184.00" y1="178.50" x2="184.00" y2="182.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="181.00" y="182.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="182.50" y="187.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  PH-B1</text>
+<line x1="226.00" y1="178.50" x2="226.00" y2="182.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="223.00" y="182.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="224.50" y="187.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  EC-B2</text>
+<line x1="268.00" y1="178.50" x2="268.00" y2="182.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="265.00" y="182.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="266.50" y="187.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@6  DO-B1 O2</text>
+<line x1="310.00" y1="178.50" x2="310.00" y2="182.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="307.00" y="182.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="308.50" y="187.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  PH-B2</text>
+<line x1="352.00" y1="178.50" x2="352.00" y2="182.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="349.00" y="182.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="350.50" y="187.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
+<text x="390.00" y="177.00" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
+<text x="30.00" y="196.00" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-E</text>
+<line x1="48.00" y1="194.00" x2="390.00" y2="194.00" stroke="#8a5a2b" stroke-width="0.6"/>
+<line x1="58.00" y1="194.00" x2="58.00" y2="198.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="55.00" y="198.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.50" y="203.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  MET-EXT météo</text>
+<line x1="100.00" y1="194.00" x2="100.00" y2="198.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="97.00" y="198.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="98.50" y="203.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  PYR-EXT</text>
+<line x1="142.00" y1="194.00" x2="142.00" y2="198.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="139.00" y="198.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="140.50" y="203.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  OND-1 onduleur</text>
+<line x1="184.00" y1="194.00" x2="184.00" y2="198.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="181.00" y="198.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="182.50" y="203.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  ENE-02 compteur</text>
+<line x1="226.00" y1="194.00" x2="226.00" y2="198.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="223.00" y="198.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="224.50" y="203.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  ENE-03 compteur</text>
+<line x1="268.00" y1="194.00" x2="268.00" y2="198.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="265.00" y="198.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="266.50" y="203.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@6  NIV citerne</text>
+<line x1="310.00" y1="194.00" x2="310.00" y2="198.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="307.00" y="198.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="308.50" y="203.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  NIV tampon</text>
+<line x1="352.00" y1="194.00" x2="352.00" y2="198.00" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="349.00" y="198.00" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="350.50" y="203.00" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
+<text x="390.00" y="192.50" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
+<text x="30.00" y="211.50" font-size="2.3" text-anchor="start" fill="#1a1a1a" font-weight="700">AUT-P</text>
+<line x1="48.00" y1="209.50" x2="390.00" y2="209.50" stroke="#8a5a2b" stroke-width="0.6"/>
+<line x1="58.00" y1="209.50" x2="58.00" y2="213.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="55.00" y="213.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="56.50" y="218.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@1  AT-401 O2</text>
+<line x1="100.00" y1="209.50" x2="100.00" y2="213.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="97.00" y="213.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="98.50" y="218.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@2  AT-402 O2</text>
+<line x1="142.00" y1="209.50" x2="142.00" y2="213.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="139.00" y="213.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="140.50" y="218.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@3  AT-403 O2</text>
+<line x1="184.00" y1="209.50" x2="184.00" y2="213.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="181.00" y="213.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="182.50" y="218.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@4  AT-404 O2</text>
+<line x1="226.00" y1="209.50" x2="226.00" y2="213.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="223.00" y="213.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="224.50" y="218.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@5  AT-409 écloserie</text>
+<line x1="268.00" y1="209.50" x2="268.00" y2="213.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="265.00" y="213.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="266.50" y="218.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@6  pH/TT-401</text>
+<line x1="310.00" y1="209.50" x2="310.00" y2="213.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="307.00" y="213.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="308.50" y="218.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@7  ENE-04 compteur</text>
+<line x1="352.00" y1="209.50" x2="352.00" y2="213.50" stroke="#8a5a2b" stroke-width="0.35"/>
+<rect x="349.00" y="213.50" width="38.00" height="7.00" rx="1" fill="#fff" stroke="#1a1a1a" stroke-width="0.35"/>
+<text x="350.50" y="218.50" font-size="1.9" text-anchor="start" fill="#1a1a1a">@10  relais 16 E/S</text>
+<text x="390.00" y="208.00" font-size="1.7" text-anchor="end" fill="#4a4a4a">120 ohms</text>
 <text x="25.00" y="236.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Règles</text>
 <text x="25.00" y="240.20" font-size="2.05" text-anchor="start" fill="#1a1a1a">Sujets MQTT : serre/lub1/&lt;zone&gt;/mesure/&lt;grandeur&gt;, /etat/actionneurs, /consigne (avec validite_s = 120), /alarme, /disponibilite (dernière volonté).</text>
 <text x="25.00" y="243.17" font-size="2.05" text-anchor="start" fill="#1a1a1a">Comptes MQTT distincts par automate (listes d&#x27;accès), aucun port ouvert depuis internet, accès distant uniquement par VPN initié depuis le site.</text>

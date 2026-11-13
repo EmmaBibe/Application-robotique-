@@ -103,3 +103,16 @@ Chaque étalonnage est saisi dans la supervision : la date, la valeur avant et a
 - Estimation de la croissance par caméra (surface foliaire des laitues sur radeau, nombre de bouquets de tomates).
 - Capteurs sans fil LoRaWAN pour les serres de l'extension (moins de câblage sur 1 000 m²), avec passerelle sur le serveur existant.
 - Jumeau numérique recalé : le modèle de simulation est ajusté en continu sur les mesures, pour anticiper la nuit à venir (faut-il charger davantage le stock thermique cet après-midi ?).
+
+## 11.9 Automate de l'unité aquacole (tranches 2 et 3)
+
+Un quatrième automate, **AUT-P**, sur la même carte CAZ-1, gère l'unité aquacole :
+
+| Entrée ou sortie | Usage |
+|---|---|
+| RS485 Modbus | Sondes d'oxygène optiques (une par bac de grossissement et une pour l'écloserie), température, pH du bassin de reprise |
+| Entrées 4-20 mA | Niveaux du bassin de reprise et du bassin tampon |
+| Entrées isolées | Pressostat de chaque soufflante, détecteur de fuite, porte du bâtiment, défaut de la pompe à chaleur |
+| Relais | Soufflante de secours, électrovanne de purge du décanteur, pompe vers le bassin tampon, pompe à chaleur, pompes doseuses de potasse et de chaux (via relais d'interface) |
+
+Sécurités programmées localement, sans le serveur : bascule sur la soufflante de secours si la pression d'air chute ; arrêt de l'envoi d'eau vers les cultures si l'UV est en défaut ; alarme locale et SMS si l'oxygène descend sous 3 mg/L dans un bac. Les nitrites et nitrates sont mesurés à la trousse deux fois par semaine et saisis dans la supervision (les sondes en ligne fiables sont trop chères pour cette taille).

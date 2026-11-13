@@ -84,6 +84,7 @@ th{font-size:11px;color:var(--doux);font-weight:600}
   <button data-d="eau">Eau</button>
   <button data-d="electricite">Électricité</button>
   <button data-d="iiot">Électronique et IIoT</button>
+  <button data-d="aquaculture">Aquaculture</button>
   <button data-d="cultures">Cultures</button>
 </nav>
 <main>
@@ -149,7 +150,7 @@ document.querySelectorAll("#onglets button").forEach(b => b.onclick = () => {
   afficherSchema(); rafraichir();
 });
 
-const CLE_REGLES = { ensemble: null, climat: "climat", fertirrigation: "fertirrigation", bassins: "bassins", eau: "eau", electricite: "electricite", iiot: "iiot", cultures: null };
+const CLE_REGLES = { ensemble: null, climat: "climat", fertirrigation: "fertirrigation", bassins: "bassins", eau: "eau", electricite: "electricite", iiot: "iiot", aquaculture: "aquaculture", cultures: null };
 function rafraichir() {
   const hh = Math.floor(E.h), mm = Math.floor((E.h - hh) * 60);
   const m = M.meteo(E.mois, E.h);

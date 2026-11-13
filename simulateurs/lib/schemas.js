@@ -490,7 +490,76 @@ const cultures = {
   },
 };
 
-export const SCHEMAS = { ensemble, climat, fertirrigation, bassins, eau, electricite, iiot, cultures };
+
+// ------------------------------------------------------------ 8 bis. aquaculture (pilote)
+const aquaculture = {
+  titre: "Aquaculture : pilote de 2 bacs de Clarias couplé au bassin tempéré (planche H04)",
+  svg() {
+    const bac = (id, x) => `
+      <circle cx="${x}" cy="170" r="78" fill="none" stroke="var(--doux)" stroke-width="2"/>
+      <circle id="eau-${id}" cx="${x}" cy="170" r="74" fill="var(--eau)" opacity=".45"/>
+      <g id="poissons-${id}">${[0, 1, 2, 3, 4].map(k => `<g transform="translate(${x - 40 + k * 20},${150 + (k % 2) * 30})"><path d="M-12,0 Q0,-7 12,0 Q0,7 -12,0 Z M12,0 L18,-5 L18,5 Z" fill="#6b6b5a" opacity=".85"><animateTransform attributeName="transform" type="translate" values="0,0;${k % 2 ? 6 : -6},${k % 2 ? -3 : 3};0,0" dur="${2 + k * 0.4}s" repeatCount="indefinite"/></path></g>`).join("")}</g>
+      <g id="bulles-${id}">${[0, 1, 2, 3].map(k => `<circle cx="${x - 30 + k * 20}" cy="230" r="3.5" fill="#fff" opacity=".8"><animate attributeName="cy" from="235" to="110" dur="${1.3 + k * 0.25}s" repeatCount="indefinite"/></circle>`).join("")}</g>
+      ${t(x, 268, id === "b1" ? "B-401 · 3 m³" : "B-402 · 3 m³", "tag")}`;
+    return svg(`
+      ${bac("b1", 120)}${bac("b2", 300)}
+      ${tuyau("t-sortie", "M120,248 L120,300 L300,300 L300,248 M300,300 L430,300", COUL.drain)}
+      ${equip("DR-401", 470, 300, F.cuve("dr", 60, 80), "DR-401", "décanteur", 58)}
+      ${tuyau("t-bf", "M500,300 L560,300", COUL.eau)}
+      ${equip("BF-401", 600, 300, F.cuve("bf", 70, 90), "BF-401", "biofiltre", 62)}
+      ${tuyau("t-rep", "M635,300 L700,300", COUL.eau)}
+      ${equip("T-401", 740, 300, F.cuve("rep", 70, 80), "T-401", "reprise", 58)}
+      ${tuyau("t-retour", "M740,260 L740,60 L120,60 L120,95 M300,60 L300,95", COUL.eau)}
+      ${t(430, 52, "retour gravitaire vers les bacs (air-lift)", "val")}
+      ${tuyau("t-air", "M120,470 L120,420 L300,420 L300,250 M120,420 L120,250 M300,420 L600,420 L600,345", COUL.air)}
+      ${equip("SB-401", 120, 500, F.ventilo("SB-401"), "SB-401 soufflante", "", 34)}
+      ${tuyau("t-transf", "M775,320 L830,320 L830,430", COUL.eau)}
+      ${equip("P-403", 830, 450, F.pompe, "P-403", "", 34)}
+      ${tuyau("t-transf2", "M846,450 L900,450 L900,520 L960,520", COUL.eau)}
+      ${equip("UV-401", 900, 490, F.uv, "UV-401", "", -20)}
+      ${t(960, 545, "vers le bassin", "val", "end")}${t(960, 559, "tempéré (H03)", "val", "end")}
+      ${tuyau("t-app", "M950,250 L800,250 L800,280", COUL.eau)}
+      ${equip("EV-402", 880, 250, F.vanne, "EV-402", "", -16)}
+      ${t(955, 272, "eau traitée", "val", "end")}
+      ${equip("P-401", 690, 410, F.boite(56, 30, "KOH"), "P-401 potasse", "", 32)}
+      ${tuyau("t-k", "M690,395 L690,340 L705,340", COUL.sol)}
+      ${equip("RC-401", 210, 360, F.boite(76, 30, "1 kW"), "RC-401 chauffage", "", 32)}
+      ${equip("OX-aq", 420, 160, F.capteur("O₂"), "", "", 26)}${equip("TT-aq", 480, 160, F.capteur("T"), "", "", 26)}
+      ${equip("NO-aq", 540, 160, F.capteur("NO₃"), "", "", 26)}${equip("PH-aq", 600, 160, F.capteur("pH"), "", "", 26)}
+      ${t(510, 120, "Mesures des bacs", "grand")}
+      ${t(400, 590, "Nitrate et ammoniaque : trousse deux fois par semaine sur site ; ici, valeurs calculées par le simulateur.", "val", "start")}
+    `);
+  },
+  maj(E, fmt) {
+    const A = E.sys.aqua;
+    rot("SB-401", A.souffl); etat("SB-401", A.souffl ? "on" : "ko"); val("SB-401", A.souffl ? "60 W" : "ARRÊTÉE");
+    flux("t-air", A.souffl); flux("t-retour", A.souffl, true); flux("t-sortie", A.souffl, true); flux("t-bf", A.souffl, true); flux("t-rep", A.souffl, true);
+    for (const b of ["b1", "b2"]) {
+      document.getElementById("bulles-" + b).setAttribute("opacity", A.souffl ? 1 : 0);
+      document.getElementById("poissons-" + b).setAttribute("transform", A.surface ? "translate(0,-55)" : "");
+    }
+    etat("OX-aq", A.o2 < 3 ? "ko" : A.o2 < 5 ? "att" : "on"); val("OX-aq", `${fmt(A.o2)} mg/L`);
+    etat("TT-aq", A.t < 24 || A.t > 31 ? "att" : "on"); val("TT-aq", `${fmt(A.t)} °C`);
+    etat("NO-aq", A.no3 > 150 ? "att" : "on"); val("NO-aq", `${fmt(A.no3, 0)} mg/L`);
+    etat("PH-aq", "on"); val("PH-aq", fmt(A.ph, 2));
+    etat("P-403", A.transfert ? "on" : "ko"); flux("t-transf", A.transfert, true); flux("t-transf2", A.transfert, true);
+    etat("UV-401", A.uv ? "on" : "ko"); val("UV-401", A.uv ? "" : "HORS SERVICE");
+    etat("EV-402", A.appoint ? "on" : ""); flux("t-app", A.appoint);
+    etat("P-401", A.dosK ? "on" : ""); flux("t-k", A.dosK);
+    etat("RC-401", A.chauffe ? "on" : ""); val("RC-401", A.chauffe ? "en marche" : "");
+    etat("DR-401", "on"); etat("BF-401", A.tan > 1 ? "att" : "on"); etat("T-401", "on");
+    niveau("rep", A.v / 6000); niveau("dr", 0.85); niveau("bf", 0.9);
+  },
+  kpis(E, fmt) {
+    const A = E.sys.aqua;
+    return [["Oxygène", fmt(A.o2) + " mg/L", "> 5 ; alarme < 3"], ["Eau", fmt(A.t) + " °C", "26-28"],
+      ["Clarias", `${A.effectif} x ${fmt(1000 * A.biomasse / A.effectif, 0)} g`, `${fmt(A.biomasse, 0)} kg, lot ${A.lot}`],
+      ["Nitrate", fmt(A.no3, 0) + " mg/L", "cible 50-150"], ["Envoyé aux cultures", fmt(A.vEnvoye, 0) + " L", `${fmt(A.nEnvoye * 1000, 0)} g d'azote`],
+      ["Aliment distribué", fmt(A.nourri, 1) + " kg", "depuis le départ"]];
+  },
+};
+
+export const SCHEMAS = { ensemble, climat, fertirrigation, bassins, eau, electricite, iiot, aquaculture, cultures };
 
 // ------------------------------------------------------------ fiches des équipements
 export const FICHES = {
@@ -556,4 +625,13 @@ export const FICHES = {
   "VO-201": ["Ouvrant de toiture feuilles", "Idem."],
   "VL-101": ["Ouvrant latéral nord", "10 x 1,5 m, enrouleur motorisé."],
   "VL-201": ["Ouvrant latéral sud", "Idem."],
+  "SB-401": ["Soufflante des bacs à poissons", "Aération et relevage de l'eau par air-lift. Charge prioritaire 0 : jamais délestée. En tranche 2, une seconde soufflante démarre seule en secours."],
+  "DR-401": ["Décanteur", "Retire les matières en suspension (fèces, restes d'aliment) ; purge vers le minéralisateur deux fois par jour."],
+  "BF-401": ["Biofiltre à lit mobile", "Les bactéries fixées sur le média transforment l'ammoniaque, toxique, en nitrate, que les plantes absorbent."],
+  "T-401": ["Bassin de reprise", "Point de prélèvement de l'eau envoyée aux cultures, de l'appoint et du dosage de potasse."],
+  "P-403": ["Pompe vers les cultures", "Envoie 5 % du volume des bacs par jour (10 % si le nitrate dépasse 120 mg/L). Ne démarre que si l'UV est en service."],
+  "UV-401": ["Stérilisateur UV de l'eau des poissons", "Désinfecte l'eau avant qu'elle rejoigne les cultures ; en défaut, l'envoi s'arrête."],
+  "EV-402": ["Appoint des bacs", "Eau traitée depuis le réservoir tampon, quand le volume baisse."],
+  "P-401": ["Dosage de potasse", "Remonte le pH des bacs (la nitrification l'acidifie) et apporte le potassium qui manque aux plantes."],
+  "RC-401": ["Chauffage des bacs", "Thermoplongeur de 1 kW sur thermostat 26-27 °C, bacs couverts et isolés. En tranche 2 : chauffe-eau solaire et pompe à chaleur."],
 };

@@ -8,13 +8,13 @@ Les trois simulateurs fonctionnent hors ligne dans un navigateur récent, d'un d
 
 - le modèle climatique (rayonnement, transmission de la couverture, transpiration, ventilation naturelle à travers les filets, mur évaporatif, écran, stockage thermique, pertes par la paroi et vers le ciel) ;
 - la régulation par priorités du chapitre 8, avec la raison de chaque décision ;
-- les sous-systèmes : eau (pluie, premier flot, citerne, tampon, forage, osmoseur), fertirrigation (somme de rayonnement, drainage, recyclage, UV, dosage CE puis pH), bassins (oxygène, température, refroidissement, appoint), électricité (production, batterie, réseau intermittent, groupe, contacteurs de délestage, puissance de chaque départ), automatismes (messages MQTT, passage en mode autonome, alarmes et SMS) ;
+- les sous-systèmes : eau (pluie, premier flot, citerne, tampon, forage, osmoseur), fertirrigation (somme de rayonnement, drainage, recyclage, UV, dosage CE puis pH), bassins (oxygène, température, refroidissement, appoint), aquaculture du pilote (oxygène et respiration aérienne du Clarias, repas, croissance, ammoniaque et nitrate, pH tenu par la potasse, chauffage, eau envoyée au bassin tempéré), électricité (production, batterie, réseau intermittent, groupe, contacteurs de délestage, puissance de chaque départ), automatismes (messages MQTT, passage en mode autonome, alarmes et SMS) ;
 - l'aptitude des cultures : pour chaque culture, la température, le DPV, la solution (température, CE, pH) et l'oxygène sont comparés à la recette ; le facteur le plus défavorable fixe le score (loi du minimum).
 
 | Simulateur | Fichier | À quoi il sert |
 |---|---|---|
-| Maquette 3D vivante | `serre_3d_autonome.html` | Se promener dans la serre, voir le soleil réel du mois et de l'heure, voir bouger ouvrants, écran, pad, extracteurs ; voir circuler l'eau et l'énergie dans les tuyaux et câbles ; cliquer sur chaque élément ; isoler un domaine ; retirer un équipement ; piloter en manuel ; provoquer une panne ; lire les conditions de chaque culture ; jouer sur les prix et rendements |
-| Simulateur des systèmes | `systemes_autonome.html` | Huit vues schématiques animées (ensemble, climat, fertirrigation, bassins, eau, électricité, électronique et IIoT, cultures) : qui fait quoi, quand, sous quelles conditions ; règles allumées en direct ; journal des événements ; carte CAZ-1 avec ses voyants |
+| Maquette 3D vivante | `serre_3d_autonome.html` | Se promener dans la serre, voir le soleil réel du mois et de l'heure, voir bouger ouvrants, écran, pad, extracteurs ; voir circuler l'eau et l'énergie dans les tuyaux et câbles ; cliquer sur chaque élément ; isoler un domaine ; retirer un équipement ; piloter en manuel ; provoquer une panne ; lire les conditions de chaque culture ; voir l'abri aquacole du pilote et ses poissons ; jouer sur les prix et rendements des légumes, le prix du poisson, les alevins vendus, avec ou sans aquaculture et tranche 3 |
+| Simulateur des systèmes | `systemes_autonome.html` | Neuf vues schématiques animées (ensemble, climat, fertirrigation, bassins, eau, électricité, électronique et IIoT, aquaculture, cultures) : qui fait quoi, quand, sous quelles conditions ; règles allumées en direct ; journal des événements ; carte CAZ-1 avec ses voyants |
 | Supervision | `../logiciel/dashboard/index.html` | L'écran de travail du technicien, tel qu'il sera sur site |
 
 ### Pannes que l'on peut provoquer
@@ -29,6 +29,8 @@ Les trois simulateurs fonctionnent hors ligne dans un navigateur récent, d'un d
 | Rafale d'orage | ouvrants fermés immédiatement (sécurité de la structure) |
 | Capteur T/HR muet | alarme, régulation sur valeurs de secours |
 | Lampe UV grillée | alarme : le drainage revient en cuve sans désinfection |
+| Aération des bacs à poissons arrêtée | l'oxygène tombe sous 3 mg/L en une demi-heure ; alarme critique et SMS, repas suspendus ; les Clarias viennent respirer en surface et tiennent plusieurs heures (des tilapias seraient en train de mourir) |
+| UV de l'eau des poissons grillée | l'envoi d'eau vers le bassin tempéré s'arrête automatiquement, alarme |
 
 ### Ce que le simulateur dit des cultures
 
@@ -57,16 +59,16 @@ Ces scores sont des indicateurs de conditions, pas des prévisions de rendement 
 
 ## 18.2 Dossier de plans et schémas
 
-Le dossier `plans/Dossier_plans_et_schemas.pdf` (format A3, cadre normalisé avec repères de zones et cartouche) comprend 16 planches :
+Le dossier `plans/Dossier_plans_et_schemas.pdf` (format A3, cadre normalisé avec repères de zones et cartouche) comprend 18 planches :
 
 | N° | Planche |
 |---|---|
 | 000 | Bordereau des plans |
-| A01 à A04 | Plan de masse, plan de la serre et de l'annexe, coupe A-A, fondations et élévation du pignon est |
-| H01 à H03 | P&ID de l'eau (collecte, traitement, stockage), de la fertirrigation fruits, des bassins feuilles |
+| A01 à A05 | Plan de masse du pilote, plan de la serre et de l'annexe, coupe A-A, fondations et élévation du pignon est, plan de masse de la ferme intégrée de 2 000 m² |
+| H01 à H04 | P&ID de l'eau (collecte, traitement, stockage), de la fertirrigation fruits, des bassins feuilles, de l'unité aquacole et de son couplage aux cultures |
 | E01 à E04 | Schéma unifilaire (calibres, sections, différentiels séparés pour les charges vitales), commande 24 V et délestage, câblage de l'armoire AUT-F, mise à la terre et foudre |
-| I01, I02 | Architecture réseau et adressage (IP, Modbus, MQTT), organigramme de la régulation climatique |
-| T01, T02 | Liste des entrées et sorties des trois automates, liste des câbles |
+| I01, I02 | Architecture réseau et adressage (IP, Modbus, MQTT, quatre automates dont AUT-P pour l'aquaculture), organigramme de la régulation climatique |
+| T01, T02 | Liste des entrées et sorties des quatre automates, liste des câbles |
 
 Les planches sont générées par `plans/generer_plans.py` : une modification de conception se reporte en relançant le script.
 

@@ -74,30 +74,55 @@ def energie():
 
 
 def tresorerie():
-    import importlib.util, sys
-    # mêmes formules que le classeur (simulateurs/lib/modele.js : finance())
-    cap1, cap2 = 55220, 114730
-    def flux(idx):
-        ca_p, ca_e, op_p, op_f = 6042, 61707, 7794, 45736
-        cum, out = -cap1, [-cap1]
-        for a in range(1, 11):
-            rp = .55 if a == 1 else .9
-            age = a - 2
-            re = 0 if age <= 0 else [.7, .9, 1][min(age, 3) - 1]
-            ca = (ca_p * rp + ca_e * re) * idx * .92
-            op = op_p if age <= 0 else op_p + (op_f - op_p) * (.6 + .4 * re)
-            ebe = ca - op
-            am = 5508 + (11211 if a > 2 else 0)
-            imp = max((ebe - am) * .3, ca * .01)
-            cum += ebe - imp - (cap2 if a == 2 else 0) + ((cap1 + cap2) * .2 if a == 10 else 0)
-            out.append(cum)
-        return out
-    fig, ax = plt.subplots(figsize=(6.6, 2.9))
-    for idx, coul, nom in ((0.8, ROUGE, "prudent (indice 0,8)"), (1.0, ORANGE, "médian (1,0)"), (1.2, BLEU, "seuil « go » (1,2)"), (1.6, VERT, "optimiste (≈ 1,6)")):
-        ax.plot(range(11), [v / 1000 for v in flux(idx)], color=coul, lw=1.8, label=nom)
+    """Trésorerie cumulée de la ferme intégrée, calculée par simulateurs/lib/modele.js (mêmes formules que le classeur)."""
+    import json
+    import subprocess
+    script = (
+        "import('" + (R / "simulateurs" / "lib" / "modele.js").as_uri() + "').then(M => {"
+        "const out = {}; for (const p of [0.8, 1.0, 1.2, 1.5]) out[p] = M.finance({ prix: p }).cumul;"
+        "out.sans = M.finance({ aquaculture: false }).cumul; console.log(JSON.stringify(out)); });"
+    )
+    data = json.loads(subprocess.run(["node", "--input-type=module", "-e", script], capture_output=True, text=True, check=True).stdout)
+    fig, ax = plt.subplots(figsize=(6.6, 3.0))
+    for cle, coul, nom in (("0.8", ROUGE, "prix des légumes -20 %"), ("1", ORANGE, "médian"), ("1.2", BLEU, "prix +20 % (seuil « go » tranche 2)"),
+                           ("1.5", VERT, "prix +50 % (rentable à 12 %)")):
+        ax.plot(range(11), [v / 1000 for v in data[cle]], color=coul, lw=1.8, label=nom)
+    ax.plot(range(11), [v / 1000 for v in data["sans"]], color=GRIS, lw=1.2, ls="--", label="médian, sans aquaculture")
     ax.axhline(0, color="#1a1a1a", lw=.8)
-    ax.set_xlabel("année"); ax.set_ylabel("trésorerie cumulée (k$)"); ax.legend(frameon=False, fontsize=8, loc="lower left")
+    ax.set_xlabel("année"); ax.set_ylabel("trésorerie cumulée (k$)"); ax.legend(frameon=False, fontsize=7.5, loc="lower left")
     fig.tight_layout(); fig.savefig(OUT / "tresorerie.svg"); plt.close(fig)
+
+
+def configurations():
+    lignes = lire("comparaison_configurations.csv")
+    noms = list(dict.fromkeys(l["configuration"] for l in lignes))
+    fig, ax = plt.subplots(figsize=(6.6, 3.0))
+    larg = 0.26
+    for k, (sc, coul) in enumerate((("prudent", ROUGE), ("médian", ORANGE), ("optimiste", VERT))):
+        vals = [int(next(l for l in lignes if l["configuration"] == n and l["scenario"] == sc)["ebe_croisiere_usd"]) / 1000 for n in noms]
+        xs = [i + (k - 1) * larg for i in range(len(noms))]
+        ax.bar(xs, vals, larg * 0.95, color=coul, label=sc)
+        for x, v in zip(xs, vals):
+            ax.text(x, v + (3 if v >= 0 else -9), f"{v:.0f}", ha="center", fontsize=7)
+    ax.axhline(0, color="#1a1a1a", lw=.8)
+    ax.set_xticks(range(len(noms)), [n.replace(", ", "\n") for n in noms], fontsize=7.5)
+    ax.set_ylabel("EBE de croisière (k$/an)"); ax.legend(frameon=False, fontsize=8, ncol=3, loc="upper left"); ax.grid(axis="x", visible=False)
+    fig.tight_layout(); fig.savefig(OUT / "configurations.svg"); plt.close(fig)
+
+
+def bilan_nutriments():
+    lignes = {l["grandeur"]: l for l in lire("bilan_aquaponie.csv")}
+    col = "Ferme 2 000 m² (tranche 3)"
+    el = [("Azote", "n_couverture_pct"), ("Phosphore", "p_couverture_pct"), ("Potassium", "k_couverture_pct")]
+    fig, ax = plt.subplots(figsize=(6.6, 2.4))
+    vals = [float(lignes[k][col]) for _, k in el]
+    ax.barh([e[0] for e in el], vals, color=[VERT, BLEU, ORANGE])
+    ax.axvline(100, color="#1a1a1a", lw=.8, ls="--")
+    for k, v in enumerate(vals):
+        ax.text(v + 3, k, f"{v:.0f} %", va="center", fontsize=8)
+    ax.set_xlabel("part des besoins des cultures couverte par l'eau des poissons, ferme de 2 000 m² (%)"); ax.grid(axis="y", visible=False)
+    ax.set_xlim(0, 200)
+    fig.tight_layout(); fig.savefig(OUT / "nutriments.svg"); plt.close(fig)
 
 
 def chiffre_affaires():
@@ -115,5 +140,5 @@ def chiffre_affaires():
 
 
 if __name__ == "__main__":
-    climat(); variantes(); energie(); tresorerie(); chiffre_affaires()
+    climat(); variantes(); energie(); tresorerie(); configurations(); bilan_nutriments(); chiffre_affaires()
     print("figures écrites")

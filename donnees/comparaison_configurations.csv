@@ -1,0 +1,13 @@
+configuration,scenario,investissement_usd,ebe_croisiere_usd,van_12pct_usd,tri_10ans
+"Serres seules, 1 000 m²",prudent,169950,-15060,-210004,négatif
+"Serres seules, 1 000 m²",médian,169950,16037,-92564,-0.0352
+"Serres seules, 1 000 m²",optimiste,169950,57418,25916,0.1559
+"Serres seules, 2 000 m²",prudent,279730,-28590,-310899,négatif
+"Serres seules, 2 000 m²",médian,279730,29019,-130678,-0.0433
+"Serres seules, 2 000 m²",optimiste,279730,107922,52822,0.1734
+"Serres + aquaculture, 1 000 m²",prudent,243870,-21869,-295979,négatif
+"Serres + aquaculture, 1 000 m²",médian,243870,30012,-103989,-0.0016
+"Serres + aquaculture, 1 000 m²",optimiste,243870,100978,89155,0.2057
+"Serres + aquaculture, 2 000 m²",prudent,367950,-37998,-413473,négatif
+"Serres + aquaculture, 2 000 m²",médian,367950,48079,-140792,-0.0095
+"Serres + aquaculture, 2 000 m²",optimiste,367950,162752,127132,0.2151

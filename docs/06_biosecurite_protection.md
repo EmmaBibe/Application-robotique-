@@ -100,3 +100,13 @@ Détaillée aux documents 05 et 09 : eau d'appoint traitée, circuits fruits et 
 - Traçabilité : chaque caisse porte une étiquette avec culture, lot, date de récolte, compartiment (code QR qui renvoie à la fiche du lot).
 - Analyses semestrielles de métaux lourds et de nitrates sur les produits ; résultats communiqués aux clients professionnels.
 - Ce système prépare une certification de bonnes pratiques agricoles de type GLOBALG.A.P., utile pour les marchés miniers et l'export régional.
+
+## 6.9 Biosécurité de l'unité aquacole
+
+- Circuit fermé, sans eau de rivière ni de lac ; aucun poisson ne sort vivant du site autrement que vendu.
+- Géniteurs et alevins achetés : origine connue, quarantaine de 30 jours dans un bac isolé, bain de sel à l'arrivée.
+- Accès au bâtiment aquacole par le sas de l'annexe, pédiluve, matériel (épuisettes, seaux) propre à chaque zone (écloserie, grossissement, quarantaine).
+- Aucun produit phytosanitaire de synthèse dans les serres : il passerait dans l'eau des poissons. La lutte biologique déjà prévue devient une obligation.
+- Aucun antibiotique en prévention ; en cas de maladie, l'envoi d'eau vers les cultures est coupé avant tout traitement, et ne reprend qu'après le délai d'attente du produit.
+- Sécurité sanitaire des légumes : l'eau des poissons, filtrée et désinfectée aux UV, ne touche jamais les feuilles ; analyses mensuelles E. coli et salmonelles sur les feuilles et le bassin tampon.
+- Poissons morts retirés chaque jour, comptés, enregistrés, enterrés à la chaux ou compostés à haute température.

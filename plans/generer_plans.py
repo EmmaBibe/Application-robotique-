@@ -36,8 +36,8 @@ def bordereau(planches):
 
 def toutes():
     planches = [
-        G.plan_masse(), G.plan_serre(), G.coupe(), G.fondations(),
-        H.eau(), H.fertirrigation(), H.bassins(),
+        G.plan_masse(), G.plan_serre(), G.coupe(), G.fondations(), G.plan_masse_ferme(),
+        H.eau(), H.fertirrigation(), H.bassins(), H.aquaculture(),
         E.unifilaire(), E.commande(), E.cablage_armoire(), E.terre_foudre(),
         I.architecture(), I.logique(), I.liste_es(), I.liste_cables(),
     ]

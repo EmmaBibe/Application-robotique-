@@ -90,6 +90,10 @@ Lecture agronomique :
 
 **Ce que l'on ne sait pas encore et qu'il faut mesurer avant d'investir** (phase 0, voir feuille de route) : les prix réellement pratiqués par produit et par canal, les volumes hebdomadaires que chaque acheteur peut prendre, les exigences (emballage, calibre, délais de paiement). Une grille d'enquête est fournie dans `donnees/enquete_prix_modele.csv`.
 
+### Poisson et pisciculture
+
+Le poisson frais vendu à Lubumbashi vient des lacs du nord de la province (Moero, barrages), de Zambie (tilapia d'élevage) ou de l'importation en congelé ; le poisson frais local est cher et irrégulier. La pisciculture en étangs existe autour de la ville (tilapia du Nil, Clarias), mais les synthèses sur la filière en RDC citent pour le Haut-Katanga la non-maîtrise de la reproduction artificielle et de l'élevage larvaire du Clarias, et l'alimentation inadaptée des jeunes stades, comme premiers freins. L'alevin de Clarias de 10 g s'y vend 0,3 à 0,5 $, celui de tilapia 0,25 à 0,4 $. Les prix de marché du poisson de table en Afrique subsaharienne se situent entre 2,5 et 5 $/kg selon la FAO ; aucune cotation récente fiable n'a été trouvée pour Lubumbashi : l'enquête de la phase 0 doit la fournir (chapitre 19).
+
 ## 1.8 Cadre légal et administratif (points à vérifier avec un juriste local)
 
 - Forme de société : SARL ou SAS selon l'Acte uniforme OHADA, immatriculation par le Guichet unique de création d'entreprise.

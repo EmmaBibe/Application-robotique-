@@ -182,30 +182,39 @@ export function avancer(E, secondes, kwc = 3.3, batterieKwh = 10.24) {
 }
 
 // ------------------------------------------------------------ finance
-// Base médiane du classeur financier (finance/modele_financier_serre_lubumbashi.xlsx)
+// Base médiane du classeur financier (finance/modele_financier_serre_lubumbashi.xlsx) :
+// pilote (année 0), tranche 2 à 1 000 m² avec aquaculture (année 2), tranche 3 à 2 000 m² (année 4).
 export const FIN = {
-  caPilote: 6042, caExtension: 61707, pertes: 0.08,
-  opexPilote: 7794, opexFerme: 45736,
-  capex1: 55220, capex2: 114730, amort1: 5508, amort2: 11211,
-  rampPilote: [0.55, 0.9], rampExt: [0.7, 0.9, 1.0], anneeExt: 2, residuel: 0.2, taux: 0.12,
+  ca: { pil: 6042, t2: 61708, t3: 56900 }, pertes: 0.08,
+  aqua: { pil: 940.5, t2: 38175, t3: 53850, prodT2: 5, prodT3: 10, prix: 3.3, alevins: 90000, prixAlevin: 0.25, coutAlevin: 0.06, pertes: 0.05 },
+  avec: { opex: { pil: 8333, t2: 69936, t3: 119892 }, capex: [62920, 180950, 124080], amort: [6588, 17680, 12520] },
+  sans: { opex: { pil: 7794, t2: 45736, t3: 85102 }, capex: [55220, 114730, 109780], amort: [5508, 11211, 11090] },
+  rampPilote: [0.55, 0.9], ramp: [0.7, 0.9, 1.0], an2: 2, an3: 4, residuel: 0.2, taux: 0.12,
 };
 
-export function finance({ prix = 1, rendement = 1, capex2Facteur = 1, opexFacteur = 1, extension = true } = {}) {
-  const f = FIN, idx = prix * rendement;
-  const capex2 = f.capex2 * capex2Facteur;
-  const flux = [-f.capex1], ebe = [0], cumul = [-f.capex1];
+export function finance({ prix = 1, rendement = 1, capex2Facteur = 1, aquaculture = true, tranche3 = true,
+                          prixPoisson = FIN.aqua.prix, alevins = FIN.aqua.alevins } = {}) {
+  const f = FIN, idx = prix * rendement, c = aquaculture ? f.avec : f.sans, A = f.aqua;
+  const capex = [c.capex[0], c.capex[1] * capex2Facteur, c.capex[2] * capex2Facteur];
+  const ramp = age => (age <= 0 ? 0 : f.ramp[Math.min(age, 3) - 1]);
+  // écart à la base médiane de l'aquaculture (prix du poisson, alevins vendus), en régime établi
+  const dAqua = prod => prod * 1000 * (1 - A.pertes) * (prixPoisson - A.prix) + (alevins - A.alevins) * (A.prixAlevin - A.coutAlevin);
+  const flux = [-capex[0]], ebe = [0], cumul = [-capex[0]];
   for (let a = 1; a <= 10; a++) {
     const rp = a === 1 ? f.rampPilote[0] : f.rampPilote[1];
-    const age = a - f.anneeExt;
-    const re = !extension || age <= 0 ? 0 : (f.rampExt[age - 1] ?? 1);
-    const ca = (f.caPilote * rp + f.caExtension * re) * idx * (1 - f.pertes);
-    const opexBase = !extension || age <= 0 ? f.opexPilote : f.opexPilote + (f.opexFerme - f.opexPilote) * (0.6 + 0.4 * re);
-    const opex = opexBase * opexFacteur * (0.7 + 0.3 * rendement);
-    const e = ca - opex;
-    const amort = f.amort1 + (extension && a > f.anneeExt ? f.amort2 * capex2Facteur : 0);
-    const impot = Math.max((e - amort) * 0.3, ca * 0.01);
-    const inv = extension && a === f.anneeExt ? capex2 : 0;
-    const resid = a === 10 ? (f.capex1 + (extension ? capex2 : 0)) * f.residuel : 0;
+    const age2 = a - f.an2, age3 = tranche3 ? a - f.an3 : -1;
+    const r2 = ramp(age2), r3 = ramp(age3);
+    const caLeg = (f.ca.pil * rp + f.ca.t2 * r2 + f.ca.t3 * r3) * idx * (1 - f.pertes);
+    let caAqua = 0;
+    if (aquaculture) caAqua = age2 <= 0 ? A.pil * rp : (A.t2 + dAqua(A.prodT2)) * r2 + (A.t3 - A.t2 + dAqua(A.prodT3) - dAqua(A.prodT2)) * r3;
+    const o = c.opex;
+    const opexBase = age2 <= 0 ? o.pil : age3 <= 0 ? o.pil + (o.t2 - o.pil) * (0.6 + 0.4 * r2) : o.t2 + (o.t3 - o.t2) * (0.6 + 0.4 * r3);
+    const opex = opexBase * (0.7 + 0.3 * rendement);
+    const e = caLeg + caAqua - opex;
+    const amort = c.amort[0] + (a > f.an2 ? c.amort[1] * capex2Facteur : 0) + (tranche3 && a > f.an3 ? c.amort[2] * capex2Facteur : 0);
+    const impot = Math.max((e - amort) * 0.3, (caLeg + caAqua) * 0.01);
+    const inv = (a === f.an2 ? capex[1] : 0) + (tranche3 && a === f.an3 ? capex[2] : 0);
+    const resid = a === 10 ? (capex[0] + capex[1] + (tranche3 ? capex[2] : 0)) * f.residuel : 0;
     const fl = e - impot - inv + resid;
     flux.push(fl); ebe.push(e); cumul.push(cumul[a - 1] + fl);
   }
@@ -214,5 +223,5 @@ export function finance({ prix = 1, rendement = 1, capex2Facteur = 1, opexFacteu
   const v = r => flux.reduce((s, x, i) => s + x / Math.pow(1 + r, i), 0);
   if (v(lo) * v(hi) < 0) { for (let i = 0; i < 80; i++) { const mid = (lo + hi) / 2; if (v(lo) * v(mid) <= 0) hi = mid; else lo = mid; } tri = (lo + hi) / 2; }
   const retour = cumul.findIndex(x => x > 0);
-  return { flux, ebe, cumul, van, tri, retour: retour < 0 ? null : retour, ebeCroisiere: ebe[6], creux: -Math.min(...cumul) };
+  return { flux, ebe, cumul, van, tri, retour: retour < 0 ? null : retour, ebeCroisiere: ebe[8], creux: -Math.min(...cumul) };
 }

@@ -104,6 +104,10 @@ Le fichier `donnees/calendrier_production.csv` donne le planning hebdomadaire d�
 
 Constat qui oriente toute la stratégie commerciale : **le compartiment feuilles rapporte 64 % du chiffre d'affaires sur la moitié de la surface**, et la laitue seule rapporte plus que toutes les tomates réunies. Les fruits restent indispensables (ils fidélisent les acheteurs et la demande est massive), mais l'équilibre économique se joue sur les feuilles et sur la régularité des livraisons.
 
+## 3.6 bis Mélange de cultures des tranches 2 et 3
+
+La tranche 2 (+900 m²) reprend le mélange du pilote : 350 m² de fruits et 550 m² de feuilles (380 m² de radeaux). La tranche 3 (+1 000 m²) est orientée fruits : 650 m² (tomate ronde 250 m², tomate cerise 100 m², poivron 200 m², piment 100 m²) et 350 m² de feuilles (240 m² de radeaux). Le marché des tomates et des poivrons est plus profond que celui des laitues ; à 2 000 m², la ferme met en vente chaque semaine environ 700 laitues, 230 kg de tomates, 75 kg de poivrons et plus de 250 kg d'autres légumes-feuilles. Les radeaux de feuilles et la cuve des fruits reçoivent l'eau des poissons (chapitre 19), complétée en potassium, fer et calcium.
+
 ## 3.7 Sources des rendements
 
 Les rendements médians retenus sont volontairement inférieurs aux potentiels publiés, parce qu'ils concernent une équipe qui apprend :

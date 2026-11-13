@@ -21,10 +21,11 @@ def architecture():
     for k, (nom, ip, zone, fonctions) in enumerate([
             ("AUT-F", "192.168.10.11", "compartiment fruits", ["climat, stockage thermique", "irrigation, dosage fruits", "module 16 relais @10"]),
             ("AUT-L", "192.168.10.12", "compartiment feuilles", ["climat, bassins, chiller", "pépinière, LED", "module 16 relais @10"]),
-            ("AUT-E", "192.168.10.13", "local technique", ["eau, osmoseur, citerne", "onduleur, délestage, groupe", "sas, météo, arrêt d'urgence"])]):
-        x = 40 + k * 120
-        f.boite(x, 97, 100, 36, f"{nom} - {ip}", [zone] + fonctions, rempli="#fff")
-        f.ligne(x + 50, 97, x + 50, 70, "sol", 0.7)
+            ("AUT-E", "192.168.10.13", "local technique", ["eau, osmoseur, citerne", "onduleur, délestage, groupe", "sas, météo, arrêt d'urgence"]),
+            ("AUT-P", "192.168.10.14", "unité aquacole (tranche 2)", ["oxygène, soufflantes", "écloserie, chauffage", "envoi d'eau vers les cultures"])]):
+        x = 32 + k * 91
+        f.boite(x, 97, 84, 36, f"{nom} - {ip}", [zone] + fonctions, rempli="#fff")
+        f.ligne(x + 42, 97, x + 42, 70, "sol", 0.7)
     # niveau terrain : bus RS485
     f.rect(25, 150, 370, 75, ep=0.4, rempli="#fbf6ec", r=2)
     f.texte(30, 156, "NIVEAU TERRAIN - un bus RS485 Modbus RTU par automate (9600 bauds, 8N1, câble LiYCY 2x2x0,5 blindé)", 2.5, gras=True, c="drain")
@@ -32,9 +33,10 @@ def architecture():
         ("AUT-F", [("1", "TH-F1 T/HR"), ("2", "CO2-F1"), ("3", "EC-F1"), ("4", "PH-F1"), ("5", "TS-F1"), ("7", "TS-STO"), ("8", "SUB-F1"), ("10", "relais 16 E/S")]),
         ("AUT-L", [("1", "TH-L1 T/HR"), ("2", "TH-P1 pépinière"), ("3", "EC-B1"), ("4", "PH-B1"), ("5", "EC-B2"), ("6", "DO-B1 O2"), ("7", "PH-B2"), ("10", "relais 16 E/S")]),
         ("AUT-E", [("1", "MET-EXT météo"), ("2", "PYR-EXT"), ("3", "OND-1 onduleur"), ("4", "ENE-02 compteur"), ("5", "ENE-03 compteur"), ("6", "NIV citerne"), ("7", "NIV tampon"), ("10", "relais 16 E/S")]),
+        ("AUT-P", [("1", "AT-401 O2"), ("2", "AT-402 O2"), ("3", "AT-403 O2"), ("4", "AT-404 O2"), ("5", "AT-409 écloserie"), ("6", "pH/TT-401"), ("7", "ENE-04 compteur"), ("10", "relais 16 E/S")]),
     ]
     for k, (aut, capteurs) in enumerate(bus):
-        y = 165 + k * 19
+        y = 163 + k * 15.5
         f.texte(30, y + 2, aut, 2.3, gras=True)
         f.ligne(48, y, 390, y, "drain", 0.6)
         for j, (adr, nom) in enumerate(capteurs):
@@ -133,7 +135,7 @@ def logique():
 
 
 def liste_es():
-    f = Feuille("T01", "Liste des entrées et sorties (AUT-F, AUT-L, AUT-E)", "sans", lot="Lot automatisme")
+    f = Feuille("T01", "Liste des entrées et sorties (AUT-F, AUT-L, AUT-E, AUT-P)", "sans", lot="Lot automatisme")
     lignes = [
         ("AUT-F", "DI1-DI4", "TOR 24 V", "Fins de course ouvrant toit et écran (ouvert / fermé)", "CAZ-1"),
         ("AUT-F", "DI5", "TOR 24 V", "Anémomètre > 14 m/s (relais KA-ANE)", "CAZ-1"),
@@ -158,9 +160,14 @@ def liste_es():
         ("AUT-E", "K4-K6", "relais", "Démarrage groupe, P-001 transfert, sirène", "CAZ-1"),
         ("AUT-E", "R1-R4", "relais", "P-002 forage, RO-001, EV-301 pad, éclairage extérieur", "module @10"),
         ("AUT-E", "Modbus", "RS485", "Météo, pyranomètre, onduleur, compteurs, niveaux", "bus E"),
+        ("AUT-P", "DI1-DI6", "TOR 24 V", "Pressostat PSL-401, défaut SB-401/402, défaut PAC-401, fuite, porte du bâtiment", "CAZ-1"),
+        ("AUT-P", "AI1-AI2", "4-20 mA", "Niveau du bassin de reprise LT-401, niveau du tampon LT-402", "CAZ-1"),
+        ("AUT-P", "K1-K6", "relais", "SB-402 secours, EV-401 purge, P-403 vers cultures (si UV-401 OK), PAC-401, P-401, P-402", "CAZ-1"),
+        ("AUT-P", "R1-R3", "relais", "P-404 + EV-403/404 (sur ordre de la fertirrigation), P-406 surnageant, P-407 écloserie", "module @10"),
+        ("AUT-P", "Modbus", "RS485", "Sondes d'oxygène AT-401..404 et AT-409, pH et température du bassin de reprise", "bus P"),
     ]
     f.tableau(25, 25, [("Automate", 22), ("Repère", 24), ("Type", 26), ("Fonction", 175), ("Support", 28)], lignes, taille=2.05, h=5.6)
-    f.note(25, 170, [
+    f.note(25, 200, [
         "Réserve : 2 entrées et 4 relais libres par automate au minimum (extensions).",
         "Chaque mouvement de moteur est protégé par fins de course câblées ET temporisation logicielle (180 s ouvrants, 240 s écran).",
         "Le module 16 relais Modbus (adresse 10) porte les sorties non critiques ; une panne du module laisse les sécurités sur la carte CAZ-1.",

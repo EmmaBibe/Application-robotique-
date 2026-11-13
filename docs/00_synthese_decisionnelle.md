@@ -1,7 +1,7 @@
 # Synthèse décisionnelle
 
 Serre agricole en environnement contrôlé, Lubumbashi (Haut-Katanga, RDC)
-Surface de culture de référence : 10 m x 10 m. Version 1.0, novembre 2026.
+Pilote de 10 m x 10 m, puis ferme intégrée serres et aquaculture de 1 000 à 2 000 m². Version 1.2, novembre 2026.
 
 ---
 
@@ -41,54 +41,66 @@ La simulation thermique de la serre (modèle fourni dans `logiciel/`) montre que
 
 L'étude recommande d'ajouter la laitue et des aromatiques (basilic, coriandre, persil) : ce sont les cultures qui rapportent le plus au m² en hydroponie, et elles financent les autres.
 
+**Les poissons ont leur place, mais pas pour les raisons qu'on lit le plus souvent** (chapitre 19). L'eau des poissons couvre l'azote et le phosphore des cultures, mais seulement un quart du potassium : l'économie d'engrais est d'un tiers environ, soit 1 000 à 2 000 $ par an. Ce que l'aquaculture apporte vraiment, c'est un deuxième produit sur un marché profond (le poisson frais manque en ville), une écloserie de poisson-chat (Clarias) là où les alevins font défaut dans la province, et une ferme moins dépendante du prix des légumes. La forme retenue est « découplée » : poissons et plantes ont chacun leur circuit et l'eau des bacs sert d'eau d'appoint, filtrée et désinfectée, aux cultures. Le Clarias, qui respire l'air en surface, supporte les pannes d'aération que provoquent les coupures du réseau.
+
 ## 3. Ce que coûte le projet et ce qu'il rapporte
 
-Montants en dollars US, rendu Lubumbashi, hors terrain. Détail dans `finance/modele_financier_serre_lubumbashi.xlsx`.
+Montants en dollars US, rendu Lubumbashi, hors terrain. Détail dans `finance/modele_financier_serre_lubumbashi.xlsx` et au chapitre 13.
 
-| | Phase 1 : pilote 100 m² | Phase 2 : extension 900 m² | Total |
-|---|---|---|---|
-| Investissement | 55 220 $ | 114 730 $ | 169 950 $ |
-| Coût par m² de serre | 552 $ | 127 $ | |
+La ferme se construit en trois tranches, chacune décidée sur les résultats mesurés de la précédente :
+
+| | Phase 1 : pilote | Phase 2 : 1 000 m² et aquaculture | Phase 3 : 2 000 m² | Total |
+|---|---|---|---|---|
+| Contenu | 100 m² de serre, annexe, énergie, supervision, 2 bacs de 3 m³ | +900 m² de serres, écloserie, grossissement 5 t/an | +1 000 m² orientés fruits, grossissement 10 t/an | |
+| Investissement | 62 920 $ | 180 950 $ | 124 080 $ | 367 950 $ |
+| Année | 0 | 2 | 4 | |
 
 La phase 1 porte presque toutes les infrastructures communes (annexe, sas, énergie, supervision, chambre froide, stockage d'eau), d'où son coût élevé au m². Ces équipements servent ensuite à toute la ferme.
 
-Résultats de la ferme complète (1 000 m²) en régime de croisière :
+Résultats en régime de croisière :
 
-| Scénario | CA net annuel | EBE annuel | TRI sur 10 ans |
-|---|---|---|---|
-| Prudent | 30 700 $ | -15 100 $ | négatif |
-| Médian | 61 800 $ | 16 000 $ | -3,5 % |
-| Optimiste | 103 200 $ | 57 400 $ | +16 % |
+| Scénario | CA net, 2 000 m² | dont poissons et alevins | EBE à 1 000 m² | EBE à 2 000 m² | TRI sur 10 ans |
+|---|---|---|---|---|---|
+| Prudent | 87 600 $ | 31 100 $ | -24 100 $ | -38 000 $ | négatif |
+| Médian | 168 000 $ | 53 900 $ | 23 000 $ | 48 100 $ | -1,0 % |
+| Optimiste | 279 800 $ | 86 800 $ | 87 200 $ | 162 800 $ | +21,5 % |
 
 Ces chiffres doivent être lus sans complaisance :
 
-1. **Avec les hypothèses médianes, l'investissement complet ne se rembourse pas en dix ans.** La ferme dégage un excédent d'exploitation positif (16 000 $/an) mais insuffisant face à 170 000 $ investis.
-2. **Le résultat dépend presque entièrement de deux inconnues : le rendement réellement obtenu et le prix réellement payé par les clients.** Entre le scénario prudent et l'optimiste, l'écart d'EBE est de 72 000 $ par an pour la même serre.
-3. **Le seuil de viabilité est identifiable.** Avec les rendements médians, l'EBE devient nul si les prix tombent à 74 % des prix médians. Vu d'aujourd'hui, pour que le projet entier (pilote compris) rémunère le capital à 12 %, il faut un indice prix x rendement d'environ 1,5 fois le médian (par exemple +25 % sur les prix et +25 % sur les rendements). Mais la décision d'extension se prend après le pilote, quand son coût est déjà engagé : à ce moment-là, l'extension seule est rentable à 12 % dès que l'indice mesuré atteint 1,1 fois le médian. C'est cet écart qui justifie de commencer petit : le pilote coûte cher au m², mais il évite d'engager 115 000 $ à l'aveugle.
-4. **Le pilote seul n'est pas une affaire rentable.** À 100 m², le chiffre d'affaires (environ 5 000 $/an) ne peut pas porter un salaire et les frais fixes. Si le porteur de projet fait lui-même le travail, le pilote s'équilibre à peu près. C'est un outil d'apprentissage et de preuve commerciale.
+1. **Avec les hypothèses médianes, aucune configuration ne rémunère le capital à 12 %.** La ferme intégrée de 2 000 m² dégage 48 000 $ d'excédent par an, contre 16 000 $ pour la ferme de 1 000 m² sans poissons du projet initial, mais l'investissement a doublé. Les poissons font gagner environ trois points de TRI ; l'agrandissement, à lui seul, n'en fait gagner aucun.
+2. **Le résultat dépend de trois inconnues : le prix réellement payé pour les légumes, le rendement réellement obtenu, et le nombre d'alevins vendus aux pisciculteurs.** Entre le scénario prudent et l'optimiste, l'écart d'EBE est de 200 000 $ par an pour la même ferme.
+3. **Les seuils sont identifiables.** La ferme de 2 000 m² reste à l'équilibre d'exploitation tant que les légumes se vendent au moins à 58 % des prix médians (74 % sans aquaculture). Pour que le projet entier rémunère le capital à 12 %, il faut un indice prix x rendement des légumes d'environ 1,5, ou une combinaison équivalente de ventes directes, de prix du poisson et d'alevins vendus. Mais chaque tranche se décide une fois la précédente payée : la tranche 2 avec aquaculture se rentabilise dès que les prix des légumes atteignent environ 1,2 fois le médian (c'est le seuil « go » retenu) ; la tranche 3 demande environ 1,4.
+4. **L'aquaculture est un pari à fort levier.** Dans le scénario médian, son rendement propre est d'environ 7 % ; dans l'optimiste, 33 % ; dans le prudent, elle creuse la perte. Son premier levier est l'écloserie : chaque tranche de 30 000 alevins vendus vaut environ 5 700 $ d'EBE par an.
+5. **Le pilote seul n'est pas une affaire rentable.** À 100 m², le chiffre d'affaires ne peut pas porter un salaire et les frais fixes. Si le porteur de projet fait lui-même le travail, le pilote s'équilibre à peu près. C'est un outil d'apprentissage et de preuve commerciale.
 
 ## 4. Recommandation
 
 **Lancer le pilote, en le considérant comme l'achat d'une information, pas comme une affaire.**
 
-- Budget pilote recommandé : 55 220 $ (configuration « optimisée »). Une configuration « vitrine R&D » plus instrumentée (environ 105 000 $) n'a de sens qu'avec un partenaire qui la finance (université, entreprise minière dans le cadre de sa responsabilité sociale, bailleur).
-- Perte maximale si l'on abandonne après deux ans, matériel revendu à 35 % : environ 43 000 $. C'est le risque réel à accepter.
+- Budget pilote recommandé : 62 920 $ (configuration « optimisée », pilote aquacole compris). Une configuration « vitrine R&D » plus instrumentée (environ 112 000 $) n'a de sens qu'avec un partenaire qui la finance (université, entreprise minière dans le cadre de sa responsabilité sociale, bailleur).
+- Perte maximale si l'on abandonne après deux ans, matériel revendu à 35 % : environ 48 000 $. C'est le risque réel à accepter.
 - Durée : 12 à 18 mois de production avant de décider.
+- Terrain : prévoir dès le départ une parcelle d'environ 80 x 60 m (4 800 m², planche A05), pour ne pas fermer la porte aux tranches 2 et 3.
 
-**Ne décider l'extension que si le pilote atteint, sur 12 mois glissants :**
+**Ne décider la tranche 2 que si le pilote atteint, sur 12 mois glissants :**
 
 | Indicateur | Seuil « go » | Seuil « stop » |
 |---|---|---|
 | Tomate, rendement annualisé | ≥ 28 kg/m² | < 20 kg/m² |
 | Laitue, têtes vendables par m² de radeau et par an | ≥ 220 | < 160 |
-| Prix moyen obtenu, tous produits | ≥ 110 % du médian | < 90 % |
+| Prix moyen obtenu, tous légumes | ≥ 110 % du médian | < 90 % |
 | Indice global prix x rendement (modèle financier) | ≥ 1,2 | < 1,0 |
 | Clients professionnels sous contrat ou commande régulière | ≥ 4 | < 2 |
 | Pertes et invendus | ≤ 8 % | > 15 % |
 | Incidents sanitaires ayant détruit plus de 20 % d'une culture | 0 | ≥ 2 |
 | Disponibilité de la supervision (données reçues) | ≥ 98 % | < 90 % |
+| Poissons : survie, indice de conversion | ≥ 85 %, ≤ 1,3 | < 75 %, > 1,5 |
+| Écloserie : pontes réussies, pisciculteurs engagés | ≥ 3 pontes, ≥ 5 acheteurs | 0 ponte, < 2 acheteurs |
+| Prix du poisson obtenu, prix de l'aliment rendu | ≥ 3,0 $/kg, ≤ 1,30 $/kg | < 2,5 $/kg, > 1,60 $/kg |
 
-Entre les deux seuils : prolonger le pilote de six mois en corrigeant ce qui coince, ou étendre plus modestement (300 à 400 m²) en recalculant avec les valeurs mesurées.
+Entre les deux seuils : prolonger le pilote de six mois en corrigeant ce qui coince, ou étendre plus modestement (300 à 400 m²) en recalculant avec les valeurs mesurées. Si seuls les critères aquacoles échouent, la tranche 2 se fait sans aquaculture (ou avec un grossissement alimenté en alevins achetés si seule l'écloserie échoue).
+
+**La tranche 3 (2 000 m²) ne se décide que 18 mois après la mise en service de la tranche 2**, si l'indice prix x rendement mesuré atteint 1,4 et si l'EBE de la ferme de 1 000 m² dépasse 40 000 $ par an (chapitre 16, §16.6). Une ferme de 1 000 m² bien vendue vaut mieux qu'une ferme de 2 000 m² mal vendue.
 
 Le modèle financier est construit pour que ces valeurs mesurées remplacent les hypothèses en quelques minutes.
 
@@ -98,6 +110,7 @@ Le modèle financier est construit pour que ces valeurs mesurées remplacent les
 - Deux compartiments indépendants (fruits / feuilles), chacun avec son propre circuit d'eau désinfecté aux UV : une maladie racinaire ne traverse pas la serre.
 - Sas de biosécurité, filets anti-insectes 50 mesh, vide sanitaire annuel, lutte biologique : on vise zéro traitement chimique de synthèse sur les produits récoltés.
 - Climat piloté par l'excès de chaleur du jour, stocké dans l'eau pour la nuit : pas de chauffage au gaz ni au charbon.
+- Aquaculture découplée : écloserie de Clarias et poisson de table élevés sans hormones de croissance ni antibiotiques préventifs ; l'eau renouvelée des bacs arrose les cultures, rien n'est rejeté.
 - Supervision locale autonome (fonctionne sans internet), alertes SMS, tableau de bord qui montre la serre comme un organisme vivant : chaque lot de plantes, de la graine à la récolte, avec son climat, sa solution, ses photos et son historique. Un mode « recherche » permet de mener des essais comparatifs et d'exporter les données.
 
 ## 6. Se mettre dans la serre avant d'investir
@@ -105,10 +118,10 @@ Le modèle financier est construit pour que ces valeurs mesurées remplacent les
 Trois simulateurs, fonctionnant hors ligne, permettent d'éprouver la conception avant toute dépense (chapitre 18) :
 
 - **la maquette 3D vivante**, où l'on se promène dans les allées, où le soleil est à sa vraie place pour chaque mois et chaque heure, où les ouvrants, l'écran, le mur évaporatif et les extracteurs bougent selon le climat calculé, où l'eau et l'énergie circulent dans les tuyaux et les câbles ;
-- **le simulateur des systèmes**, qui montre, schéma par schéma (climat, fertirrigation, bassins, eau, électricité, électronique et IIoT), qui fait quoi, quand et sous quelles conditions, et comment la serre réagit à huit pannes que l'on peut provoquer ;
+- **le simulateur des systèmes**, qui montre, schéma par schéma (climat, fertirrigation, bassins, eau, électricité, électronique et IIoT, aquaculture), qui fait quoi, quand et sous quelles conditions, et comment la ferme réagit à dix pannes que l'on peut provoquer ;
 - **la supervision**, l'écran que le technicien utilisera sur site.
 
-Ils sont complétés par un dossier de plans A3 de 16 planches (génie civil, P&ID, unifilaire, commande, câblage, réseau, logique, listes d'E/S et de câbles) et par le dossier de fabrication de la carte électronique des automates (schéma KiCad, circuit imprimé, Gerbers, nomenclature).
+Ils sont complétés par un dossier de plans A3 de 18 planches (génie civil, plan de masse de la ferme intégrée, P&ID dont l'unité aquacole, unifilaire, commande, câblage, réseau, logique, listes d'E/S et de câbles) et par le dossier de fabrication de la carte électronique des automates (schéma KiCad, circuit imprimé, Gerbers, nomenclature).
 
 ## 7. Où trouver quoi
 
@@ -131,3 +144,4 @@ Ils sont complétés par un dossier de plans A3 de 16 planches (génie civil, P&
 | Planning et étapes de décision | `16_feuille_de_route.md` |
 | Sources | `17_sources.md` |
 | Simulateurs 2D et 3D, dossier de plans, carte électronique CAZ-1 | `18_simulateurs_et_carte_electronique.md` |
+| Aquaponie et pisciculture : ce que les poissons apportent, unité aquacole, chiffres | `19_aquaponie_pisciculture.md` |

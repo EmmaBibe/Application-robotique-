@@ -30,82 +30,95 @@
 <text x="266.20" y="60.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="60.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="62.50" x2="315.00" y2="62.50" stroke="#8a8a8a" stroke-width="0.15"/>
-<text x="26.20" y="67.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">H01</text>
-<text x="46.20" y="67.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">P&amp;ID : collecte, traitement et stockage de l&#x27;eau</text>
-<text x="236.20" y="67.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="26.20" y="67.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">A05</text>
+<text x="46.20" y="67.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Plan de masse de la ferme intégrée (2 000 m² de serres et aquaculture)</text>
+<text x="236.20" y="67.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">1:400</text>
 <text x="266.20" y="67.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="67.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="69.00" x2="315.00" y2="69.00" stroke="#8a8a8a" stroke-width="0.15"/>
 <rect x="25.00" y="69.00" width="290.00" height="6.50" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
-<text x="26.20" y="73.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">H02</text>
-<text x="46.20" y="73.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">P&amp;ID : fertirrigation du compartiment fruits</text>
+<text x="26.20" y="73.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">H01</text>
+<text x="46.20" y="73.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">P&amp;ID : collecte, traitement et stockage de l&#x27;eau</text>
 <text x="236.20" y="73.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="73.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="73.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="75.50" x2="315.00" y2="75.50" stroke="#8a8a8a" stroke-width="0.15"/>
-<text x="26.20" y="80.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">H03</text>
-<text x="46.20" y="80.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">P&amp;ID : bassins à radeaux du compartiment feuilles</text>
+<text x="26.20" y="80.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">H02</text>
+<text x="46.20" y="80.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">P&amp;ID : fertirrigation du compartiment fruits</text>
 <text x="236.20" y="80.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="80.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="80.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="82.00" x2="315.00" y2="82.00" stroke="#8a8a8a" stroke-width="0.15"/>
 <rect x="25.00" y="82.00" width="290.00" height="6.50" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
-<text x="26.20" y="86.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">E01</text>
-<text x="46.20" y="86.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">Schéma unifilaire général</text>
+<text x="26.20" y="86.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">H03</text>
+<text x="46.20" y="86.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">P&amp;ID : bassins à radeaux du compartiment feuilles</text>
 <text x="236.20" y="86.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="86.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="86.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="88.50" x2="315.00" y2="88.50" stroke="#8a8a8a" stroke-width="0.15"/>
-<text x="26.20" y="93.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">E02</text>
-<text x="46.20" y="93.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Commande 24 V : délestage et automatismes</text>
+<text x="26.20" y="93.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">H04</text>
+<text x="46.20" y="93.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">P&amp;ID : unité aquacole et couplage aux cultures</text>
 <text x="236.20" y="93.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="93.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="93.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="95.00" x2="315.00" y2="95.00" stroke="#8a8a8a" stroke-width="0.15"/>
 <rect x="25.00" y="95.00" width="290.00" height="6.50" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
-<text x="26.20" y="99.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">E03</text>
-<text x="46.20" y="99.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">Câblage de l&#x27;armoire de zone AUT-F</text>
+<text x="26.20" y="99.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">E01</text>
+<text x="46.20" y="99.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">Schéma unifilaire général</text>
 <text x="236.20" y="99.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="99.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="99.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="101.50" x2="315.00" y2="101.50" stroke="#8a8a8a" stroke-width="0.15"/>
-<text x="26.20" y="106.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">E04</text>
-<text x="46.20" y="106.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Mise à la terre et protection contre la foudre</text>
-<text x="236.20" y="106.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">1:200</text>
+<text x="26.20" y="106.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">E02</text>
+<text x="46.20" y="106.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Commande 24 V : délestage et automatismes</text>
+<text x="236.20" y="106.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="106.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="106.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="108.00" x2="315.00" y2="108.00" stroke="#8a8a8a" stroke-width="0.15"/>
 <rect x="25.00" y="108.00" width="290.00" height="6.50" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
-<text x="26.20" y="112.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">I01</text>
-<text x="46.20" y="112.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">Architecture réseau, bus de terrain et plan d&#x27;adressage</text>
+<text x="26.20" y="112.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">E03</text>
+<text x="46.20" y="112.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">Câblage de l&#x27;armoire de zone AUT-F</text>
 <text x="236.20" y="112.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="112.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="112.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="114.50" x2="315.00" y2="114.50" stroke="#8a8a8a" stroke-width="0.15"/>
-<text x="26.20" y="119.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">I02</text>
-<text x="46.20" y="119.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Logique de régulation climatique (organigramme)</text>
-<text x="236.20" y="119.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="26.20" y="119.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">E04</text>
+<text x="46.20" y="119.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Mise à la terre et protection contre la foudre</text>
+<text x="236.20" y="119.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">1:200</text>
 <text x="266.20" y="119.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="119.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="121.00" x2="315.00" y2="121.00" stroke="#8a8a8a" stroke-width="0.15"/>
 <rect x="25.00" y="121.00" width="290.00" height="6.50" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
-<text x="26.20" y="125.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">T01</text>
-<text x="46.20" y="125.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">Liste des entrées et sorties (AUT-F, AUT-L, AUT-E)</text>
+<text x="26.20" y="125.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">I01</text>
+<text x="46.20" y="125.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">Architecture réseau, bus de terrain et plan d&#x27;adressage</text>
 <text x="236.20" y="125.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="125.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="125.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="127.50" x2="315.00" y2="127.50" stroke="#8a8a8a" stroke-width="0.15"/>
-<text x="26.20" y="132.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">T02</text>
-<text x="46.20" y="132.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Liste des câbles</text>
+<text x="26.20" y="132.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">I02</text>
+<text x="46.20" y="132.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Logique de régulation climatique (organigramme)</text>
 <text x="236.20" y="132.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
 <text x="266.20" y="132.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
 <text x="286.20" y="132.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
 <line x1="25.00" y1="134.00" x2="315.00" y2="134.00" stroke="#8a8a8a" stroke-width="0.15"/>
-<rect x="25.00" y="30.00" width="290.00" height="104.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
-<line x1="45.00" y1="30.00" x2="45.00" y2="134.00" stroke="#8a8a8a" stroke-width="0.15"/>
-<line x1="235.00" y1="30.00" x2="235.00" y2="134.00" stroke="#8a8a8a" stroke-width="0.15"/>
-<line x1="265.00" y1="30.00" x2="265.00" y2="134.00" stroke="#8a8a8a" stroke-width="0.15"/>
-<line x1="285.00" y1="30.00" x2="285.00" y2="134.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="25.00" y="134.00" width="290.00" height="6.50" rx="0" fill="#f7f8f7" stroke="none" stroke-width="0"/>
+<text x="26.20" y="138.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">T01</text>
+<text x="46.20" y="138.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">Liste des entrées et sorties (AUT-F, AUT-L, AUT-E, AUT-P)</text>
+<text x="236.20" y="138.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="266.20" y="138.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
+<text x="286.20" y="138.55" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<line x1="25.00" y1="140.50" x2="315.00" y2="140.50" stroke="#8a8a8a" stroke-width="0.15"/>
+<text x="26.20" y="145.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">T02</text>
+<text x="46.20" y="145.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">Liste des câbles</text>
+<text x="236.20" y="145.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">sans</text>
+<text x="266.20" y="145.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">A</text>
+<text x="286.20" y="145.05" font-size="2.3" text-anchor="start" fill="#1a1a1a">13/11/2026</text>
+<line x1="25.00" y1="147.00" x2="315.00" y2="147.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<rect x="25.00" y="30.00" width="290.00" height="117.00" rx="0" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>
+<line x1="45.00" y1="30.00" x2="45.00" y2="147.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<line x1="235.00" y1="30.00" x2="235.00" y2="147.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<line x1="265.00" y1="30.00" x2="265.00" y2="147.00" stroke="#8a8a8a" stroke-width="0.15"/>
+<line x1="285.00" y1="30.00" x2="285.00" y2="147.00" stroke="#8a8a8a" stroke-width="0.15"/>
 <text x="25.00" y="200.00" font-size="2.6" text-anchor="start" fill="#1a1a1a" font-weight="700">Notes</text>
 <text x="25.00" y="204.20" font-size="2.2" text-anchor="start" fill="#1a1a1a">Codification : A = architecture et génie civil, H = hydraulique (P&amp;ID), E = électricité,</text>
 <text x="25.00" y="207.39" font-size="2.2" text-anchor="start" fill="#1a1a1a">I = automatisme et IIoT, T = tableaux, C = carte électronique CAZ-1 (dossier KiCad joint).</text>

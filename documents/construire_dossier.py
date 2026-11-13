@@ -15,7 +15,7 @@ from weasyprint import HTML
 R = Path(__file__).resolve().parents[1]
 D = R / "docs"
 FIG = Path(__file__).resolve().parent / "figures"
-VERSION, DATE = "1.1", "13 novembre 2026"
+VERSION, DATE = "1.2", "13 novembre 2026"
 
 FIGURES = {
     "3.6 ": [("chiffre_affaires.svg", "Chiffre d'affaires brut annuel du pilote par culture (scénario médian)", "")],
@@ -26,7 +26,11 @@ FIGURES = {
     "10.3 ": [("energie.svg", "Consommation électrique journalière par poste et production solaire, mois par mois", "")],
     "10.6 ": [(R / "plans" / "svg" / "E01.svg", "Schéma unifilaire général (planche E01)", "plan")],
     "11.2 ": [(R / "plans" / "svg" / "I01.svg", "Architecture réseau, bus de terrain et adressage (planche I01)", "plan")],
-    "13.5 ": [("tresorerie.svg", "Trésorerie cumulée du projet selon l'indice prix x rendement obtenu", "")],
+    "13.5 ": [("tresorerie.svg", "Trésorerie cumulée de la ferme intégrée selon le prix obtenu pour les légumes (scénario médian pour le reste)", "")],
+    "19.7 ": [("nutriments.svg", "Azote, phosphore et potassium : ce que l'eau des poissons apporte aux cultures", "")],
+    "19.8 ": [(R / "plans" / "svg" / "H04.svg", "P&ID de l'unité aquacole et de son couplage aux cultures (planche H04)", "plan")],
+    "19.9 ": [("configurations.svg", "EBE de croisière des quatre configurations étudiées, par scénario", "")],
+    "19.10 ": [(R / "plans" / "svg" / "A05.svg", "Plan de masse de la ferme intégrée (planche A05)", "plan")],
 }
 
 CSS = """
@@ -62,7 +66,7 @@ figure img { width: 100%; }
 figcaption { font-size: 8pt; color: #55625b; margin-top: 1.5mm; text-align: left; }
 figcaption::before { counter-increment: figure; content: "Figure " counter(figure) " - "; font-weight: 700; color: #2f7d4f; }
 .plan { page: plan; page-break-before: always; page-break-after: always; }
-.plan img { width: 100%; }
+.plan img { display: block; width: auto; max-width: 100%; max-height: 158mm; margin: 0 auto; }
 /* couverture */
 .couverture { page: couverture; width: 210mm; height: 297mm; position: relative; background: #f2f5f2; }
 .couverture .bande { position: absolute; left: 0; top: 0; width: 210mm; height: 104mm; background: #1f5e3a; }
@@ -126,7 +130,7 @@ def construire():
       <div class="bande"></div>{img}
       <div class="titre"><div class="sur">Étude de faisabilité</div>
         <h0>Serre agricole autonome<br>en environnement contrôlé</h0>
-        <div class="sous">Pilote de 100 m² et extension à 1 000 m²<br>Lubumbashi, Haut-Katanga, République démocratique du Congo</div></div>
+        <div class="sous">Pilote de 100 m², puis ferme intégrée serres et aquaculture de 1 000 à 2 000 m²<br>Lubumbashi, Haut-Katanga, République démocratique du Congo</div></div>
       <div class="pied"><b>Version {VERSION}</b> · {DATE}<br>Agronomie · architecture et génie civil · thermique · hydraulique · électricité et énergie ·
         électronique et IIoT · logiciel · économie et finance · exploitation · risques</div>
     </section>"""
@@ -138,15 +142,16 @@ def construire():
       <tr><td><b>Version</b></td><td>{VERSION} du {DATE}</td></tr>
       <tr><td><b>Statut</b></td><td>Diffusion pour décision (phase 0)</td></tr>
       <tr><td><b>Site</b></td><td>Lubumbashi, Haut-Katanga (11,7° S, 1 230 m d'altitude)</td></tr>
-      <tr><td><b>Documents associés</b></td><td>Dossier de plans et schémas (SLB-PLA-001, 16 planches A3) ; dossier de la carte automate CAZ-1 (SLB-ELN-001) ;
+      <tr><td><b>Documents associés</b></td><td>Dossier de plans et schémas (SLB-PLA-001, 18 planches A3) ; dossier de la carte automate CAZ-1 (SLB-ELN-001) ;
         modèle financier (classeur Excel) ; simulateurs 2D et 3D ; logiciel de supervision</td></tr>
       </tbody></table>
       <h2>Historique</h2>
       <table><thead><tr><th>Version</th><th>Date</th><th>Objet</th></tr></thead><tbody>
       <tr><td>1.0</td><td>12/11/2026</td><td>Première diffusion de l'étude</td></tr>
       <tr><td>1.1</td><td>13/11/2026</td><td>Ajout des simulateurs des systèmes, du dossier de plans, de la carte électronique CAZ-1 ; mise en page</td></tr>
+      <tr><td>1.2</td><td>13/11/2026</td><td>Aquaculture découplée (chapitre 19), ferme intégrée en trois tranches jusqu'à 2 000 m², modèle financier refondu, planches A05 et H04</td></tr>
       </tbody></table>
-      <div class="encart"><b>Comment lire ce dossier.</b> Le chapitre 0 répond à la question « faut-il se lancer ? ». Les chapitres 1 à 16 détaillent
+      <div class="encart"><b>Comment lire ce dossier.</b> Le chapitre 0 répond à la question « faut-il se lancer ? ». Les chapitres 1 à 16 et 19 détaillent
       chaque discipline ; chaque choix y est justifié et chiffré. Les repères d'équipements (P-101, KM2, AUT-F…) sont identiques dans ce dossier,
       les plans, le logiciel et les simulateurs.</div>
     </section>"""

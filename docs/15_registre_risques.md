@@ -1,6 +1,6 @@
 # 15. Registre des risques
 
-Le registre complet (20 risques, avec causes, mesures, plan de réponse et responsable) est dans `donnees/registre_risques.csv`, pour être tenu à jour dans un tableur. Il est revu chaque mois pendant le pilote.
+Le registre complet (26 risques, avec causes, mesures, plan de réponse et responsable) est dans `donnees/registre_risques.csv`, pour être tenu à jour dans un tableur. Il est revu chaque mois pendant le pilote.
 
 Criticité = probabilité (1 à 5) x gravité (1 à 5). Au-delà de 12 : risque majeur, suivi mensuel obligatoire.
 
@@ -15,7 +15,7 @@ Criticité = probabilité (1 à 5) x gravité (1 à 5). Au-delà de 12 : risque 
 
 ## 15.2 Les quatre risques majeurs
 
-**R01. Prix obtenus inférieurs aux hypothèses (criticité 20).** C'est le risque numéro un : le modèle financier montre qu'une baisse de 26 % des prix ramène l'EBE à zéro. La parade commence avant d'investir : enquête de prix auprès d'au moins quinze acheteurs professionnels, lettres d'intention, positionnement sur la saison des pluies et sur la qualité sanitaire (produits analysés). Pendant le pilote, chaque vente est enregistrée avec son prix réel : l'indicateur est connu en continu.
+**R01. Prix obtenus inférieurs aux hypothèses (criticité 20).** C'est le risque numéro un : le modèle financier montre qu'une baisse de 26 % des prix ramène l'EBE de la ferme sans poissons à zéro (42 % avec l'aquaculture, qui diversifie le chiffre d'affaires). La parade commence avant d'investir : enquête de prix auprès d'au moins quinze acheteurs professionnels, lettres d'intention, positionnement sur la saison des pluies et sur la qualité sanitaire (produits analysés). Pendant le pilote, chaque vente est enregistrée avec son prix réel : l'indicateur est connu en continu.
 
 **R03. Rendements inférieurs aux hypothèses (criticité 16).** Toute nouvelle exploitation hors-sol connaît une courbe d'apprentissage. Parades : formation sérieuse, appui d'un agronome spécialisé les six premiers mois (visites et suivi à distance grâce aux données), deux variétés par culture, recalage des recettes sur les mesures. Les données de la supervision permettent de comprendre un écart de rendement au lieu de le subir.
 
@@ -30,4 +30,15 @@ Criticité = probabilité (1 à 5) x gravité (1 à 5). Au-delà de 12 : risque 
 
 ## 15.4 Le risque de tout arrêter
 
-Le pire cas raisonnable : après deux ans de pilote, les prix et les rendements sont décevants et l'on arrête. Le terrain est libéré, le matériel revendu (environ 35 % de sa valeur : panneaux solaires, batteries, pompes, chambre froide, structure démontable se revendent bien à Lubumbashi). Perte nette estimée : environ 43 000 $ dans le scénario médian, 47 500 $ dans le scénario prudent (onglet `Pilote_seul` du modèle). C'est le montant que le porteur de projet doit être prêt à perdre, et il ne doit pas l'emprunter.
+Le pire cas raisonnable : après deux ans de pilote, les prix et les rendements sont décevants et l'on arrête. Le terrain est libéré, le matériel revendu (environ 35 % de sa valeur : panneaux solaires, batteries, pompes, chambre froide, structure démontable se revendent bien à Lubumbashi). Perte nette estimée, pilote aquacole compris : environ 48 000 $ dans le scénario médian, 52 600 $ dans le scénario prudent (onglet `Pilote_seul` du modèle). C'est le montant que le porteur de projet doit être prêt à perdre, et il ne doit pas l'emprunter.
+
+## 15.5 Risques propres à l'aquaculture
+
+| Id | Risque | Probabilité | Gravité | Criticité | Parade principale |
+|---|---|---|---|---|---|
+| R21 | Écloserie qui ne produit pas (pontes ratées, cannibalisme, mortalité larvaire) | 3 | 4 | 12 | Formation dans une écloserie de référence pendant le pilote ; tri fréquent ; repli sur l'achat d'alevins |
+| R22 | Marché des alevins plus étroit que prévu | 3 | 4 | 12 | Enquête en phase 0, lettres d'intention ; écloserie dimensionnée progressivement |
+| R23 | Mortalité massive (panne d'oxygène, maladie) | 2 | 4 | 8 | Clarias à respiration aérienne, soufflante de secours, alarme SMS, quarantaine |
+| R24 | Hausse ou rupture de l'aliment importé | 3 | 3 | 9 | Deux fournisseurs, stock de 6 semaines, indice de conversion suivi par lot |
+| R25 | Prix du poisson tiré vers le bas par le tilapia zambien et le congelé | 3 | 3 | 9 | Vente vivante ou très fraîche, clients professionnels sous contrat |
+| R26 | Contamination des légumes par l'eau des poissons | 1 | 5 | 5 | Filtration et UV, eau jamais au contact des feuilles, analyses mensuelles |

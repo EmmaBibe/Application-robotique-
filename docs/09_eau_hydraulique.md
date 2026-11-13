@@ -87,3 +87,12 @@ Circuit indépendant : bac de 300 L, pompe de 100 W, gouttière de distribution,
 | Pompe et bac du pad | 1 | 100 W, 300 L |
 | Débitmètres à impulsions | 3 | Eau d'appoint, irrigation fruits, appoint bassins |
 | Capteurs de niveau | 5 | Citerne, cuve tampon, cuve de solution, cuve de drainage, bac du pad |
+
+## 9.8 Eau de l'unité aquacole (tranches 2 et 3)
+
+- **Volume** : 32 m³ de bacs en tranche 2, 64 m³ en tranche 3, remplis à l'eau de pluie traitée ou au forage (jamais d'eau de surface).
+- **Renouvellement** : 5 % du volume par jour (1,6 puis 3,2 m³/j), prélevés dans le bassin de reprise après le biofiltre, filtrés à 50 µm, désinfectés aux UV, puis envoyés au bassin tampon de 2 m³ qui alimente les radeaux et la cuve des fruits. Cette eau couvre 55 à 60 % des besoins en eau des cultures en saison sèche : l'élevage ne consomme presque pas d'eau en plus de la serre.
+- **Qualité visée dans les bacs** : oxygène > 5 mg/L, température 26-28 °C (28-29 °C en écloserie), pH 7,0-7,5, ammoniaque non ionisée < 0,05 mg/L, nitrite < 1 mg/L, nitrate 50 à 150 mg/L d'azote.
+- **Boues** : 3,6 puis 7,2 kg de matière sèche par jour, purgées du décanteur vers un minéralisateur aéré (10 à 15 jours), dont le surnageant rejoint le bassin tampon ; le résidu est composté.
+- **Aucun rejet liquide** dans le milieu : toute l'eau sortant des bacs est absorbée par les cultures.
+- P&ID : planche H04 du dossier de plans.

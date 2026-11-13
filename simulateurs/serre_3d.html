@@ -56,6 +56,7 @@ li{margin:2px 0}
     <option value="eau">Eau et hydraulique</option>
     <option value="elec">Électricité et énergie</option>
     <option value="iiot">Capteurs et IIoT</option>
+    <option value="aqua">Aquaculture (pilote)</option>
   </select>
   <label><input type="checkbox" id="c-couverture" checked> Film et parois</label>
   <label><input type="checkbox" id="c-etiquettes" checked> Valeurs des capteurs</label>
@@ -105,10 +106,14 @@ li{margin:2px 0}
     <p class="sous">Configuration optimisée : 6 panneaux de 550 Wc sur l'annexe, batterie LiFePO4 10,2 kWh. Les délestages SNEL sont simulés.</p>
   </section>
   <section id="o-finance" class="cache">
-    <p class="sous">Ferme complète (pilote + extension à 1 000 m²), mêmes formules que le classeur Excel.</p>
-    <label>Prix obtenus <input type="range" id="f-prix" min="60" max="150" value="100"></label>
-    <label>Rendements <input type="range" id="f-rdt" min="60" max="150" value="100"></label>
-    <label>Coût de l'extension <input type="range" id="f-capex" min="60" max="140" value="100"></label>
+    <p class="sous">Ferme intégrée : pilote, puis 1 000 m² avec écloserie et grossissement de poisson, puis 2 000 m². Mêmes formules que le classeur Excel (scénario médian au départ).</p>
+    <label>Prix des légumes <span id="v-prix">100 %</span> <input type="range" id="f-prix" min="60" max="150" value="100"></label>
+    <label>Rendements des légumes <span id="v-rdt">100 %</span> <input type="range" id="f-rdt" min="60" max="150" value="100"></label>
+    <label>Coût des tranches 2 et 3 <span id="v-capex">100 %</span> <input type="range" id="f-capex" min="60" max="140" value="100"></label>
+    <label>Prix du poisson <span id="v-pp">3,30 $/kg</span> <input type="range" id="f-pp" min="200" max="500" value="330"></label>
+    <label>Alevins vendus par an <span id="v-al">90 000</span> <input type="range" id="f-al" min="0" max="200000" step="5000" value="90000"></label>
+    <label style="display:inline-block;margin-right:10px"><input type="checkbox" id="f-aqua" checked> Aquaculture</label>
+    <label style="display:inline-block"><input type="checkbox" id="f-t3" checked> Tranche 3 (2 000 m²)</label>
     <div class="grille" id="kpis-finance"></div>
     <canvas id="tresorerie" width="560" height="240" style="width:100%;margin-top:8px"></canvas>
     <div class="sous">Trésorerie cumulée sur 10 ans (après impôt)</div>
@@ -240,7 +245,7 @@ const mat = {
 };
 
 // ================================================================ outils de construction
-const domaines = { agronomie: [], genie: [], climat: [], eau: [], elec: [], iiot: [], couverture: [] };
+const domaines = { agronomie: [], genie: [], climat: [], eau: [], elec: [], iiot: [], couverture: [], aqua: [] };
 const cliquables = [];
 function ajouter(obj, domaine, info) {
   obj.traverse(o => { if (o.isMesh) { o.castShadow = o.material !== mat.film && o.material !== mat.filet && o.material !== mat.poly; o.receiveShadow = true; } });
@@ -504,6 +509,37 @@ meteoMat.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 3, 6),
 meteoMat.add(placer(boite(0.3, 0.2, 0.3, mat.armoire), 8, 3.05, -7));
 ajouter(meteoMat, ["iiot", "climat"], { titre: "Station météo", texte: "Vent (ultrasons), pluie, température, humidité, rayonnement. Commande directe des sécurités : ouvrants limités à 30 % au-delà de 10 m/s, fermés au-delà de 14 m/s.", cout: "450 $ + pyranomètre 220 $" });
 
+// ================================================================ pilote aquacole (abri 4 x 3 m accolé à l'annexe, côté est)
+const abriAqua = new THREE.Group();
+const matAbri = new THREE.MeshStandardMaterial({ color: 0xe7eef2, roughness: 0.4, transparent: true, opacity: 0.55, side: THREE.DoubleSide });
+abriAqua.add(placer(boite(4, 2.6, 0.05, matAbri), 7.05, 1.3, 7.0));
+abriAqua.add(placer(boite(4, 2.6, 0.05, matAbri), 7.05, 1.3, 10.0));
+abriAqua.add(placer(boite(0.05, 2.6, 3, matAbri), 9.05, 1.3, 8.5));
+const toitAbri = boite(4.3, 0.06, 3.4, matAbri); toitAbri.position.set(7.05, 2.7, 8.5); toitAbri.rotation.x = -8 * Math.PI / 180; abriAqua.add(toitAbri);
+abriAqua.add(placer(boite(4, 0.1, 3, mat.beton), 7.05, 0.05, 8.5));
+ajouter(abriAqua, ["aqua", "genie"], { titre: "Abri aquacole du pilote", texte: "4 x 3 m, panneaux translucides isolés, accolé à l'annexe (accès par le sas), à l'emplacement du futur bâtiment aquacole de la tranche 2. Abrite deux bacs de 3 m³ de Clarias, le décanteur, le biofiltre et la soufflante.", cout: "Pilote aquacole : 5 200 $ + essais de reproduction 1 800 $" });
+const matBac = new THREE.MeshStandardMaterial({ color: 0x2c3e50, roughness: 0.6 });
+const eauxAqua = [], poissons3d = [];
+for (const [i, x] of [[1, 6.1], [2, 8.0]]) {
+  const bac = new THREE.Group();
+  bac.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 1.2, 32, 1, true), matBac), x, 0.7, 8.0));
+  const eauBac = placer(new THREE.Mesh(new THREE.CircleGeometry(0.88, 32), mat.eau.clone()), x, 1.15, 8.0); eauBac.rotation.x = -Math.PI / 2; bac.add(eauBac); eauxAqua.push(eauBac);
+  for (let k = 0; k < 5; k++) {
+    const poisson = new THREE.Mesh(new THREE.CapsuleGeometry(0.035, 0.22, 4, 8), new THREE.MeshStandardMaterial({ color: 0x5b5a4a }));
+    poisson.rotation.z = Math.PI / 2; poisson.rotation.y = k * 1.3;
+    poisson.position.set(x + Math.cos(k * 1.3) * 0.45, 0.9, 8.0 + Math.sin(k * 1.3) * 0.45);
+    poisson.userData.poisson = { x, k, a: k * 1.3 }; bac.add(poisson); poissons3d.push(poisson);
+  }
+  ajouter(bac, ["aqua", "agronomie"], { titre: `Bac B-40${i} (3 m³)`, texte: "Bac circulaire à fond conique, couvercle isolant. 230 à 240 Clarias par lot, de 12 g à 800 g en 5 à 6 mois. Le Clarias respire l'air en surface : il survit à une panne d'aération.", cout: "Inclus au pilote aquacole" });
+}
+const filtresAqua = new THREE.Group();
+filtresAqua.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.0, 20), mat.citerne), 8.6, 0.6, 9.4));
+filtresAqua.add(placer(new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 1.1, 20), mat.armoire), 7.8, 0.65, 9.45));
+filtresAqua.add(placer(boite(0.4, 0.3, 0.3, mat.armoire), 6.3, 0.25, 9.5));
+ajouter(filtresAqua, ["aqua", "eau"], { titre: "Décanteur, biofiltre et soufflante", texte: "Le décanteur retire les matières en suspension, le biofiltre à lit mobile transforme l'ammoniaque en nitrate, la soufflante aère et relève l'eau par air-lift (charge prioritaire 0). Planche H04.", cout: "Inclus au pilote aquacole" });
+ajouter(tube([[6.1, 0.4, 7.2], [5.3, 0.4, 7.2], [5.3, 0.3, 6.4], [3.5, 0.3, 6.4], [3.5, 0.3, 4.9]], 0.03, mat.tuyauBleu), ["aqua", "eau"],
+  { titre: "Eau des poissons vers le bassin tempéré", texte: "5 % du volume des bacs par jour (10 % si le nitrate dépasse 120 mg/L), filtrés à 50 µm et désinfectés aux UV : l'azote et le phosphore des poissons nourrissent les radeaux ; le potassium est complété par la potasse qui tient le pH des bacs.", cout: "Inclus" });
+
 // ================================================================ réseaux (eau, électricité)
 ajouter(tube([[-3.4, 0.6, 7], [-3.4, 0.6, 6.4], [-0.9, 0.6, 6.4], [-0.9, 0.6, 5], [-0.7, 0.6, 0], [-0.7, 0.6, -4.4], [-4.5, 0.6, -4.4]], 0.035, mat.tuyauRouge), "eau",
   { titre: "Circuit fruits", texte: "Cuve de 500 L (local technique) → pompe 0,37 kW → filtre à disques → goutte-à-goutte 2 L/h. Le drainage revient par les gouttières, filtre 50 µm, UV-C, puis réutilisation.", cout: "Station 2 circuits : 2 500 $" });
@@ -699,7 +735,11 @@ function panneaux_() {
 
 // ================================================================ finance
 function majFinance() {
-  const r = M.finance({ prix: $("#f-prix").value / 100, rendement: $("#f-rdt").value / 100, capex2Facteur: $("#f-capex").value / 100 });
+  const r = M.finance({ prix: $("#f-prix").value / 100, rendement: $("#f-rdt").value / 100, capex2Facteur: $("#f-capex").value / 100,
+                        prixPoisson: $("#f-pp").value / 100, alevins: +$("#f-al").value, aquaculture: $("#f-aqua").checked, tranche3: $("#f-t3").checked });
+  $("#v-prix").textContent = `${$("#f-prix").value} %`; $("#v-rdt").textContent = `${$("#f-rdt").value} %`; $("#v-capex").textContent = `${$("#f-capex").value} %`;
+  $("#v-pp").textContent = `${fmt($("#f-pp").value / 100, 2)} $/kg`; $("#v-al").textContent = fmt(+$("#f-al").value, 0);
+  $("#f-pp").disabled = $("#f-al").disabled = !$("#f-aqua").checked;
   const ton = r.van >= 0 ? "var(--vert)" : r.ebeCroisiere >= 0 ? "var(--orange)" : "var(--rouge)";
   $("#kpis-finance").innerHTML = [
     ["EBE de croisière", `${fmt(r.ebeCroisiere, 0)} $`, "par an"],
@@ -707,7 +747,7 @@ function majFinance() {
     ["TRI", r.tri == null ? "négatif" : `${fmt(r.tri * 100)} %`, "sur 10 ans"],
     ["Retour", r.retour == null ? "> 10 ans" : `année ${r.retour}`, "trésorerie positive"],
     ["Besoin max.", `${fmt(r.creux, 0)} $`, "creux de trésorerie"],
-    ["Indice", fmt($("#f-prix").value * $("#f-rdt").value / 10000, 2), "prix x rendement"],
+    ["Indice légumes", fmt($("#f-prix").value * $("#f-rdt").value / 10000, 2), "prix x rendement"],
   ].map(([a, b, c]) => `<div class="kpi"><span>${a}</span><b>${b}</b><span>${c}</span></div>`).join("");
   const cv = $("#tresorerie"), x = cv.getContext("2d"), W = cv.width, H = cv.height;
   x.clearRect(0, 0, W, H);
@@ -716,7 +756,7 @@ function majFinance() {
   x.strokeStyle = "#8a9a90"; x.beginPath(); x.moveTo(30, y(0)); x.lineTo(W - 10, y(0)); x.stroke();
   r.cumul.forEach((v, i) => { const bx = 34 + i * (W - 50) / 11; x.fillStyle = v >= 0 ? "#5fbf85" : "#e9776b"; x.fillRect(bx, Math.min(y(0), y(v)), (W - 50) / 11 - 6, Math.abs(y(v) - y(0))); x.fillStyle = "#9fb0a5"; x.font = "14px system-ui"; x.fillText(i, bx + 6, H - 4); });
 }
-["f-prix", "f-rdt", "f-capex"].forEach(id => $("#" + id).oninput = majFinance);
+["f-prix", "f-rdt", "f-capex", "f-pp", "f-al", "f-aqua", "f-t3"].forEach(id => $("#" + id).oninput = majFinance);
 
 document.querySelectorAll(".onglets button").forEach(b => b.onclick = () => {
   document.querySelectorAll(".onglets button").forEach(x => x.classList.toggle("actif", x === b));
@@ -809,6 +849,12 @@ function boucle(t) {
     camera.position.y = 1.65;
   } else orbite.update();
   majActionneurs(dt); majSoleil(); majFlux(dt);
+  const enSurface = E.sys && E.sys.aqua && E.sys.aqua.surface;
+  for (const p of poissons3d) {
+    const u = p.userData.poisson; u.a += dt * (0.5 + 0.1 * u.k);
+    p.position.set(u.x + Math.cos(u.a) * (0.3 + 0.05 * u.k), enSurface ? 1.1 : 0.75 + 0.06 * u.k, 8.0 + Math.sin(u.a) * (0.3 + 0.05 * u.k));
+    p.rotation.y = -u.a;
+  }
   cumulAffichage += dt; if (cumulAffichage > 0.25) { panneaux_(); if (!$("#o-cultures").classList.contains("cache") || !$("#o-pannes").classList.contains("cache")) majCultures(); cumulAffichage = 0; }
   renderer.render(scene, camera); etiquettes.render(scene, camera);
   requestAnimationFrame(boucle);

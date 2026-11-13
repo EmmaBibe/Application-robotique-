@@ -93,3 +93,11 @@ python -m outils.etude_climatique    # simulation des 12 mois
 ```
 
 Le démonstrateur d'interface s'ouvre directement : `logiciel/dashboard/index.html`.
+
+## 12.9 Aquaculture dans la supervision
+
+- **Lots de poissons** suivis comme les lots de plantes : date d'empoissonnement, origine des alevins, nombre, poids moyen échantillonné, mortalités, aliment distribué, indice de conversion calculé, date de récolte prévue.
+- **Écloserie** : chaque ponte avec sa femelle, son poids d'œufs, son taux d'éclosion, les tris et le nombre d'alevins vendus ou transférés.
+- **Ration du jour** proposée à partir de la biomasse estimée et de la température de l'eau (table de rationnement du Clarias), à valider par le technicien.
+- **Sujets MQTT** : `serre/lub1/aqua/mesure/bacN` (`{"o2": 6.4, "t": 27.2}`), `serre/lub1/aqua/mesure/reprise` (`{"ph": 7.2, "niveau": 82}`), `serre/lub1/aqua/etat` (soufflantes, pompe vers les cultures, UV), `serre/lub1/aqua/alarme`.
+- **Bilan des nutriments** : azote, phosphore et potassium apportés par l'eau des poissons, et complément dosé par la station de fertirrigation, pour suivre l'économie d'engrais réelle.

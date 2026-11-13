@@ -88,7 +88,7 @@ Le pilotage par intégration de température (la plante réagit surtout à la mo
 | NFT en gouttières | Bon | Mauvaise | Faible | Moyenne | Non |
 | Radeaux flottants (DWC) | Bon | Excellente (des heures, voire des jours, avec une aération minimale) | Très forte (environ 8 m³ d'eau) | Faible | **Oui** |
 | Tours verticales | Moyen (ombrage mutuel) | Mauvaise | Faible | Élevée | Non |
-| Aquaponie | Moyen | Bonne | Forte | Élevée, double compétence poissons/plantes | Non pour le pilote |
+| Aquaponie couplée (une seule boucle poissons-plantes) | Moyen (pH 7, carences en potassium et fer) | Bonne | Forte | Élevée, double compétence poissons/plantes | Non : la version découplée est retenue (D13) |
 
 **Décision** : deux bassins de radeaux flottants indépendants, environ 16,8 m² chacun, 25 cm d'eau. Un bassin « frais » (solution maintenue sous 21-22 °C pour épinard, céleri, chou de Chine, laitue) et un bassin « tempéré » (sous 24-26 °C pour amarante, oignon vert, poireau, aromatiques). Les bassins servent aussi de masse thermique pour le compartiment.
 
@@ -135,7 +135,7 @@ Capteurs industriels en Modbus RTU sur RS485 : bon marché, robustes, câbles de
 
 ## D12. Deux configurations
 
-Le dossier décrit pour chaque module une **configuration optimisée** (retenue pour le plan de financement, 55 220 $) et une **configuration complète** (« vitrine R&D », environ 105 000 $). Les différences principales :
+Le dossier décrit pour chaque module une **configuration optimisée** (retenue pour le plan de financement, 55 220 $ pour la serre pilote, 62 920 $ avec le pilote aquacole) et une **configuration complète** (« vitrine R&D », environ 105 000 $ hors aquaculture). Les différences principales :
 
 | Poste | Optimisée | Complète |
 |---|---|---|
@@ -150,3 +150,33 @@ Le dossier décrit pour chaque module une **configuration optimisée** (retenue 
 | Annexe | Construction légère | Maçonnerie |
 
 Le passage de l'une à l'autre se fait module par module, sans rien démonter.
+
+## D13. Aquaculture
+
+| Critère (poids) | Pas de poissons | Aquaponie couplée | Aquaculture découplée (circuits séparés, eau des bacs envoyée aux cultures) |
+|---|---|---|---|
+| Revenu supplémentaire et diversification (25 %) | 1 | 3 | 4 |
+| Rendement et qualité des légumes (20 %) | 5 | 2 | 5 |
+| Maîtrise sanitaire (15 %) | 5 | 2 | 4 |
+| Robustesse aux pannes (15 %) | 5 | 2 | 4 (Clarias à respiration aérienne) |
+| Coût d'investissement et compétences (15 %) | 5 | 3 | 2 |
+| Économie d'engrais et d'eau (10 %) | 1 | 4 | 4 |
+| **Note pondérée** | **3,60** | **2,60** | **3,90** |
+
+**Décision : aquaculture découplée, poisson-chat africain (Clarias gariepinus), avec écloserie**, introduite progressivement : pilote de 6 m³ en phase 1, unité de 5 t/an avec écloserie en tranche 2, 10 t/an en tranche 3 (chapitre 19).
+
+La note de la version découplée est à peine supérieure à « pas de poissons » : le choix repose sur un pari économique (écloserie, marché du poisson), qui doit être vérifié par le pilote. Le Clarias est préféré au tilapia parce qu'il supporte une panne d'aération, qu'il se reproduit en écloserie sans traitement hormonal des alevins, et qu'il accepte de fortes densités.
+
+*Ce qui ferait changer d'avis* : un pilote où l'écloserie échoue et où le poisson se vend moins de 2,5 $/kg (on garde alors les serres seules) ; une enquête de marché très favorable au tilapia (un bac du module 2 lui est réservé).
+
+## D14. Surface cible
+
+| Option | EBE médian de croisière | TRI médian / optimiste | Risque commercial | Décision |
+|---|---|---|---|---|
+| 1 000 m² de serres seules (projet initial) | 16 000 $ | -3,5 % / 15,6 % | Moyen | Remplacée |
+| 1 000 m² et aquaculture | 30 000 $ | -0,2 % / 20,6 % | Moyen | Étape intermédiaire (tranche 2) |
+| 2 000 m² et aquaculture | 48 100 $ | -1,0 % / 21,5 % | Plus élevé sur les légumes, orientés fruits pour le limiter | **Cible, sous condition (tranche 3)** |
+| 3 000 m² et aquaculture | environ 55 000 à 65 000 $ | voisin de 0 % / environ 22 % | Élevé : volumes de légumes difficiles à écouler | Non |
+
+**Décision** : viser 2 000 m² et une unité aquacole de 10 t/an, en trois tranches. La tranche 3 ne se fait que si les prix et rendements mesurés à 1 000 m² atteignent 1,4 fois le médian. Agrandir ne rend pas le projet rentable dans le scénario médian : c'est la marge par m² et le prix obtenu qui décident.
+

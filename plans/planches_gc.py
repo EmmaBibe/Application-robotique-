@@ -274,3 +274,72 @@ def fondations():
         "- boucle de terre posée en fond de fouille avant coulage (E04).",
     ], titre="Notes", taille=2.1)
     return f
+
+
+def plan_masse_ferme():
+    f = Feuille("A05", "Plan de masse de la ferme intégrée (2 000 m² de serres et aquaculture)", "1:400",
+                lot="Lot architecture - parcelle de 80 x 60 m, implantation par tranches")
+    s = 2.5  # 1 m = 2,5 mm (1:400)
+    ox, oy = 28, 34
+    f.rect(ox, oy, 80 * s, 60 * s, ep=0.5, tirets="4,2", rempli="#fbfaf6")
+    f.texte(ox + 2, oy - 2, "Clôture grillagée h = 2,20 m", 2.0, c="fin")
+
+    def bloc(x, y, l, h, titre, sous, coul, tunnels=0):
+        f.rect(ox + x * s, oy + y * s, l * s, h * s, ep=0.7, rempli=coul)
+        for k in range(1, tunnels):
+            f.ligne(ox + x * s, oy + (y + k * h / tunnels) * s, ox + (x + l) * s, oy + (y + k * h / tunnels) * s, ep=0.25, tirets="2,1")
+        f.texte(ox + (x + l / 2) * s, oy + (y + h / 2) * s - 1, titre, 2.6, "middle", gras=True)
+        if sous:
+            f.texte(ox + (x + l / 2) * s, oy + (y + h / 2) * s + 3, sous, 1.9, "middle", c="fin")
+    bloc(3, 3, 31, 28.8, "TRANCHE 2", "3 tunnels 9,6 x 31 m = 893 m²", "#eef6ef", 3)
+    bloc(37, 3, 34.7, 28.8, "TRANCHE 3", "3 tunnels 9,6 x 34,7 m = 1 000 m²", "#f3f8ee", 3)
+    bloc(3, 36, 10, 10, "PILOTE", "100 m²", "#eef6ef")
+    bloc(3, 48, 10, 3, "ANNEXE", "", "#f7f1e6")
+    bloc(13, 46, 15, 10, "AQUACULTURE", "bâtiment 15 x 10 m", "#e3eef8")
+    f.rect(ox + 31 * s, oy + 47 * s, 4 * s, 2.5 * s, ep=0.4, rempli="#f1e9fa")
+    f.texte(ox + 33 * s, oy + 51.5 * s, "capteurs", 1.7, "middle", c="fin")
+    f.texte(ox + 33 * s, oy + 53 * s, "solaires", 1.7, "middle", c="fin")
+    bloc(38, 37, 22, 10, "PV SOL", "tranches 2 et 3 (+10 kWc)", "#dfe7f2")
+    f.cercle(ox + 66 * s, oy + 40 * s, 3 * s, ep=0.5, rempli="#e0eef8")
+    f.texte(ox + 66 * s, oy + 40 * s + 1, "CI-002", 2, "middle", gras=True)
+    f.texte(ox + 66 * s, oy + 45.5 * s, "citerne 50 m³", 1.8, "middle", c="fin")
+    f.cercle(ox + 75 * s, oy + 38 * s, 2, ep=0.4, rempli="#1f6fb2")
+    f.texte(ox + 75 * s, oy + 38 * s + 5, "forage", 1.8, "middle")
+    f.rect(ox + 64 * s, oy + 50 * s, 8 * s, 5 * s, ep=0.3, rempli="#efe6da")
+    f.texte(ox + 68 * s, oy + 52.8 * s, "compost", 1.9, "middle")
+    f.rect(ox + 38 * s, oy + 50 * s, 22 * s, 8 * s, ep=0.3, rempli="#efefef")
+    f.texte(ox + 49 * s, oy + 54.5 * s, "aire de livraison et stationnement", 1.9, "middle")
+    f.rect(ox + 46 * s, oy + 60 * s - 1, 6 * s, 2, ep=0.3, rempli="#333")
+    f.texte(ox + 49 * s, oy + 60 * s + 5, "portail 6 m", 2, "middle")
+    f.rect(ox + 1.5 * s, oy + 34.5 * s, 13 * s, 18 * s, ep=0.25, tirets="1.5,1")
+    f.texte(ox + 1.5 * s, oy + 34 * s - 1, "zone pilote (planche A01)", 1.8, c="fin")
+    # cotes
+    f.cote(ox, oy + 60 * s, ox + 80 * s, oy + 60 * s, "80,00", 12)
+    f.cote(ox + 80 * s, oy, ox + 80 * s, oy + 60 * s, "60,00", 10)
+    f.cote(ox + 3 * s, oy + 31.8 * s, ox + 34 * s, oy + 31.8 * s, "31,00", 5)
+    f.cote(ox + 37 * s, oy + 31.8 * s, ox + 71.7 * s, oy + 31.8 * s, "34,70", 5)
+    f.cote(ox + 71.7 * s, oy + 3 * s, ox + 71.7 * s, oy + 31.8 * s, "28,80", 6)
+    # nord
+    f.poly([(ox + 76 * s, oy + 4), (ox + 76 * s + 3, oy + 12), (ox + 76 * s, oy + 10), (ox + 76 * s - 3, oy + 12)], ferme=True, rempli="#1a1a1a")
+    f.texte(ox + 76 * s, oy + 2, "N", 3, "middle", gras=True)
+    f.note(242, 40, [
+        "Principes :",
+        "- serres au nord de la parcelle, bâtiments bas au sud : à 11,7° de latitude sud,",
+        "  le soleil passe au nord du zénith dix mois sur douze ; aucun bâtiment ne fait",
+        "  d'ombre aux serres ;",
+        "- faîtages est-ouest, murs évaporatifs à l'est (vents de saison sèche E-SE) ;",
+        "- 3 m de bande sanitaire en gravier entre les blocs, 4 m entre la tranche 2",
+        "  et le pilote ;",
+        "- le bâtiment aquacole touche l'annexe : accès unique par le sas, local à",
+        "  aliment et salle de préparation du poisson partagés avec le conditionnement ;",
+        "- l'eau des bacs part vers les serres par une canalisation enterrée (PE 40)",
+        "  qui longe le pilote puis la tranche 2 (planche H04) ;",
+        "- la tranche 3 et sa part de panneaux ne sont construites qu'après décision",
+        "  (chapitre 16) ; leur emplacement reste libre et gravillonné.",
+        "",
+        "Surfaces :",
+        "- parcelle 4 800 m² ; serres 1 993 m² ; bâtiments 180 m² ;",
+        "- panneaux au sol 220 m² (en plus des panneaux du pilote sur l'annexe) ;",
+        "- voiries et aires 500 m² ; bandes sanitaires et réserves le reste.",
+    ], titre="Notes", taille=2.1)
+    return f

@@ -197,3 +197,131 @@ def bassins():
     ], titre="Logique", taille=2.05)
     f.legende(330, 30, LEG)
     return f
+
+
+def aquaculture():
+    f = Feuille("H04", "P&ID : unité aquacole et couplage aux cultures", "sans",
+                lot="Lot aquaculture - module de 32 m³ (tranche 2), doublé en tranche 3")
+    # bacs de grossissement
+    for k in range(4):
+        x = 40 + k * 32
+        f.cercle(x, 55, 11, ep=0.6, rempli="#1f6fb222")
+        f.texte(x, 54, f"B-40{k + 1}", 2.3, "middle", gras=True)
+        f.texte(x, 57.6, "8 m³", 1.9, "middle", c="fin")
+        f.instrument(x + 9, 34, "AT", f"40{k + 1}", ligne_vers=(x + 5, 46))
+        f.conduite([(x, 66), (x, 80)], "drain", fleche=False)
+        f.conduite([(x - 6, 24), (x - 6, 44)], "eau")
+    f.texte(85, 18.5, "retour gravitaire depuis T-401", 1.9, "middle", c="fin")
+    f.conduite([(278, 60), (278, 24), (34, 24)], "eau", fleche=False)
+    f.conduite([(40, 80), (160, 80)], "drain")
+    f.texte(100, 84, "collecteur des sorties centrales (eau et matières en suspension)", 1.8, "middle", c="fin")
+    # décanteur, biofiltre, air-lift, bassin de reprise
+    f.cuve(160, 68, 22, 32, "DR-401", "décanteur", niveau=0.8)
+    f.conduite([(182, 78), (195, 78)], "eau")
+    f.cuve(195, 68, 30, 32, "BF-401", "biofiltre MBBR", niveau=0.85)
+    for k in range(6):
+        f.cercle(200 + k * 4.2, 90, 1.1, c="air", ep=0.25)
+    f.conduite([(225, 78), (240, 78)], "eau")
+    f.rect(240, 46, 9, 54, ep=0.5, rempli="#fff")
+    f.texte(244.5, 108, "AL-401", 2.1, "middle", gras=True)
+    f.texte(244.5, 111.5, "air-lift et dégazage", 1.8, "middle", c="fin")
+    f.conduite([(249, 50), (260, 50), (260, 62)], "eau")
+    f.cuve(258, 60, 42, 40, "T-401", "bassin de reprise", niveau=0.7)
+    for k in range(5):
+        f.ligne(266 + k * 6, 92, 269 + k * 6, 96, "sol", 0.4)
+    f.texte(279, 98.5, "échangeur E-401", 1.7, "middle", c="fin")
+    for k, (l, n) in enumerate((("pH", "401"), ("TT", "401"), ("LT", "401"))):
+        f.instrument(264 + k * 11, 116, l, n, ligne_vers=(264 + k * 11, 100))
+    # soufflantes
+    f.boite(186, 125, 28, 12, "SB-401", ["soufflante 0,4 kW"])
+    f.boite(186, 141, 28, 12, "SB-402", ["secours automatique"])
+    f.conduite([(214, 131), (230, 131)], "air", fleche=False)
+    f.conduite([(214, 147), (230, 147), (230, 104)], "air", fleche=False)
+    f.clapet(222, 131)
+    f.clapet(222, 147)
+    f.conduite([(230, 104), (244, 104), (244, 100)], "air")
+    f.conduite([(230, 104), (210, 104), (210, 100)], "air")
+    f.instrument(238, 160, "PSL", "401", ligne_vers=(230, 147))
+    f.conduite([(186, 147), (176, 147), (176, 165)], "air")
+    # écloserie et quarantaine
+    f.rect(30, 108, 110, 48, ep=0.5, rempli="#fff", r=1)
+    f.texte(85, 113.5, "ECL-401 : écloserie (28-29 °C)", 2.3, "middle", gras=True)
+    for k in range(6):
+        f.rect(36 + k * 17, 125, 14, 10, ep=0.35, rempli="#1f6fb222", r=1)
+        f.texte(43 + k * 17, 131, f"L{k + 1}", 1.9, "middle")
+    f.rect(36, 140, 30, 10, ep=0.35, rempli="#fff")
+    f.texte(51, 146.2, "incubateurs", 1.9, "middle")
+    f.rect(72, 140, 30, 10, ep=0.35, rempli="#fff")
+    f.texte(87, 146.2, "géniteurs (2 bacs)", 1.9, "middle")
+    f.instrument(122, 145, "AT", "409", ligne_vers=(110, 140))
+    f.texte(85, 120, "6 bacs d'alevinage de 1 m³", 1.8, "middle", c="fin")
+    f.rect(30, 164, 50, 20, ep=0.5, rempli="#fff", r=1)
+    f.texte(55, 172, "Q-401 : quarantaine", 2.2, "middle", gras=True)
+    f.texte(55, 176, "3 m³, circuit isolé", 1.8, "middle", c="fin")
+    f.pompe(150, 118, "P-407", sens=180)
+    f.conduite([(258, 70), (250, 70)], "eau", fleche=False)
+    f.conduite([(156, 104), (156, 118), (154, 118)], "eau", fleche=False)
+    f.conduite([(146, 118), (140, 118)], "eau")
+    f.conduite([(140, 150), (152, 150), (152, 80)], "drain", fleche=True)
+    f.texte(145, 98, "alimentation", 1.7, "middle", c="fin")
+    f.texte(145, 101, "depuis T-401", 1.7, "middle", c="fin")
+    f.conduite([(258, 96), (252, 96), (252, 104), (156, 104)], "eau", fleche=False)
+    # purge et minéralisation des boues
+    f.vanne(171, 108, "EV-401", vertical=True, ev=True)
+    f.conduite([(171, 100), (171, 104)], "drain", fleche=False)
+    f.conduite([(171, 112), (171, 165)], "drain")
+    f.cuve(150, 165, 42, 26, "MIN-401", "minéralisateur aéré", niveau=0.75, coul="drain")
+    f.conduite([(150, 186), (130, 186), (130, 196)], "drain")
+    f.texte(130, 200, "résidus vers le compost", 1.9, "middle", c="fin")
+    f.pompe(205, 178, "P-406")
+    f.conduite([(192, 178), (201, 178)], "drain", fleche=False)
+    f.conduite([(209, 178), (360, 178), (360, 136)], "drain")
+    f.texte(270, 182, "surnageant riche en phosphore et azote vers T-402", 1.8, "middle", c="fin")
+    # dosage et appoint
+    f.pompe_doseuse(318, 72, "P-401")
+    f.pompe_doseuse(318, 88, "P-402")
+    f.texte(326, 73, "potasse (KOH)", 1.8, c="fin")
+    f.texte(326, 89, "chaux / dolomie", 1.8, c="fin")
+    f.conduite([(314.5, 72), (300, 72)], "sol")
+    f.conduite([(314.5, 88), (300, 88)], "sol")
+    f.texte(330, 58.5, "depuis H01 (eau traitée)", 1.9, c="fin")
+    f.conduite([(328, 62), (306, 62), (300, 62)], "eau")
+    f.vanne(314, 62, "EV-402", ev=True)
+    # chauffage
+    f.boite(330, 22, 58, 13, "CS-401", ["chauffe-eau solaire 20 m²"])
+    f.boite(330, 40, 58, 11, "PAC-401", ["pompe à chaleur d'appoint"])
+    f.conduite([(330, 30), (292, 30), (292, 90)], "sol", fleche=True)
+    f.conduite([(330, 46), (296, 46), (296, 90)], "sol", fleche=False)
+    # prélèvement vers les cultures
+    f.pompe(296, 140, "P-403", sens=0)
+    f.conduite([(296, 100), (296, 136)], "eau", fleche=False)
+    f.conduite([(300, 140), (308, 140)], "eau", fleche=False)
+    f.filtre(313, 140, "F-401", "50 µm")
+    f.conduite([(318, 140), (322, 140)], "eau", fleche=False)
+    f.uv(330, 140, "UV-401")
+    f.conduite([(338, 140), (344, 140)], "eau")
+    f.cuve(344, 112, 32, 24, "T-402", "tampon 2 m³", niveau=0.6)
+    f.instrument(392, 116, "LT", "402", ligne_vers=(376, 122))
+    f.pompe(388, 152, "P-404", sens=90)
+    f.conduite([(376, 132), (388, 132), (388, 148)], "eau", fleche=False)
+    f.conduite([(388, 156), (388, 168), (402, 168)], "eau")
+    f.vanne(396, 168, "", ev=True)
+    f.texte(386, 171, "EV-403", 2.1, "end", gras=True)
+    f.texte(403, 175, "vers H03", 1.9, "end", gras=True)
+    f.texte(403, 178.5, "(appoint radeaux)", 1.7, "end", c="fin")
+    f.conduite([(388, 168), (388, 192), (402, 192)], "eau")
+    f.vanne(396, 192, "", ev=True)
+    f.texte(386, 195, "EV-404", 2.1, "end", gras=True)
+    f.texte(403, 199, "vers H02", 1.9, "end", gras=True)
+    f.texte(403, 202.5, "(cuve des fruits)", 1.7, "end", c="fin")
+    f.note(25, 210, [
+        "Débit vers les cultures : 5 % du volume des bacs par jour (1,6 m³/j en tranche 2, 3,2 m³/j en tranche 3), réglé sur le nitrate des bacs (cible 50-150 mg/L N-NO3).",
+        "P-403 ne démarre que si UV-401 est en service ; EV-403/EV-404 sont commandées par la station de fertirrigation selon le niveau et la CE des circuits de culture.",
+        "SB-401 en service permanent (charge prioritaire 0) ; PSL-401 détecte la perte de pression d'air et démarre SB-402. Alarme SMS si AT < 3 mg/L dans un bac.",
+        "pH de T-401 tenu entre 7,0 et 7,5 par P-401 (potasse) et P-402 (chaux) : ces dosages apportent aussi le potassium et le calcium qui manquent aux plantes.",
+        "EV-401 purge le décanteur deux fois par jour vers MIN-401 (10 à 15 jours, aéré). Écloserie et quarantaine sur circuits séparés ; Q-401 ne rejoint jamais le circuit principal.",
+    ], titre="Logique", taille=2.0)
+    f.legende(250, 210, [(("eau", None), "eau des bacs / eau traitée"), (("drain", None), "boues et rejets des bacs"),
+                         (("sol", None), "dosage et circuit de chauffage"), (("air", None), "air (aération, air-lift)"),
+                         (("signal", "1.2,0.8"), "liaison de mesure / commande")])
+    return f

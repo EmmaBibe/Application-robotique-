@@ -108,3 +108,18 @@ La région du Katanga est parmi les plus foudroyées d'Afrique. Une serre métal
 ## 10.9 Coût du kWh
 
 Configuration complète : environ 14 500 $ pour l'ensemble énergie, avec un remplacement des batteries vers la 10e année et de l'onduleur vers la 10e-12e année. Sur 20 ans, le coût du kWh produit et stocké ressort entre 0,15 et 0,20 $/kWh, soit l'ordre du tarif SNEL, mais disponible à 100 %, et trois fois moins cher que le groupe électrogène.
+
+## 10.8 Unité aquacole (tranches 2 et 3)
+
+L'aquaculture (chapitre 19) ajoute une charge continue, sans pointe, qui se prête bien au solaire.
+
+| Charge | Ferme 1 000 m² | Ferme 2 000 m² | Priorité |
+|---|---|---|---|
+| Soufflantes d'aération et d'air-lift (une en service, une en secours automatique par module) | 0,40 kW | 0,80 kW | 0 (jamais délestée) |
+| Écloserie : pompes, chauffage d'appoint des incubateurs | 0,15 kW | 0,15 kW | 0 |
+| Capteurs d'oxygène, automate AUT-P | 0,05 kW | 0,05 kW | 0 |
+| Pompe à chaleur d'appoint (jours couverts de juillet) | 1,2 kW, quelques heures par an | idem | 2 |
+| Machine à glace, préparation du poisson | 0,6 kW, 2 h/j | 0,6 kW, 3 h/j | 2 |
+| **Énergie moyenne** | **environ 14 kWh/j** | **environ 24 kWh/j** | |
+
+Dimensionnement : +4 kWc et +15 kWh de batterie en tranche 2 (inclus dans l'investissement aquacole), +6 kWc et +15 kWh en tranche 3 pour l'ensemble de la ferme. Les charges de priorité 0 de l'aquaculture tiennent environ 30 heures sur la batterie de la tranche 2 sans soleil ni réseau ; au-delà, le groupe démarre. En cas de défaillance totale, le Clarias survit plusieurs heures sans aération grâce à sa respiration aérienne ; l'écloserie, elle, doit être secourue en priorité (une petite batterie dédiée de 2 kWh alimente les incubateurs et une pompe à air).

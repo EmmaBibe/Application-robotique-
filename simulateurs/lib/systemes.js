@@ -29,6 +29,8 @@ export const PANNES = {
   vent: "Rafale d'orage (16 m/s)",
   capteurTH: "Capteur T/HR fruits muet",
   uv: "Lampe UV-C UV-101 grillée",
+  aeration: "Aération des bacs à poissons arrêtée (soufflante et secours)",
+  uvAqua: "UV de l'eau des poissons (UV-401) grillée",
 };
 
 // ------------------------------------------------------------ état initial
@@ -46,6 +48,12 @@ export function initialiser(E) {
       frais: { v: 4200, ec: 1.8, ph: 6.0, t: 20.5, o2: 7.6, chiller: false, ev: false, dos: false, acide: false, uv: false },
       tempere: { v: 4200, ec: 1.8, ph: 6.1, t: 22.5, o2: 7.2, chiller: false, ev: false, dos: false, acide: false, uv: false },
       surpresseur: true, secours: false,
+    },
+    // pilote aquacole : 2 bacs de 3 m³ de Clarias, couplés au bassin tempéré (planche H04, échelle pilote)
+    aqua: {
+      v: 6000, t: 27, o2: 6.7, tan: 0.35, tanAttente: 0, no3: 70, ph: 7.2, effectif: 470, biomasse: 160, lot: 1,
+      souffl: true, chauffe: false, transfert: false, uv: true, dosK: false, appoint: false, surface: false,
+      nourri: 0, repasFaits: {}, vEnvoye: 0, nEnvoye: 0, potasse: 0, recoltes: 0,
     },
     elec: { km1: true, km2: true, km3: true, charges: {}, courant: 0, onduleur: true },
     iiot: { messages: [], autonome: { "AUT-F": false, "AUT-L": false, "AUT-E": false }, derniereConsigne: 0, sms: [] },
@@ -88,6 +96,7 @@ export function pas(E, dt) {
     msg(E, "AUT-F", "serveur", "serre/lub1/fruits/mesure/air", P.capteurTH ? "(aucune réponse Modbus de TH-F1)" : `{"t":${f.t.toFixed(1)},"hr":${M.hrDepuisW(f.t, f.w).toFixed(0)}}`);
     msg(E, "AUT-L", "serveur", "serre/lub1/feuilles/mesure/bassin1", `{"t":${S.bassins.frais.t.toFixed(1)},"o2":${S.bassins.frais.o2.toFixed(1)}}`);
     msg(E, "AUT-E", "serveur", "serre/lub1/energie/mesure", `{"soc":${E.soc.toFixed(0)},"pv_w":${E.pv.toFixed(0)}}`);
+    msg(E, "AUT-L", "serveur", "serre/lub1/aqua/mesure/bac1", `{"o2":${S.aqua.o2.toFixed(1)},"t":${S.aqua.t.toFixed(1)},"no3":${S.aqua.no3.toFixed(0)}}`);
     if (serveurOk) msg(E, "serveur", "AUT-F", "serre/lub1/fruits/consigne", `{"ouvrant_pct":${E.comp.fruits.cmd.ouvrant.toFixed(0)},"validite_s":120}`);
   }
 
@@ -204,6 +213,58 @@ export function pas(E, dt) {
     b.uv = (E.h % 4) < 1 && !P.uv;
   }
 
+  // ---------------- pilote aquacole (Clarias, 2 bacs de 3 m³)
+  const A = S.aqua;
+  A.souffl = !P.aeration;
+  const sat = 16.8 - 0.33 * A.t;                         // saturation en oxygène (≈ 7,9 mg/L à 27 °C)
+  const surface = A.o2 < 3;                              // le Clarias complète sa respiration à la surface
+  if (surface !== A.surface) log(E, "aquaculture", surface ? "Oxygène sous 3 mg/L : les Clarias viennent respirer l'air en surface, repas suspendus" : "Oxygène revenu au-dessus de 3 mg/L : respiration normale");
+  A.surface = surface;
+  if (A.o2 < 1 && !A.prevenu) { A.prevenu = true; log(E, "aquaculture", "Oxygène sous 1 mg/L : à cette densité, des tilapias seraient déjà en train de mourir ; les Clarias tiennent plusieurs heures grâce à l'air. Rétablir l'aération."); }
+  if (A.o2 > 4) A.prevenu = false;
+  const conso = A.biomasse * 200 / 3600 / A.v * 1.3 * (surface ? 0.35 : 1); // mg/L/s, poissons + biofiltre
+  A.o2 += ((A.souffl ? (sat - A.o2) / 600 : 0) - conso) * dt;
+  A.o2 = Math.max(0.4, Math.min(sat, A.o2));
+  // repas à 8 h et 16 h : 0,75 % de la biomasse chacun, si l'eau le permet
+  for (const hRepas of [8, 16]) {
+    const cle = `${E.jour}-${hRepas}`;
+    if (E.h >= hRepas && E.h < hRepas + 1 && !A.repasFaits[cle]) {
+      A.repasFaits[cle] = true;
+      if (A.o2 < 4 || A.t < 23 || A.t > 32) { log(E, "aquaculture", `Repas de ${hRepas} h supprimé (oxygène ${A.o2.toFixed(1)} mg/L, eau ${A.t.toFixed(1)} °C)`); continue; }
+      const ration = A.biomasse * 0.0075;
+      A.nourri += ration; A.biomasse += ration / 1.15;
+      A.tanAttente += ration * 0.061 * 0.5 * 1e6 / A.v;  // mg/L d'azote ammoniacal libéré dans les heures qui suivent
+      log(E, "aquaculture", `Repas de ${hRepas} h : ${ration.toFixed(2)} kg d'aliment pour ${A.effectif} Clarias de ${(1000 * A.biomasse / A.effectif).toFixed(0)} g en moyenne`);
+    }
+  }
+  if (A.biomasse / A.effectif > 0.8) {
+    A.recoltes++; log(E, "aquaculture", `Récolte du lot ${A.lot} : ${A.biomasse.toFixed(0)} kg de Clarias à 800 g ; remise en charge de 470 alevins de l'écloserie`);
+    A.lot++; A.biomasse = 470 * 0.012; A.effectif = 470;
+  }
+  const libere = Math.min(A.tanAttente, A.tanAttente * dt / 14400 + 1e-9);
+  A.tanAttente -= libere; A.tan += libere;
+  const nitrifie = A.tan * dt / 1800;                    // biofiltre : demi-vie d'environ 20 min
+  A.tan -= nitrifie; A.no3 += nitrifie * 0.75;           // 25 % perdus par dénitrification dans les boues
+  A.ph -= nitrifie * 0.02;
+  A.dosK = A.ph < 7.0;
+  if (A.dosK && Math.random() < dt / 600) { A.ph += 0.15; A.potasse += 0.05; log(E, "aquaculture", `pH des bacs ${A.ph.toFixed(2)} < 7,0 : dose de potasse (P-401), qui apporte aussi le potassium des plantes`); }
+  // eau envoyée au bassin tempéré : 5 % du volume par jour, doublé si le nitrate dépasse 120 mg/L
+  A.uv = !P.uvAqua;
+  A.transfert = A.uv;
+  if (A.transfert) {
+    const q = (A.no3 > 120 ? 600 : 300) / 86400 * dt;
+    const b = Bs.tempere, ecPoisson = 0.35 + A.no3 * 0.006;
+    b.ec = (b.ec * b.v + ecPoisson * q) / (b.v + q); b.v += q;
+    A.v -= q; A.vEnvoye += q; A.nEnvoye += q * A.no3 / 1e6;
+    A.no3 -= 0;                                           // la concentration ne change pas par soutirage, seulement par dilution à l'appoint
+  }
+  A.appoint = A.v < 5950 && W.tampon > 60;
+  if (A.appoint) { const v = Math.min(0.1 * dt, W.tampon - 50, 6000 - A.v); A.no3 = A.no3 * A.v / (A.v + v); A.tan = A.tan * A.v / (A.v + v); A.v += v; W.tampon -= v; }
+  // température : bacs couverts et isolés (20 W/K), thermoplongeur de 1 kW sur thermostat 26-27 °C
+  const tAirAqua = E.comp.feuilles.t;
+  A.chauffe = S.elec.km1 && (A.chauffe ? A.t < 27 : A.t < 26);
+  A.t += ((A.chauffe ? 1000 : 0) - 20 * (A.t - tAirAqua)) / (A.v * 4186) * dt;
+
   // ---------------- électricité : charges et contacteurs
   const f = E.comp.fruits.cmd, l = E.comp.feuilles.cmd;
   const socOk = s => E.reseau || E.soc + (E.pv > 3000 ? 15 : 0) >= s;
@@ -216,6 +277,9 @@ export function pas(E, dt) {
     "Automates, réseau, capteurs (P0)": 60,
     "Surpresseur bassins (P0)": Bs.surpresseur ? 80 : 0,
     "Surpresseur secours 24 V (P0)": Bs.secours ? 45 : 0,
+    "Soufflante des bacs à poissons (P0)": S.aqua.souffl ? 60 : 0,
+    "Chauffage des bacs à poissons (P1)": km1 && S.aqua.chauffe ? 1000 : 0,
+    "Pompe vers les cultures + UV-401 (P1)": km1 && S.aqua.transfert ? 40 : 0,
     "Pompe irrigation P-101 (P1)": km1 && F.pIrr ? 370 : 0,
     "Reprise drainage + UV (P1)": km1 && F.pReprise ? 160 : 0,
     "Brassage (P1)": km1 ? ((f.haf ? 2 : 0) + (l.haf ? 2 : 0)) * 45 : 0,
@@ -248,6 +312,10 @@ export function pas(E, dt) {
   regle("UV", P.uv && F.pReprise, "attention", "lampe UV-C hors service : drainage non désinfecté renvoyé en cuve");
   regle("TH", P.capteurTH, "attention", "capteur T/HR fruits muet : régulation sur valeurs de secours");
   regle("CHAUD", E.comp.fruits.t > 35, "critique", "température fruits au-dessus de 35 °C");
+  regle("O2P", S.aqua.o2 < 3, "critique", "oxygène bas dans les bacs à poissons (aération ?)");
+  regle("TP", S.aqua.t < 24 || S.aqua.t > 31, "attention", "température des bacs à poissons hors de 24-31 °C");
+  regle("TAN", S.aqua.tan > 1, "attention", "ammoniaque élevée dans les bacs (biofiltre, ration ?)");
+  regle("UVP", P.uvAqua, "attention", "UV-401 hors service : envoi de l'eau des poissons vers les cultures arrêté");
 }
 
 // ------------------------------------------------------------ aptitude des cultures
@@ -330,6 +398,16 @@ export function regles(E) {
       ["SOC ≥ 35 % ou réseau", S.elec.km2, "KM2 fermé : charges priorité 2", "AUT-E"],
       ["SOC ≥ 55 % ou réseau", S.elec.km3, "KM3 fermé : charges priorité 3", "AUT-E"],
       ["Pas de réseau et SOC < 15 %", E.groupe, "démarrage du groupe électrogène", "OND-1 (contact sec)"],
+    ],
+    aquaculture: [
+      ["Toujours", S.aqua.souffl, "aération et relevage par air-lift (jamais délestés)", "SB-401"],
+      ["Oxygène < 3 mg/L", S.aqua.surface, "repas suspendus, alarme SMS ; le Clarias respire en surface", "AUT-L (AUT-P en tranche 2)"],
+      ["8 h et 16 h, oxygène > 4 mg/L et eau 23-32 °C", E.h >= 8 && E.h < 9 || E.h >= 16 && E.h < 17, "repas de 0,75 % de la biomasse", "technicien"],
+      ["UV-401 en service", S.aqua.transfert, "envoi de 5 % du volume par jour vers le bassin tempéré", "P-403, UV-401"],
+      ["Nitrate > 120 mg/L", S.aqua.no3 > 120, "débit vers les cultures doublé", "P-403"],
+      ["pH des bacs < 7,0", S.aqua.dosK, "dose de potasse", "P-401"],
+      ["Eau < 26 °C (arrêt à 27 °C)", S.aqua.chauffe, "thermoplongeur 1 kW", "RC-401"],
+      ["Volume < 5 950 L", S.aqua.appoint, "appoint en eau traitée", "EV-402"],
     ],
     iiot: [
       ["Consigne reçue il y a moins de 2 min", !S.iiot.autonome["AUT-F"], "l'automate applique la consigne du serveur", "AUT-F, AUT-L, AUT-E"],
