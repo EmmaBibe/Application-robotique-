@@ -25,6 +25,10 @@ export const BADGES = [
   { id: 'focus5', icon: '⏱️', name: 'Concentré', desc: 'Terminer 5 sessions de concentration' },
   { id: 'lvl5', icon: '⚙️', name: 'Mécatronicien', desc: 'Atteindre le niveau 5' },
   { id: 'lvl8', icon: '🤖', name: 'Architecte', desc: 'Atteindre le niveau 8' },
+  { id: 'front', icon: '🧭', name: 'Explorateur des frontières', desc: 'Finir tous les modules de la phase Frontières' },
+  { id: 'mars5', icon: '🛰️', name: 'En route', desc: 'Accomplir 5 missions de la campagne Objectif Mars' },
+  { id: 'mars', icon: '🔴', name: 'Pionnier martien', desc: 'Accomplir toute la campagne Objectif Mars' },
+  { id: 'dos3', icon: '📁', name: 'Ingénieur rigoureux', desc: 'Rendre 3 dossiers d\'ingénieur' },
 ];
 
 let modulesRef = [];
@@ -46,6 +50,11 @@ export function checkBadges() {
   const reviewed = s.cardReviews || 0;
   const found = modulesRef.filter(m => m.phase === 'fondations');
   const foundDone = found.length && found.every(m => m.lessons.every(l => s.lessons[l.id]?.done));
+  const phaseDone = ph => { const ms = modulesRef.filter(m => m.phase === ph); return ms.length && ms.every(m => m.lessons.every(l => s.lessons[l.id]?.done)); };
+  const marsMod = modulesRef.find(m => m.id === 'mars');
+  const marsN = marsMod ? marsMod.lessons.filter(l => s.lessons[l.id]?.done).length : 0;
+  const dosIds = new Set(modulesRef.flatMap(m => m.lessons.flatMap(l => l.blocks.filter(b => b && b.t === 'dossier').map(b => b.id))));
+  const dosN = [...dosIds].filter(id => s.defis[id]?.done).length;
   const lvl = levelOf(s.xp).index;
   const st = Math.max(currentStreak(), 0);
   const rules = {
@@ -54,6 +63,7 @@ export function checkBadges() {
     d1: defis >= 1, d5: defis >= 5, d12: defis >= 12, q25: quizOk >= 25, code3: codeOk >= 3,
     lab8: Object.keys(s.sims).length >= 8, idea3: s.ideas.length >= 3, cards50: reviewed >= 50,
     focus5: s.focus.sessions >= 5, lvl5: lvl >= 5, lvl8: lvl >= 8,
+    front: phaseDone('frontieres'), mars5: marsN >= 5, mars: !!marsMod && marsN >= marsMod.lessons.length, dos3: dosN >= 3,
   };
   const fresh = BADGES.filter(b => rules[b.id] && !s.badges[b.id]);
   if (!fresh.length) return;

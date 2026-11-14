@@ -20,3 +20,7 @@ export const Manual = (id, title, text, xp) => ({ t: 'defi', id, title, text, ma
 export const Think = (id, q, a) => ({ t: 'think', id, q, a });
 export const Table = (head, rows) => ({ t: 'table', head, rows });
 export const Svg = html => ({ t: 'svg', html });
+export const Calc = (id, title, text, inputs, compute, o = {}) => ({ t: 'calc', id, title, text, inputs, compute, ...o });
+export const Dossier = (id, title, text, questions, rubric, xp) => ({ t: 'dossier', id, title, text, questions, rubric, xp });
+export const Brief = (kicker, html, tags = []) => ({ t: 'brief', kicker, html, tags });
+export const Twist = (title, html) => ({ t: 'twist', title, html });

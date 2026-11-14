@@ -64,6 +64,10 @@ function renderOne(b, ctx, cleanups) {
       });
       return d;
     }
+    case 'calc': return calc(b, ctx);
+    case 'dossier': return dossier(b, ctx);
+    case 'brief': return div('brief', `<div class="brief-k">${esc(b.kicker || 'Briefing de mission')}</div><div class="prose">${b.html}</div>${b.tags ? `<div class="brief-tags">${b.tags.map(t => `<span class="tag accent">${esc(t)}</span>`).join('')}</div>` : ''}`);
+    case 'twist': return div('callout twist', `<div class="ttl">🚨 ${esc(b.title || 'Imprévu')}</div><div class="prose">${b.html}</div>`);
     default: return null;
   }
 }
@@ -275,5 +279,129 @@ function defi(b, cleanups, ctx) {
     });
     d.appendChild(btn);
   }
+  return d;
+}
+
+
+// ---------------------------------------------------------------------------
+// Calculateur de conception : l'étudiant règle des paramètres, le calcul montre
+// les conséquences et vérifie les contraintes. Toutes respectées = défi relevé.
+function calc(b, ctx) {
+  const id = b.id;
+  const d = div('calc');
+  const done = () => store.get().defis[id]?.done;
+  d.innerHTML = `<div class="head"><span class="tag warn">Atelier de conception</span><h4>${esc(b.title)}</h4>${b.xp !== 0 ? `<span class="tag" data-k="st">${done() ? 'réussi' : `+${b.xp || XP.defi} XP`}</span>` : ''}</div>
+    ${b.text ? `<div class="prose">${b.text}</div>` : ''}
+    <div class="calc-grid"><div class="calc-in"></div><div class="calc-out"><div class="readout calc-res"></div><ul class="calc-checks"></ul></div></div>
+    <div class="fb" hidden></div>`;
+  const inBox = d.querySelector('.calc-in'), res = d.querySelector('.calc-res'), checks = d.querySelector('.calc-checks'), fb = d.querySelector('.fb');
+  const vals = {};
+  const savedKey = `robomaster.calc.${id}`;
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(savedKey) || '{}'); } catch { saved = {}; }
+  for (const inp of b.inputs) {
+    vals[inp.k] = saved[inp.k] ?? inp.value;
+    const w = document.createElement('label');
+    w.className = 'ctl';
+    if (inp.options) {
+      w.innerHTML = `<span class="lab"><span>${esc(inp.label)}</span></span><select></select>`;
+      const sel = w.querySelector('select');
+      inp.options.forEach(([v, l]) => { const o = document.createElement('option'); o.value = v; o.textContent = l; if (String(v) === String(vals[inp.k])) o.selected = true; sel.appendChild(o); });
+      sel.addEventListener('change', () => { vals[inp.k] = isNaN(+sel.value) ? sel.value : +sel.value; update(); });
+    } else {
+      const dg = inp.digits ?? (String(inp.step).split('.')[1]?.length || 0);
+      w.innerHTML = `<span class="lab"><span>${esc(inp.label)}</span><b></b></span><input type="range">`;
+      const r = w.querySelector('input'), out = w.querySelector('b');
+      Object.assign(r, { min: inp.min, max: inp.max, step: inp.step, value: vals[inp.k] });
+      const show = () => { out.textContent = `${Number(r.value).toFixed(dg)}${inp.unit ? ' ' + inp.unit : ''}`; };
+      r.addEventListener('input', () => { vals[inp.k] = Number(r.value); show(); update(); });
+      show();
+    }
+    inBox.appendChild(w);
+  }
+  function update() {
+    let r;
+    try { r = b.compute({ ...vals }); } catch (e) { r = { outputs: [['Erreur', e.message, '']], checks: [] }; }
+    res.innerHTML = r.outputs.map(([l, v, u]) => `<span>${esc(l)}</span><b>${typeof v === 'number' ? fmtNum(v) : esc(v)}${u ? ' ' + esc(u) : ''}</b>`).join('');
+    checks.innerHTML = (r.checks || []).map(([l, ok]) => `<li class="${ok ? 'ok' : 'ko'}">${ok ? '✔' : '✘'} ${esc(l)}</li>`).join('');
+    try { localStorage.setItem(savedKey, JSON.stringify(vals)); } catch { /* ignoré */ }
+    const all = (r.checks || []).length && r.checks.every(c => c[1]);
+    fb.hidden = !all;
+    if (all) {
+      fb.className = 'fb ok';
+      fb.textContent = b.okText || 'Toutes les contraintes sont respectées. Note dans ton carnet pourquoi ce compromis est le bon.';
+      if (!done() && b.xp !== 0) {
+        store.update(s => { s.defis[id] = { done: true, at: new Date().toISOString() }; });
+        gain(b.xp || XP.defi, `Conception validée : ${b.title}`);
+        const st = d.querySelector('[data-k=st]'); if (st) st.textContent = 'réussi';
+      }
+    }
+  }
+  update();
+  return d;
+}
+function fmtNum(v) {
+  if (!isFinite(v)) return '∞';
+  const a = Math.abs(v);
+  const s = a >= 1000 ? Math.round(v).toLocaleString('fr-FR') : a >= 100 ? v.toFixed(0) : a >= 10 ? v.toFixed(1) : a >= 1 ? v.toFixed(2) : v.toFixed(3);
+  return s.replace('.', ',');
+}
+
+// ---------------------------------------------------------------------------
+// Dossier d'ingénieur : questions ouvertes, réponses gardées dans le carnet,
+// grille d'auto-évaluation. Validé quand tout est rempli et la grille cochée.
+function dossier(b, ctx) {
+  const id = b.id;
+  const d = div('exo dossier-box');
+  const s0 = store.get();
+  const isDone = () => store.get().defis[id]?.done;
+  d.innerHTML = `<div class="head"><span class="tag violet">Dossier d'ingénieur</span><h4 style="margin:0">${esc(b.title)}</h4><span class="tag" data-k="st">${isDone() ? 'rendu' : `+${b.xp || 80} XP`}</span></div>
+    ${b.text ? `<div class="prose">${b.text}</div>` : ''}
+    <ol class="dos-q"></ol>
+    ${b.rubric ? `<div class="rubric"><b>Grille d'auto-évaluation</b> <span class="small muted">(sois honnête : c'est toi que tu formes)</span><ul></ul></div>` : ''}
+    <div class="row" style="margin-top:.7rem"><button class="btn primary" type="button" data-k="go">Rendre mon dossier</button><span class="small muted" data-k="msg"></span></div>`;
+  const ol = d.querySelector('.dos-q');
+  const notes = s0.notes;
+  const areas = b.questions.map((q, i) => {
+    const key = `dossier:${id}:${i}`;
+    const li = document.createElement('li');
+    li.innerHTML = `<div class="prose">${q}</div><textarea placeholder="Ta réponse, même provisoire. Elle est gardée dans ton carnet."></textarea>`;
+    const ta = li.querySelector('textarea');
+    ta.value = (notes.find(n => n.key === key) || {}).body || '';
+    ta.addEventListener('change', () => {
+      store.update(s => {
+        const n = s.notes.find(x => x.key === key);
+        if (n) { n.body = ta.value; n.at = new Date().toISOString(); }
+        else if (ta.value.trim()) s.notes.unshift({ id: Date.now().toString(36) + i, key, title: `${b.title} · question ${i + 1}`, body: ta.value, tag: 'dossier', at: new Date().toISOString() });
+      });
+    });
+    ol.appendChild(li);
+    return ta;
+  });
+  const boxes = (b.rubric || []).map((r, i) => {
+    const key = `robomaster.rubric.${id}.${i}`;
+    const li = document.createElement('li');
+    li.innerHTML = `<label class="check"><input type="checkbox"><span></span></label>`;
+    li.querySelector('span').textContent = r;
+    const c = li.querySelector('input');
+    try { c.checked = localStorage.getItem(key) === '1'; } catch { /* ignoré */ }
+    c.addEventListener('change', () => { try { localStorage.setItem(key, c.checked ? '1' : '0'); } catch { /* ignoré */ } });
+    d.querySelector('.rubric ul').appendChild(li);
+    return c;
+  });
+  const msg = d.querySelector('[data-k=msg]');
+  d.querySelector('[data-k=go]').addEventListener('click', () => {
+    const empty = areas.filter(a => a.value.trim().length < 40).length;
+    const unchecked = boxes.filter(c => !c.checked).length;
+    if (empty) { msg.textContent = `${empty} réponse${empty > 1 ? 's' : ''} trop courte${empty > 1 ? 's' : ''} : développe un peu (au moins quelques phrases).`; return; }
+    if (unchecked) { msg.textContent = `Il reste ${unchecked} critère${unchecked > 1 ? 's' : ''} de la grille non validé${unchecked > 1 ? 's' : ''}. Améliore ton dossier, puis coche honnêtement.`; return; }
+    areas.forEach(a => a.dispatchEvent(new Event('change')));
+    if (!isDone()) {
+      store.update(s => { s.defis[id] = { done: true, at: new Date().toISOString() }; });
+      gain(b.xp || 80, `Dossier rendu : ${b.title}`);
+    }
+    d.querySelector('[data-k=st]').textContent = 'rendu';
+    msg.textContent = 'Dossier rendu. Tes réponses sont dans ton carnet d\'ingénieur ; relis-les dans quelques semaines, tu verras ton chemin.';
+  });
   return d;
 }

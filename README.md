@@ -8,15 +8,18 @@ Fonctionne sur ordinateur et sur téléphone, s'installe comme une application e
 
 ## Contenu
 
-- **68 leçons** réparties en **19 modules** et **4 phases** :
+- **94 leçons** réparties en **28 modules** et **6 phases** :
   1. *Fondations* : bien démarrer, mathématiques, physique, électronique, programmation
   2. *Le cœur de la robotique* : mécanique et actionneurs, systèmes embarqués, robots mobiles, bras manipulateurs, commande et asservissements
   3. *Le robot intelligent* : perception et capteurs, vision, localisation et SLAM, planification, intelligence artificielle, ROS 2
   4. *L'ingénieur de demain* : ingénierie système et sécurité, créativité et invention, robotique de demain
-- **21 simulateurs interactifs** : vecteurs, cercle trigonométrique, matrices de transformation, profil de mouvement, masse-ressort, engrenages, loi d'Ohm, PWM et pont en H, conversion analogique-numérique, robot différentiel et odométrie, bras 2 axes (modèles direct et inverse), PID, capteurs de distance (lidar, ultrason, infrarouge), filtrage et Kalman, filtre particulaire, A* et compagnie, convolution d'images, neurone artificiel, Q-learning, suiveur de ligne programmable, graphe ROS 2
-- **41 exercices de code** corrigés automatiquement, des dizaines d'exercices numériques et de quiz
+  5. *Les frontières* : dynamique des robots, équilibre et robots à pattes, drones, essaims et multi-robots, optimisation et commande prédictive, interaction humain-robot, robotique molle et bio-inspirée
+  6. *Objectif Mars* : une campagne de 13 missions qui croisent tous les domaines (fusée, trajectoire, atterrissage, énergie, rover, autonomie, terrain, hélicoptère, grottes, construction, ressources locales, dossier final), suivie de 3 ateliers « retour sur Terre » ancrés en RDC
+- **29 simulateurs interactifs** : vecteurs, cercle trigonométrique, matrices de transformation, profil de mouvement, masse-ressort, engrenages, loi d'Ohm, PWM et pont en H, conversion analogique-numérique, robot différentiel et odométrie, bras 2 axes (modèles direct et inverse), PID, capteurs de distance (lidar, ultrason, infrarouge), filtrage et Kalman, filtre particulaire, A* et compagnie, convolution d'images, neurone artificiel, Q-learning, suiveur de ligne programmable, graphe ROS 2, dynamique d'un bras (Terre, Mars, Lune), pendule inversé (PID contre LQR), drone sur Terre et sur Mars, essaim d'exploration, transfert Terre-Mars, atterrissage propulsé, rover piloté avec délai radio, budget énergétique martien
+- **Ateliers de conception** chiffrés (fusée à deux étages, mobilité d'un rover, énergie d'une base, drone de livraison, robot solaire) et **dossiers d'ingénieur** à questions ouvertes avec grille d'auto-évaluation, gardés dans le carnet
+- **52 exercices de code** corrigés automatiquement, des dizaines d'exercices numériques et de quiz
 - **Défis** : réglages de PID, choix de résistance, labyrinthe qui piège A*, tour chronométré du suiveur de ligne, et des défis créatifs à réaliser hors de l'écran
-- **Révision espacée** (boîtes de Leitner) avec plus de 200 cartes
+- **Révision espacée** (boîtes de Leitner) avec plus de 300 cartes
 - **Carnet d'ingénieur** pour noter idées (problème, idée, prototype, test) et réflexions, exportable
 - **Projets réels** avec matériel, budget et étapes : veilleuse, suiveur de ligne, bras à servos, gyropode, robot autonome sous ROS 2
 - **Guide du Master** : programme type, outils à maîtriser, calendrier conseillé, stage et débouchés

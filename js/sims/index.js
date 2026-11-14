@@ -22,6 +22,14 @@ export const SIMS = {
   qlearning: { title: 'Q-learning', domain: 'IA', icon: '⚡', desc: 'Un robot apprend seul, par essais et erreurs, à rejoindre sa base.', load: () => import('./qlearning.js') },
   linecode: { title: 'Code ton suiveur de ligne', domain: 'Programmation', icon: '⌨', desc: 'Écris le programme du robot en JavaScript et lance-le sur la piste.', load: () => import('./linecode.js') },
   rosgraph: { title: 'Graphe ROS 2', domain: 'Logiciel robot', icon: '⧉', desc: 'Nœuds, topics, messages : l\'architecture logicielle d\'un robot.', load: () => import('./rosgraph.js') },
+  armdyn: { title: 'Dynamique d\'un bras', domain: 'Dynamique', icon: '⤾', desc: 'Gravité, inertie, couplage : PD, compensation de gravité et couple calculé, sur Terre, Mars ou la Lune.', load: () => import('./armdyn.js') },
+  cartpole: { title: 'Pendule inversé', domain: 'Commande avancée', icon: '⊥', desc: 'Garder une tige debout sur un chariot : PID contre LQR.', load: () => import('./cartpole.js') },
+  quadrotor: { title: 'Drone sur Terre et sur Mars', domain: 'Drones', icon: '✣', desc: 'Commande en cascade, poussée des rotors et air martien 70 fois moins dense.', load: () => import('./quadrotor.js') },
+  swarm: { title: 'Essaim d\'exploration', domain: 'Multi-robots', icon: '⁂', desc: 'Plusieurs robots cartographient une grotte inconnue : hasard, glouton ou coordination.', load: () => import('./swarm.js') },
+  hohmann: { title: 'Transfert Terre-Mars', domain: 'Espace', icon: '☄', desc: 'Choisis la fenêtre de tir : orbite de Hohmann, phasage et Δv.', load: () => import('./hohmann.js') },
+  lander: { title: 'Atterrissage sur Mars', domain: 'Espace', icon: '⬇', desc: 'Pose un atterrisseur à la poussée : carburant, vitesse et équation de la fusée.', load: () => import('./lander.js') },
+  roverdelay: { title: 'Piloter un rover depuis la Terre', domain: 'Espace', icon: '⌛', desc: 'Jusqu\'à 22 minutes de délai : pourquoi un rover doit devenir autonome.', load: () => import('./roverdelay.js') },
+  marsenergy: { title: 'Énergie d\'un rover martien', domain: 'Énergie', icon: '☀', desc: 'Panneaux, batterie, chauffage et tempête de poussière sur 30 sols.', load: () => import('./marsenergy.js') },
 };
 
 export async function mountSim(id, el, opts = {}, api = {}) {

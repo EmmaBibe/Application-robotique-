@@ -21,6 +21,7 @@ const NAV = [
   { href: '#/labo', label: 'Labo', ico: 'flask' },
   { href: '#/defis', label: 'Défis', ico: 'trophy' },
   { href: '#/revision', label: 'Révision', ico: 'cards', pill: () => dueCards().length || '' },
+  { href: '#/mars', label: 'Objectif Mars', ico: 'rocket' },
   { sep: 'Devenir ingénieur' },
   { href: '#/projets', label: 'Projets réels', ico: 'tool' },
   { href: '#/master', label: 'Guide du Master', ico: 'grad' },
@@ -67,6 +68,7 @@ const routes = [
   [/^#\/projets$/, projets],
   [/^#\/projets\/([\w-]+)$/, projetView],
   [/^#\/master$/, master],
+  [/^#\/mars$/, marsView],
   [/^#\/carnet$/, carnet],
   [/^#\/glossaire$/, glossaire],
   [/^#\/profil$/, profil],
@@ -120,7 +122,7 @@ function dueCards() {
 }
 function allDefis() {
   const out = [];
-  for (const m of MODULES) for (const l of m.lessons) for (const b of l.blocks) if (b && b.t === 'defi') out.push({ ...b, lesson: l, module: m });
+  for (const m of MODULES) for (const l of m.lessons) for (const b of l.blocks) if (b && (b.t === 'defi' || b.t === 'calc' || b.t === 'dossier')) out.push({ ...b, lesson: l, module: m });
   return out;
 }
 const greet = () => { const h = new Date().getHours(); return h < 6 ? 'Encore debout' : h < 12 ? 'Bonjour' : h < 18 ? 'Bon après-midi' : 'Bonsoir'; };
@@ -197,8 +199,14 @@ function home() {
     </a>
   </div>
 
+  <a class="card link mars-teaser" href="#/mars">
+    <div class="eyebrow">Campagne · Objectif Mars</div>
+    <h3 style="margin:0 0 .3rem">🚀 Prépare la première base martienne</h3>
+    <p class="small muted" style="margin:0">Treize missions qui mélangent mécanique, énergie, IA, commande et gestion de projet. ${marsDone()} / ${marsLessons().length} missions accomplies.</p>
+  </a>
+
   <h2>Ton parcours</h2>
-  <div class="grid c4" id="phase-mini"></div>
+  <div class="grid c3" id="phase-mini"></div>
 
   <div class="callout tip" style="margin-top:2rem">
     <div class="ttl">💬 Pensée du jour</div>
@@ -233,6 +241,59 @@ function heatmap(el) {
     cells.push(`<i class="l${l}" title="${d} : ${v} XP"></i>`);
   }
   el.innerHTML = cells.join('');
+}
+
+// ---------------------------------------------------------------- campagne martienne
+
+function marsLessons() { const m = MODULES.find(x => x.id === 'mars'); return m ? m.lessons : []; }
+function marsDone() { const s = store.get(); return marsLessons().filter(l => s.lessons[l.id]?.done).length; }
+
+function marsView() {
+  crumbs([['Accueil', '#/'], ['Objectif Mars']]);
+  const s = store.get();
+  const ls = marsLessons();
+  const terre = MODULES.find(x => x.id === 'terre');
+  const done = marsDone();
+  const n = ls.length;
+  // trajectoire Terre → Mars : une étape par mission (deux rangées sur petit écran)
+  const narrow = (main.clientWidth || innerWidth) < 640;
+  const VW = narrow ? 400 : 800, VH = narrow ? 300 : 210;
+  const pts = ls.map((l, i) => {
+    if (narrow) {
+      const half = Math.ceil(n / 2), row = i < half ? 0 : 1, k = row ? i - half : i, m = row ? n - half : half;
+      const t = m > 1 ? k / (m - 1) : 0;
+      return row ? [330 - t * 250, 200 + Math.sin(t * Math.PI) * 25] : [70 + t * 260, 95 - Math.sin(t * Math.PI) * 35];
+    }
+    const t = n > 1 ? i / (n - 1) : 0;
+    return [100 + t * 600, 150 - Math.sin(t * Math.PI) * 95];
+  });
+  const earth = narrow ? [36, 110, 22] : [40, 160, 28], marsP = narrow ? [40, 250, 18] : [760, 160, 22];
+  const svg = `<svg viewBox="0 0 ${VW} ${VH}" role="img" aria-label="Trajet de la Terre vers Mars, une étape par mission">
+    <defs><radialGradient id="gT"><stop offset="0" stop-color="#7cc4ff"/><stop offset="1" stop-color="#1d5fa8"/></radialGradient><radialGradient id="gM"><stop offset="0" stop-color="#f3a27a"/><stop offset="1" stop-color="#a5412a"/></radialGradient></defs>
+    ${Array.from({ length: 40 }, (_, i) => `<circle cx="${(i * 197) % VW}" cy="${(i * 89) % VH}" r="${i % 3 ? 0.8 : 1.4}" fill="#fff" opacity=".5"/>`).join('')}
+    <path d="M ${[[earth[0], earth[1]], ...pts, [marsP[0], marsP[1]]].map(p => p.join(' ')).join(' L ')}" fill="none" stroke="#e07a4f" stroke-width="2" stroke-dasharray="6 6" opacity=".7"/>
+    <circle cx="${earth[0]}" cy="${earth[1]}" r="${earth[2]}" fill="url(#gT)"/><text x="${earth[0]}" y="${earth[1] + earth[2] + 16}" fill="#cfe6ff" font-size="13" text-anchor="middle">Terre</text>
+    <circle cx="${marsP[0]}" cy="${marsP[1]}" r="${marsP[2]}" fill="url(#gM)"/><text x="${marsP[0]}" y="${marsP[1] + marsP[2] + 16}" fill="#ffd2bf" font-size="13" text-anchor="middle">Mars</text>
+    ${pts.map((p, i) => { const ok = s.lessons[ls[i].id]?.done; return `<a href="#/l/${ls[i].id}"><circle cx="${p[0]}" cy="${p[1]}" r="${narrow ? 14 : 12}" fill="${ok ? '#e07a4f' : '#0b1222'}" stroke="#e07a4f" stroke-width="2"/><text x="${p[0]}" y="${p[1] + 4}" fill="${ok ? '#1a0a04' : '#ffd2bf'}" font-size="12" font-weight="700" text-anchor="middle">${i + 1}</text></a>`; }).join('')}
+    ${(() => { const p = done === 0 ? [earth[0], earth[1] - earth[2]] : pts[Math.min(done, n) - 1]; return `<text x="${p[0]}" y="${p[1] - 18}" font-size="20" text-anchor="middle">🚀</text>`; })()}
+  </svg>`;
+  main.innerHTML = `
+    <div class="eyebrow">Phase 6 · Campagne</div>
+    <h1>Objectif Mars</h1>
+    <p class="lead">Le but affiché est un peu fou : préparer, avec des robots, la première base humaine sur Mars. Le vrai but est sérieux : chaque mission te fait combiner plusieurs domaines, faire des compromis chiffrés, gérer des imprévus et défendre tes choix, exactement comme dans un projet d'ingénieur.</p>
+    <div class="mars-map">${svg}
+      <div class="row between" style="margin-top:.6rem;color:#ffd2bf"><span>${done} / ${n} missions accomplies</span><span class="small">${done === n ? 'Campagne terminée : présente ton plan !' : 'Chaque mission prend une à plusieurs séances. Rien ne presse.'}</span></div>
+    </div>
+    <div class="grid c3" style="margin-bottom:1.4rem">
+      <div class="card"><b>🧩 Des missions croisées</b><p class="small muted" style="margin:.3rem 0 0">Chaque mission mobilise au moins trois domaines : physique, électronique, commande, IA, gestion de projet.</p></div>
+      <div class="card"><b>🚨 Des imprévus</b><p class="small muted" style="margin:.3rem 0 0">Comme dans la réalité, quelque chose finit toujours par mal tourner. Les imprévus te forcent à repenser ta solution.</p></div>
+      <div class="card"><b>📁 Des dossiers d'ingénieur</b><p class="small muted" style="margin:.3rem 0 0">Pas de QCM pour l'essentiel : des questions ouvertes, gardées dans ton carnet, et une grille pour t'auto-évaluer.</p></div>
+    </div>
+    <h2>Les missions</h2>
+    <div class="mars-steps">${ls.map((l, i) => `<a class="mars-step ${s.lessons[l.id]?.done ? 'done' : ''}" href="#/l/${l.id}"><span class="n">${s.lessons[l.id]?.done ? '✓' : i + 1}</span><span><b>${esc(l.title.replace(/^Mission \d+ · /, ''))}</b><small>${esc(l.sub)} · environ ${l.min} min</small></span></a>`).join('')}</div>
+    ${terre ? `<h2>Retour sur Terre</h2><p class="muted">${esc(terre.intro)}</p>
+    <div class="mars-steps">${terre.lessons.map(l => `<a class="mars-step ${s.lessons[l.id]?.done ? 'done' : ''}" href="#/l/${l.id}"><span class="n">${s.lessons[l.id]?.done ? '✓' : '🌍'}</span><span><b>${esc(l.title.replace(/^Atelier \d+ · /, ''))}</b><small>${esc(l.sub)}</small></span></a>`).join('')}</div>` : ''}
+    <div class="callout info" style="margin-top:1.6rem"><div class="ttl">📌 Conseil</div><p style="margin:0">La campagne s'appuie sur les phases 1 à 5. Si une notion te manque (PID, A*, filtre de Kalman, équation de la fusée), ouvre la leçon correspondante depuis le parcours, puis reviens : c'est comme ça que travaillent les ingénieurs.</p></div>`;
 }
 
 // ---------------------------------------------------------------- parcours
@@ -390,7 +451,7 @@ function defis() {
     <p class="lead">${doneN} / ${list.length} relevés. Chaque défi est un vrai problème d'ingénieur, en miniature. Tu peux les tenter dans l'ordre que tu veux.</p>
     <div class="grid c2">${list.map(d => `
       <a class="card link" href="#/l/${d.lesson.id}">
-        <div class="row between"><span class="tag ${s.defis[d.id]?.done ? 'ok' : 'warn'}">${s.defis[d.id]?.done ? 'relevé' : `+${d.xp || XP.defi} XP`}</span><span class="small muted">${esc(d.module.title)}</span></div>
+        <div class="row between"><span class="tag ${s.defis[d.id]?.done ? 'ok' : 'warn'}">${s.defis[d.id]?.done ? 'relevé' : `+${d.xp || (d.t === 'dossier' ? 80 : XP.defi)} XP`}</span><span class="small muted">${d.t === 'calc' ? 'Atelier de conception · ' : d.t === 'dossier' ? 'Dossier d\'ingénieur · ' : ''}${esc(d.module.title)}</span></div>
         <h3 style="margin:.6rem 0 .3rem">${esc(d.title)}</h3>
         <p class="small muted" style="margin:0">${esc(d.lesson.title)}</p>
       </a>`).join('')}</div>`;
