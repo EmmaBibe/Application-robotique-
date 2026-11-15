@@ -3,3 +3,5 @@ android/RoboMaster.apk
 android/*.idsig
 desktop/dist/
 desktop/cache/
+__pycache__/
+recherche/planificateur/*.log
