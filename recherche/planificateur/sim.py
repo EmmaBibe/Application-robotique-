@@ -108,6 +108,53 @@ class World:
             if i % 2: self._add_dyn((x, self.rng.uniform(0.5, 6)), (self.rng.uniform(-0.3, 0.3), s))
             else: self._add_dyn((x, self.rng.uniform(14, 19.5)), (self.rng.uniform(-0.3, 0.3), -s))
 
+    # ---------------------------------------------------------------- scènes dures (séance 4)
+    def _flux(self, p, v, r=0.35):
+        self.dyn.append(dict(p=np.array(p, float), v=np.array(v, float), r=r, mode='tout_droit', t_switch=1e9, kind='flux', done=True,
+                             reactif=bool(np.random.default_rng(len(self.dyn) * 31 + 7).random() < 0.7)))
+
+    def build_traversee(self):
+        """Un flux continu de piétons rapides à traverser, dans les deux sens : il faut choisir son trou."""
+        for i in range(34):
+            x = self.rng.uniform(6.3, 13.7); s = self.rng.uniform(1.5, 2.4) * (1 if i % 2 else -1)
+            self._flux((x, self.rng.uniform(0.5, 19.5)), (0.0, s))
+
+    def build_goulot(self):
+        """Une porte de 1,6 m dans un mur, avec un flux de personnes qui la franchit à contre-sens."""
+        gap = self.rng.uniform(8, 12); self.door = np.array([10.0, gap])
+        y = 0.4
+        while y < SIZE:
+            if abs(y - gap) > 1.25: self.static.append((10.0, y, 0.45))
+            y += 0.8
+        self.keepout = [(10.0, gap), (8.5, gap), (11.5, gap)]
+        for _ in range(14):
+            x = self.rng.uniform(10.8, 19.5); yy = gap + self.rng.uniform(-3, 3)
+            self.dyn.append(dict(p=np.array([x, yy]), v=np.array([-1.0, 0.0]), r=0.35, mode='tout_droit', t_switch=1e9, kind='porte', done=True,
+                                 sp=self.rng.uniform(1.0, 1.5), reactif=bool(np.random.default_rng(len(self.dyn) * 31 + 7).random() < 0.7)))
+
+    def build_coin_aveugle(self):
+        """Un couloir entre deux murs, percé d'ouvertures d'où surgissent des personnes pressées."""
+        gaps = [6.5, 10.5, 14.5]
+        for yw in (8.9, 11.1):
+            x = 3.0
+            while x < 17.5:
+                if all(abs(x - g) > 1.0 for g in gaps): self.static.append((x, yw, 0.4))
+                x += 0.7
+        for g in gaps:
+            for k in range(4):
+                s = self.rng.uniform(1.6, 2.2) * (1 if self.rng.random() < 0.5 else -1)
+                self._flux((g + self.rng.uniform(-0.3, 0.3), self.rng.uniform(0.5, 19.5)), (0.0, s))
+
+    def build_poursuite(self):
+        """Des agents qui foncent vers le robot (ils visent sa position, avec un temps de réaction)."""
+        self._rand_static(10)
+        for _ in range(7):
+            while True:
+                x, y = self.rng.uniform(6, 19), self.rng.uniform(1, 19)
+                if self._free(x, y, 0.35, 4.0): break
+            self.dyn.append(dict(p=np.array([x, y]), v=np.zeros(2), r=0.35, mode='tout_droit', t_switch=1e9, kind='chasseur', done=True,
+                                 sp=self.rng.uniform(1.0, 1.35), reactif=False))
+
     # ------------------------------------------------------------ évolution
     def step_obstacles(self, t, robot=None, react=False):
         for o in self.dyn:
@@ -118,6 +165,24 @@ class World:
                     o['v'] = o['v'] + DT * 1.5 * d / n * (2.0 - n)
                     sp = np.hypot(*o['v'])
                     if sp > 1.8: o['v'] = o['v'] / sp * 1.8
+            if o['kind'] == 'chasseur' and robot is not None:
+                d = robot - o['p']; n = np.hypot(*d)
+                if n > 1e-6: o['v'] = 0.85 * o['v'] + 0.15 * o['sp'] * d / n   # vise le robot, avec un temps de réaction
+            elif o['kind'] == 'porte':
+                door = self.door
+                if o['p'][0] > door[0] + 0.3:
+                    d = door - o['p']; n = np.hypot(*d); o['v'] = o['sp'] * d / max(n, 1e-6)
+                else: o['v'] = np.array([-o['sp'], 0.0])
+                if o['p'][0] < 0.8:
+                    o['p'] = np.array([19.5, door[1] + self.rng.uniform(-3, 3)])
+            if o['kind'] == 'flux':
+                o['p'] = o['p'] + o['v'] * DT
+                if o['p'][1] > SIZE + 0.4: o['p'][1] -= SIZE + 0.8
+                if o['p'][1] < -0.4: o['p'][1] += SIZE + 0.8
+                continue
+            if o['kind'] in ('chasseur', 'porte'):
+                o['p'] = o['p'] + o['v'] * DT
+                continue
             if o['kind'] == 'errant':
                 if self.rng.random() < 0.03:   # change de direction de temps en temps
                     ang = np.arctan2(o['v'][1], o['v'][0]) + self.rng.normal(0, 1.2)
@@ -177,43 +242,58 @@ COND = {
 
 
 def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
-    import zlib
+    import zlib, os, time
+    from collections import deque
     rng = np.random.default_rng(12345 + zlib.crc32(world.name.encode()) % 1000 + 7919 * world.seed)
     s = world.start.copy(); v = w = 0.0; t = 0.0
-    C = COND[cond] if isinstance(cond, str) else cond
+    C = dict(COND[cond] if isinstance(cond, str) else cond)
+    if os.environ.get('REEL'): C['reel'] = True   # chaîne de commande et perception réalistes, pour toutes les conditions
+    robot = tracker = None
+    if C.get('reel'):
+        import robot_reel
+        robot = robot_reel.RealRobot(s, np.random.default_rng(777 + world.seed)); tracker = robot_reel.Tracker()
+        C['lat'] = C.get('lat', 0) + 1          # chaîne lidar + traitement : une période de retard de plus
     known = world.static.copy()
     if C.get('unknown'): known = known[np.hypot(known[:, 0] - s[0], known[:, 1] - s[1]) - known[:, 2] < C.get('range', 6.0)]
     planner.reset(known, world.goal.copy())
     if hasattr(planner, 'bind'): planner.bind(world)
+    try: planner.set_perception(bool(C.get('occl')), C.get('range') or 0.0)
+    except AttributeError: pass
     try: planner.set_latency(C.get('lat', 0))   # retard connu du système (mesurable par horodatage sur un vrai robot)
     except AttributeError: pass
     gv, gw, bw = 1.0, 1.0, 0.0
     if C.get('slip'):   # erreur de modèle persistante : roues qui patinent, moteur mal étalonné
         gv, gw, bw = rng.uniform(0.75, 1.15), rng.uniform(0.75, 1.2), rng.uniform(-0.12, 0.12)
-    from collections import deque
     queue = deque()
     path = [s[:2].copy()]; vs = []; ws = []; comp = []; minclear = np.inf
     outcome = 'temps'
-    import time
     while t < T_MAX:
-        meas = s + (rng.normal(0, [0.03, 0.03, 0.02]) if perturb else 0)
-        obs = world.obstacles(noise=0.05 if perturb else 0.0, robot=s, rng_range=C.get('range'), occl=C.get('occl', False), drop=C.get('drop', 0.0))
-        if not C.get('range'):
-            pass
+        if robot is not None:
+            meas = robot.est.copy()                                   # pose estimée (odométrie + recalage lidar)
+            obs = world.obstacles(noise=0.05, robot=s, rng_range=C.get('range'), occl=C.get('occl', False), drop=C.get('drop', 0.0))
+            obs = tracker(obs)                                        # vitesses estimées, pas données
+        else:
+            meas = s + (rng.normal(0, [0.03, 0.03, 0.02]) if perturb else 0)
+            obs = world.obstacles(noise=0.05 if perturb else 0.0, robot=s, rng_range=C.get('range'), occl=C.get('occl', False), drop=C.get('drop', 0.0))
         if C.get('lat'):
             queue.append((meas, obs))
-            meas, obs = queue[0] if len(queue) > C['lat'] else queue[0]
+            meas, obs = queue[0]
             if len(queue) > C['lat']: queue.popleft()
         t0 = time.perf_counter()
         vc, wc = planner.act(t, meas, obs)
         comp.append(time.perf_counter() - t0)
         vc = float(np.clip(vc, 0, VMAX)); wc = float(np.clip(wc, -WMAX, WMAX))
-        v = v + np.clip(vc - v, -AMAX * DT, AMAX * DT); w = w + np.clip(wc - w, -ALPHA * DT, ALPHA * DT)
-        va, wa = v, w
-        if perturb: va = v * (1 + rng.normal(0, 0.05)); wa = w + rng.normal(0, 0.05)
-        va, wa = va * gv, wa * gw + bw * (abs(va) > 0.05)
-        s = s + DT * np.array([va * np.cos(s[2]), va * np.sin(s[2]), wa])
-        s[2] = (s[2] + np.pi) % (2 * np.pi) - np.pi
+        if robot is not None:
+            if C.get('slip'):   # le glissement s'applique en plus, comme une erreur de gain sur les roues
+                vc, wc = vc * gv, wc * gw + bw * (abs(vc) > 0.05)
+            s = robot.step(vc, wc).copy(); v, w = robot.speeds()
+        else:
+            v = v + np.clip(vc - v, -AMAX * DT, AMAX * DT); w = w + np.clip(wc - w, -ALPHA * DT, ALPHA * DT)
+            va, wa = v, w
+            if perturb: va = v * (1 + rng.normal(0, 0.05)); wa = w + rng.normal(0, 0.05)
+            va, wa = va * gv, wa * gw + bw * (abs(va) > 0.05)
+            s = s + DT * np.array([va * np.cos(s[2]), va * np.sin(s[2]), wa])
+            s[2] = (s[2] + np.pi) % (2 * np.pi) - np.pi
         world.step_obstacles(t, robot=s[:2], react=C.get('react', False)); t += DT
         world.t = t
         path.append(s[:2].copy()); vs.append(v); ws.append(w)

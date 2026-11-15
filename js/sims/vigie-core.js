@@ -212,10 +212,17 @@ function predict(obs, scen, u) {
   return P;
 }
 
-function cost(s, U, P, obs, D, guide) {
+/** Coût d'une séquence de commandes. md (facultatif) : modèle interne de la réponse du robot ;
+    gt (facultatif) : route horodatée, position voulue à chaque instant. */
+function cost(s, U, P, obs, D, guide, md, gt) {
   let x = s[0], y = s[1], th = s[2], c = 0, tw = 1, nav = 0;
+  let vv = md ? md.v0 : 0, ww = md ? md.w0 : 0;
   for (let t = 0; t < T; t++) {
-    const v = U[2 * t], w = U[2 * t + 1];
+    let v = U[2 * t], w = U[2 * t + 1];
+    if (md) {
+      vv += Math.max(-md.av * DT, Math.min(md.av * DT, (v - vv) * md.kv)); ww += Math.max(-md.aw * DT, Math.min(md.aw * DT, (w - ww) * md.kw));
+      v = vv; w = ww;
+    }
     x += DT * v * Math.cos(th); y += DT * v * Math.sin(th); th += DT * w;
     let d = Math.min(x, y, SIZE - x, SIZE - y) - R_ROB;
     const Pt = P[t];
@@ -224,6 +231,7 @@ function cost(s, U, P, obs, D, guide) {
     tw *= 0.97;
     nav = look(D, x, y); c += 0.4 * nav + 0.05 * w * w;
     if (guide) { let gd = 1e9; for (let k = 0; k < guide.length; k += 2) { const ex = x - guide[k][0], ey = y - guide[k][1], e = ex * ex + ey * ey; if (e < gd) gd = e; } c += 1.5 * gd; }
+    if (gt && t < gt.length) { const ex = x - gt[t][0], ey = y - gt[t][1]; c += 2 * (ex * ex + ey * ey); }
   }
   return c + 8 * nav;
 }
@@ -232,7 +240,7 @@ export class MPPI {
   constructor(seed = 0) { this.N = 160; this.rand = makeRand(seed + 99); this.name = 'MPPI'; }
   reset(stat, goal) { this.goal = goal; this.updateStatic(stat); this.U = new Float64Array(2 * T); for (let t = 0; t < T; t++) this.U[2 * t] = 0.5; }
   updateStatic(stat) { this.static = stat; this.D = dijkstra(occupancy(stat, R_ROB + 0.1), this.goal); }
-  optimize(s, Unom, obs, P, guide, N) {
+  optimize(s, Unom, obs, P, guide, N, gt) {
     const R = this.rand, samples = [], J = new Float64Array(N);
     for (let n = 0; n < N; n++) {
       const U = new Float64Array(2 * T);
@@ -242,7 +250,7 @@ export class MPPI {
         U[2 * t] = n === 1 ? 0 : Math.min(VMAX, Math.max(0, Unom[2 * t] + (noise ? R.n() * 0.5 : 0)));
         U[2 * t + 1] = n === 1 ? 0 : Math.min(WMAX, Math.max(-WMAX, Unom[2 * t + 1] + (noise ? R.n() : 0)));
       }
-      samples.push(U); J[n] = cost(s, U, P, obs, this.D, guide);
+      samples.push(U); J[n] = cost(s, U, P, obs, this.D, guide, this.md, gt);
     }
     let mn = Infinity; for (const j of J) mn = Math.min(mn, j);
     const sorted = Float64Array.from(J).sort(), lam = Math.max(1e-6, (sorted[Math.floor(N * 0.1)] - mn) / 2);
@@ -383,6 +391,153 @@ export class Vigie extends MPPI {
   }
 }
 
+
+// ------------------------------------------------------------------ VIGIE 3 : espace-temps, tubes calibrés, modèle interne
+const STR = 0.35, STDT = 1 / 3, STK = 24, STS = 4, STN = Math.round(SIZE / STR);
+
+/** A* dans l'espace-temps (x, y, t) avec contrôle continu entre deux instants ; la place réservée
+    autour de chaque agent grandit avec le temps selon son imprévisibilité ua. Peut attendre sur place. */
+function spacetimePlan(s, goal, obs, D, ua) {
+  const nf = STK * STS + 1, dtf = STDT / STS, occ = new Uint8Array(nf * STN * STN), base = new Uint8Array(STN * STN);
+  const mark = (o, px, py, rr) => {
+    const i0 = Math.max(0, ((px - rr) / STR) | 0), i1 = Math.min(STN - 1, ((px + rr) / STR) | 0), j0 = Math.max(0, ((py - rr) / STR) | 0), j1 = Math.min(STN - 1, ((py + rr) / STR) | 0);
+    for (let i = i0; i <= i1; i++) for (let j = j0; j <= j1; j++) { const dx = (i + 0.5) * STR - px, dy = (j + 0.5) * STR - py; if (dx * dx + dy * dy < rr * rr) o[i * STN + j] = 1; }
+  };
+  obs.forEach(o => { if (!o[5]) mark(base, o[0], o[1], o[4] + R_ROB + 0.3); });
+  for (let i = 0; i < STN; i++) base[i] = base[(STN - 1) * STN + i] = base[i * STN] = base[i * STN + STN - 1] = 1;
+  for (let q = 0; q < nf; q++) {
+    const t = q * dtf, layer = occ.subarray(q * STN * STN, (q + 1) * STN * STN); layer.set(base);
+    obs.forEach((o, m) => { if (o[5]) mark(layer, o[0] + o[2] * t, o[1] + o[3] * t, o[4] + R_ROB + 0.3 + (ua ? ua[m] : 0.05) * t); });
+  }
+  const cell = p => [Math.min(STN - 1, Math.max(0, (p[0] / STR) | 0)), Math.min(STN - 1, Math.max(0, (p[1] / STR) | 0))];
+  const [si, sj] = cell(s), [gi, gj] = cell(goal);
+  const H = (i, j) => look(D, (i + 0.5) * STR, (j + 0.5) * STR) / STR;
+  const key = (i, j, k) => (k * STN + i) * STN + j;
+  const G = new Map(), prev = new Map(), closed = new Set(), h = new Heap();
+  const k0 = key(si, sj, 0); G.set(k0, 0); h.push(H(si, sj), k0);
+  let best = -1, bestc = Infinity, n = 0;
+  const moves = [[0, 0, 0.25]]; for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) if (a || b) moves.push([a, b, Math.hypot(a, b)]);
+  while (h.size && n < 80000) {
+    const [, u] = h.pop(); if (closed.has(u)) continue; closed.add(u); n++;
+    const j = u % STN, i = ((u / STN) | 0) % STN, k = (u / (STN * STN)) | 0;
+    if ((i === gi && j === gj) || k === STK) {
+      const c = G.get(u) + (i === gi && j === gj ? 0 : H(i, j)); if (c < bestc) { bestc = c; best = u; }
+      if (i === gi && j === gj) break; continue;
+    }
+    for (const [di, dj, c] of moves) {
+      const a = i + di, b = j + dj; if (a < 0 || b < 0 || a >= STN || b >= STN) continue;
+      let ok = true;
+      for (let q = 1; q <= STS && ok; q++) {
+        const ci = Math.round(i + di * q / STS), cj = Math.round(j + dj * q / STS);
+        if (occ[(k * STS + q) * STN * STN + ci * STN + cj] && !(k === 0 && q < 2)) ok = false;
+      }
+      if (!ok) continue;
+      const v = key(a, b, k + 1), nd = G.get(u) + c + 0.2;
+      if (nd < (G.has(v) ? G.get(v) : Infinity)) { G.set(v, nd); prev.set(v, u); h.push(nd + H(a, b), v); }
+    }
+  }
+  if (best < 0) return null;
+  const nodes = []; for (let u = best; u !== undefined; u = prev.get(u)) nodes.push(u);
+  nodes.reverse();
+  const pts = nodes.map(u => [(((u / STN) | 0) % STN + 0.5) * STR, (u % STN + 0.5) * STR]); pts[0] = [s[0], s[1]];
+  const out = [];
+  for (let q = 1; q <= Math.floor(pts.length * STDT / DT); q++) {
+    const tt = q * DT / STDT, a = Math.min(pts.length - 1, Math.floor(tt)), b = Math.min(pts.length - 1, a + 1), f = tt - a;
+    out.push([pts[a][0] + (pts[b][0] - pts[a][0]) * f, pts[a][1] + (pts[b][1] - pts[a][1]) * f]);
+  }
+  return out;
+}
+
+function timedControls(s, gt) {
+  const U = new Float64Array(2 * T); let [x, y, th] = s;
+  for (let t = 0; t < T; t++) {
+    const q = gt[Math.min(gt.length - 1, t + 3)], d = Math.hypot(q[0] - x, q[1] - y);
+    let a = Math.atan2(q[1] - y, q[0] - x) - th; a = Math.atan2(Math.sin(a), Math.cos(a));
+    U[2 * t] = Math.min(VMAX, d / 0.4) * Math.max(0, Math.cos(a)); U[2 * t + 1] = Math.max(-WMAX, Math.min(WMAX, 2.5 * a));
+    x += DT * U[2 * t] * Math.cos(th); y += DT * U[2 * t] * Math.sin(th); th += DT * U[2 * t + 1];
+  }
+  return U;
+}
+
+/** Vitesse prudente aux angles morts : derrière chaque bord d'obstacle qui cache une zone libre, on imagine
+    une personne qui pourrait surgir à 1,5 m/s, et on roule assez lentement pour pouvoir s'arrêter. */
+function phantomSpeed(s, obs, sense = 5) {
+  const st = obs.filter(o => !o[5]); let vmax = VMAX;
+  const hd = [Math.cos(s[2]), Math.sin(s[2])];
+  for (const o of st) {
+    const rx = o[0] - s[0], ry = o[1] - s[1], d = Math.hypot(rx, ry);
+    if (d > sense + 1.5 || d < o[4] + 0.2 || (rx * hd[0] + ry * hd[1]) / d < -0.2) continue;
+    const base = Math.atan2(ry, rx), half = Math.asin(Math.min(1, o[4] / d)), L = Math.sqrt(Math.max(0, d * d - o[4] * o[4]));
+    for (const sg of [-1, 1]) {
+      const a = base + sg * (half + 0.02), E = [s[0] + L * Math.cos(a), s[1] + L * Math.sin(a)];
+      let nx = E[0] - o[0], ny = E[1] - o[1]; const nn = Math.hypot(nx, ny); nx /= nn; ny /= nn;
+      const P = [E[0] + Math.cos(a) - 0.25 * nx, E[1] + Math.sin(a) - 0.25 * ny];
+      if (st.some(b => Math.hypot(b[0] - P[0], b[1] - P[1]) < b[4] + 0.35)) continue;
+      const blk = (Q, skip) => { const qx = Q[0] - s[0], qy = Q[1] - s[1], LQ = Math.hypot(qx, qy), ux = qx / LQ, uy = qy / LQ;
+        return st.some(b => { if (b === skip) return false; const bx = b[0] - s[0], by = b[1] - s[1], pr = bx * ux + by * uy; return pr > 0 && pr < LQ - 0.05 && Math.abs(bx * uy - by * ux) < b[4] - 0.05; }); };
+      if (blk(E, o) || !blk(P, null)) continue;
+      const ang = Math.abs(Math.atan2((P[1] - s[1]) * hd[0] - (P[0] - s[0]) * hd[1], (P[0] - s[0]) * hd[0] + (P[1] - s[1]) * hd[1]));
+      if (ang > 1.3) continue;
+      const dd = Math.max(0, Math.hypot(P[0] - s[0], P[1] - s[1]) - 0.35 - R_ROB - 0.25), a2 = 0.8 * AMAX;
+      vmax = Math.min(vmax, Math.max(0.15, -1.5 + Math.sqrt(2.25 + 2 * a2 * dd)));
+    }
+  }
+  return vmax;
+}
+
+export class Vigie3 extends Vigie {
+  constructor(seed = 0) { super(seed); this.name = 'VIGIE 3'; this.K = 3; this.N = 96; this.occl = false; }
+  reset(stat, goal) {
+    super.reset(stat, goal);
+    this.mh = []; this.md = { v0: 0, w0: 0, kv: 1, kw: 1, av: AMAX, aw: ALPHA }; this.par = [0.1, 0.1, AMAX, ALPHA]; this.last = null;
+  }
+  // modèle interne : on retrouve, chaque seconde, la constante de temps et l'accélération qui expliquent le mieux
+  // les vitesses mesurées à partir des commandes envoyées (inspiration : le cervelet)
+  identify() {
+    if (this.mh.length < 25) return;
+    const taus = [0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.55, 0.7, 0.9, 1.2], accs = [0.8, 1.2, 1.6, 2, 3];
+    const best = [0, 1].map(j => {
+      let bc = null, be = Infinity;
+      for (const tau of taus) for (const a0 of accs) {
+        const a = j ? 2 * a0 : a0; let v = this.mh[0][1][j], e = 0;
+        for (let k = 0; k < this.mh.length - 1; k++) { v += Math.max(-a * DT, Math.min(a * DT, (this.mh[k][0][j] - v) * Math.min(1, DT / tau))); e += (v - this.mh[k + 1][1][j]) ** 2; }
+        if (e < be) { be = e; bc = [tau, a]; }
+      }
+      return bc;
+    });
+    this.par = [best[0][0], best[1][0], best[0][1], best[1][1]];
+  }
+  act(t, s, obs) {
+    let vm = 0, wm = 0;
+    if (this.last) { const dx = s[0] - this.last[0], dy = s[1] - this.last[1]; vm = (dx * Math.cos(s[2]) + dy * Math.sin(s[2])) / DT; wm = Math.atan2(Math.sin(s[2] - this.last[2]), Math.cos(s[2] - this.last[2])) / DT; }
+    this.last = [...s];
+    this.md.v0 += 0.25 * (vm - this.md.v0); this.md.w0 += 0.25 * (wm - this.md.w0);
+    if (this.k % 10 === 0) this.identify();
+    const [tv, tw, av, aw] = this.par; Object.assign(this.md, { kv: Math.min(1, DT / tv), kw: Math.min(1, DT / tw), av, aw });
+    const u = this.track(t, obs); this.u = u;
+    if (this.k % 10 === 0 || !this.modes.length) {
+      const guides = diverseGuides(s, this.goal, obs, this.K), old = this.modes.filter(m => !m.st && m.g);
+      this.modes = guides.map(g => { let best = null, bd = 1e9; for (const m of old) { const d = guideDist(m.g, g); if (d < bd) { bd = d; best = m; } } return { g, U: best && bd < 1 ? best.U : guideControls(s, g) }; });
+      if (!this.modes.length) this.modes = [{ g: null, U: this.U }];
+      const gt = spacetimePlan(s, this.goal, obs, this.D, u.map(x => 0.02 + 0.3 * x));
+      if (gt && gt.length > 3) this.modes.push({ g: null, gt, U: timedControls(s, gt), st: true });
+    }
+    this.k++;
+    const Pcv = predict(obs);
+    for (const m of this.modes) { if (m.st && m.gt.length > 1) m.gt = m.gt.slice(1); m.U = this.optimize(s, m.U, obs, Pcv, m.g, this.N, m.st ? m.gt : null); }
+    let bi = 0, bc = Infinity;
+    this.modes.forEach((m, i) => { const c = cost(s, m.U, Pcv, obs, this.D, null, this.md); if (c < bc) { bc = c; bi = i; } });
+    const out = [this.modes[bi].U[0], this.modes[bi].U[1]];
+    if (this.occl) out[0] = Math.min(out[0], phantomSpeed(s, obs));
+    this.viz = { plans: this.modes.map(m => rollPts(s, m.U)), chosen: bi, commit: bi, reflex: 0, u, st: this.modes[bi].st };
+    for (const m of this.modes) this.shift(m.U);
+    this.U = this.modes[0].U;
+    this.mh.push([[Math.max(0, Math.min(VMAX, out[0])), out[1]], [vm, wm]]); if (this.mh.length > 60) this.mh.shift();
+    const md = this.md; md.v0 += Math.max(-md.av * DT, Math.min(md.av * DT, (out[0] - md.v0) * md.kv)); md.w0 += Math.max(-md.aw * DT, Math.min(md.aw * DT, (out[1] - md.w0) * md.kw));
+    return out;
+  }
+}
+
 /** Mémoire de carte commune aux deux planificateurs : les obstacles fixes vus restent connus. */
 /** Prédicteur de Smith : avec un retard connu de L pas, on rejoue les commandes déjà envoyées
     pour estimer l'état présent du robot, et on avance les agents d'autant. */
@@ -420,27 +575,96 @@ export function withMemory(planner) {
   };
 }
 
+
+// ------------------------------------------------------------------ robot réaliste (chaîne de commande complète)
+// Même modèle que recherche/planificateur/robot_reel.py : retard de la chaîne, saturation des roues,
+// régulateur PI par roue sur codeur, couple limité par la vitesse et la batterie, frottements,
+// masse et inertie, odométrie qui dérive recalée par le lidar, vitesses des personnes estimées.
+const RW = 0.08, BW = 0.45, MASS = 25, IZ = 1.4, TMAXW = 2.3, WNL = 1.9 / 0.08, CC = 0.12, CV = 0.02, TICKS = 1024;
+
+export class RealRobot {
+  constructor(pose, R) {
+    this.p = [...pose]; this.v = 0; this.w = 0; this.R = R; this.t = 0;
+    this.cmd = [0, 0]; this.prev = [0, 0]; this.integ = [0, 0]; this.encAcc = [0, 0]; this.encPrev = [0, 0];
+    this.est = [...pose]; this.rErr = [1 + R.n() * 0.01, 1 + R.n() * 0.01]; this.kMot = [1 + R.n() * 0.05, 1 + R.n() * 0.05];
+  }
+  step(vc0, wc0) {
+    this.prev = this.cmd; this.cmd = [Math.min(VMAX, Math.max(0, vc0)), Math.min(WMAX, Math.max(-WMAX, wc0))];
+    for (let k = 0; k < 10; k++) {
+      const [vc, wc] = k < 5 ? this.prev : this.cmd;
+      let wl = (vc - wc * BW / 2) / RW, wr = (vc + wc * BW / 2) / RW; const lim = VMAX / RW, kk = Math.max(1, Math.abs(wl) / lim, Math.abs(wr) / lim);
+      const ref = [wl / kk, wr / kk], om = [(this.v - this.w * BW / 2) / RW, (this.v + this.w * BW / 2) / RW], F = [0, 0], omm = [0, 0];
+      const batt = 1 - 0.12 * Math.min(1, this.t / 45);
+      for (const j of [0, 1]) {
+        this.encAcc[j] += om[j] * 0.01 * TICKS / (2 * Math.PI);
+        const ticks = Math.floor(this.encAcc[j]); omm[j] = (ticks - this.encPrev[j]) * 2 * Math.PI / TICKS / 0.01; this.encPrev[j] = ticks;
+        const e = ref[j] - omm[j];
+        const av = TMAXW * batt * Math.max(0, Math.min(1, 1 - Math.abs(om[j]) / WNL)) * this.kMot[j];
+        const tc = 1.0 * e + 1.0 * this.integ[j];             // régulateur de roue bien réglé
+        let tau = Math.max(-av - 0.3, Math.min(av, tc));
+        if (!(tau !== tc && Math.sign(e) === Math.sign(tc))) this.integ[j] += e * 0.01;   // anti-emballement
+        tau -= CV * om[j] + CC * Math.tanh(om[j] / 0.5); F[j] = tau / RW;
+      }
+      this.v += (F[0] + F[1]) / MASS * 0.01; this.w += (F[1] - F[0]) * BW / 2 / IZ * 0.01;
+      if (this.v < 0 && vc >= 0) this.v *= 0.5;
+      const vr = this.v * (this.rErr[0] + this.rErr[1]) / 2, wr2 = this.w + (this.rErr[1] - this.rErr[0]) * this.v / BW;
+      this.p = [this.p[0] + 0.01 * vr * Math.cos(this.p[2]), this.p[1] + 0.01 * vr * Math.sin(this.p[2]), this.p[2] + 0.01 * wr2];
+      const dl = omm[0] * 0.01 * RW, dr = omm[1] * 0.01 * RW, vo = (dl + dr) / 2 / 0.01, wo = (dr - dl) / BW / 0.01;
+      this.est = [this.est[0] + 0.01 * vo * Math.cos(this.est[2]), this.est[1] + 0.01 * vo * Math.sin(this.est[2]), this.est[2] + 0.01 * wo];
+      this.t += 0.01;
+    }
+    this.p[2] = Math.atan2(Math.sin(this.p[2]), Math.cos(this.p[2]));
+    const R = this.R, z = [this.p[0] + R.n() * 0.03, this.p[1] + R.n() * 0.03, this.p[2] + R.n() * 0.012];
+    const d2 = Math.atan2(Math.sin(z[2] - this.est[2]), Math.cos(z[2] - this.est[2]));
+    this.est = [this.est[0] + 0.35 * (z[0] - this.est[0]), this.est[1] + 0.35 * (z[1] - this.est[1]), Math.atan2(Math.sin(this.est[2] + 0.35 * d2), Math.cos(this.est[2] + 0.35 * d2))];
+    return this.p;
+  }
+}
+
+/** Vitesses des personnes estimées à partir des positions mesurées (filtre alpha-bêta). */
+export function makeTracker() {
+  const st = new Map();
+  return obs => obs.map(o => {
+    if (!o[5]) return o;
+    const k = st.get(o[6]);
+    if (!k) { st.set(o[6], [[o[0], o[1]], [0, 0]]); return [o[0], o[1], 0, 0, o[4], o[5], o[6]]; }
+    const [p, v] = k, pp = [p[0] + v[0] * DT, p[1] + v[1] * DT], r = [o[0] - pp[0], o[1] - pp[1]];
+    const np2 = [pp[0] + 0.6 * r[0], pp[1] + 0.6 * r[1]], nv = [v[0] + 0.3 * r[0] / DT, v[1] + 0.3 * r[1] / DT];
+    st.set(o[6], [np2, nv]);
+    return [np2[0], np2[1], nv[0], nv[1], o[4], o[5], o[6]];
+  });
+}
+
 /** Un épisode complet, sans dessin (utilisé par les tests et par le mode « course »). */
 export function createEpisode(scene, seed, Planner, cond = {}) {
   const w = makeWorld(scene, seed), R = makeRand(seed * 31 + 5);
+  const lat = (cond.latence ? 2 : 0) + (cond.reel ? 1 : 0);
   const mem = withMemory(new Planner(seed));
-  const pl = cond.latence && Planner === Vigie ? withSmith(mem, 2) : mem;
+  if (cond.perception && mem.planner) mem.planner.occl = true;
+  const pl = lat && (Planner === Vigie || Planner === Vigie3) ? withSmith(mem, lat) : mem;
   let s = [...w.start], v = 0, om = 0, t = 0, outcome = null, minc = Infinity; const path = [[s[0], s[1]]], queue = [];
   const gv = cond.glissement ? R.u(0.75, 1.15) : 1, gw = cond.glissement ? R.u(0.75, 1.2) : 1, bw = cond.glissement ? R.u(-0.12, 0.12) : 0;
   const known = cond.carte ? w.static.filter(([x, y, r]) => Math.hypot(x - s[0], y - s[1]) - r < 6) : w.static;
+  const robot = cond.reel ? new RealRobot(s, makeRand(seed * 7 + 777)) : null, track = cond.reel ? makeTracker() : null;
   pl.reset(known, w.goal);
   return {
     world: w, planner: pl.planner, path,
     get t() { return t; }, get s() { return s; }, get outcome() { return outcome; }, get minClear() { return minc; },
     step() {
       if (outcome) return outcome;
-      let meas = [s[0] + R.n() * 0.03, s[1] + R.n() * 0.03, s[2] + R.n() * 0.02], obs = observe(w, s, cond, R);
-      if (cond.latence) { queue.push([meas, obs]); [meas, obs] = queue[0]; if (queue.length > 2) queue.shift(); }
+      let meas, obs = observe(w, s, cond, R);
+      if (robot) { meas = [...robot.est]; obs = track(obs); } else meas = [s[0] + R.n() * 0.03, s[1] + R.n() * 0.03, s[2] + R.n() * 0.02];
+      if (lat) { queue.push([meas, obs]); [meas, obs] = queue[0]; if (queue.length > lat) queue.shift(); }
       let [vc, wc] = pl.act(t, meas, obs);
       vc = Math.min(VMAX, Math.max(0, vc)); wc = Math.min(WMAX, Math.max(-WMAX, wc));
-      v += Math.max(-AMAX * DT, Math.min(AMAX * DT, vc - v)); om += Math.max(-ALPHA * DT, Math.min(ALPHA * DT, wc - om));
-      const va = v * (1 + R.n() * 0.05) * gv, wa = (om + R.n() * 0.05) * gw + (Math.abs(v) > 0.05 ? bw : 0);
-      s = [s[0] + DT * va * Math.cos(s[2]), s[1] + DT * va * Math.sin(s[2]), Math.atan2(Math.sin(s[2] + DT * wa), Math.cos(s[2] + DT * wa))];
+      if (robot) {
+        if (cond.glissement) { vc *= gv; wc = wc * gw + (vc > 0.05 ? bw : 0); }
+        s = [...robot.step(vc, wc)]; v = robot.v; om = robot.w;
+      } else {
+        v += Math.max(-AMAX * DT, Math.min(AMAX * DT, vc - v)); om += Math.max(-ALPHA * DT, Math.min(ALPHA * DT, wc - om));
+        const va = v * (1 + R.n() * 0.05) * gv, wa = (om + R.n() * 0.05) * gw + (Math.abs(v) > 0.05 ? bw : 0);
+        s = [s[0] + DT * va * Math.cos(s[2]), s[1] + DT * va * Math.sin(s[2]), Math.atan2(Math.sin(s[2] + DT * wa), Math.cos(s[2] + DT * wa))];
+      }
       stepWorld(w, t, s, cond.reactifs); t += DT; path.push([s[0], s[1]]);
       const c = clearance(w, s); minc = Math.min(minc, c);
       if (c < 0) outcome = 'collision'; else if (Math.hypot(s[0] - w.goal[0], s[1] - w.goal[1]) < 0.5) outcome = 'succes'; else if (t >= 45) outcome = 'temps';

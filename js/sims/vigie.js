@@ -5,11 +5,12 @@ import { createEpisode, MPPI, Vigie, SCENES, SIZE } from './vigie-core.js';
 export default function vigie(root, opts = {}, api = {}) {
   const f = frame(root, { title: opts.title || 'VIGIE contre MPPI : la course', tag: 'Planification · invention', height: 470 });
   let scene = opts.scene || 'foule_dense', seed = 1, speed = 3, race = false, solved = false;
-  const cond = { perception: false, latence: false, glissement: false, reactifs: false, carte: false };
+  const cond = { reel: true, perception: false, latence: false, glissement: false, reactifs: false, carte: false };
   const tally = { MPPI: { succes: 0, collision: 0, temps: 0, t: 0 }, VIGIE: { succes: 0, collision: 0, temps: 0, t: 0 } };
   let eps, pause = 0;
 
   segmented(f.ctrl, { label: 'Scène', value: scene, options: Object.entries(SCENES).map(([value, label]) => ({ value, label })), onChange: v => { scene = v; restart(); } });
+  checkbox(f.ctrl, { label: 'Robot réaliste : moteurs, inertie, retard de 100 ms, odométrie, vitesses estimées', value: true, onChange: v => { cond.reel = v; restart(); } });
   checkbox(f.ctrl, { label: 'Perception limitée (5 m, masquage, détections perdues)', value: false, onChange: v => { cond.perception = v; restart(); } });
   checkbox(f.ctrl, { label: 'Latence de 200 ms', value: false, onChange: v => { cond.latence = v; restart(); } });
   checkbox(f.ctrl, { label: 'Roues qui patinent (modèle faux)', value: false, onChange: v => { cond.glissement = v; restart(); } });

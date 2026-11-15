@@ -193,8 +193,11 @@ class MPPI:
     def update_static(self, static):
         self.D = dijkstra(occupancy([tuple(c) for c in static], R_ROB + 0.1), self.goal)
 
+    def _roll(self, s, U):
+        return rollout(s, U)
+
     def eval_cost(self, s, U, obs, scen=None, guide=None):
-        tr = rollout(s, U)
+        tr = self._roll(s, U)
         c = obstacle_cost(tr, predict(obs, self.T, scen), obs[:, 4])
         nav = lookup(self.D, tr[..., 0], tr[..., 1])
         c = c + 8.0 * nav[..., -1] + 0.4 * nav.sum(-1) + 0.05 * (U[..., 1] ** 2).sum(-1)
@@ -710,6 +713,10 @@ class Vigie(MPPI):
         nav = lookup(self.D, tr[..., 0], tr[..., 1])
         return c + 8.0 * nav[..., -1] + 0.4 * nav.sum(-1) + 0.05 * (U[..., 1] ** 2).sum(-1)
 
+    def option_values(self, s, seq, obs):
+        C = np.stack([self.eval_scen(s, seq, obs, sc) for sc in SCENARIOS], -1)   # (options, suites, futurs)
+        return (C.min(1) * SCEN_W).sum(-1)
+
     def refresh(self, s, obs):
         guides = diverse_guides(s, self.goal, obs, self.K - 1 + 1)
         old = self.modes[1:] if self.modes else []
@@ -769,8 +776,7 @@ class Vigie(MPPI):
             seq = np.empty((nO, K, self.T, 2))
             for i in range(nO):
                 for k in range(K): seq[i, k, :P] = pref[i]; seq[i, k, P:] = Us[k, P:]
-            C = np.stack([self.eval_scen(s, seq, obs, sc) for sc in SCENARIOS], -1)   # (options, suites, futurs)
-            V = (C.min(1) * SCEN_W).sum(-1)
+            V = self.option_values(s, seq, obs)
         else:
             seq = np.stack([np.concatenate([pr, Us[0, P:]]) for pr in pref])
             V = self.eval_scen(s, seq, obs, (0.0, 1.0))
@@ -908,3 +914,485 @@ class V2NoSmith(VigieV2):
 
 
 ALL += [V2NoArcs, V2NoReseed, V2NoSmith]
+
+
+# =====================================================================================
+# Séance 4 : planification espace-temps et fantômes d'angle mort
+# =====================================================================================
+ST_RES, ST_DT, ST_K = 0.5, 0.5, 20          # grille de 0,5 m, pas de 0,5 s, horizon de 10 s
+ST_N = int(SIZE / ST_RES)
+ST_MOVES = [(0, 0, 0.3)] + [(di, dj, np.hypot(di, dj)) for di in (-1, 0, 1) for dj in (-1, 0, 1) if di or dj]
+
+
+def spacetime_plan(s, goal, obs, D, unc=0.12):
+    """A* dans l'espace-temps (x, y, t) : chaque couche de temps a sa propre carte d'occupation,
+    construite avec la position prédite de chaque agent. Le plan peut attendre sur place,
+    pour laisser passer un flux puis se glisser dans un trou."""
+    xs = (np.arange(ST_N) + 0.5) * ST_RES
+    gx, gy = np.meshgrid(xs, xs, indexing='ij')
+    stat = np.zeros((ST_N, ST_N), bool)
+    for o in obs[obs[:, 5] == 0]:
+        stat |= (gx - o[0]) ** 2 + (gy - o[1]) ** 2 < (o[4] + R_ROB + 0.1) ** 2
+    stat[0, :] = stat[-1, :] = stat[:, 0] = stat[:, -1] = True
+    mob = obs[obs[:, 5] > 0]
+    occ = np.empty((ST_K + 1, ST_N, ST_N), bool)
+    for k in range(ST_K + 1):
+        t = k * ST_DT; o = stat.copy()
+        for a in mob:
+            px, py = a[0] + a[2] * t, a[1] + a[3] * t; rr = a[4] + R_ROB + 0.15 + unc * t
+            o |= (gx - px) ** 2 + (gy - py) ** 2 < rr * rr
+        occ[k] = o
+    cell = lambda p: (min(ST_N - 1, max(0, int(p[0] / ST_RES))), min(ST_N - 1, max(0, int(p[1] / ST_RES))))
+    si, sj = cell(s); gi, gj = cell(goal)
+    Dst = lookup(D, gx, gy) / (ST_RES * 1.0)   # coût restant estimé, en pas de grille
+    start = (si, sj, 0); G = {start: 0.0}; prev = {}; pq = [(Dst[si, sj], start)]
+    best, bestc = None, np.inf; closed = set(); n = 0
+    while pq and n < 60000:
+        f, u = heapq.heappop(pq)
+        if u in closed: continue
+        closed.add(u); n += 1
+        i, j, k = u
+        if (i, j) == (gi, gj) or k == ST_K:
+            c = G[u] + (0 if (i, j) == (gi, gj) else Dst[i, j])
+            if c < bestc: bestc, best = c, u
+            if (i, j) == (gi, gj): break
+            continue
+        for di, dj, c in ST_MOVES:
+            a, b = i + di, j + dj
+            if not (0 <= a < ST_N and 0 <= b < ST_N) or occ[k + 1, a, b]: continue
+            if k == 0 and occ[0, a, b] and (a, b) != (si, sj): continue
+            v = (a, b, k + 1); nd = G[u] + c + 0.15   # chaque pas de temps coûte un peu : ne pas traîner
+            if nd < G.get(v, np.inf):
+                G[v] = nd; prev[v] = u; heapq.heappush(pq, (nd + Dst[a, b], v))
+    if best is None: return None
+    path = [best]
+    while path[-1] in prev: path.append(prev[path[-1]])
+    path = path[::-1]
+    pts = np.array([[(i + 0.5) * ST_RES, (j + 0.5) * ST_RES] for i, j, k in path]); pts[0] = s[:2]
+    # positions au pas de la commande (0,1 s), interpolées
+    tq = np.arange(1, int(len(pts) * ST_DT / DT) + 1) * DT
+    tk = np.arange(len(pts)) * ST_DT
+    return np.stack([np.interp(tq, tk, pts[:, 0]), np.interp(tq, tk, pts[:, 1])], 1)
+
+
+def timed_controls(s, gt, T):
+    """Commande initiale qui suit une trajectoire horodatée (position voulue à chaque instant)."""
+    U = np.zeros((T, 2)); x = s.copy()
+    for t in range(T):
+        q = gt[min(len(gt) - 1, t + 3)]
+        d = np.hypot(q[0] - x[0], q[1] - x[1])
+        a = np.arctan2(q[1] - x[1], q[0] - x[0]) - x[2]; a = np.arctan2(np.sin(a), np.cos(a))
+        U[t] = (np.clip(d / 0.4, 0, VMAX) * max(0.0, np.cos(a)), np.clip(2.5 * a, -WMAX, WMAX))
+        x = x + DT * np.array([U[t, 0] * np.cos(x[2]), U[t, 0] * np.sin(x[2]), U[t, 1]])
+    return U
+
+
+def phantoms(s, obs, rng_=5.0, speed=1.5):
+    """Fantômes d'angle mort : derrière chaque bord d'obstacle qui cache une zone libre,
+    on imagine une personne qui pourrait surgir en coupant la ligne de vue."""
+    st = obs[obs[:, 5] == 0]
+    if not len(st): return np.zeros((0, obs.shape[1]))
+    rel = st[:, :2] - s[:2]; d = np.hypot(*rel.T)
+    hd = np.array([np.cos(s[2]), np.sin(s[2])])
+    out = []
+    for k in np.nonzero((d < rng_ + 1.5) & (d > st[:, 4] + 0.2))[0]:
+        c, r = st[k, :2], st[k, 4]
+        if (rel[k] @ hd) / d[k] < -0.2: continue           # obstacles derrière le robot : inutile
+        base = np.arctan2(rel[k, 1], rel[k, 0]); half = np.arcsin(min(1.0, r / d[k]))
+        for sg in (-1, 1):
+            a = base + sg * (half + 0.02); L = np.sqrt(max(d[k] ** 2 - r ** 2, 0))
+            E = s[:2] + L * np.array([np.cos(a), np.sin(a)])        # bord vu par le robot
+            nrm = E - c; nrm /= np.linalg.norm(nrm) + 1e-9
+            away = (E - s[:2]) / (np.linalg.norm(E - s[:2]) + 1e-9)
+            P = E + 1.0 * away - 0.25 * nrm                            # caché dans l'ombre, juste derrière le bord
+            if np.any(np.hypot(st[:, 0] - P[0], st[:, 1] - P[1]) < st[:, 4] + 0.35): continue
+            if not (0.5 < P[0] < SIZE - 0.5 and 0.5 < P[1] < SIZE - 0.5): continue
+            # le bord n'est utile que s'il est lui-même visible (pas au milieu d'un mur)
+            seg = E - s[:2]; Ls = np.linalg.norm(seg); u_ = seg / (Ls + 1e-9)
+            pr = rel @ u_; perp = np.abs(rel[:, 0] * u_[1] - rel[:, 1] * u_[0])
+            blocked = (pr > 0) & (pr < Ls - 0.05) & (perp < st[:, 4] - 0.05); blocked[k] = False
+            if blocked.any(): continue
+            # le fantôme doit être réellement caché (sinon les capteurs le verraient)
+            relP = P - s[:2]; LP = np.linalg.norm(relP); uP = relP / (LP + 1e-9)
+            prP = rel @ uP; perpP = np.abs(rel[:, 0] * uP[1] - rel[:, 1] * uP[0])
+            if not np.any((prP > 0) & (prP < LP) & (perpP < st[:, 4])): continue
+            v = np.array([-u_[1], u_[0]]) * sg * speed     # surgit en travers de la ligne de vue
+            if (v @ (s[:2] - P)) < 0: v = -v
+            row = np.zeros(obs.shape[1]); row[:2] = P; row[2:4] = v; row[4] = 0.35; row[5] = 1; row[6] = -1 - len(out)
+            out.append((Ls, row))
+    out.sort(key=lambda x: x[0])
+    return np.array([r for _, r in out[:6]]).reshape(-1, obs.shape[1])
+
+
+def phantom_speed(s, ph, a=0.8 * AMAX, cone=1.3, margin=0.25):
+    """Vitesse prudente : pouvoir s'arrêter avant qu'une personne surgissant d'un angle mort
+    (à la vitesse du fantôme) n'atteigne le robot. v²/2a + v_f·v/a ≤ d  ⇒  v = −v_f + √(v_f² + 2ad)."""
+    if not len(ph): return VMAX
+    hd = np.array([np.cos(s[2]), np.sin(s[2])])
+    rel = ph[:, :2] - s[:2]; d = np.hypot(*rel.T) - ph[:, 4] - R_ROB - margin
+    ang = np.abs(np.arctan2(rel[:, 1] * hd[0] - rel[:, 0] * hd[1], rel @ hd))
+    sel = ang < cone
+    if not sel.any(): return VMAX
+    vf = np.hypot(ph[sel, 2], ph[sel, 3]); dd = np.maximum(d[sel], 0.0)
+    return float(np.clip((-vf + np.sqrt(vf ** 2 + 2 * a * dd)).min(), 0.15, VMAX))
+
+
+class VigieST(VigieV2):
+    """VIGIE-ST : VIGIE 2 + une route espace-temps (qui peut attendre) + fantômes d'angle mort."""
+    name = 'VIGIE-ST (proposé)'
+    use_st = True; use_phantom = True
+    occl = False
+
+    def set_perception(self, occl, rng_):
+        self.occl = bool(occl); self.sense = rng_ or 5.0
+
+    def sample_cost(self, s, U, obs, guide):
+        if isinstance(guide, dict):          # route horodatée : on compare à la position voulue au même instant
+            tr = rollout(s, U)
+            c = Vigie.sample_cost(self, s, U, obs, None)
+            g = guide['gt']; n = min(self.T, len(g))
+            d2 = ((tr[..., :n, :2] - g[:n]) ** 2).sum(-1)
+            return c + 2.0 * d2.sum(-1)
+        return Vigie.sample_cost(self, s, U, obs, guide)
+
+    def refresh(self, s, obs):
+        was_st = bool(self.modes) and self.commit < len(self.modes) and self.modes[self.commit].get('st', False)
+        self.modes = [m for m in self.modes if not m.get('st')]
+        if was_st: self.commit = 0
+        super().refresh(s, obs)
+        if not self.use_st: return
+        gt = spacetime_plan(s, self.goal, obs, self.D)
+        if gt is None or len(gt) < 3: return
+        old = [m for m in getattr(self, '_stmodes', [])]
+        U = old[0]['U'] if old else timed_controls(s, gt, self.T)
+        fresh = timed_controls(s, gt, self.T)
+        g = {'gt': gt}
+        J = self.sample_cost(s, np.stack([U, fresh]), obs, g)
+        m = dict(g=g, U=fresh if J[1] < J[0] else U, st=True)
+        self.modes.append(m); self._stmodes = [m]
+        if was_st: self.commit = len(self.modes) - 1
+
+    def act(self, t, s, obs):
+        # la route horodatée vieillit : on la décale d'un pas à chaque cycle
+        for m in self.modes:
+            if m.get('st') and len(m['g']['gt']) > 1: m['g']['gt'] = m['g']['gt'][1:]
+        u = np.array(super().act(t, s, obs), float)
+        if self.use_phantom and self.occl:
+            u[0] = min(u[0], phantom_speed(s, phantoms(s, obs, self.sense)))
+        return u
+
+
+class VigieSTNoPhantom(VigieST):
+    name = 'VIGIE-ST sans fantômes'; use_phantom = False
+
+
+class VigieSTNoST(VigieST):
+    name = 'VIGIE-ST sans route espace-temps'; use_st = False
+
+
+ALL += [VigieST, VigieSTNoPhantom, VigieSTNoST]
+
+
+class MMStrong(MultiModalMPPI):
+    """Référence renforcée : même MPPI multimodal, mais deux passes d'optimisation et deux fois plus de tirages."""
+    name = 'MPPI multimodal renforcé (2 passes, 256 tirages)'
+    N = 256
+
+    def mppi_step(self, s, Unom, obs, scen_list=None, guide=None, iters=1):
+        return MultiModalMPPI.mppi_step(self, s, Unom, obs, scen_list, guide, iters=2)
+
+
+ALL += [MMStrong]
+
+
+# ---------------------------------------------------------------- planificateur espace-temps v2 (contrôle continu)
+ST2_RES, ST2_DT, ST2_K, ST2_SUB = 0.35, 1.0 / 3.0, 24, 4      # 0,35 m, 1/3 s, horizon 8 s, 4 contrôles par transition
+ST2_N = int(round(SIZE / ST2_RES))
+
+
+def spacetime_plan2(s, goal, obs, D, unc=0.05, margin=0.3, unc_agent=None):
+    """A* espace-temps avec vérification continue : entre deux instants du plan, on vérifie
+    4 positions intermédiaires contre la position prédite des agents aux mêmes instants.
+    Un agent rapide ne peut plus « traverser » le plan entre deux couches de temps."""
+    xs = (np.arange(ST2_N) + 0.5) * ST2_RES
+    gx, gy = np.meshgrid(xs, xs, indexing='ij')
+    stat = np.zeros((ST2_N, ST2_N), bool)
+    for o in obs[obs[:, 5] == 0]:
+        stat |= (gx - o[0]) ** 2 + (gy - o[1]) ** 2 < (o[4] + R_ROB + margin) ** 2
+    stat[0, :] = stat[-1, :] = stat[:, 0] = stat[:, -1] = True
+    mobmask = obs[:, 5] > 0
+    mob = obs[mobmask]
+    ua = (np.full(len(mob), unc) if unc_agent is None else unc_agent[mobmask])
+    nf = ST2_K * ST2_SUB + 1; dtf = ST2_DT / ST2_SUB
+    occ = np.empty((nf, ST2_N, ST2_N), bool)
+    for q in range(nf):
+        t = q * dtf; o = stat.copy()
+        for a, ui in zip(mob, ua):
+            px, py = a[0] + a[2] * t, a[1] + a[3] * t; rr = a[4] + R_ROB + margin + ui * t
+            i0, i1 = max(0, int((px - rr) / ST2_RES)), min(ST2_N - 1, int((px + rr) / ST2_RES) + 1)
+            j0, j1 = max(0, int((py - rr) / ST2_RES)), min(ST2_N - 1, int((py + rr) / ST2_RES) + 1)
+            if i0 > i1 or j0 > j1: continue
+            o[i0:i1 + 1, j0:j1 + 1] |= (gx[i0:i1 + 1, j0:j1 + 1] - px) ** 2 + (gy[i0:i1 + 1, j0:j1 + 1] - py) ** 2 < rr * rr
+        occ[q] = o
+    cell = lambda p: (min(ST2_N - 1, max(0, int(p[0] / ST2_RES))), min(ST2_N - 1, max(0, int(p[1] / ST2_RES))))
+    si, sj = cell(s); gi, gj = cell(goal)
+    Dst = lookup(D, gx, gy) / ST2_RES
+    moves = [(0, 0, 0.25)] + [(di, dj, np.hypot(di, dj)) for di in (-1, 0, 1) for dj in (-1, 0, 1) if di or dj]
+    start = (si, sj, 0); G = {start: 0.0}; prev = {}; pq = [(Dst[si, sj], start)]
+    best, bestc = None, np.inf; closed = set(); n = 0
+    while pq and n < 80000:
+        f, u = heapq.heappop(pq)
+        if u in closed: continue
+        closed.add(u); n += 1
+        i, j, k = u
+        if (i, j) == (gi, gj) or k == ST2_K:
+            c = G[u] + (0 if (i, j) == (gi, gj) else Dst[i, j])
+            if c < bestc: bestc, best = c, u
+            if (i, j) == (gi, gj): break
+            continue
+        for di, dj, c in moves:
+            a, b = i + di, j + dj
+            if not (0 <= a < ST2_N and 0 <= b < ST2_N): continue
+            ok = True
+            for q in range(1, ST2_SUB + 1):
+                ci = int(round(i + di * q / ST2_SUB)); cj = int(round(j + dj * q / ST2_SUB))
+                if occ[k * ST2_SUB + q, ci, cj] and not (k == 0 and q < 2): ok = False; break
+            if not ok: continue
+            v = (a, b, k + 1); nd = G[u] + c + 0.2
+            if nd < G.get(v, np.inf):
+                G[v] = nd; prev[v] = u; heapq.heappush(pq, (nd + Dst[a, b], v))
+    if best is None: return None
+    path = [best]
+    while path[-1] in prev: path.append(prev[path[-1]])
+    path = path[::-1]
+    pts = np.array([[(i + 0.5) * ST2_RES, (j + 0.5) * ST2_RES] for i, j, k in path]); pts[0] = s[:2]
+    tq = np.arange(1, int(len(pts) * ST2_DT / DT) + 1) * DT
+    tk = np.arange(len(pts)) * ST2_DT
+    return np.stack([np.interp(tq, tk, pts[:, 0]), np.interp(tq, tk, pts[:, 1])], 1)
+
+
+class MMST(MultiModalMPPI):
+    """Référence + route espace-temps : pour isoler l'apport de la planification espace-temps."""
+    name = 'MPPI multimodal + route espace-temps'
+
+    def sample_cost_t(self, s, U, obs, gt):
+        tr = self._roll(s, U); c = self.eval_cost(s, U, obs)
+        n = min(self.T, len(gt)); return c + 2.0 * ((tr[..., :n, :2] - gt[:n]) ** 2).sum(-1).sum(-1)
+
+    def refresh_modes(self, s, obs):
+        super().refresh_modes(s, obs)
+        gt = spacetime_plan2(s, self.goal, obs, self.D)
+        self.gt = gt
+        if gt is not None and len(gt) > 3:
+            self.modes.append(dict(g=gt, U=timed_controls(s, gt, self.T), st=True))
+
+    def act(self, t, s, obs):
+        if self.k % 10 == 0 or not self.modes: self.refresh_modes(s, obs)
+        self.k += 1
+        if not self.modes: return 0.0, 0.0
+        for m in self.modes:
+            if m.get('st'):
+                if len(m['g']) > 1: m['g'] = m['g'][1:]
+                for _ in range(1):
+                    eps = self.rng.normal(0, 1, (self.N, self.T, 2)) * self.SIG
+                    U = m['U'][None] + eps; U[0] = m['U']; U[1] = 0
+                    U[..., 0] = np.clip(U[..., 0], 0, VMAX); U[..., 1] = np.clip(U[..., 1], -WMAX, WMAX)
+                    J = self.sample_cost_t(s, U, obs, m['g'])
+                    lam = max(1e-6, (np.percentile(J, 10) - J.min()) / 2.0); w = np.exp(-(J - J.min()) / lam); w /= w.sum()
+                    m['U'] = (w[:, None, None] * U).sum(0)
+            else:
+                m['U'] = self.mppi_step(s, m['U'], obs, self.scen(), m['g'])
+        Us = np.stack([m['U'] for m in self.modes])
+        J = self.eval_cost(s, Us, obs)
+        i = int(np.argmin(J))
+        u = Us[i, 0].copy()
+        for m in self.modes: m['U'] = np.roll(m['U'], -1, 0); m['U'][-1] = m['U'][-2]
+        return u
+
+
+ALL += [MMST]
+
+
+class TubeMixin:
+    """Tubes espace-temps calibrés : la place réservée autour de chaque agent dans le plan espace-temps
+    s'élargit avec le temps d'autant plus vite que l'agent s'est montré imprévisible."""
+    def refresh_modes(self, s, obs):
+        MultiModalMPPI.refresh_modes(self, s, obs)
+        ua = 0.02 + 0.30 * self.tr.u(obs)
+        gt = spacetime_plan2(s, self.goal, obs, self.D, unc_agent=ua)
+        if gt is not None and len(gt) > 3:
+            self.modes.append(dict(g=gt, U=timed_controls(s, gt, self.T), st=True))
+
+    def act(self, t, s, obs):
+        if not hasattr(self, 'tr'): self.tr = SurpriseTracker()
+        self.tr.update(obs, t)
+        return super().act(t, s, obs)
+
+
+class MMSTTube(TubeMixin, MMST):
+    name = 'Espace-temps à tubes calibrés'
+
+
+class PhantomMixin:
+    occl = False
+    def set_perception(self, occl, rng_): self.occl = bool(occl); self.sense = rng_ or 5.0
+    def act(self, t, s, obs):
+        u = np.array(super().act(t, s, obs), float)
+        if self.occl: u[0] = min(u[0], phantom_speed(s, phantoms(s, obs, self.sense)))
+        return u
+
+
+class Vigie3(PhantomMixin, SmithMixin, TubeMixin, MMST):
+    """VIGIE 3 : route espace-temps à tubes calibrés sur l'imprévisibilité de chaque agent,
+    plus les routes topologiques, compensation du retard et vitesse prudente aux angles morts."""
+    name = 'VIGIE 3 (proposé)'
+
+
+class Vigie2ST(VigieV2):
+    """VIGIE 2 (valeur d'option) + route espace-temps v2 comme option supplémentaire."""
+    name = 'VIGIE 2 + espace-temps'
+    def sample_cost(self, s, U, obs, guide):
+        if isinstance(guide, dict):
+            tr = rollout(s, U); c = Vigie.sample_cost(self, s, U, obs, None)
+            g = guide['gt']; n = min(self.T, len(g))
+            return c + 2.0 * ((tr[..., :n, :2] - g[:n]) ** 2).sum(-1).sum(-1)
+        return Vigie.sample_cost(self, s, U, obs, guide)
+    def refresh(self, s, obs):
+        was = bool(self.modes) and self.commit < len(self.modes) and self.modes[self.commit].get('st', False)
+        self.modes = [m for m in self.modes if not m.get('st')]
+        if was: self.commit = 0
+        super().refresh(s, obs)
+        gt = spacetime_plan2(s, self.goal, obs, self.D, unc_agent=0.02 + 0.30 * self._u if self._u is not None and len(self._u) == len(obs) else None)
+        if gt is not None and len(gt) > 3:
+            self.modes.append(dict(g={'gt': gt}, U=timed_controls(s, gt, self.T), st=True))
+            if was: self.commit = len(self.modes) - 1
+    def act(self, t, s, obs):
+        for m in self.modes:
+            if m.get('st') and len(m['g']['gt']) > 1: m['g']['gt'] = m['g']['gt'][1:]
+        return super().act(t, s, obs)
+
+
+ALL += [MMSTTube, Vigie3, Vigie2ST]
+
+
+
+# ---------------------------------------------------------------- modèle interne appris en ligne (inspiration : le cervelet)
+def rollout_dyn(s, U, v0, w0, tv, tw, av, aw):
+    """Comme rollout, mais le robot ne suit pas la commande instantanément : premier ordre de constante
+    de temps tv (tw en rotation), accélérations limitées à av (aw). Part des vitesses actuelles v0, w0."""
+    T = U.shape[-2]
+    out = np.empty(U.shape[:-1] + (3,))
+    x = np.full(U.shape[:-2], s[0]); y = np.full(U.shape[:-2], s[1]); th = np.full(U.shape[:-2], s[2])
+    v = np.full(U.shape[:-2], v0); w = np.full(U.shape[:-2], w0)
+    kv, kw = min(1.0, DT / tv), min(1.0, DT / tw)
+    for t in range(T):
+        v = v + np.clip((U[..., t, 0] - v) * kv, -av * DT, av * DT)
+        w = w + np.clip((U[..., t, 1] - w) * kw, -aw * DT, aw * DT)
+        x = x + DT * v * np.cos(th); y = y + DT * v * np.sin(th); th = th + DT * w
+        out[..., t, 0] = x; out[..., t, 1] = y; out[..., t, 2] = th
+    return out
+
+
+class InternalModelMixin:
+    """Modèle interne appris en ligne. Le planificateur compare ce qu'il a commandé à ce qu'il mesure
+    (vitesses tirées des poses estimées) et ajuste, chaque seconde, la constante de temps et l'accélération
+    du robot qui expliquent le mieux les mesures. Ses prédictions partent ensuite de la vitesse actuelle
+    du robot et respectent sa réactivité réelle, au lieu de supposer qu'il obéit instantanément."""
+    TAUS = np.array([0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.55, 0.7, 0.9, 1.2])
+    ACCS = np.array([0.8, 1.2, 1.6, 2.0, 3.0])
+
+    def _im_init(self):
+        self.im_hist = deque(maxlen=60); self.im_par = [0.1, 0.1, 2.0, 4.0]; self.im_v = 0.0; self.im_w = 0.0; self.im_k = 0
+        self.im_last = None
+
+    def _roll(self, s, U):
+        tv, tw, av, aw = self.im_par
+        return rollout_dyn(s, U, self.im_v, self.im_w, tv, tw, av, aw)
+
+    def _identify(self):
+        H = list(self.im_hist)
+        if len(H) < 25: return
+        cmd = np.array([h[0] for h in H]); mea = np.array([h[1] for h in H])
+        best = []
+        for j, amax_set in ((0, self.ACCS), (1, self.ACCS * 2)):
+            bc, be = None, np.inf
+            for tau in self.TAUS:
+                for a in amax_set:
+                    v = mea[0, j]; e = 0.0
+                    for k in range(len(H) - 1):
+                        v = v + np.clip((cmd[k, j] - v) * min(1, DT / tau), -a * DT, a * DT)
+                        e += (v - mea[k + 1, j]) ** 2
+                    if e < be: be, bc = e, (tau, a)
+            best.append(bc)
+        self.im_par = [best[0][0], best[1][0], best[0][1], best[1][1]]
+
+    def act(self, t, s, obs):
+        if not hasattr(self, 'im_hist'): self._im_init()
+        # vitesses mesurées à partir des poses successives
+        if self.im_last is not None:
+            d = s[:2] - self.im_last[:2]; dth = np.arctan2(np.sin(s[2] - self.im_last[2]), np.cos(s[2] - self.im_last[2]))
+            vm = (d @ np.array([np.cos(s[2]), np.sin(s[2])])) / DT; wm = dth / DT
+        else: vm, wm = 0.0, 0.0
+        self.im_last = np.array(s, float)
+        # observateur : modèle + petite correction par la mesure (bruitée)
+        self.im_v += 0.25 * (vm - self.im_v); self.im_w += 0.25 * (wm - self.im_w)
+        self.im_k += 1
+        if self.im_k % 10 == 0: self._identify()
+        u = np.array(super().act(t, s, obs), float)
+        if self.im_hist and len(self.im_hist) > 0: pass
+        self.im_hist.append(((float(np.clip(u[0], 0, VMAX)), float(np.clip(u[1], -WMAX, WMAX))), (vm, wm)))
+        # prédiction du modèle pour le pas suivant
+        tv, tw, av, aw = self.im_par
+        self.im_v += np.clip((u[0] - self.im_v) * min(1, DT / tv), -av * DT, av * DT)
+        self.im_w += np.clip((u[1] - self.im_w) * min(1, DT / tw), -aw * DT, aw * DT)
+        return u
+
+
+class Vigie3M(InternalModelMixin, Vigie3):
+    name = 'VIGIE 3 + modèle interne (proposé)'
+
+
+ALL += [Vigie3M]
+
+
+# ---------------------------------------------------------------- valeur d'option corrigée (suite à l'audit externe)
+def predict_agents(obs, T, ang, fac):
+    """Futur où chaque agent a son propre scénario (angle de virage ang[m], facteur de vitesse fac[m])."""
+    p, v = obs[:, :2], obs[:, 2:4]
+    t = np.arange(1, T + 1) * DT
+    mob = obs[:, 5] > 0
+    a = ang[None, :] * np.minimum(1.0, t / 2.0)[:, None]
+    f = 1.0 + (fac - 1.0)[None, :] * np.minimum(1.0, t / 1.0)[:, None]
+    c, s_ = np.cos(a), np.sin(a)
+    vx = f * (c * v[None, :, 0] - s_ * v[None, :, 1]); vy = f * (s_ * v[None, :, 0] + c * v[None, :, 1])
+    vx[:, ~mob] = 0; vy[:, ~mob] = 0
+    return p[None] + DT * np.cumsum(np.stack([vx, vy], -1), 0)
+
+
+class Vigie2C(InternalModelMixin, VigieV2):
+    """VIGIE 2 corrigé : (1) chaque agent tire son propre futur, indépendamment des autres (plus de futur collectif) ;
+    (2) on branche au prochain cycle de décision (0,1 s) : les options ne diffèrent que par la commande
+    réellement exécutée avant la prochaine observation ; (3) les prédictions respectent la réactivité réelle
+    du robot (modèle interne), ce qui lisse les raccords entre début et suite.
+    La valeur reste E[min], donc optimiste (elle suppose qu'on saura quel futur se produit) : on la combine
+    avec min E pour ne pas surestimer les routes alternatives."""
+    name = 'VIGIE 2 corrigé (audit)'
+    P = 1; NJ = 12
+
+    def eval_joint(self, s, U, obs, ang, fac):
+        tr = self._roll(s, U)
+        c = obstacle_cost(tr, predict_agents(obs, self.T, ang, fac), obs[:, 4])
+        nav = lookup(self.D, tr[..., 0], tr[..., 1])
+        return c + 8.0 * nav[..., -1] + 0.4 * nav.sum(-1) + 0.05 * (U[..., 1] ** 2).sum(-1)
+
+    def option_values(self, s, seq, obs):
+        m = len(obs); u = self._u if self._u is not None and len(self._u) == m else np.zeros(m)
+        idx = self.rng.choice(len(SCENARIOS), size=(self.NJ, m), p=SCEN_W)
+        C = np.stack([self.eval_joint(s, seq, obs, np.array([SCENARIOS[k][0] for k in row]) * u,
+                                      1 + (np.array([SCENARIOS[k][1] for k in row]) - 1) * u) for row in idx], -1)
+        optimiste = C.min(1).mean(-1)            # E[min] : suppose qu'on saura quel futur se produit
+        prudent = C.mean(-1).min(1)              # min E : meilleure suite sans information nouvelle
+        return 0.5 * optimiste + 0.5 * prudent
+
+
+ALL += [Vigie2C]

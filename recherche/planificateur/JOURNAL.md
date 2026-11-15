@@ -251,3 +251,61 @@ Aucun apport n'est significatif. Le réensemencement et les arcs, qui débloquai
 ### Contre-vérification par l'implémentation JavaScript (graines 700 à 711)
 
 VIGIE 2 (JavaScript) contre le MPPI de l'application : 95,5 % contre 90,7 %, +4,8 points, IC 95 % [+1,7 ; +7,9], 31 mondes gagnés et 11 perdus, VIGIE devant dans les 7 conditions. Attention : la référence est ici le MPPI simple de l'application, pas le MPPI multimodal, et les deux implémentations diffèrent par le nombre de tirages ; l'écart plus grand qu'en Python (+1,0) vient en partie de là.
+
+## Séance 4 · Scènes dures, robot réaliste, VIGIE 3
+
+### Scènes dures
+
+Quatre scènes ajoutées pour trouver où la meilleure méthode échoue vraiment : `traversee` (34 personnes plus rapides que le robot, en flux continu dans les deux sens), `goulot` (porte de 1,6 m franchie à contre-sens par 14 personnes), `coin_aveugle` (couloir étroit percé d'ouvertures d'où surgissent des personnes pressées), `poursuite` (7 agents qui visent le robot).
+
+Sur les graines 1000 à 1019, sans chaîne réaliste : traversée 55 % pour le MPPI multimodal, 65 % avec deux fois plus de calcul, 75 % pour l'oracle. L'optimiseur est le facteur limitant, pas la prédiction.
+
+### Nouvelles briques
+
+- **Route espace-temps** : A* dans (x, y, t), avec contrôle continu entre deux instants (sinon des agents rapides « traversent » le plan entre deux couches de temps). Le plan peut attendre sur place. Ajoutée au MPPI multimodal : traversée 55 % → 80 %, goulot 90 % → 100 % (graines 1000 à 1019, sans chaîne réaliste).
+- **Tubes calibrés** : la place réservée autour de chaque agent dans l'espace-temps grandit selon son imprévisibilité mesurée.
+- **Vitesse prudente aux angles morts** : derrière chaque bord d'obstacle qui cache une zone libre, on imagine une personne qui pourrait surgir à 1,5 m/s, et on roule assez lentement pour pouvoir s'arrêter. Les traiter comme de vrais obstacles figeait le robot.
+- **Modèle interne appris en ligne** (inspiration : le cervelet) : chaque seconde, le planificateur cherche la constante de temps et l'accélération qui expliquent le mieux les vitesses mesurées à partir des commandes envoyées, et ses prédictions respectent cette réactivité.
+
+### Robot réaliste (`robot_reel.py`)
+
+Chaîne complète : retard de 50 ms de la commande, saturation des roues, régulateur PI par roue sur codeur de 1 024 points, couple limité par la vitesse et la batterie, frottements, masse de 25 kg et inertie, odométrie recalée par le lidar, vitesses des personnes estimées par filtre alpha-bêta, une période de retard supplémentaire de la chaîne lidar. Activé par `REEL=1`.
+
+**Erreur trouvée et corrigée.** La première version du régulateur de roue était mal réglée : dépassement de plus de 200 % en rotation, et action intégrale qui s'emballait en saturation. Avec ce robot défectueux, toutes les méthodes s'effondraient (31 % pour le MPPI multimodal) et VIGIE 3 avec modèle interne faisait +18 points. **Ce résultat est annulé** : le modèle interne compensait en partie un robot mal réglé, pas un robot réaliste. Régulateur corrigé (gains 1,0 et 1,0, anti-emballement) : 90 % de la consigne de rotation en 0,2 s, dépassement inférieur à 2 %. La référence retrouve alors 100 % en forêt, foule et carrefour.
+
+### Audit externe de la valeur d'option
+
+Un audit réalisé par une autre IA à partir du code de l'application a relevé quatre points, tous justes :
+1. E[min] est une borne optimiste : elle suppose que le robot saura quel futur se produit avant de choisir sa suite.
+2. Le début de trajectoire évalué dure 0,8 s, alors qu'une seule commande de 0,1 s est exécutée avant de replanifier.
+3. Un scénario s'appliquait à tous les agents à la fois, alors que chaque personne a son propre comportement (plus de 4 scénarios distincts nécessaires en moyenne par monde).
+4. Recoller le début d'un plan à la suite d'un autre crée des sauts de commande irréalistes (environ 80 % des combinaisons dépassent les limites d'accélération).
+
+Réponse : VIGIE 3 n'utilise plus la valeur d'option, et ses tubes sont calculés agent par agent. Une version corrigée de la valeur d'option est testée : `Vigie2C`, avec futurs tirés agent par agent, branchement au prochain cycle, prédictions qui respectent l'inertie, et critère mixte ½ E[min] + ½ min E pour ne pas surestimer les routes alternatives.
+
+### Comparaison sur robot réaliste corrigé (graines 1100 à 1109, 11 scènes × 3 conditions, 330 épisodes par méthode)
+
+| Méthode | Succès | Collisions | Temps |
+|---|---|---|---|
+| VIGIE 3 | 68 % | 30 % | 20,6 s |
+| MPPI multimodal + prédicteur de Smith | 67 % | 31 % | 21,9 s |
+| VIGIE 3 + modèle interne | 66 % | 31 % | 21,5 s |
+| VIGIE 2 | 62 % | 25 % | 22,3 s |
+| VIGIE 2 corrigé (audit) | 55 % | 38 % | 25,5 s |
+
+Écarts appariés par rapport à la référence : VIGIE 3 +0,6 point (IC [−3,0 ; +4,2]), VIGIE 3 + modèle interne −0,6 (IC [−4,8 ; +3,6]), VIGIE 2 −5,5 (IC [−10,6 ; −0,3]), VIGIE 2 corrigé −11,8 (IC [−16,7 ; −7,0]).
+
+Par scène, VIGIE 3 et sa variante font mieux dans le goulot (67 % contre 60 %) et les angles morts (80 % avec modèle interne contre 67 %), moins bien dans la forêt et la foule. La traversée et la poursuite tombent sous 10 % pour toutes les méthodes : avec un robot qui met plus d'une seconde à atteindre sa vitesse de croisière, face à des agents allant jusqu'à 2,4 m/s, ces scènes deviennent presque infaisables.
+
+### Ce qu'on en retire
+
+1. **Le réalisme change tout**, comme le craignait l'utilisateur : la route espace-temps qui apportait +25 points dans la traversée en simulation idéale n'apporte plus rien avec un robot réaliste, parce qu'elle suppose un horaire que le robot ne peut pas tenir.
+2. **Aucune version de VIGIE ne bat significativement la meilleure référence** sur robot réaliste. VIGIE 3 fait jeu égal.
+3. **La valeur d'option fait perdre des points** sur robot réaliste, et la version corrigée de l'audit encore plus : elle rend le robot plus hésitant, ce qui coûte cher quand le robot réagit lentement.
+4. **Les gains les plus prometteurs** se trouvent dans les situations à visibilité réduite (angles morts) et dans les passages étroits à contre-courant, mais les échantillons sont encore trop petits pour conclure (30 mondes par scène).
+
+### Prochaines pistes
+
+- Rendre la route espace-temps compatible avec la dynamique réelle : la planifier avec le modèle interne identifié (accélérations atteignables), et non avec des déplacements d'une case par pas.
+- Recalibrer les scènes dures pour un robot réaliste (agents moins rapides que le robot), sinon elles ne départagent personne.
+- Évaluer les briques prometteuses (angles morts, goulot) sur des échantillons plus grands avant toute conclusion.
