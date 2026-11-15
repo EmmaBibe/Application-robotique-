@@ -176,3 +176,78 @@ Contre-vérification par une seconde implémentation indépendante (JavaScript, 
 | sans inertie d'engagement | 96,6 % | 0,0 | [−1,7 ; +1,7] |
 
 Sur les mondes de test, chaque brique apporte au plus un point, et aucun de ces apports n'est significatif pris isolément. Les effets plus marqués observés en développement (jusqu'à 9 points) ne se confirment pas : ils dépendaient en partie des mondes utilisés pour régler. C'est la raison même de séparer développement et évaluation.
+
+## Séance 3 · VIGIE 2
+
+### Objectif
+
+Combler l'écart avec le MPPI multimodal dans toutes les conditions, sans régler sur les mondes de test : analyse sur de nouvelles graines de développement (800 à 811), évaluation finale sur des graines jamais vues (900 à 939, deux fois plus de mondes qu'avant).
+
+### Diagnostic
+
+Sur les graines 800 à 811, VIGIE et le MPPI multimodal sont à égalité parfaite (16 mondes gagnés chacun). Un cas ressort : le couloir 807, où VIGIE reste bloqué dans 5 conditions sur 7. L'enquête trouve deux causes.
+
+1. **Défaut partagé par tous les MPPI** : la carte des distances au but donnait une valeur « infranchissable » en escalier aux cases proches des murs. Un plan qui frôlait le bord d'un passage était jugé catastrophique. Corrigé pour tous les planificateurs : le champ est maintenant prolongé de façon continue dans les zones occupées, les obstacles restant punis par le coût de collision.
+2. **Faiblesse connue de MPPI** : avec un bruit indépendant à chaque pas, les tirages se compensent et le robot n'« imagine » presque jamais un virage franc. Après avoir évité un passant en remontant le long du mur, il ne revient jamais vers le passage.
+
+### VIGIE 2
+
+| Brique ajoutée | Rôle |
+|---|---|
+| quatre routes au lieu de trois | même budget de calcul que le MPPI multimodal (384 trajectoires par cycle) |
+| arcs de virage injectés | 9 arcs francs parmi les tirages, pour pouvoir vraiment tourner |
+| réensemencement | à chaque mise à jour des routes, on compare le plan hérité et un plan neuf tracé vers la route, on garde le meilleur |
+| prédicteur de Smith | avec un retard connu, on rejoue les commandes déjà envoyées pour estimer l'état présent, et on avance les agents d'autant |
+
+Pour une comparaison équitable, la référence est aussi évaluée **avec** le même prédicteur de Smith.
+
+Sur les graines de développement : VIGIE 2 à 98 %, MPPI multimodal à 96 % (+1,9 point, IC 95 % [+0,2 ; +3,6]), MPPI multimodal avec prédicteur de Smith à 97 % (+1,2 point, IC [−0,3 ; +2,7]).
+
+### Évaluation finale de VIGIE 2 (graines 900 à 939, jamais vues)
+
+7 scènes × 7 conditions × 40 mondes = 1 960 épisodes par méthode, 11 760 au total. Détails : `resultats_final3_cond.md` et `resultats_final3_scene.md`.
+
+| Méthode | Succès | Collisions | Temps moyen | Calcul |
+|---|---|---|---|---|
+| **VIGIE 2** | **95 %** | 4 % | **19,0 s** | 18,0 ms |
+| MPPI multimodal + prédicteur de Smith | 95 % | 4 % | 19,3 s | 17,4 ms |
+| MPPI multimodal (2025) | 94 % | 5 % | 19,7 s | 17,2 ms |
+| MPPI | 94 % | 5 % | 18,5 s | 2,8 ms |
+| DWA | 74 % | 4 % | 15,3 s | 1,4 ms |
+| A* + poursuite pure | 61 % | 39 % | 13,5 s | 0,9 ms |
+
+Comparaisons appariées sur le taux de succès (VIGIE 2 − autre) :
+- contre MPPI multimodal + Smith : +0,3 point, IC 95 % [−0,8 ; +1,3] ;
+- contre MPPI multimodal : +0,8 point, IC [−0,3 ; +1,9] ;
+- contre MPPI : +1,0 point, IC [−0,3 ; +2,2].
+
+Aucun de ces écarts n'est significatif. **L'avance observée en développement (+1,9 point) ne se confirme pas.**
+
+Temps de trajet, sur les mondes réussis par les deux méthodes :
+- contre MPPI multimodal + Smith : **−0,38 s**, IC [−0,52 ; −0,24] (1 800 paires), **significatif** ;
+- contre MPPI multimodal : **−0,79 s**, IC [−0,93 ; −0,64], **significatif** ;
+- contre MPPI : +0,49 s (MPPI plus rapide, mais avec 1 point de succès en moins, non significatif).
+
+Point faible : perception dégradée, 91 % contre 95 % (−3,2 points, IC [−6,4 ; 0,0], à la limite de la significativité).
+
+### Bilan honnête
+
+- **Ce qui est acquis.** VIGIE 2 est un planificateur nouveau dans sa combinaison, fonctionnel, robuste aux sept conditions de perturbation. Il est au niveau de la meilleure référence récente pour la sécurité, et **plus rapide qu'elle de façon significative**, à sécurité égale.
+- **Ce qui n'est pas acquis.** Il n'est pas significativement plus sûr que la meilleure référence. Sous perception dégradée, il fait un peu moins bien.
+- **Le plafond du banc d'essai.** Toutes les variantes de MPPI sont entre 94 et 95 %. Les échecs restants semblent en grande partie inévitables (l'oracle de la séance 1 plafonnait à 99 %). Pour départager davantage, il faudrait des scènes où les méthodes actuelles s'effondrent vraiment, ou passer au réel.
+- **La leçon de méthode.** Deux fois de suite, une avance mesurée sur les graines de développement a disparu sur les graines de test. Sans cette séparation, nous aurions annoncé une supériorité fausse.
+
+### Ablation de VIGIE 2 (graines 900 à 907, 392 épisodes par variante)
+
+| Variante | Succès | Apport de la brique | IC 95 % |
+|---|---|---|---|
+| VIGIE 2 complet | 97,7 % | – | – |
+| sans prédicteur de Smith | 96,9 % | +0,8 | [−0,8 ; +2,3] |
+| sans réensemencement | 98,7 % | −1,0 | [−2,3 ; 0,0] |
+| sans arcs de virage | 98,7 % | −1,0 | [−2,6 ; +0,5] |
+
+Aucun apport n'est significatif. Le réensemencement et les arcs, qui débloquaient le couloir 807 en développement, ne montrent pas de bénéfice global sur les mondes de test, et une légère tendance (non significative) à coûter un point. À réexaminer sur un échantillon plus grand avant de les garder ou de les retirer.
+
+### Contre-vérification par l'implémentation JavaScript (graines 700 à 711)
+
+VIGIE 2 (JavaScript) contre le MPPI de l'application : 95,5 % contre 90,7 %, +4,8 points, IC 95 % [+1,7 ; +7,9], 31 mondes gagnés et 11 perdus, VIGIE devant dans les 7 conditions. Attention : la référence est ici le MPPI simple de l'application, pas le MPPI multimodal, et les deux implémentations diffèrent par le nombre de tirages ; l'écart plus grand qu'en Python (+1,0) vient en partie de là.

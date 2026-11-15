@@ -1,5 +1,5 @@
 // Service worker : mise en cache pour l'usage hors ligne. Fichier généré par tools/build-sw.mjs.
-const CACHE = 'robomaster-b3a76f89bf';
+const CACHE = 'robomaster-cb00a502d8';
 const ASSETS = [
   "./",
   "index.html",

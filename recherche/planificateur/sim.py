@@ -185,6 +185,8 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
     if C.get('unknown'): known = known[np.hypot(known[:, 0] - s[0], known[:, 1] - s[1]) - known[:, 2] < C.get('range', 6.0)]
     planner.reset(known, world.goal.copy())
     if hasattr(planner, 'bind'): planner.bind(world)
+    try: planner.set_latency(C.get('lat', 0))   # retard connu du système (mesurable par horodatage sur un vrai robot)
+    except AttributeError: pass
     gv, gw, bw = 1.0, 1.0, 0.0
     if C.get('slip'):   # erreur de modèle persistante : roues qui patinent, moteur mal étalonné
         gv, gw, bw = rng.uniform(0.75, 1.15), rng.uniform(0.75, 1.2), rng.uniform(-0.12, 0.12)

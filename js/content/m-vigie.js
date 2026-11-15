@@ -22,13 +22,15 @@ export const labo = {
           ['Banc d\'essai', 'Construire un simulateur reproductible et des scènes difficiles.', '7 scènes, 7 conditions de perturbation', 'Sans banc d\'essai fiable, on ne peut rien affirmer.'],
           ['Références et oracle', 'Comparer à ce qui marche le mieux aujourd\'hui, et à un planificateur qui connaît le futur.', 'oracle : 99 % de succès', 'L\'oracle dit combien il reste réellement à gagner.'],
           ['Essais et échecs', 'Proposer, mesurer, comprendre l\'échec, corriger.', '4 versions ratées avant VIGIE', 'Chaque échec a appris quelque chose de précis.'],
-          ['Évaluation finale', 'Tester sur des mondes jamais utilisés pour régler.', 'graines 600 à 619', 'Sinon on mesure seulement sa capacité à régler l\'algorithme sur ses propres tests.'],
+          ['Évaluation finale', 'Tester sur des mondes jamais utilisés pour régler.', 'graines 900 à 939, 11 760 épisodes', 'Sinon on mesure seulement sa capacité à régler l\'algorithme sur ses propres tests.'],
         ]),
         Table(['Version', 'Idée', 'Ce qui s\'est passé'], [
           ['v1', 'garder ses options ouvertes face à plusieurs futurs possibles', 'robot trop prudent : il hésite et finit percuté (81 % contre 96 %)'],
           ['v2', 'futurs qui s\'écartent progressivement', 'égalité avec les références, mais plus lent'],
           ['v3', 'coût en temps avant collision (loi des foules de piétons)', 'pas de gain'],
           ['v4', 'feux d\'alignement avant les passages étroits', 'gain apparent dû à un défaut du banc d\'essai, puis perte une fois le défaut corrigé'],
+          ['VIGIE 1', 'imprévisibilité mesurée par agent, valeur d\'option, réflexes, engagement', 'meilleur que MPPI, au niveau de la référence 2025'],
+          ['VIGIE 2', 'arcs de virage, réensemencement, prédicteur de Smith', 'aussi sûr que la meilleure référence, et plus rapide qu\'elle'],
         ]),
         Danger(`Le gain spectaculaire de la v4 venait d'un défaut du simulateur : certains couloirs étaient infranchissables pour tout le monde. Sans vérification, on aurait annoncé une fausse découverte. Toujours se demander : « et si c'était mon banc d'essai qui se trompait ? »`, 'Le piège le plus dangereux'),
         H('Le résultat qui a tout débloqué'),
@@ -51,6 +53,12 @@ export const labo = {
           ['I', 'Inertie d\'engagement : changer de route a un coût', 'neurosciences (accumulation de preuves avant de décider)'],
           ['E', 'Ensemble de routes qui contient toujours le plan de base', 'gestion de portefeuille : garder une valeur sûre'],
         ]),
+        P(`<p>La version 2 ajoute trois briques, chacune née d'un échec observé :</p>`),
+        Table(['Brique de VIGIE 2', 'Problème qu\'elle corrige', 'Inspiration'], [
+          ['Arcs de virage injectés parmi les tirages', 'MPPI tire un bruit indépendant à chaque pas : les tirages se compensent et il n\'imagine presque jamais un vrai virage', 'primitives de mouvement'],
+          ['Réensemencement des routes', 'un plan hérité, optimisé dans une mauvaise direction, ne revient jamais vers le bon passage', 'jardinage : on ressème quand la pousse part de travers'],
+          ['Prédicteur de Smith', 'avec 200 ms de retard, le robot réagit à un monde déjà passé', 'commande des procédés chimiques (O. J. M. Smith, 1957)'],
+        ]),
         H('I : mesurer l\'imprévisibilité de chaque agent'),
         P(`<p>Chaque seconde, VIGIE compare la position d'un agent avec celle qu'il avait prédite une seconde plus tôt en supposant une vitesse constante. L'erreur, lissée dans le temps, donne un indice entre 0 (parfaitement prévisible) et 1 (erratique) :</p>`),
         F('ē<sub>j</sub> ← 0,85·ē<sub>j</sub> + 0,15·‖p<sub>j</sub>(t) − (p<sub>j</sub>(t−1) + v<sub>j</sub>(t−1)·1 s)‖ &nbsp;&nbsp;&nbsp; u<sub>j</sub> = clip((ē<sub>j</sub> − 0,08) / 0,45 ; 0 ; 1)', 'un agent jamais observé assez longtemps reçoit u = 0,3'),
@@ -63,7 +71,7 @@ export const labo = {
           sol: 'function imprevisibilite(e) {\n  return Math.min(1, Math.max(0, (e - 0.08) / 0.45));\n}',
         }),
         H('V : la valeur d\'option'),
-        P(`<p>VIGIE entretient trois plans en parallèle (le plan de base de MPPI et deux routes topologiquement différentes), plus trois réflexes. Pour chaque <em>début</em> de trajectoire candidat (0,8 s), il regarde, dans chaque futur possible, quelle est la meilleure <em>suite</em> encore disponible, puis fait la moyenne pondérée :</p>`),
+        P(`<p>VIGIE 2 entretient quatre plans en parallèle (le plan de base de MPPI et trois routes topologiquement différentes), plus trois réflexes. Pour chaque <em>début</em> de trajectoire candidat (0,8 s), il regarde, dans chaque futur possible, quelle est la meilleure <em>suite</em> encore disponible, puis fait la moyenne pondérée :</p>`),
         F('V(début<sub>i</sub>) = Σ<sub>s</sub> w<sub>s</sub> · min<sub>k</sub> J(début<sub>i</sub> + suite<sub>k</sub> | futur s)', 'on exécute le début de plus faible V'),
         Tip(`Comparer avec la règle habituelle, min<sub>k</sub> Σ<sub>s</sub> w<sub>s</sub>·J : celle-ci choisit le plan le meilleur en moyenne et s'y tient. La valeur d'option préfère un début qui laisse plusieurs bonnes portes de sortie, quel que soit le futur. C'est exactement ce qu'on paie quand on achète une option en finance : le droit de choisir plus tard.`, 'La différence qui compte'),
         Code('c2', 'Écris <code>valeurOption(C, w)</code> : <code>C[k][s]</code> est le coût de la suite k dans le futur s, <code>w[s]</code> le poids du futur s. Renvoie Σ<sub>s</sub> w[s] · min<sub>k</sub> C[k][s].', {
@@ -78,8 +86,9 @@ export const labo = {
         Pipe('Un cycle de VIGIE, dix fois par seconde', [
           ['Perception', 'Positions et vitesses des agents visibles, carte des obstacles fixes déjà vus.', '23 agents visibles', null],
           ['Imprévisibilité', 'Mise à jour de u pour chaque agent.', 'u = 0,1 (prévisible) à 0,9 (erratique)', null],
-          ['Plans', 'Trois optimisations MPPI de 96 trajectoires, une par route.', 'plan de base + 2 routes', 'Les routes sont recalculées chaque seconde par A* avec pénalité de diversité.'],
-          ['Options', '3 débuts de plan + 3 réflexes, évalués dans 5 futurs.', '90 évaluations', null],
+          ['Anticipation du retard', 'Les commandes envoyées pendant le retard des mesures sont rejouées pour estimer l\'état présent.', 'retard de 200 ms compensé', 'Prédicteur de Smith : il suffit de connaître le retard, mesurable par horodatage.'],
+          ['Plans', 'Quatre optimisations MPPI de 96 trajectoires, une par route, avec des arcs de virage francs parmi les tirages.', 'plan de base + 3 routes', 'Les routes sont recalculées chaque seconde par A* avec pénalité de diversité, et chaque plan est réensemencé si un plan neuf fait mieux.'],
+          ['Options', '4 débuts de plan + 3 réflexes, évalués dans 5 futurs.', '140 évaluations', null],
           ['Décision', 'Valeur d\'option + inertie, réflexes seulement si danger.', 'suivre la route 1', null],
           ['Action', 'Première commande (vitesse, rotation) envoyée aux moteurs.', 'v = 1,1 m/s ; ω = 0,3 rad/s', null],
         ]),
@@ -94,22 +103,26 @@ export const labo = {
       why: `Une invention se juge sur des chiffres honnêtes, avec leurs incertitudes et leurs limites. Et elle n'est vraiment validée qu'une fois testée sur une machine réelle.`,
       objectives: ['Lire un tableau de résultats avec intervalles de confiance', 'Comprendre une étude d\'ablation', 'Distinguer ce qui est nouveau de ce qui est emprunté', 'Préparer un essai sur prototype'],
       blocks: [
-        P(`<p>L'évaluation finale porte sur des mondes jamais utilisés pendant la mise au point : 7 scènes × 7 conditions de perturbation × 20 mondes, soit 980 épisodes par méthode.</p>
+        P(`<p>L'évaluation finale de VIGIE 2 porte sur des mondes jamais utilisés pendant la mise au point : 7 scènes × 7 conditions de perturbation × 40 mondes, soit 1 960 épisodes par méthode et 11 760 en tout.</p>
 <table><thead><tr><th>Méthode</th><th>Succès</th><th>Collisions</th><th>Temps moyen</th><th>Calcul par cycle</th></tr></thead><tbody>
-<tr><td>MPPI multimodal (référence récente, 2025)</td><td>97 %</td><td>2 %</td><td>19,2 s</td><td>16,6 ms</td></tr>
-<tr><td><b>VIGIE</b></td><td><b>96 %</b></td><td><b>3 %</b></td><td><b>18,5 s</b></td><td><b>15,4 ms</b></td></tr>
-<tr><td>MPPI</td><td>94 %</td><td>6 %</td><td>17,8 s</td><td>2,3 ms</td></tr>
-<tr><td>DWA</td><td>81 %</td><td>3 %</td><td>14,9 s</td><td>0,9 ms</td></tr>
-<tr><td>A* + poursuite pure</td><td>61 %</td><td>39 %</td><td>13,4 s</td><td>0,9 ms</td></tr>
+<tr><td><b>VIGIE 2</b></td><td><b>95 %</b></td><td>4 %</td><td><b>19,0 s</b></td><td>18,0 ms</td></tr>
+<tr><td>MPPI multimodal + prédicteur de Smith</td><td>95 %</td><td>4 %</td><td>19,3 s</td><td>17,4 ms</td></tr>
+<tr><td>MPPI multimodal (référence récente, 2025)</td><td>94 %</td><td>5 %</td><td>19,7 s</td><td>17,2 ms</td></tr>
+<tr><td>MPPI</td><td>94 %</td><td>5 %</td><td>18,5 s</td><td>2,8 ms</td></tr>
+<tr><td>DWA</td><td>74 %</td><td>4 %</td><td>15,3 s</td><td>1,4 ms</td></tr>
+<tr><td>A* + poursuite pure</td><td>61 %</td><td>39 %</td><td>13,5 s</td><td>0,9 ms</td></tr>
 </tbody></table>
-<p>Sur les mêmes mondes, VIGIE fait <b>2,2 points de mieux que MPPI</b> (intervalle de confiance à 95 % : +0,8 à +3,8 points, donc significatif). Face au MPPI multimodal, l'écart est de <b>−1,0 point</b> (de −2,3 à +0,3) : <b>pas de différence significative</b>. VIGIE arrive plus vite (18,5 s contre 19,2 s), avec moins d'à-coups et un peu moins de calcul. Il fait mieux avec des roues qui patinent (96 % contre 94 %), égal quand toutes les perturbations sont réunies (99 % chacun, mais 20,3 s contre 22,0 s), et moins bien en conditions normales et avec latence (94 % contre 98 %).</p>
-<p>Une seconde implémentation, écrite indépendamment en JavaScript (celle du simulateur de cette leçon), confirme l'avantage sur MPPI : 92,9 % contre 90,2 %, devant dans 6 conditions sur 7.</p>
-<h3>L'ablation : que vaut chaque brique ?</h3>
-<p>En retirant les briques une à une sur les mondes de test, chacune apporte au plus un point, et aucun de ces apports n'est significatif pris seul. En développement, les mêmes retraits coûtaient jusqu'à 9 points : une bonne partie de ces écarts venait des mondes utilisés pour régler. C'est exactement pour cela qu'on sépare les deux.</p>
+<p><b>Sécurité.</b> Sur les mêmes mondes, VIGIE 2 fait +0,3 point face à la meilleure référence équipée du même prédicteur de Smith (intervalle de confiance à 95 % : −0,8 à +1,3), +0,8 face au MPPI multimodal et +1,0 face à MPPI. Aucun de ces écarts n'est significatif : <b>VIGIE 2 est aussi sûr que le meilleur, pas plus</b>. Sous perception dégradée, il fait un peu moins bien (91 % contre 95 %).</p>
+<p><b>Efficacité.</b> Sur les trajets réussis par les deux, VIGIE 2 arrive <b>0,38 s plus tôt</b> que la meilleure référence (intervalle −0,52 à −0,24 s, sur 1 800 paires) et 0,79 s plus tôt que le MPPI multimodal : un avantage <b>significatif</b>, à sécurité égale.</p>
+<h3>Ablation et contre-vérification</h3>
+<p>En retirant une à une les briques ajoutées dans VIGIE 2 (prédicteur de Smith, réensemencement, arcs de virage), aucun écart n'est significatif sur les mondes de test. Le réensemencement et les arcs, qui débloquaient un couloir en développement, n'apportent pas de gain global mesurable : ils seront réexaminés sur un échantillon plus grand. La version JavaScript de ce simulateur, écrite indépendamment, bat le MPPI de l'application de 4,8 points (intervalle +1,7 à +7,9), devant dans les 7 conditions.</p>
+<h3>Deux leçons de méthode</h3>
+<ul><li>En développement, VIGIE 2 avait 1,9 point d'avance, un écart significatif. Sur les mondes neufs, cette avance a disparu. C'est la deuxième fois : sans mondes de test séparés, on aurait annoncé une supériorité fausse.</li>
+<li>Toutes les variantes de MPPI plafonnent entre 94 et 95 %, et un planificateur qui connaît le futur atteint 99 %. Une bonne partie des échecs restants est inévitable dans ce banc d'essai. Pour départager davantage, il faudra des scènes plus dures, ou le réel.</li></ul>
 <h3>Ce qu'on peut affirmer</h3>
-<ul><li><b>VIGIE est nouveau dans sa combinaison.</b> Nous n'avons trouvé aucune publication qui règle l'éventail des futurs de chaque agent par son imprévisibilité mesurée en ligne, et qui choisit entre routes topologiques et réflexes par valeur d'option. Chaque brique a des parents connus : MPPI, commande contingente, prédiction conforme adaptative.</li>
-<li><b>VIGIE fonctionne et résiste</b> aux sept conditions de perturbation, et il bat significativement MPPI.</li>
-<li><b>VIGIE ne bat pas la meilleure méthode récente</b> sur l'ensemble des tests : il fait jeu égal avec elle.</li>
+<ul><li><b>VIGIE est nouveau dans sa combinaison.</b> Nous n'avons trouvé aucune publication qui règle l'éventail des futurs de chaque agent par son imprévisibilité mesurée en ligne, et qui choisit entre routes topologiques et réflexes par valeur d'option. Chaque brique a des parents connus.</li>
+<li><b>VIGIE 2 fonctionne et résiste</b> aux sept conditions de perturbation, au niveau de la meilleure méthode récente, et il arrive plus vite qu'elle.</li>
+<li><b>Il ne la surpasse pas en sécurité.</b> L'écart n'est pas significatif.</li>
 <li><b>Tout cela est en simulation.</b> Le vrai juge sera un robot réel.</li></ul>
 <h3>Vers un prototype</h3>
 <p>Plateforme envisagée : robot à deux roues motrices (vitesse maximale 1,5 m/s), lidar 2D pour détecter et suivre les personnes, ordinateur embarqué de type Raspberry Pi 5 ou Jetson, VIGIE intégré comme module de commande de ROS 2 (Nav2). Les essais iront du plus sûr au plus exigeant : mannequins sur chariots poussés, puis personnes qui marchent selon un scénario connu, puis circulation libre, toujours avec arrêt d'urgence et vitesse limitée.</p>`),

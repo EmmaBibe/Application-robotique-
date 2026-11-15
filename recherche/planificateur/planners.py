@@ -35,9 +35,19 @@ def dijkstra(occ, goal):
             a, b = i + di, j + dj
             if 0 <= a < NG and 0 <= b < NG and not occ[a, b] and d + c < D[a, b]:
                 D[a, b] = d + c; heapq.heappush(pq, (d + c, (a, b)))
-    D = D * RES
-    D[np.isinf(D)] = np.nanmax(D[np.isfinite(D)]) + 10
-    return D
+    # cases occupées ou isolées : on prolonge le champ de façon continue au lieu d'une falaise artificielle
+    # (les obstacles eux-mêmes sont déjà punis par le coût de collision)
+    pq = [(D[i, j], (i, j)) for i, j in zip(*np.nonzero(np.isfinite(D)))]
+    heapq.heapify(pq); E = D.copy()
+    while pq:
+        d, (i, j) = heapq.heappop(pq)
+        if d > E[i, j]: continue
+        for di, dj, c in NB:
+            a, b = i + di, j + dj
+            if 0 <= a < NG and 0 <= b < NG and np.isinf(D[a, b]) and d + 2 * c < E[a, b]:
+                E[a, b] = d + 2 * c; heapq.heappush(pq, (d + 2 * c, (a, b)))
+    E[np.isinf(E)] = np.nanmax(E[np.isfinite(E)]) + 10
+    return E * RES
 
 
 def astar(occ, start, goal, extra=None):
@@ -815,3 +825,86 @@ class Vigie4(Vigie):
 
 
 ALL += [Vigie4]
+
+
+# ---------------------------------------------------------------- anticipation du retard (prédicteur de Smith)
+class SmithMixin:
+    """Prédicteur de Smith (O. J. M. Smith, 1957, commande des procédés chimiques) : quand les mesures
+    arrivent avec un retard connu, on rejoue les commandes déjà envoyées pendant ce retard pour estimer
+    l'état présent du robot, et on avance les agents d'autant."""
+    lat = 0
+
+    def set_latency(self, L):
+        self.lat = int(L); self._cmds = deque(maxlen=max(1, self.lat)); self._v = 0.0; self._w = 0.0
+
+    def act(self, t, s, obs):
+        if self.lat <= 0: return super().act(t, s, obs)
+        x = np.array(s, float); v, w = self._v_hist if hasattr(self, '_v_hist') else (0.0, 0.0)
+        # état des vitesses au moment de la mesure : celles d'il y a « lat » pas
+        vs = list(self._cmds)
+        vv, ww = self._vw_at_meas if hasattr(self, '_vw_at_meas') else (0.0, 0.0)
+        for vc, wc in vs:
+            vv = vv + np.clip(vc - vv, -AMAX * DT, AMAX * DT); ww = ww + np.clip(wc - ww, -4.0 * DT, 4.0 * DT)
+            x = x + DT * np.array([vv * np.cos(x[2]), vv * np.sin(x[2]), ww])
+        o = obs.copy(); mob = o[:, 5] > 0
+        o[mob, :2] += o[mob, 2:4] * len(vs) * DT
+        u = super().act(t + len(vs) * DT, x, o)
+        # mémoriser la commande, et la vitesse réelle estimée au moment de la prochaine mesure
+        if len(self._cmds) == self._cmds.maxlen and vs:
+            vc, wc = vs[0]; v0, w0 = self._vw_at_meas if hasattr(self, '_vw_at_meas') else (0.0, 0.0)
+            self._vw_at_meas = (v0 + np.clip(vc - v0, -AMAX * DT, AMAX * DT), w0 + np.clip(wc - w0, -4.0 * DT, 4.0 * DT))
+        self._cmds.append((float(np.clip(u[0], 0, VMAX)), float(np.clip(u[1], -WMAX, WMAX))))
+        return u
+
+
+class VigieV2(SmithMixin, Vigie):
+    """VIGIE 2 : quatre routes (plan de base + trois routes distinctes, même budget de calcul que le MPPI multimodal),
+    anticipation du retard des mesures, réensemencement des plans et arcs de virage injectés dans les tirages."""
+    name = 'VIGIE 2 (proposé)'; K = 4; N = 96
+    ARCS = np.array([[0.8, w] for w in np.linspace(-1.6, 1.6, 7)] + [[0.3, -2.0], [0.3, 2.0]])
+
+    use_arcs = True; use_reseed = True
+
+    def optimize(self, s, Unom, obs, guide):
+        if not self.use_arcs: return Vigie.optimize(self, s, Unom, obs, guide)
+        eps = self.rng.normal(0, 1, (self.N, self.T, 2)) * self.SIG
+        U = Unom[None] + eps; U[0] = Unom; U[1] = 0.0
+        na = len(self.ARCS)
+        U[2:2 + na] = self.ARCS[:, None, :]          # arcs francs : tourner vraiment, pas seulement trembler
+        U[..., 0] = np.clip(U[..., 0], 0, VMAX); U[..., 1] = np.clip(U[..., 1], -WMAX, WMAX)
+        J = self.sample_cost(s, U, obs, guide)
+        lam = max(1e-6, (np.percentile(J, 10) - J.min()) / 2.0)
+        w = np.exp(-(J - J.min()) / lam); w /= w.sum()
+        return (w[:, None, None] * U).sum(0)
+
+    def refresh(self, s, obs):
+        super().refresh(s, obs)
+        if not self.use_reseed: return
+        # réensemencement : pour chaque route, plan hérité ou plan neuf tracé vers la route, on garde le meilleur
+        for m in self.modes[1:]:
+            fresh = guide_to_controls(s, m['g'], self.T)
+            J = self.sample_cost(s, np.stack([m['U'], fresh]), obs, m['g'])
+            if J[1] < J[0]: m['U'] = fresh
+
+
+class MMSmith(SmithMixin, MultiModalMPPI):
+    name = 'MPPI multimodal + prédicteur de Smith'
+
+
+ALL += [VigieV2, MMSmith]
+
+
+class V2NoArcs(VigieV2):
+    name = 'VIGIE 2 sans arcs de virage'; use_arcs = False
+
+
+class V2NoReseed(VigieV2):
+    name = 'VIGIE 2 sans réensemencement'; use_reseed = False
+
+
+class V2NoSmith(VigieV2):
+    name = 'VIGIE 2 sans prédicteur de Smith'
+    def set_latency(self, L): SmithMixin.set_latency(self, 0)
+
+
+ALL += [V2NoArcs, V2NoReseed, V2NoSmith]

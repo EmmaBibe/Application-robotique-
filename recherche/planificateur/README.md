@@ -1,6 +1,6 @@
 # Laboratoire de planification et de suivi de trajectoire
 
-C'est ici qu'a été mis au point **VIGIE**, un planificateur qui mesure en ligne l'imprévisibilité de chaque agent, n'ouvre l'éventail des futurs possibles que pour ceux qui le méritent, et choisit entre plusieurs routes et des gestes réflexes par valeur d'option. Classe `Vigie` dans `planners.py`, version JavaScript dans `js/sims/vigie-core.js`, résultats et limites dans `JOURNAL.md`.
+C'est ici qu'a été mis au point **VIGIE**, un planificateur qui mesure en ligne l'imprévisibilité de chaque agent, n'ouvre l'éventail des futurs possibles que pour ceux qui le méritent, et choisit entre plusieurs routes et des gestes réflexes par valeur d'option. Version actuelle : classe `VigieV2` dans `planners.py`, version JavaScript dans `js/sims/vigie-core.js`. Évaluation finale (11 760 épisodes) : aussi sûre que la meilleure référence récente (95 %), et significativement plus rapide qu'elle à sécurité égale. Détails, réussites et limites dans `JOURNAL.md`.
 
 Banc d'essai pour inventer et évaluer de nouveaux algorithmes de planification et de suivi, en les comparant honnêtement aux méthodes existantes : mêmes mondes, mêmes perturbations, mêmes graines aléatoires.
 
@@ -27,7 +27,7 @@ Chaque monde est vérifié faisable : un chemin existe pour le robot avec 5 cm d
 ```bash
 pip install numpy matplotlib
 CONDS=nominal,perception,latence,glissement,carte_inconnue,reactifs,enfer \
-  python3 bench.py 600:620 final.csv 19,3,2,1,0   # évaluation finale de VIGIE
+  python3 bench.py 900:940 final.csv 27,3,28,2,1,0   # évaluation finale de VIGIE 2
 python3 bench.py 300:330 resultats.csv          # graines 300 à 329, tous les planificateurs
 python3 bench.py 300:330 r.csv 2,3,15           # seulement certains (indices de planners.ALL)
 SCENES=couloir,foule python3 bench.py 20 r.csv  # seulement certaines scènes

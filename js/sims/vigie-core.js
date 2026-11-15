@@ -147,9 +147,21 @@ function dijkstra(occ, goal) {
       D[v] = d + c; h.push(d + c, v);
     }
   }
-  let mx = 0; for (const x of D) if (isFinite(x) && x > mx) mx = x;
-  for (let k = 0; k < D.length; k++) D[k] = isFinite(D[k]) ? D[k] * RES : mx * RES + 10;
-  return D;
+  // cases occupées : on prolonge le champ de façon continue (pas de falaise artificielle près des murs)
+  const E = D.slice(), h2 = new Heap();
+  for (let k = 0; k < E.length; k++) if (isFinite(D[k])) h2.push(D[k], k);
+  while (h2.size) {
+    const [d, u] = h2.pop(); if (d > E[u]) continue;
+    const i = (u / NG) | 0, j = u % NG;
+    for (const [di, dj, c] of NB) {
+      const a = i + di, b = j + dj; if (a < 0 || b < 0 || a >= NG || b >= NG) continue;
+      const v = a * NG + b; if (isFinite(D[v]) || d + 2 * c >= E[v]) continue;
+      E[v] = d + 2 * c; h2.push(d + 2 * c, v);
+    }
+  }
+  let mx = 0; for (const x of E) if (isFinite(x) && x > mx) mx = x;
+  for (let k = 0; k < E.length; k++) E[k] = isFinite(E[k]) ? E[k] * RES : mx * RES + 10;
+  return E;
 }
 
 function astar(occ, start, goal, extra) {
@@ -225,7 +237,8 @@ export class MPPI {
     for (let n = 0; n < N; n++) {
       const U = new Float64Array(2 * T);
       for (let t = 0; t < T; t++) {
-        const noise = n > 1;
+        const noise = n > 1, arc = this.arcs && n >= 2 && n < 2 + this.arcs.length ? this.arcs[n - 2] : null;
+        if (arc) { U[2 * t] = arc[0]; U[2 * t + 1] = arc[1]; continue; }
         U[2 * t] = n === 1 ? 0 : Math.min(VMAX, Math.max(0, Unom[2 * t] + (noise ? R.n() * 0.5 : 0)));
         U[2 * t + 1] = n === 1 ? 0 : Math.min(WMAX, Math.max(-WMAX, Unom[2 * t + 1] + (noise ? R.n() : 0)));
       }
@@ -285,7 +298,11 @@ function guideControls(s, g) {
 const guideDist = (a, b) => { let tot = 0; for (const p of a) { let m = 1e9; for (const q of b) m = Math.min(m, Math.hypot(p[0] - q[0], p[1] - q[1])); tot += m; } return tot / a.length; };
 
 export class Vigie extends MPPI {
-  constructor(seed = 0) { super(seed); this.name = 'VIGIE'; this.N = 96; this.K = 3; this.P = 8; }
+  constructor(seed = 0) {
+    super(seed); this.name = 'VIGIE'; this.N = 96; this.K = 4; this.P = 8;
+    // arcs de virage francs injectés parmi les tirages : MPPI seul « n'imagine » presque jamais un vrai virage
+    this.arcs = [-1.6, -1.07, -0.53, 0, 0.53, 1.07, 1.6].map(w => [0.8, w]).concat([[0.3, -2], [0.3, 2]]);
+  }
   reset(stat, goal) { super.reset(stat, goal); this.hist = new Map(); this.err = new Map(); this.modes = []; this.k = 0; this.commit = 0; this.vlast = 0; this.wlast = 0; this.switches = 0; this.reflexes = 0; }
 
   // I : imprévisibilité mesurée en ligne pour chaque agent. On compare seulement des mesures séparées
@@ -318,6 +335,12 @@ export class Vigie extends MPPI {
       if (cg && guideDist(cg, g) < 1) nc = nm.length - 1;
     }
     this.modes = nm; this.commit = nc;
+    // réensemencement : plan hérité ou plan neuf tracé vers la route, on garde le meilleur
+    const Pcv = predict(obs);
+    for (const m of this.modes.slice(1)) {
+      const fresh = guideControls(s, m.g);
+      if (cost(s, fresh, Pcv, obs, this.D, m.g) < cost(s, m.U, Pcv, obs, this.D, m.g)) m.U = fresh;
+    }
   }
 
   act(t, s, obs) {
@@ -361,6 +384,28 @@ export class Vigie extends MPPI {
 }
 
 /** Mémoire de carte commune aux deux planificateurs : les obstacles fixes vus restent connus. */
+/** Prédicteur de Smith : avec un retard connu de L pas, on rejoue les commandes déjà envoyées
+    pour estimer l'état présent du robot, et on avance les agents d'autant. */
+export function withSmith(inner, L) {
+  const cmds = []; let vm = 0, wm = 0;
+  return {
+    planner: inner.planner,
+    reset: (a, b) => inner.reset(a, b),
+    act(t, s, obs) {
+      let [x, y, th] = s, vv = vm, ww = wm;
+      for (const [vc, wc] of cmds) {
+        vv += Math.max(-AMAX * DT, Math.min(AMAX * DT, vc - vv)); ww += Math.max(-ALPHA * DT, Math.min(ALPHA * DT, wc - ww));
+        x += DT * vv * Math.cos(th); y += DT * vv * Math.sin(th); th += DT * ww;
+      }
+      const o = obs.map(r => r[5] ? [r[0] + r[2] * cmds.length * DT, r[1] + r[3] * cmds.length * DT, ...r.slice(2)] : r);
+      const u = inner.act(t + cmds.length * DT, [x, y, th], o);
+      if (cmds.length === L) { const [vc, wc] = cmds.shift(); vm += Math.max(-AMAX * DT, Math.min(AMAX * DT, vc - vm)); wm += Math.max(-ALPHA * DT, Math.min(ALPHA * DT, wc - wm)); }
+      cmds.push([Math.min(VMAX, Math.max(0, u[0])), Math.min(WMAX, Math.max(-WMAX, u[1]))]);
+      return u;
+    },
+  };
+}
+
 export function withMemory(planner) {
   const known = new Map(); let dirty = 0, k = 0;
   return {
@@ -377,7 +422,9 @@ export function withMemory(planner) {
 
 /** Un épisode complet, sans dessin (utilisé par les tests et par le mode « course »). */
 export function createEpisode(scene, seed, Planner, cond = {}) {
-  const w = makeWorld(scene, seed), R = makeRand(seed * 31 + 5), pl = withMemory(new Planner(seed));
+  const w = makeWorld(scene, seed), R = makeRand(seed * 31 + 5);
+  const mem = withMemory(new Planner(seed));
+  const pl = cond.latence && Planner === Vigie ? withSmith(mem, 2) : mem;
   let s = [...w.start], v = 0, om = 0, t = 0, outcome = null, minc = Infinity; const path = [[s[0], s[1]]], queue = [];
   const gv = cond.glissement ? R.u(0.75, 1.15) : 1, gw = cond.glissement ? R.u(0.75, 1.2) : 1, bw = cond.glissement ? R.u(-0.12, 0.12) : 0;
   const known = cond.carte ? w.static.filter(([x, y, r]) => Math.hypot(x - s[0], y - s[1]) - r < 6) : w.static;
