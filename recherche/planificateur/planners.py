@@ -154,6 +154,9 @@ class DWA:
     def reset(self, static, goal):
         self.goal = goal; self.D = dijkstra(occupancy([tuple(c) for c in static], R_ROB + 0.1), goal); self.v = 0; self.w = 0
 
+    def update_static(self, static):
+        self.D = dijkstra(occupancy([tuple(c) for c in static], R_ROB + 0.1), self.goal)
+
     def act(self, t, s, obs):
         vs = np.linspace(max(0, self.v - AMAX * 0.3), min(VMAX, self.v + AMAX * 0.3), 9)
         ws = np.linspace(max(-WMAX, self.w - 1.2), min(WMAX, self.w + 1.2), 17)
@@ -176,6 +179,9 @@ class MPPI:
         self.goal = goal; self.rng = np.random.default_rng(0)
         self.D = dijkstra(occupancy([tuple(c) for c in static], R_ROB + 0.1), goal)
         self.U = np.zeros((self.T, 2)); self.U[:, 0] = 0.5
+
+    def update_static(self, static):
+        self.D = dijkstra(occupancy([tuple(c) for c in static], R_ROB + 0.1), self.goal)
 
     def eval_cost(self, s, U, obs, scen=None, guide=None):
         tr = rollout(s, U)
@@ -556,3 +562,256 @@ class AlignMPPI(HarborMPPI):
 
 
 ALL += [HarborMPPI, AttentionMPPI, AlignMPPI]
+
+
+
+# ---------------------------------------------------------------- mémoire de carte (identique pour tous)
+class Memory:
+    """Enveloppe commune : retient les obstacles fixes déjà vus (carte construite en roulant)
+    et les rend au planificateur, même quand ils sortent du champ des capteurs."""
+    def __init__(self, P):
+        self.p = P(); self.name = P.name
+
+    def __getattr__(self, k):
+        return getattr(self.__dict__['p'], k)
+
+    def reset(self, static, goal):
+        self.known = {}
+        for i, (x, y, r) in enumerate(static): self.known[(round(x, 1), round(y, 1))] = (x, y, 0, 0, r, 0, i)
+        self.dirty = 0; self.k = 0
+        self.p.reset(np.array([v[:2] + (v[4],) for v in self.known.values()], float).reshape(-1, 3), goal)
+
+    def act(self, t, s, obs):
+        self.k += 1
+        for o in obs[obs[:, 5] == 0]:
+            key = (round(o[0], 1), round(o[1], 1))
+            if key not in self.known: self.known[key] = tuple(o[:4]) + (o[4], 0, o[6] if len(o) > 6 else 0); self.dirty += 1
+        if self.dirty and self.k % 5 == 0 and hasattr(self.p, 'update_static'):
+            self.p.update_static(np.array([(v[0], v[1], v[4]) for v in self.known.values()], float).reshape(-1, 3)); self.dirty = 0
+        st = np.array(list(self.known.values()), float).reshape(-1, 7)
+        dyn = obs[obs[:, 5] > 0]
+        if dyn.shape[1] < 7: dyn = np.hstack([dyn, np.zeros((len(dyn), 7 - dyn.shape[1]))])
+        return self.p.act(t, s, np.vstack([st, dyn]))
+
+
+# =====================================================================================
+# VIGIE : notre proposition
+#   V : Valeur d'option, on choisit le début de trajectoire qui garde les meilleures suites possibles
+#   I : Imprévisibilité mesurée en ligne pour chaque agent (comme on vérifie une prévision météo)
+#   G : Gestes réflexes (freiner, esquiver) mis en concurrence avec les plans
+#   I : Inertie d'engagement, pour ne pas hésiter entre deux routes
+#   E : Ensemble de routes qui contient toujours le MPPI de base
+# =====================================================================================
+from collections import deque
+
+
+class SurpriseTracker:
+    """Pour chaque agent mobile : erreur entre où on l'attendait (vitesse constante, 1 s plus tôt)
+    et où il est vraiment. Lissée dans le temps, elle donne un indice d'imprévisibilité entre 0 et 1.
+    On ne compare que des mesures séparées d'environ une seconde : un agent qui disparaît
+    puis réapparaît ne doit pas paraître imprévisible pour autant."""
+    def __init__(self, horizon=1.0, default=0.3):
+        self.h = {}; self.e = {}; self.H = horizon; self.default = default
+
+    def update(self, obs, t):
+        for o in obs[obs[:, 5] > 0]:
+            i = int(o[6]); q = self.h.setdefault(i, deque(maxlen=40)); q.append((t, o[:4].copy()))
+            while q and t - q[0][0] > self.H + 0.15: q.popleft()
+            t0, old = q[0]
+            if abs((t - t0) - self.H) <= 0.15:
+                pred = old[:2] + old[2:4] * (t - t0)
+                err = np.hypot(*(o[:2] - pred))
+                self.e[i] = 0.85 * self.e.get(i, err) + 0.15 * err
+
+    def u(self, obs):
+        out = np.zeros(len(obs))
+        for k, o in enumerate(obs):
+            if o[5] > 0:
+                i = int(o[6])
+                out[k] = np.clip((self.e[i] - 0.08) / 0.45, 0, 1) if i in self.e else self.default
+        return out
+
+
+def predict_u(obs, T, scen, u):
+    """Futur d'un scénario, dont l'écart à la vitesse constante est proportionnel à l'imprévisibilité de chaque agent."""
+    p, v = obs[:, :2], obs[:, 2:4]
+    t = np.arange(1, T + 1) * DT
+    mob = obs[:, 5] > 0
+    ang, k = scen
+    a = (ang * u)[None, :] * np.minimum(1.0, t / 2.0)[:, None]
+    f = 1.0 + ((k - 1.0) * u)[None, :] * np.minimum(1.0, t / 1.0)[:, None]
+    c, s_ = np.cos(a), np.sin(a)
+    vx = f * (c * v[None, :, 0] - s_ * v[None, :, 1]); vy = f * (s_ * v[None, :, 0] + c * v[None, :, 1])
+    vx[:, ~mob] = 0; vy[:, ~mob] = 0
+    return p[None] + DT * np.cumsum(np.stack([vx, vy], -1), 0)
+
+
+def obstacle_cost_tube(traj, P, Rt):
+    """Comme obstacle_cost, mais avec un rayon qui dépend du temps (T, M) : le tube d'incertitude s'ouvre."""
+    if P.shape[1] == 0: d = np.full(traj.shape[:-1], 10.0)
+    else:
+        dx = traj[..., :, None, 0] - P[:, :, 0]; dy = traj[..., :, None, 1] - P[:, :, 1]
+        d = (np.sqrt(dx * dx + dy * dy) - Rt - R_ROB).min(-1)
+    xw, yw = traj[..., 0], traj[..., 1]
+    d = np.minimum(d, np.minimum(np.minimum(xw, yw), np.minimum(SIZE - xw, SIZE - yw)) - R_ROB)
+    tw = 0.97 ** np.arange(traj.shape[-2])
+    return ((3000.0 * (d < 0) + 60.0 * np.clip(0.6 - d, 0, None) ** 2) * tw).sum(-1)
+
+
+class Vigie(MPPI):
+    name = 'VIGIE (proposé)'
+    K = 3; N = 128; P = 8
+    use_option = True; use_surprise = True; use_reflex = True; use_inertia = True; use_tube = False; use_permanence = False
+    GHOST_T = 1.5
+
+    def reset(self, static, goal):
+        super().reset(static, goal)
+        self.tr = SurpriseTracker(); self.modes = []; self.k = 0; self.commit = 0; self.switches = 0
+        self.seen = {}; self.t = 0.0
+        self.vlast = 0.0; self.wlast = 0.0; self.reflex_n = 0; self._u = None
+
+    # coût d'échantillonnage : vitesse constante, tube élargi selon l'imprévisibilité
+    def sample_cost(self, s, U, obs, guide):
+        tr = rollout(s, U)
+        P = predict(obs, self.T)
+        R = obs[:, 4][None, :] + (0.35 * self._u[None, :] * np.minimum(np.arange(1, self.T + 1) * DT, 2.0)[:, None] if self.use_tube else 0)
+        c = obstacle_cost_tube(tr, P, np.broadcast_to(R, P.shape[:2]))
+        nav = lookup(self.D, tr[..., 0], tr[..., 1])
+        c = c + 8.0 * nav[..., -1] + 0.4 * nav.sum(-1) + 0.05 * (U[..., 1] ** 2).sum(-1)
+        if guide is not None:
+            d = np.sqrt(((tr[..., None, :2] - guide) ** 2).sum(-1)).min(-1)
+            c = c + 1.5 * (d ** 2).sum(-1)
+        return c
+
+    def optimize(self, s, Unom, obs, guide):
+        eps = self.rng.normal(0, 1, (self.N, self.T, 2)) * self.SIG
+        U = Unom[None] + eps; U[0] = Unom; U[1] = 0.0
+        U[..., 0] = np.clip(U[..., 0], 0, VMAX); U[..., 1] = np.clip(U[..., 1], -WMAX, WMAX)
+        J = self.sample_cost(s, U, obs, guide)
+        lam = max(1e-6, (np.percentile(J, 10) - J.min()) / 2.0)
+        w = np.exp(-(J - J.min()) / lam); w /= w.sum()
+        return (w[:, None, None] * U).sum(0)
+
+    # coût d'évaluation commun à toutes les options, dans un futur donné
+    def eval_scen(self, s, U, obs, scen):
+        tr = rollout(s, U)
+        P = predict_u(obs, self.T, scen, self._u) if self.use_surprise else predict(obs, self.T, scen)
+        c = obstacle_cost(tr, P, obs[:, 4])
+        nav = lookup(self.D, tr[..., 0], tr[..., 1])
+        return c + 8.0 * nav[..., -1] + 0.4 * nav.sum(-1) + 0.05 * (U[..., 1] ** 2).sum(-1)
+
+    def refresh(self, s, obs):
+        guides = diverse_guides(s, self.goal, obs, self.K - 1 + 1)
+        old = self.modes[1:] if self.modes else []
+        base = self.modes[0] if self.modes else dict(g=None, U=self.U.copy())
+        new = [base]
+        cg = self.modes[self.commit]['g'] if self.modes and self.commit > 0 else None
+        newcommit = 0
+        for g in guides[:self.K - 1]:
+            best, bd = None, 1e9
+            for m in old:
+                d = np.mean(np.sqrt(((m['g'][:, None] - g[None]) ** 2).sum(-1)).min(1))
+                if d < bd: best, bd = m, d
+            new.append(dict(g=g, U=best['U'] if best is not None and bd < 1.0 else guide_to_controls(s, g, self.T)))
+            if cg is not None:
+                d = np.mean(np.sqrt(((cg[:, None] - g[None]) ** 2).sum(-1)).min(1))
+                if d < 1.0: newcommit = len(new) - 1
+        self.modes = new; self.commit = newcommit
+
+    def update_static(self, static):
+        super().update_static(static)
+        self.commit = 0; self.k = 0          # la carte a changé : on revient au plan de base et on recalcule les routes
+
+    def permanence(self, t, obs):
+        """Permanence de l'objet : un agent qui sort du champ (masqué, non détecté) reste en mémoire
+        pendant GHOST_T secondes, prolongé à vitesse constante, avec une imprévisibilité qui grandit."""
+        mob = obs[obs[:, 5] > 0]
+        for o in mob: self.seen[int(o[6])] = (o.copy(), t)
+        ghosts, gu = [], []
+        ids = set(int(o[6]) for o in mob)
+        for i, (o, t0) in list(self.seen.items()):
+            dt = t - t0
+            if i in ids: continue
+            if dt > self.GHOST_T: del self.seen[i]; continue
+            g = o.copy(); g[:2] = o[:2] + o[2:4] * dt; ghosts.append(g); gu.append(min(1.0, 0.3 + 0.7 * dt / self.GHOST_T))
+        return (np.vstack([obs] + ghosts) if ghosts else obs), np.array(gu)
+
+    def act(self, t, s, obs):
+        self.tr.update(obs, t)
+        gu = np.zeros(0)
+        if self.use_permanence: obs, gu = self.permanence(t, obs)
+        self._u = self.tr.u(obs) if self.use_surprise else np.where(obs[:, 5] > 0, 0.5, 0.0)
+        if len(gu): self._u[-len(gu):] = np.maximum(self._u[-len(gu):], gu) if self.use_surprise else gu
+        if self.k % 10 == 0 or not self.modes: self.refresh(s, obs)
+        self.k += 1
+        for m in self.modes: m['U'] = self.optimize(s, m['U'], obs, m['g'])
+        Us = np.stack([m['U'] for m in self.modes]); K = len(Us); P = self.P
+
+        # options : début de chaque plan, plus les gestes réflexes
+        pref = [Us[i, :P] for i in range(K)]
+        kinds = list(range(K))
+        if self.use_reflex:
+            v0 = self.vlast
+            pref += [np.tile([0.0, self.wlast], (P, 1)), np.tile([0.6 * v0, 1.6], (P, 1)), np.tile([0.6 * v0, -1.6], (P, 1))]
+            kinds += [-1, -2, -3]
+        nO = len(pref)
+        if self.use_option:
+            seq = np.empty((nO, K, self.T, 2))
+            for i in range(nO):
+                for k in range(K): seq[i, k, :P] = pref[i]; seq[i, k, P:] = Us[k, P:]
+            C = np.stack([self.eval_scen(s, seq, obs, sc) for sc in SCENARIOS], -1)   # (options, suites, futurs)
+            V = (C.min(1) * SCEN_W).sum(-1)
+        else:
+            seq = np.stack([np.concatenate([pr, Us[0, P:]]) for pr in pref])
+            V = self.eval_scen(s, seq, obs, (0.0, 1.0))
+        if self.use_reflex:
+            # un réflexe n'est permis que si tous les plans sont menacés (risque de collision attendu > 25 %)
+            plan_best = V[:K].min()
+            if plan_best < 0.25 * 3000.0: V[K:] = np.inf
+        if self.use_inertia:
+            for i, kd in enumerate(kinds):
+                if kd >= 0 and kd != self.commit: V[i] += 0.04 * abs(V[self.commit]) + 2.0
+        i = int(np.argmin(V)); kd = kinds[i]
+        if kd >= 0:
+            if kd != self.commit: self.switches += 1
+            self.commit = kd
+        else: self.reflex_n += 1
+        u = pref[i][0].copy()
+        for m in self.modes: m['U'] = np.roll(m['U'], -1, 0); m['U'][-1] = m['U'][-2]
+        self.U = self.modes[0]['U']
+        self.vlast, self.wlast = float(np.clip(u[0], 0, VMAX)), float(u[1])
+        return u
+
+
+class VigieNoOption(Vigie):
+    name = 'VIGIE sans valeur d\'option'; use_option = False
+
+
+class VigieNoSurprise(Vigie):
+    name = 'VIGIE sans mesure d\'imprévisibilité'; use_surprise = False
+
+
+class VigieNoReflex(Vigie):
+    name = 'VIGIE sans gestes réflexes'; use_reflex = False
+
+
+class VigieNoInertia(Vigie):
+    name = 'VIGIE sans inertie d\'engagement'; use_inertia = False
+
+
+class VigieNoPermanence(Vigie):
+    name = 'VIGIE avec permanence de l\'objet'; use_permanence = True
+
+
+class VigieNoTube(Vigie):
+    name = 'VIGIE avec tube calibré (écarté)'; use_tube = True
+
+
+ALL += [Vigie, VigieNoOption, VigieNoSurprise, VigieNoReflex, VigieNoInertia, VigieNoTube, VigieNoPermanence]
+
+
+class Vigie4(Vigie):
+    name = 'VIGIE à 4 routes'; K = 4; N = 96
+
+
+ALL += [Vigie4]

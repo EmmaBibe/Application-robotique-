@@ -8,9 +8,12 @@ import matplotlib.pyplot as plt
 src = sys.argv[1] if len(sys.argv) > 1 else 'resultats_v1.csv'
 tag = sys.argv[2] if len(sys.argv) > 2 else 'v1'
 rows = list(csv.DictReader(open(src)))
+import os
+GROUP = os.environ.get('GROUP', 'scene')
+for r in rows: r['seed'] = r['seed'] + '|' + r.get('cond', '') + '|' + r.get('scene', '')
+for r in rows: r['scene'] = r.get(GROUP, r['scene']) if GROUP != 'scene' else r['scene']
 for r in rows:
     for k in ('temps', 'longueur', 'marge_min', 'jerk', 'lissage_w', 'calcul_ms', 'calcul_max_ms', 'changements'): r[k] = float(r[k])
-    r['seed'] = int(r['seed'])
 planners = list(dict.fromkeys(r['planner'] for r in rows))
 scenes = list(dict.fromkeys(r['scene'] for r in rows))
 by = defaultdict(list)

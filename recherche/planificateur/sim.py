@@ -49,7 +49,8 @@ class World:
     def _add_dyn(self, p, v, r=0.35, kind='intent'):
         t_switch = self.rng.uniform(1.0, 12.0)
         mode = self.rng.choice(['tout_droit', 'gauche', 'droite', 'arret', 'accel'], p=[0.3, 0.2, 0.2, 0.15, 0.15])
-        self.dyn.append(dict(p=np.array(p, float), v=np.array(v, float), r=r, mode=mode, t_switch=t_switch, kind=kind, done=False))
+        self.dyn.append(dict(p=np.array(p, float), v=np.array(v, float), r=r, mode=mode, t_switch=t_switch, kind=kind, done=False,
+                         reactif=bool(np.random.default_rng(len(self.dyn) * 31 + 7).random() < 0.7)))
 
     def build_foret(self):
         self._rand_static(30)
@@ -108,8 +109,15 @@ class World:
             else: self._add_dyn((x, self.rng.uniform(14, 19.5)), (self.rng.uniform(-0.3, 0.3), -s))
 
     # ------------------------------------------------------------ évolution
-    def step_obstacles(self, t):
+    def step_obstacles(self, t, robot=None, react=False):
         for o in self.dyn:
+            if react and robot is not None and o['reactif']:
+                # les agents réactifs s'écartent du robot quand il est proche (force sociale simplifiée)
+                d = o['p'] - robot; n = np.hypot(*d)
+                if 1e-6 < n < 2.0:
+                    o['v'] = o['v'] + DT * 1.5 * d / n * (2.0 - n)
+                    sp = np.hypot(*o['v'])
+                    if sp > 1.8: o['v'] = o['v'] / sp * 1.8
             if o['kind'] == 'errant':
                 if self.rng.random() < 0.03:   # change de direction de temps en temps
                     ang = np.arctan2(o['v'][1], o['v'][0]) + self.rng.normal(0, 1.2)
@@ -127,31 +135,73 @@ class World:
                 if o['p'][k] < o['r'] or o['p'][k] > SIZE - o['r']:
                     o['v'][k] *= -1; o['p'][k] = np.clip(o['p'][k], o['r'], SIZE - o['r'])
 
-    def obstacles(self, noise=0.0):
-        """Tableau N x 6 : x, y, vx, vy, r, mobile. Les mesures des mobiles sont bruitées."""
-        rows = [(x, y, 0, 0, r, 0) for x, y, r in self.static]
-        for o in self.dyn:
+    def obstacles(self, noise=0.0, robot=None, rng_range=None, occl=False, drop=0.0):
+        """Tableau N x 7 : x, y, vx, vy, r, mobile, identifiant. Les mesures des mobiles sont bruitées.
+        Avec rng_range / occl / drop : portée limitée, masquage par les autres obstacles, pertes de détection."""
+        rows = [(x, y, 0, 0, r, 0, i) for i, (x, y, r) in enumerate(self.static)]
+        for j, o in enumerate(self.dyn):
             p = o['p'] + self.nrng.normal(0, noise, 2); v = o['v'] + self.nrng.normal(0, noise, 2)
-            rows.append((p[0], p[1], v[0], v[1], o['r'], 1))
-        return np.array(rows, float).reshape(-1, 6)
+            rows.append((p[0], p[1], v[0], v[1], o['r'], 1, 1000 + j))
+        A = np.array(rows, float).reshape(-1, 7)
+        if robot is None or len(A) == 0: return A
+        keep = np.ones(len(A), bool)
+        d = np.hypot(A[:, 0] - robot[0], A[:, 1] - robot[1])
+        if rng_range: keep &= d - A[:, 4] < rng_range
+        if occl:
+            for i in np.nonzero(keep)[0]:
+                u = A[i, :2] - robot[:2]; L = np.hypot(*u)
+                if L < 1e-6: continue
+                u = u / L
+                rel = A[:, :2] - robot[:2]; proj = rel @ u
+                perp = np.abs(rel[:, 0] * u[1] - rel[:, 1] * u[0])
+                block = (proj > 0) & (proj < L - A[i, 4] - A[:, 4]) & (perp < 0.85 * A[:, 4])
+                block[i] = False
+                if block.any(): keep[i] = False
+        if drop: keep &= ~((A[:, 5] > 0) & (self.nrng.random(len(A)) < drop))
+        return A[keep]
 
     def true_obstacles(self):
         rows = [(x, y, r) for x, y, r in self.static] + [(o['p'][0], o['p'][1], o['r']) for o in self.dyn]
         return np.array(rows, float).reshape(-1, 3)
 
 
-def run_episode(world, planner, perturb=True, record=False):
+COND = {
+    'nominal': {},
+    'perception': dict(range=5.0, occl=True, drop=0.1),
+    'latence': dict(lat=2),
+    'glissement': dict(slip=True),
+    'carte_inconnue': dict(unknown=True, range=6.0),
+    'reactifs': dict(react=True),
+    'enfer': dict(range=5.0, occl=True, drop=0.1, lat=2, slip=True, unknown=True, react=True),
+}
+
+
+def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
     import zlib
     rng = np.random.default_rng(12345 + zlib.crc32(world.name.encode()) % 1000 + 7919 * world.seed)
     s = world.start.copy(); v = w = 0.0; t = 0.0
-    planner.reset(world.static.copy(), world.goal.copy())
+    C = COND[cond] if isinstance(cond, str) else cond
+    known = world.static.copy()
+    if C.get('unknown'): known = known[np.hypot(known[:, 0] - s[0], known[:, 1] - s[1]) - known[:, 2] < C.get('range', 6.0)]
+    planner.reset(known, world.goal.copy())
     if hasattr(planner, 'bind'): planner.bind(world)
+    gv, gw, bw = 1.0, 1.0, 0.0
+    if C.get('slip'):   # erreur de modèle persistante : roues qui patinent, moteur mal étalonné
+        gv, gw, bw = rng.uniform(0.75, 1.15), rng.uniform(0.75, 1.2), rng.uniform(-0.12, 0.12)
+    from collections import deque
+    queue = deque()
     path = [s[:2].copy()]; vs = []; ws = []; comp = []; minclear = np.inf
     outcome = 'temps'
     import time
     while t < T_MAX:
         meas = s + (rng.normal(0, [0.03, 0.03, 0.02]) if perturb else 0)
-        obs = world.obstacles(noise=0.05 if perturb else 0.0)
+        obs = world.obstacles(noise=0.05 if perturb else 0.0, robot=s, rng_range=C.get('range'), occl=C.get('occl', False), drop=C.get('drop', 0.0))
+        if not C.get('range'):
+            pass
+        if C.get('lat'):
+            queue.append((meas, obs))
+            meas, obs = queue[0] if len(queue) > C['lat'] else queue[0]
+            if len(queue) > C['lat']: queue.popleft()
         t0 = time.perf_counter()
         vc, wc = planner.act(t, meas, obs)
         comp.append(time.perf_counter() - t0)
@@ -159,9 +209,10 @@ def run_episode(world, planner, perturb=True, record=False):
         v = v + np.clip(vc - v, -AMAX * DT, AMAX * DT); w = w + np.clip(wc - w, -ALPHA * DT, ALPHA * DT)
         va, wa = v, w
         if perturb: va = v * (1 + rng.normal(0, 0.05)); wa = w + rng.normal(0, 0.05)
+        va, wa = va * gv, wa * gw + bw * (abs(va) > 0.05)
         s = s + DT * np.array([va * np.cos(s[2]), va * np.sin(s[2]), wa])
         s[2] = (s[2] + np.pi) % (2 * np.pi) - np.pi
-        world.step_obstacles(t); t += DT
+        world.step_obstacles(t, robot=s[:2], react=C.get('react', False)); t += DT
         world.t = t
         path.append(s[:2].copy()); vs.append(v); ws.append(w)
         ob = world.true_obstacles()

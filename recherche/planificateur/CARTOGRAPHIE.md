@@ -31,6 +31,8 @@ Légende de l'exploitation en robotique : **forte** (technique standard), **moye
 | Éthologie | Poursuite du faucon (navigation proportionnelle) | interception optimale | moyenne (interception) | – |
 | Écologie | « Paysage de la peur » : les animaux évitent les zones où ils ont eu peur | carte de risque apprise des quasi-collisions | **rien trouvé** | piste B ci-dessous |
 | Immunologie | Sélection clonale, mémoire immunitaire | réutiliser des solutions passées | faible | – |
+| Psychologie du développement | Permanence de l'objet (Piaget) : un objet caché existe toujours | garder en mémoire les agents masqués | moyenne (agents « fantômes » en conduite autonome) | testée dans VIGIE, sans gain mesurable |
+| Physiologie | Réflexe de retrait, déclenché seulement par une menace | gestes d'urgence en concurrence avec les plans | faible | **utilisée dans VIGIE** |
 
 ## 3. Sciences humaines, économie, société
 

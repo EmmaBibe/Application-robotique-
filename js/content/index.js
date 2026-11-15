@@ -9,6 +9,7 @@ import { ia, ros } from './m-ia-ros.js';
 import { systemes, creativite, futur } from './m-ingenieur.js';
 import { dynamique, equilibre, drones, essaims, optimisation, hri, molle } from './m-frontieres.js';
 import { mars, terre } from './m-mars.js';
+import { labo } from './m-vigie.js';
 
 export const PHASES = [
   { id: 'fondations', short: 'Phase 1', title: 'Fondations', desc: 'Les bases indispensables : comprendre ce qu\'est un robot, et acquérir les outils mathématiques, physiques, électroniques et informatiques. Rien n\'est supposé connu.' },
@@ -24,7 +25,7 @@ export const MODULES = [
   meca, embarque, mobile, bras, commande,
   perception, vision, localisation, planification, ia, ros,
   systemes, creativite, futur,
-  dynamique, equilibre, drones, essaims, optimisation, hri, molle,
+  dynamique, equilibre, drones, essaims, optimisation, hri, molle, labo,
   mars, terre,
 ];
 

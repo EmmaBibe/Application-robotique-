@@ -87,3 +87,92 @@ Critère de réussite fixé à l'avance : faire au moins aussi bien que MPPI dan
 - glissement des roues, robot plus lent que les obstacles.
 
 **Pistes encore non testées** de la cartographie : paysage de la peur (carte de risque apprise des quasi-collisions), lignes de désir (routes qui se renforcent avec l'usage).
+
+## Séance 2 · 15 novembre 2026 : VIGIE
+
+### Consigne
+
+Aller au-delà des algorithmes existants : mettre au point un planificateur nouveau, fonctionnel, qui résiste à des tests de robustesse sévères, et le montrer dans l'application Windows et mobile.
+
+### Le banc d'essai durci
+
+Sept conditions, appliquées à chacune des sept scènes :
+
+| Condition | Ce qu'elle simule |
+|---|---|
+| nominal | bruits de mesure et d'actionneur seulement |
+| perception | portée de 5 m, masquage par les autres obstacles, 10 % de détections perdues |
+| latence | 200 ms entre la mesure et la commande |
+| glissement | modèle faux : gain des roues de 0,75 à 1,2, dérive en rotation |
+| carte_inconnue | obstacles fixes découverts en roulant (portée 6 m) |
+| reactifs | 70 % des agents s'écartent du robot quand il approche |
+| enfer | toutes les perturbations à la fois |
+
+Tous les planificateurs passent par la même mémoire de carte (les obstacles fixes vus restent connus).
+
+### L'idée
+
+Le résultat clé de la séance 1 : garder ses options ouvertes aide face aux agents erratiques, nuit face aux agents prévisibles. D'où **VIGIE** :
+
+- **V**aleur d'option : on choisit le début de trajectoire qui minimise la moyenne, sur les futurs possibles, de la meilleure suite disponible ;
+- **I**mprévisibilité mesurée en ligne pour chaque agent : erreur de prédiction à 1 s, lissée, qui règle l'ouverture de l'éventail des futurs de cet agent seulement ;
+- **G**estes réflexes (freiner, esquiver) mis en concurrence avec les plans, mais autorisés seulement quand tous les plans sont menacés ;
+- **I**nertie d'engagement : changer de route a un coût ;
+- **E**nsemble de routes qui contient toujours le plan MPPI de base.
+
+### Itérations sur les graines de développement (500 à 507)
+
+| Étape | Problème observé | Correction |
+|---|---|---|
+| VIGIE 1 | le réflexe « freiner » gagnait presque toujours dans les couloirs : robot figé (jusqu'à 383 pas sur 450) | réflexes autorisés seulement si le risque attendu de tous les plans dépasse 25 % |
+| ablation | le tube d'incertitude élargi dans l'échantillonnage dégradait les résultats | brique retirée |
+| VIGIE 2 | échecs sous perception dégradée | diagnostic : la mesure d'imprévisibilité comparait des positions séparées de plus d'1 s après une disparition, d'où des agents jugés erratiques à tort ; mesure corrigée pour utiliser le temps réel écoulé |
+| permanence de l'objet | garder en mémoire les agents masqués (idée de Piaget) | pas de gain mesurable : retirée du cœur, gardée comme variante |
+| 4 routes | une route de plus | pas de gain : on garde 3 routes, moins coûteuses |
+
+L'algorithme a ensuite été figé avant l'évaluation finale.
+
+### Évaluation finale (graines 600 à 619, jamais utilisées pour régler)
+
+7 scènes × 7 conditions × 20 mondes = 980 épisodes par méthode, 4 900 au total. Résultats complets : `resultats_final2_cond.md` (par condition) et `resultats_final2_scene.md` (par scène).
+
+| Méthode | Succès | Collisions | Temps moyen | À-coups | Calcul |
+|---|---|---|---|---|---|
+| MPPI multimodal (2025) | 97 % | 2 % | 19,2 s | 16,3 | 16,6 ms |
+| **VIGIE** | **96 %** | **3 %** | **18,5 s** | **15,2** | **15,4 ms** |
+| MPPI | 94 % | 6 % | 17,8 s | 11,4 | 2,3 ms |
+| DWA | 81 % | 3 % | 14,9 s | 4,7 | 0,9 ms |
+| A* + poursuite pure | 61 % | 39 % | 13,4 s | 4,0 | 0,9 ms |
+
+Comparaisons appariées (mêmes mondes) :
+- VIGIE contre MPPI : **+2,2 points**, IC 95 % [+0,8 ; +3,8], 38 mondes gagnés, 16 perdus. **Significatif.**
+- VIGIE contre MPPI multimodal : **−1,0 point**, IC 95 % [−2,3 ; +0,3], 17 gagnés, 27 perdus. **Pas de différence significative.**
+
+Par condition, VIGIE fait mieux que le MPPI multimodal avec roues qui patinent (96 contre 94) et termine plus vite dans « enfer » (20,3 s contre 22,0 s, même succès de 99 %). Il fait moins bien en nominal et avec latence (94 contre 98).
+
+Contre-vérification par une seconde implémentation indépendante (JavaScript, celle de l'application), graines 700 à 711 : VIGIE 92,9 %, MPPI 90,2 %, VIGIE devant dans 6 conditions sur 7 (`js_contre_verif.csv`).
+
+### Ce qu'on peut affirmer, et ce qu'on ne peut pas
+
+- VIGIE est un planificateur **nouveau dans sa combinaison**. Après recherche bibliographique, nous n'avons trouvé aucune publication qui règle l'ouverture d'un éventail de futurs par une imprévisibilité mesurée agent par agent et qui choisit entre routes topologiques et réflexes par valeur d'option. Chaque brique isolée a des parents connus (MPPI, commande contingente, prédiction conforme adaptative). Une revue plus poussée reste nécessaire avant de publier.
+- Il **fonctionne** et il est **robuste** : il bat significativement MPPI sous toutes les perturbations réunies et ne s'effondre dans aucune condition.
+- Il **ne bat pas** la meilleure méthode récente sur l'ensemble des tests : il fait jeu égal avec elle, plus rapide et plus doux, mais un peu moins sûr en conditions nominales.
+- Les tests sont en simulation. Rien ne garantit le même comportement sur un robot réel.
+
+### Prochaines étapes
+
+1. Comprendre les pertes en nominal et en latence face au MPPI multimodal : piste d'un éventail qui tienne compte du retard des mesures.
+2. Publier le banc d'essai et ses résultats pour que d'autres puissent reproduire.
+3. Prototype réel : robot différentiel avec lidar 2D, suivi des personnes, VIGIE comme module de ROS 2 Nav2, essais progressifs avec des mannequins mobiles avant des personnes.
+
+### Ablation sur les graines d'évaluation (600 à 605, 294 épisodes par variante)
+
+| Variante | Succès | Apport de la brique | IC 95 % |
+|---|---|---|---|
+| VIGIE complet | 96,6 % | – | – |
+| sans valeur d'option | 95,6 % | +1,0 | [−0,7 ; +2,7] |
+| sans mesure d'imprévisibilité | 95,6 % | +1,0 | [−1,0 ; +3,1] |
+| sans gestes réflexes | 95,9 % | +0,7 | [−1,0 ; +2,4] |
+| sans inertie d'engagement | 96,6 % | 0,0 | [−1,7 ; +1,7] |
+
+Sur les mondes de test, chaque brique apporte au plus un point, et aucun de ces apports n'est significatif pris isolément. Les effets plus marqués observés en développement (jusqu'à 9 points) ne se confirment pas : ils dépendaient en partie des mondes utilisés pour régler. C'est la raison même de séparer développement et évaluation.

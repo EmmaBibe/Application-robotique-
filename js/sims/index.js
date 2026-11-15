@@ -29,6 +29,7 @@ export const SIMS = {
   hohmann: { title: 'Transfert Terre-Mars', domain: 'Espace', icon: '☄', desc: 'Choisis la fenêtre de tir : orbite de Hohmann, phasage et Δv.', load: () => import('./hohmann.js') },
   lander: { title: 'Atterrissage sur Mars', domain: 'Espace', icon: '⬇', desc: 'Pose un atterrisseur à la poussée : carburant, vitesse et équation de la fusée.', load: () => import('./lander.js') },
   roverdelay: { title: 'Piloter un rover depuis la Terre', domain: 'Espace', icon: '⌛', desc: 'Jusqu\'à 22 minutes de délai : pourquoi un rover doit devenir autonome.', load: () => import('./roverdelay.js') },
+  vigie: { title: 'VIGIE contre MPPI', domain: 'Recherche', icon: '🛰', desc: 'Notre planificateur, mis au point dans le laboratoire, en course contre la référence actuelle, sous perturbations.', load: () => import('./vigie.js') },
   marsenergy: { title: 'Énergie d\'un rover martien', domain: 'Énergie', icon: '☀', desc: 'Panneaux, batterie, chauffage et tempête de poussière sur 30 sols.', load: () => import('./marsenergy.js') },
 };
 

@@ -1,5 +1,5 @@
 // Service worker : mise en cache pour l'usage hors ligne. Fichier généré par tools/build-sw.mjs.
-const CACHE = 'robomaster-14fba5dc88';
+const CACHE = 'robomaster-b3a76f89bf';
 const ASSETS = [
   "./",
   "index.html",
@@ -20,6 +20,7 @@ const ASSETS = [
   "js/content/m-physique.js",
   "js/content/m-prog.js",
   "js/content/m-robots.js",
+  "js/content/m-vigie.js",
   "js/content/projects.js",
   "js/core/gamify.js",
   "js/core/kit.js",
@@ -54,6 +55,8 @@ const ASSETS = [
   "js/sims/transform.js",
   "js/sims/trig.js",
   "js/sims/vectors.js",
+  "js/sims/vigie-core.js",
+  "js/sims/vigie.js",
   "js/sims/vision.js",
   "js/views/blocks.js",
   "assets/icons/icon-192.png",
