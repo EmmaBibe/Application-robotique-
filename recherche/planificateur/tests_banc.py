@@ -342,5 +342,22 @@ tr = _rr.TrackerKF(); tr(_o(5, 5))
 for k in range(12): tr(np.zeros((0, 7)))
 check('piste non revue depuis plus de 1 s : effacée', 1000 not in tr.s)
 
+print('25. Le filtre de suivi de l\'application (JavaScript) est identique à celui du banc')
+import json as _json, subprocess as _sp, shutil as _sh
+if _sh.which('node'):
+    g = np.random.default_rng(5); seq = []
+    for k in range(120):
+        rows = []
+        if k % 7: rows.append([2 + 0.2 * k + g.normal(0, 0.05), 5 + g.normal(0, 0.05), 0, 0, 0.35, 1, 1000])
+        if 30 < k < 60 or k > 80: rows.append([15 - 0.15 * k + g.normal(0, 0.05), 3 + 0.05 * k, 0, 0, 0.35, 1, 1001])
+        if k == 100: rows.append([10, 10, 0, 0, 0.35, 1, 1000])
+        seq.append(rows)
+    tr = _rr.TrackerKF(); py = [tr(np.array(r, float).reshape(-1, 7)).tolist() for r in seq]
+    js = _json.loads(_sp.check_output(['node', '-e', "import('../../js/sims/vigie-core.js').then(m=>{let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const tr=m.makeTracker();console.log(JSON.stringify(JSON.parse(s).map(r=>tr(r))))})})"], input=_json.dumps(seq).encode()))
+    d = max(abs(a - b) for P, J in zip(py, js) for ra, rb in zip(P, J) for a, b in zip(ra, rb))
+    check('mêmes sorties à 1e-9 près (détections manquées et sauts compris)', d < 1e-9 and sum(map(len, py)) == sum(map(len, js)), f'écart {d:.1e}')
+else:
+    check('node disponible pour comparer avec l\'application', False)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

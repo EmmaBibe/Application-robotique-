@@ -623,18 +623,48 @@ export class RealRobot {
   }
 }
 
-/** Vitesses des personnes estimées à partir des positions mesurées (filtre alpha-bêta). */
+/** Suivi des personnes : filtre de Kalman à vitesse constante avec gestion des pistes. La prédiction couvre
+ *  le temps réellement écoulé depuis la dernière détection (une détection manquée ne crée pas de pic de vitesse),
+ *  un saut impossible relance la piste, une piste non revue depuis 1 s est effacée. Même réglage que le banc Python. */
 export function makeTracker() {
-  const st = new Map();
-  return obs => obs.map(o => {
-    if (!o[5]) return o;
-    const k = st.get(o[6]);
-    if (!k) { st.set(o[6], [[o[0], o[1]], [0, 0]]); return [o[0], o[1], 0, 0, o[4], o[5], o[6]]; }
-    const [p, v] = k, pp = [p[0] + v[0] * DT, p[1] + v[1] * DT], r = [o[0] - pp[0], o[1] - pp[1]];
-    const np2 = [pp[0] + 0.6 * r[0], pp[1] + 0.6 * r[1]], nv = [v[0] + 0.3 * r[0] / DT, v[1] + 0.3 * r[1] / DT];
-    st.set(o[6], [np2, nv]);
-    return [np2[0], np2[1], nv[0], nv[1], o[4], o[5], o[6]];
-  });
+  const RM = 0.05, Q = 1.5 * 1.5, V0 = 2.0, OUBLI = 1.0, PORTE = 3.5;
+  const st = new Map(); let t = 0;
+  const fresh = (z) => ({ x: [z[0], z[1], 0, 0], P: [[RM * RM, 0, 0, 0], [0, RM * RM, 0, 0], [0, 0, V0 * V0, 0], [0, 0, 0, V0 * V0]], t });
+  return obs => {
+    t += DT;
+    const out = obs.map(o => {
+      if (!o[5]) return o;
+      let k = st.get(o[6]); const z = [o[0], o[1]];
+      if (!k) k = fresh(z);
+      else {
+        const d = t - k.t, x = k.x, P = k.P;
+        // prédiction : x = F x, P = F P Fᵀ + Q G Gᵀ (axes x et y indépendants : état (p, v) par axe)
+        const xp = [x[0] + d * x[2], x[1] + d * x[3], x[2], x[3]];
+        const Pp = P.map(r => r.slice());
+        for (const [a, b] of [[0, 2], [1, 3]]) {
+          const paa = P[a][a] + 2 * d * P[a][b] + d * d * P[b][b] + Q * d ** 4 / 4;
+          const pab = P[a][b] + d * P[b][b] + Q * d ** 3 / 2, pbb = P[b][b] + Q * d * d;
+          Pp[a][a] = paa; Pp[a][b] = Pp[b][a] = pab; Pp[b][b] = pbb;
+        }
+        const r = [z[0] - xp[0], z[1] - xp[1]];
+        const sx = Pp[0][0] + RM * RM, sy = Pp[1][1] + RM * RM;
+        if ((r[0] * r[0] / sx + r[1] * r[1] / sy > PORTE * PORTE) && Math.hypot(r[0], r[1]) > 0.5) k = fresh(z);
+        else {
+          for (const [a, b, sa, ra] of [[0, 2, sx, r[0]], [1, 3, sy, r[1]]]) {
+            const ka = Pp[a][a] / sa, kb = Pp[b][a] / sa;
+            xp[a] += ka * ra; xp[b] += kb * ra;
+            const paa = (1 - ka) * Pp[a][a], pab = (1 - ka) * Pp[a][b], pbb = Pp[b][b] - kb * Pp[a][b];
+            Pp[a][a] = paa; Pp[a][b] = Pp[b][a] = pab; Pp[b][b] = pbb;
+          }
+          k = { x: xp, P: Pp, t };
+        }
+      }
+      k.t = t; st.set(o[6], k);
+      return [k.x[0], k.x[1], k.x[2], k.x[3], o[4], o[5], o[6]];
+    });
+    for (const [id, k] of st) if (t - k.t > OUBLI) st.delete(id);
+    return out;
+  };
 }
 
 /** Un épisode complet, sans dessin (utilisé par les tests et par le mode « course »). */
