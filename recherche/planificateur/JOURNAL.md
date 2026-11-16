@@ -353,3 +353,76 @@ Corrections :
 - Décalage d'horaire corrigé, avec un test dédié.
 
 Tests de cohérence : **112 vérifications réussies, 0 échec.**
+
+## Séance 6 · Trois étapes : confirmer scène par scène, chercher la cause réelle des échecs, évaluer sur des mondes neufs
+
+### Erreur trouvée pendant l'étape 1 : routes horodatées empilées
+
+Un essai de VIGIE 4 (porte, graine 1426) tournait depuis plus de vingt minutes. Le temps de calcul par cycle doublait tous les dix cycles. Cause : quand la recherche de routes ne trouvait aucun passage (porte bouchée), `MultiModalMPPI.refresh_modes` gardait les anciens modes tels quels, routes horodatées comprises. VIGIE 3 en ajoutait une à chaque rafraîchissement (croissance linéaire), VIGIE 4 en recalculait une pour chaque mode existant (croissance exponentielle : 6 puis 532 routes en 8 rafraîchissements).
+
+| Portée | Correction |
+|---|---|
+| VIGIE 3, VIGIE 3W, VIGIE 4, VIGIE 4W dans les épisodes où la porte était bouchée, y compris en séance 5 (43 épisodes de VIGIE 4W avec un pic de calcul anormal dans l'étape 1 interrompue, 9 dans `reel_dev4.csv`) | les routes horodatées périmées sont retirées quand aucun passage n'est trouvé ; test 23, qui échoue sur l'ancien code |
+
+L'étape 1 a été relancée entièrement. L'ancien fichier est gardé (`etape1_avant_correctif.csv`). La référence, qui n'a pas de route horodatée, donne exactement les mêmes 360 résultats avant et après : le correctif ne touche qu'aux méthodes visées.
+
+### Étape 1 : porte, angles morts, poursuite (graines 1400 à 1459, robot réaliste, vision complète et perception limitée, 1 440 essais)
+
+| Scène | Référence (MPPI multimodal + Smith) | VIGIE 3 | VIGIE 3W | VIGIE 4W |
+|---|---|---|---|---|
+| porte | 62 % | 68 % (+6,7 ; IC [−2,5 ; +15,8]) | 62 % | 53 % (−8,3 ; IC [−17,5 ; +0,8]) |
+| angles morts | 45 % | 50 % | 52 % | 48 % |
+| poursuite | 74 % | 72 % | 68 % | 75 % |
+
+Aucun écart significatif. Détail : `etape1_analyse.md`.
+
+### Étape 2 : la cause réelle des échecs
+
+**Les mondes sont-ils franchissables ?** L'oracle (MPPI qui connaît le futur) ne fait que 50 % aux angles morts, moins que les méthodes testées : il est mal adapté à un couloir étroit et ne donne pas de borne fiable. Comme les personnes y vont tout droit à vitesse constante sans réagir au robot, on peut calculer une borne exacte : existe-t-il un profil de vitesse le long du couloir qui évite tout le monde ? Programmation dynamique dans (temps, abscisse, vitesse) sur le vrai futur (`faisabilite.py`). Vérifiée sur trois cas connus : couloir vide 11,5 s (11,47 s à la main), personne immobile au milieu : impossible, traversée au mauvais moment : 12,3 s. Une première version arrondissait la position à chaque pas et rendait le robot 7 % trop rapide ; grille rendue exacte avant tout calcul. Résultat : **60 mondes sur 60 franchissables**, même avec les accélérations réelles du robot (1,0 m/s² et freinage 1,6 m/s²). Les échecs viennent donc des méthodes.
+
+**Comment échouent-elles ?** Les 37 collisions en vision complète (référence et VIGIE 3W) rejouées à l'identique : toujours contre une personne, presque toujours avec le robot dans la voie de passage d'une ouverture, lent ou arrêté. Il hésite au milieu de la voie.
+
+**Ablation de la chaîne réaliste** (référence, vision complète, graines 1400 à 1429) :
+
+| Configuration | Succès |
+|---|---|
+| robot idéal | 29 / 30 |
+| robot réaliste, vitesses des personnes exactes | 27 / 30 |
+| robot réaliste, vitesses estimées par le filtre alpha-bêta | 22 / 30 |
+
+L'estimation des vitesses expliquait la plus grande part des pertes. Le filtre alpha-bêta avait des gains très forts (0,6 et 0,3) et aucune gestion des pistes : une détection manquée, une réapparition après masquage ou une sortie d'arène produisaient des vitesses aberrantes. En perception limitée, aux angles morts, 28 % des estimations près du robot étaient fausses de plus de 1 m/s (95e centile : 7,6 m/s).
+
+**Nouveau filtre** (`TrackerKF`) : Kalman à vitesse constante, bruit de mesure celui du capteur (5 cm), prédiction sur le temps réellement écoulé, porte de validation, pistes effacées après 1 s.
+
+| Scène, perception limitée | alpha-bêta | Kalman |
+|---|---|---|
+| angles morts | 1,82 m/s d'erreur moyenne, 28 % > 1 m/s | 0,27 m/s, 4,9 % |
+| porte | 1,16 m/s, 16 % | 0,20 m/s, 2 % |
+| traversée | 0,98 m/s, 15 % | 0,19 m/s, 0,9 % |
+
+En vision complète l'erreur passe de 0,21 à 0,15 m/s, et elle baisse aussi dans les scènes où les personnes changent de direction. Les pics restants sont des personnes qui viennent d'apparaître : une seule mesure ne donne pas leur vitesse. Ce filtre fait partie de la chaîne de perception du robot, commune à toutes les méthodes : c'est une correction du réalisme du banc, pas un apport de VIGIE. Il est utilisé par défaut (`TRACKER=naif` pour l'ancien). L'application utilise le même, avec des sorties identiques à 1e-14 près (test 25).
+
+**Règle du carrefour** (code de la route, R415-2 : ne pas s'engager dans une intersection si l'on risque d'y être immobilisé). Composant qui ne touche qu'à la vitesse : le long de la route choisie, on repère les tronçons que les agents prédits vont balayer dans les 4 s ; on n'y entre que si un démarrage franc les traverse sans conflit, sinon on garde de quoi s'arrêter avant ; déjà dans la zone, on s'arrête si cela évite le conflit. Versions essayées sur les graines 1400 à 1429 :
+
+1. avec obligation de dégager la zone dès qu'on y est : 24 collisions sur 30 pour la référence, contre 8 sans la règle. La zone, élargie par l'incertitude, couvrait presque toujours le robot, qui était poussé en avant, y compris contre les murs (7 collisions contre un mur). Abandonnée.
+2. filtre qui ne fait que ralentir : se déclenche trop rarement (le robot est souvent déjà dans une zone, où cette version ne fait rien).
+3. plus arrêt dans la zone quand cela évite le conflit.
+4. plus « dégager » seulement si s'arrêter mène au conflit, que passer n'y mène pas et que le robot est aligné avec sa route.
+
+Sur 30 mondes les écarts entre versions restaient dans le bruit. Pour ne pas régler la méthode sur ces mondes, la conception a été figée et départagée par une campagne plus large.
+
+**Campagne de développement** (graines 1400 à 1459, porte, angles morts, poursuite, traversée, vision complète et perception limitée, 2 400 essais, nouveau filtre pour tous) :
+
+| Méthode | Toutes scènes | Porte | Écart global / référence |
+|---|---|---|---|
+| référence | 74 % | 78 % | – |
+| VIGIE 3 | 76 % | 88 % (+10,8, significatif) | +2,5 ; IC [−1,9 ; +6,9] |
+| référence + règle | 76 % | 82 % | +1,9 ; IC [−1,2 ; +5,2] |
+| VIGIE 3 + règle (version 4) | 78 % | 91 % (+13,3, significatif) | +3,8 ; IC [−0,6 ; +7,9] |
+| VIGIE 3 + règle, sans dégager | 78 % | 90 % (+12,5, significatif) | +4,4 ; IC [+0,2 ; +8,8] |
+
+Avec le nouveau filtre, la référence passe de 62 à 78 % à la porte. « Dégager » n'apporte rien : abandonné. Version retenue : **VIGIE 5** = VIGIE 3 + règle du carrefour sans dégager. Elle a été choisie parce qu'elle arrive en tête sur ces mondes : son avance y est donc optimiste, d'où l'évaluation sur des mondes neufs. Détail : `etape2_dev_analyse.md`.
+
+En perception limitée, aux angles morts, les collisions restent autour de 60 à 70 % pour toutes les méthodes, même avec des vitesses fiables. La personne heurtée était visible depuis 1,4 s en médiane, et le robot presque arrêté dans 17 cas sur 40.
+
+Tests de cohérence : **148 vérifications réussies, 0 échec.**
