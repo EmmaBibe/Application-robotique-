@@ -118,7 +118,7 @@ for sc in ['foret', 'carrefour', 'couloir', 'piege', 'foule', 'foule_dense', 'ca
 
 print('11. Fichiers de résultats')
 for f in sorted(glob.glob('*.csv')):
-    if f.startswith('js_'): continue
+    if f.startswith('js_') or '_avant_correctif' in f: continue   # archives d'essais interrompus
     R = list(csv.DictReader(open(f)))
     if not R or 'planner' not in R[0]: continue
     cnt = {}
