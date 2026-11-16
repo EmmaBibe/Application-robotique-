@@ -307,7 +307,7 @@ class MultiModalMPPI(MPPI):
             i = int(np.argmin(J))
         if self.last is not None and i != self.last: self.switches += 1
         self.last = i
-        u = Us[i, 0].copy()
+        u = Us[i, 0].copy(); self.chosen_g = self.modes[i]['g']
         if self.tau:
             v0 = u[0]; u[0] = tau_governor(s, u, obs)
             self.tau_hits = getattr(self, 'tau_hits', 0) + (u[0] < v0 - 1e-9)
@@ -1215,7 +1215,7 @@ class MMST(MultiModalMPPI):
         Us = np.stack([m['U'] for m in self.modes])
         J = self.eval_cost(s, Us, obs)
         i = int(np.argmin(J))
-        u = Us[i, 0].copy()
+        u = Us[i, 0].copy(); self.chosen_g = self.modes[i]['g']
         for m in self.modes: m['U'] = np.roll(m['U'], -1, 0); m['U'][-1] = m['U'][-2]
         return u
 
@@ -1520,7 +1520,7 @@ class Vigie4Core(MultiModalMPPI):
                 m['U'] = self.mppi_step(s, m['U'], obs, None, m['g'])
         Us = np.stack([m['U'] for m in self.modes])
         J = self.eval_cost(s, Us, obs)
-        i = int(np.argmin(J)); u = Us[i, 0].copy()
+        i = int(np.argmin(J)); u = Us[i, 0].copy(); self.chosen_g = self.modes[i]['g']
         for m in self.modes: m['U'] = np.roll(m['U'], -1, 0); m['U'][-1] = m['U'][-2]
         return u
 
@@ -1637,3 +1637,102 @@ class VigieQuatreW(WheelModelMixin, PhantomMixin, SmithMixin, Vigie4Core):
 
 
 ALL += [Vigie3W, VigieQuatreW]
+
+
+# ---------------------------------------------------------------- règle du carrefour
+class CarrefourMixin:
+    """Règle du carrefour, empruntée au code de la route (R415-2) : ne pas s'engager dans une zone de passage
+    si l'on risque d'y être immobilisé. Le long de la route choisie, on repère les tronçons que les agents
+    prédits vont balayer dans les prochaines secondes. On n'y entre que si un démarrage franc permet de les
+    traverser sans conflit ; sinon la vitesse est limitée pour pouvoir s'arrêter avant. Filtre qui ne fait
+    que ralentir (une première version qui forçait aussi à dégager la zone poussait le robot contre les murs) ;
+    la direction reste celle du planificateur."""
+    CF_H, CF_L, CF_DS = 4.0, 5.0, 0.1       # horizon (s), longueur de route examinée (m), pas le long de la route
+    CF_ACC, CF_DEC, CF_TAU = 1.0, 1.5, 0.15  # accélération supposée pour passer, freinage, retard de réaction
+    CF_M0, CF_M1 = 0.15, 0.10                # marge (m) et élargissement par seconde de prédiction
+    CF_DEGAGE = True                         # dégager la zone quand s'y arrêter mènerait au conflit
+
+    def reset(self, static, goal):
+        super().reset(static, goal); self._cf_v = 0.0; self.cf_n = 0
+
+    def _cf_path(self, s):
+        g = getattr(self, 'chosen_g', None)
+        if g is None or not isinstance(g, np.ndarray) or len(g) < 2: return None
+        i0 = int(np.argmin(np.hypot(g[:, 0] - s[0], g[:, 1] - s[1])))
+        P = np.vstack([s[:2], g[i0 + 1:]])
+        seg = np.hypot(*np.diff(P, axis=0).T); L = np.r_[0, np.cumsum(seg)]
+        if L[-1] < 0.3: return None
+        sg = np.arange(0, min(L[-1], self.CF_L) + 1e-9, self.CF_DS)
+        return np.stack([np.interp(sg, L, P[:, 0]), np.interp(sg, L, P[:, 1])], 1)
+
+    def _cf_occ(self, path, obs):
+        A = obs[obs[:, 5] > 0]
+        K = int(round(self.CF_H / DT))
+        occ = np.zeros((K + 1, len(path)), bool)
+        if not len(A): return occ
+        for k in range(K + 1):
+            t = k * DT
+            ax_ = A[:, 0] + A[:, 2] * t; ay_ = A[:, 1] + A[:, 3] * t
+            rr = A[:, 4] + R_ROB + self.CF_M0 + self.CF_M1 * t
+            occ[k] = (np.hypot(path[:, 0, None] - ax_[None], path[:, 1, None] - ay_[None]) < rr[None]).any(1)
+        return occ
+
+    def _cf_profile(self, v0, a, n):
+        """Abscisses (indices de cellule) aux instants k = 1..K pour une accélération constante a (bornée)."""
+        K = int(round(self.CF_H / DT)); v = v0; x = 0.0; out = []
+        for _ in range(K):
+            v2 = float(np.clip(v + a * DT, 0.0, VMAX)); x += (v + v2) / 2 * DT; v = v2
+            out.append(min(n - 1, int(x / self.CF_DS)) if x / self.CF_DS < n else -1)   # -1 : sorti de la route examinée
+        return out
+
+    def _cf_first_conflict(self, occ, prof):
+        for k, i in enumerate(prof):
+            if i >= 0 and occ[k + 1, i]: return k + 1
+        return None
+
+    def act(self, t, s, obs):
+        u = np.array(super().act(t, s, obs), float)
+        v0 = self._cf_v
+        path = self._cf_path(s)
+        if path is not None and len(obs):
+            occ = self._cf_occ(path, obs); n = len(path)
+            swept = occ.any(0)
+            cg = self._cf_first_conflict(occ, self._cf_profile(v0, self.CF_ACC, n))
+            if cg is not None and not swept[0]:
+                # un démarrage franc ne passe pas : on garde de quoi s'arrêter avant la zone
+                go = self._cf_profile(v0, self.CF_ACC, n); i_in = go[cg - 1]
+                while i_in > 0 and swept[i_in - 1]: i_in -= 1
+                s_in = i_in * self.CF_DS - 0.1
+                b = self.CF_DEC * self.CF_TAU
+                vcap = max(0.0, -b + np.sqrt(b * b + 2 * self.CF_DEC * max(0.0, s_in)))
+                if u[0] > vcap: u[0] = vcap; self.cf_n += 1
+            elif cg is not None:
+                # déjà dans la zone et passer ne marche pas : s'arrêter si cela évite le conflit, sinon laisser faire
+                if self._cf_first_conflict(occ, self._cf_profile(v0, -self.CF_DEC, n)) is None:
+                    u[0] = 0.0; self.cf_n += 1
+            elif swept[0] and self.CF_DEGAGE:
+                # dans la zone, passer est sans conflit : si s'arrêter mène au conflit, on dégage
+                # (seulement si le robot est aligné avec sa route, pour ne pas foncer dans un mur en tournant)
+                hd = np.arctan2(path[min(3, n - 1), 1] - path[0, 1], path[min(3, n - 1), 0] - path[0, 0])
+                if abs((hd - s[2] + np.pi) % (2 * np.pi) - np.pi) < 0.5 and \
+                        self._cf_first_conflict(occ, self._cf_profile(v0, -self.CF_DEC, n)) is not None:
+                    u[0] = max(u[0], min(VMAX, v0 + self.CF_ACC * DT)); self.cf_n += 1
+        self._cf_v = float(np.clip(np.clip(u[0], 0, VMAX), v0 - AMAX * DT, v0 + AMAX * DT))
+        return u
+
+
+class MMSmithCarrefour(SmithMixin, CarrefourMixin, MultiModalMPPI):
+    name = 'MPPI multimodal + Smith + règle du carrefour'
+
+
+class Vigie3Carrefour(PhantomMixin, SmithMixin, CarrefourMixin, TubeMixin, MMST):
+    name = 'VIGIE 3 + règle du carrefour (proposé)'
+
+
+
+class Vigie3CarrefourSansDegager(Vigie3Carrefour):
+    name = 'VIGIE 3 + règle du carrefour, sans dégager'
+    CF_DEGAGE = False
+
+
+ALL += [MMSmithCarrefour, Vigie3Carrefour, Vigie3CarrefourSansDegager]

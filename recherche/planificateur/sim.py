@@ -258,7 +258,8 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
     robot = tracker = None
     if C.get('reel'):
         import robot_reel
-        robot = robot_reel.RealRobot(s, np.random.default_rng(777 + world.seed)); tracker = robot_reel.Tracker()
+        robot = robot_reel.RealRobot(s, np.random.default_rng(777 + world.seed))
+        tracker = robot_reel.Tracker() if os.environ.get('TRACKER') == 'naif' else robot_reel.TrackerKF()   # TRACKER=naif : ancien filtre alpha-bêta
         C['lat'] = C.get('lat', 0) + 1          # chaîne lidar + traitement : une période de retard de plus
     known = world.static.copy()
     if C.get('unknown'): known = known[np.hypot(known[:, 0] - s[0], known[:, 1] - s[1]) - known[:, 2] < C.get('range', 6.0)]
@@ -279,7 +280,7 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
         if robot is not None:
             meas = robot.est.copy()                                   # pose estimée (odométrie + recalage lidar)
             obs = world.obstacles(noise=0.05, robot=s, rng_range=C.get('range'), occl=C.get('occl', False), drop=C.get('drop', 0.0))
-            obs = tracker(obs)                                        # vitesses estimées, pas données
+            if not os.environ.get('VITESSES_EXACTES'): obs = tracker(obs)   # vitesses estimées, pas données (diagnostic : VITESSES_EXACTES=1)
         else:
             meas = s + (rng.normal(0, [0.03, 0.03, 0.02]) if perturb else 0)
             obs = world.obstacles(noise=0.05 if perturb else 0.0, robot=s, rng_range=C.get('range'), occl=C.get('occl', False), drop=C.get('drop', 0.0))

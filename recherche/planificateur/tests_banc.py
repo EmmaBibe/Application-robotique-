@@ -311,5 +311,36 @@ for C in [_pl.MMST, _pl.Vigie3, _pl.Vigie3W, _pl.VigieQuatre, _pl.VigieQuatreW]:
         _pl.diverse_guides = _dg
     check(f'{C.name} : nombre de routes borné ({n0} au départ)', n0 >= 2 and max(sizes) <= n0, str(sizes))
 
+print('24. Suivi des personnes (Kalman + gestion des pistes)')
+import robot_reel as _rr
+def _o(x, y, i=1000): return np.array([[x, y, 0, 0, 0.35, 1, i]], float)
+g = np.random.default_rng(3)
+def _err(T, seed=3):
+    g = np.random.default_rng(seed); tr = T(); e = []
+    for k in range(200):
+        out = tr(_o(2 + 2.0 * 0.1 * k + g.normal(0, 0.05), 5 + g.normal(0, 0.05)))
+        if k >= 10: e.append(np.hypot(out[0, 2] - 2.0, out[0, 3]))
+    return np.mean(e)
+ek, ea = _err(_rr.TrackerKF), _err(_rr.Tracker)
+check('vitesse constante (2 m/s, bruit 5 cm) : moins d\'erreur que l\'ancien filtre et < 0,2 m/s', ek < ea and ek < 0.2, f'{ek:.3f} contre {ea:.3f} m/s')
+tr = _rr.TrackerKF(); vmax = 0
+for k in range(40):
+    obs = _o(2 + 0.2 * k, 5) if k % 5 else np.zeros((0, 7))      # une détection sur cinq manquée
+    out = tr(obs, 0.1)
+    if k > 10 and len(out): vmax = max(vmax, abs(out[0, 2] - 2.0))
+check('détections manquées : pas de pic de vitesse (écart < 0,3 m/s)', vmax < 0.3, f'{vmax:.2f} m/s')
+tr = _rr.TrackerKF()
+for k in range(20): tr(_o(2 + 0.2 * k, 5))
+for k in range(20): tr(np.zeros((0, 7)))                          # masquée 2 s
+out = tr(_o(2 + 0.2 * 40, 5))
+check('réapparition après 2 s de masquage : vitesse plausible (< 2,5 m/s)', np.hypot(*out[0, 2:4]) < 2.5, f'{np.hypot(*out[0, 2:4]):.2f} m/s')
+tr = _rr.TrackerKF()
+for k in range(20): tr(_o(10, 19.0 + 0.1 * k))
+out = tr(_o(10, -0.4))                                            # sort par le haut, revient par le bas
+check('saut impossible (sortie d\'arène) : piste relancée, pas de vitesse aberrante', np.hypot(*out[0, 2:4]) < 2.5, f'{np.hypot(*out[0, 2:4]):.2f} m/s')
+tr = _rr.TrackerKF(); tr(_o(5, 5))
+for k in range(12): tr(np.zeros((0, 7)))
+check('piste non revue depuis plus de 1 s : effacée', 1000 not in tr.s)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

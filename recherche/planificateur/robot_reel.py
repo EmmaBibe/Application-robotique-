@@ -95,3 +95,38 @@ class Tracker:
             p = pp + 0.6 * r; v = v + 0.3 * r / dt
             self.s[i] = [p, v]; out[k, :2] = p; out[k, 2:4] = v
         return out
+
+
+class TrackerKF:
+    """Suivi des personnes par filtre de Kalman à vitesse constante, avec gestion des pistes :
+    prédiction sur le temps réellement écoulé depuis la dernière détection (une détection manquée ne crée pas
+    de pic de vitesse), porte de validation (un saut impossible, comme une réapparition après masquage,
+    relance la piste au lieu de fausser la vitesse), effacement des pistes non revues depuis 1 s.
+    Bruit de mesure : celui du capteur (5 cm). Bruit de modèle : accélérations de piéton (1,5 m/s²)."""
+    R_MES, SIG_A, V0_SIG, OUBLI, PORTE = 0.05, 1.5, 2.0, 1.0, 3.5
+
+    def __init__(self): self.s = {}; self.t = 0.0
+
+    def __call__(self, obs, dt=0.1):
+        self.t += dt; out = obs.copy(); vus = set()
+        for k, o in enumerate(obs):
+            if o[5] <= 0: continue
+            i = int(o[6]); z = o[:2].astype(float); vus.add(i)
+            if i in self.s:
+                x, P, t0 = self.s[i]; d = self.t - t0
+                F = np.eye(4); F[0, 2] = F[1, 3] = d
+                q = self.SIG_A ** 2; G = np.array([[d * d / 2, 0], [0, d * d / 2], [d, 0], [0, d]])
+                x = F @ x; P = F @ P @ F.T + q * G @ G.T
+                S = P[:2, :2] + self.R_MES ** 2 * np.eye(2); r = z - x[:2]
+                if r @ np.linalg.solve(S, r) > self.PORTE ** 2 and np.hypot(*r) > 0.5:
+                    i_new = True
+                else:
+                    Kg = P[:, :2] @ np.linalg.inv(S); x = x + Kg @ r; P = (np.eye(4) - Kg[:, :2] @ np.eye(2, 4)) @ P
+                    i_new = False
+            else: i_new = True
+            if i_new:
+                x = np.array([z[0], z[1], 0.0, 0.0]); P = np.diag([self.R_MES ** 2] * 2 + [self.V0_SIG ** 2] * 2)
+            self.s[i] = (x, P, self.t)
+            out[k, :2] = x[:2]; out[k, 2:4] = x[2:]
+        for i in [i for i, (_, _, t0) in self.s.items() if self.t - t0 > self.OUBLI]: del self.s[i]
+        return out

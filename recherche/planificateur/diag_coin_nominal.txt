@@ -1,0 +1,38 @@
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1403, 'x': np.float64(5.89), 'y': np.float64(10.06), 'v_fin': 0.1, 'cible': 'personne', 'vy_pers': np.float64(1.83), 'cote': 'devant', 't': 11.8}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1404, 'x': np.float64(10.12), 'y': np.float64(9.92), 'v_fin': 0.02, 'cible': 'personne', 'vy_pers': np.float64(-1.67), 'cote': 'devant', 't': 21.8}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1407, 'x': np.float64(14.48), 'y': np.float64(9.8), 'v_fin': 0.17, 'cible': 'personne', 'vy_pers': np.float64(-1.99), 'cote': 'devant', 't': 23.1}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1414, 'x': np.float64(6.43), 'y': np.float64(9.86), 'v_fin': 0.54, 'cible': 'personne', 'vy_pers': np.float64(-1.75), 'cote': 'devant', 't': 11.0}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1419, 'x': np.float64(10.31), 'y': np.float64(9.72), 'v_fin': 0.13, 'cible': 'personne', 'vy_pers': np.float64(-1.94), 'cote': 'devant', 't': 22.2}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1426, 'x': np.float64(13.84), 'y': np.float64(9.95), 'v_fin': 0.17, 'cible': 'personne', 'vy_pers': np.float64(2.03), 'cote': 'devant', 't': 30.3}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1429, 'x': np.float64(14.29), 'y': np.float64(9.98), 'v_fin': 0.05, 'cible': 'personne', 'vy_pers': np.float64(-2.17), 'cote': 'devant', 't': 31.8}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1433, 'x': np.float64(13.87), 'y': np.float64(9.99), 'v_fin': 0.04, 'cible': 'personne', 'vy_pers': np.float64(-2.12), 'cote': 'devant', 't': 27.0}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1434, 'x': np.float64(13.88), 'y': np.float64(10.0), 'v_fin': 0.15, 'cible': 'personne', 'vy_pers': np.float64(1.8), 'cote': 'devant', 't': 23.8}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1436, 'x': np.float64(6.4), 'y': np.float64(10.2), 'v_fin': 0.9, 'cible': 'personne', 'vy_pers': np.float64(1.62), 'cote': 'flanc', 't': 11.2}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1435, 'x': np.float64(13.62), 'y': np.float64(9.96), 'v_fin': 0.04, 'cible': 'personne', 'vy_pers': np.float64(-1.97), 'cote': 'devant', 't': 28.7}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1448, 'x': np.float64(6.74), 'y': np.float64(10.58), 'v_fin': 0.98, 'cible': 'personne', 'vy_pers': np.float64(1.94), 'cote': 'derriere', 't': 11.8}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1449, 'x': np.float64(6.09), 'y': np.float64(9.82), 'v_fin': 0.31, 'cible': 'personne', 'vy_pers': np.float64(1.98), 'cote': 'devant', 't': 9.3}
+{'planner': 'VIGIE 3 + modèle par rou', 'seed': 1454, 'x': np.float64(11.16), 'y': np.float64(11.58), 'v_fin': 1.12, 'cible': 'personne', 'vy_pers': np.float64(-1.7), 'cote': 'derriere', 't': 21.9}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1402, 'x': np.float64(6.46), 'y': np.float64(10.42), 'v_fin': 0.57, 'cible': 'personne', 'vy_pers': np.float64(1.87), 'cote': 'devant', 't': 13.6}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1403, 'x': np.float64(5.73), 'y': np.float64(9.95), 'v_fin': 0.07, 'cible': 'personne', 'vy_pers': np.float64(1.83), 'cote': 'devant', 't': 11.9}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1404, 'x': np.float64(10.34), 'y': np.float64(9.51), 'v_fin': 0.47, 'cible': 'personne', 'vy_pers': np.float64(-1.67), 'cote': 'devant', 't': 21.8}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1407, 'x': np.float64(14.71), 'y': np.float64(10.26), 'v_fin': 1.05, 'cible': 'personne', 'vy_pers': np.float64(1.88), 'cote': 'flanc', 't': 25.2}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1408, 'x': np.float64(9.84), 'y': np.float64(9.96), 'v_fin': 0.17, 'cible': 'personne', 'vy_pers': np.float64(-1.7), 'cote': 'devant', 't': 17.4}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1413, 'x': np.float64(6.3), 'y': np.float64(9.64), 'v_fin': 0.31, 'cible': 'personne', 'vy_pers': np.float64(-2.05), 'cote': 'devant', 't': 11.0}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1414, 'x': np.float64(6.52), 'y': np.float64(9.65), 'v_fin': 0.78, 'cible': 'personne', 'vy_pers': np.float64(-1.75), 'cote': 'flanc', 't': 11.1}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1429, 'x': np.float64(9.74), 'y': np.float64(10.07), 'v_fin': 0.04, 'cible': 'personne', 'vy_pers': np.float64(-2.18), 'cote': 'devant', 't': 20.0}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1433, 'x': np.float64(7.03), 'y': np.float64(10.15), 'v_fin': 0.67, 'cible': 'personne', 'vy_pers': np.float64(1.64), 'cote': 'derriere', 't': 13.2}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1435, 'x': np.float64(14.8), 'y': np.float64(9.68), 'v_fin': 1.0, 'cible': 'personne', 'vy_pers': np.float64(-1.97), 'cote': 'derriere', 't': 28.7}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1436, 'x': np.float64(14.91), 'y': np.float64(10.03), 'v_fin': 1.15, 'cible': 'personne', 'vy_pers': np.float64(-2.13), 'cote': 'flanc', 't': 25.0}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1439, 'x': np.float64(10.86), 'y': np.float64(14.02), 'v_fin': 1.15, 'cible': 'personne', 'vy_pers': np.float64(1.86), 'cote': 'derriere', 't': 17.9}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1443, 'x': np.float64(10.61), 'y': np.float64(10.53), 'v_fin': 0.94, 'cible': 'personne', 'vy_pers': np.float64(2.07), 'cote': 'flanc', 't': 21.8}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1445, 'x': np.float64(9.98), 'y': np.float64(9.67), 'v_fin': 0.34, 'cible': 'personne', 'vy_pers': np.float64(-2.16), 'cote': 'devant', 't': 22.0}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1444, 'x': np.float64(10.85), 'y': np.float64(10.49), 'v_fin': 0.95, 'cible': 'personne', 'vy_pers': np.float64(-1.74), 'cote': 'derriere', 't': 27.9}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1447, 'x': np.float64(7.18), 'y': np.float64(10.17), 'v_fin': 1.22, 'cible': 'personne', 'vy_pers': np.float64(2.03), 'cote': 'derriere', 't': 11.4}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1450, 'x': np.float64(5.75), 'y': np.float64(10.79), 'v_fin': 0.33, 'cible': 'personne', 'vy_pers': np.float64(1.82), 'cote': 'devant', 't': 12.4}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1452, 'x': np.float64(11.1), 'y': np.float64(8.21), 'v_fin': 1.04, 'cible': 'personne', 'vy_pers': np.float64(-1.98), 'cote': 'derriere', 't': 20.8}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1453, 'x': np.float64(5.94), 'y': np.float64(9.61), 'v_fin': 0.63, 'cible': 'personne', 'vy_pers': np.float64(2.11), 'cote': 'devant', 't': 13.0}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1456, 'x': np.float64(6.64), 'y': np.float64(10.06), 'v_fin': 0.83, 'cible': 'personne', 'vy_pers': np.float64(-1.74), 'cote': 'devant', 't': 11.0}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1457, 'x': np.float64(6.13), 'y': np.float64(10.19), 'v_fin': 0.28, 'cible': 'personne', 'vy_pers': np.float64(-2.13), 'cote': 'devant', 't': 12.7}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1458, 'x': np.float64(10.76), 'y': np.float64(10.82), 'v_fin': 0.93, 'cible': 'personne', 'vy_pers': np.float64(2.0), 'cote': 'derriere', 't': 18.8}
+{'planner': 'MPPI multimodal + prédic', 'seed': 1459, 'x': np.float64(6.09), 'y': np.float64(12.51), 'v_fin': 1.12, 'cible': 'personne', 'vy_pers': np.float64(1.9), 'cote': 'devant', 't': 14.1}
+37 collisions rejouées, 37 reproduites
