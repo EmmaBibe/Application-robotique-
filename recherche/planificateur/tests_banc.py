@@ -130,8 +130,9 @@ for f in sorted(glob.glob('*.csv')):
     check(f'{f} : chaque méthode a joué exactement les mêmes mondes, sans doublon', same and not dup, f'{len(R)} lignes')
 
 print('12. Séparation développement / évaluation')
-plages = {'final_v2.csv': (600, 620), 'final_v3.csv': (900, 940)}
-dev = ['dev_v1.csv', 'dev_v2.csv', 'dev_v3.csv', 'dev_v4.csv', 'dur_v1.csv', 'dur_v2.csv', 'reel_dev1.csv', 'reel_dev2.csv']
+plages = {'final_v2.csv': (600, 620), 'final_v3.csv': (900, 940), 'final_etape3.csv': (3000, 3060)}
+# tout autre fichier de résultats compte comme développement (réglages, diagnostics, ablations)
+dev = [f for f in glob.glob('*.csv') if f not in plages and not f.startswith('js_') and not f.startswith('ablation')]
 dev_seeds = set()
 for f in dev:
     if os.path.exists(f): dev_seeds |= {int(r['seed']) for r in csv.DictReader(open(f))}

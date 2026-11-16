@@ -1735,4 +1735,12 @@ class Vigie3CarrefourSansDegager(Vigie3Carrefour):
     CF_DEGAGE = False
 
 
-ALL += [MMSmithCarrefour, Vigie3Carrefour, Vigie3CarrefourSansDegager]
+
+class Vigie5(Vigie3CarrefourSansDegager):
+    """VIGIE 5 : VIGIE 3 (route espace-temps à tubes calibrés, routes topologiques, prédicteur de Smith, vitesse
+    prudente aux angles morts) + règle du carrefour (ne pas s'engager dans une zone de passage qu'on ne peut pas
+    traverser sans conflit). Version retenue à l'issue de l'étape 2 (campagne de développement etape2_dev.csv)."""
+    name = 'VIGIE 5 (proposé)'
+
+
+ALL += [MMSmithCarrefour, Vigie3Carrefour, Vigie3CarrefourSansDegager, Vigie5]
