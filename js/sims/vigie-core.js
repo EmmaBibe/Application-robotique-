@@ -485,6 +485,8 @@ function phantomSpeed(s, obs, sense = 5) {
   return vmax;
 }
 
+// Version expérimentale non utilisée par l'application : son modèle interne est la v1 (sans prise en compte du retard),
+// dont un défaut a été mis en évidence dans le laboratoire. Voir recherche/planificateur/JOURNAL.md, séance 5.
 export class Vigie3 extends Vigie {
   constructor(seed = 0) { super(seed); this.name = 'VIGIE 3'; this.K = 3; this.N = 96; this.occl = false; }
   reset(stat, goal) {

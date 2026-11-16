@@ -472,12 +472,17 @@ class OracleMPPI(MPPI):
 
     def bind(self, world): self.world = world
 
-    def future(self, obs):
+    def future(self, obs, s=None):
+        """Vrai futur des agents. Ceux qui réagissent au robot (poursuivants, agents réactifs) sont
+        simulés face à la trajectoire que le robot prévoit de suivre (son plan actuel) : exact si le robot
+        suit son plan, approché sinon."""
         import copy
         w = copy.deepcopy(self.world); t = getattr(w, 't', 0.0)
+        path = rollout(s, self.U)[:, :2] if s is not None else None
+        react = getattr(self.world, 'react', False)
         P = []
-        for _ in range(self.T):
-            w.step_obstacles(t); t += DT
+        for k in range(self.T):
+            w.step_obstacles(t, robot=None if path is None else path[k], react=react); t += DT
             P.append(w.true_obstacles()[:, :2])
         return np.array(P)
 
@@ -489,7 +494,7 @@ class OracleMPPI(MPPI):
         return c + 8.0 * nav[..., -1] + 0.4 * nav.sum(-1) + 0.05 * (U[..., 1] ** 2).sum(-1)
 
     def act(self, t, s, obs):
-        self._P = self.future(obs)
+        self._P = self.future(obs, s)
         self.U = self.mppi_step(s, self.U, obs, iters=2)
         u = self.U[0].copy(); self.U = np.roll(self.U, -1, 0); self.U[-1] = self.U[-2]
         return u
@@ -828,6 +833,8 @@ ALL += [Vigie, VigieNoOption, VigieNoSurprise, VigieNoReflex, VigieNoInertia, Vi
 
 class Vigie4(Vigie):
     name = 'VIGIE à 4 routes'; K = 4; N = 96
+
+
 
 
 ALL += [Vigie4]
@@ -1184,7 +1191,7 @@ class MMST(MultiModalMPPI):
         gt = spacetime_plan2(s, self.goal, obs, self.D)
         self.gt = gt
         if gt is not None and len(gt) > 3:
-            self.modes.append(dict(g=gt, U=timed_controls(s, gt, self.T), st=True))
+            self.modes.append(dict(g=gt, U=timed_controls(s, gt, self.T), st=True, neuf=True))
 
     def act(self, t, s, obs):
         if self.k % 10 == 0 or not self.modes: self.refresh_modes(s, obs)
@@ -1192,7 +1199,7 @@ class MMST(MultiModalMPPI):
         if not self.modes: return 0.0, 0.0
         for m in self.modes:
             if m.get('st'):
-                if len(m['g']) > 1: m['g'] = m['g'][1:]
+                if len(m['g']) > 1 and not m.pop('neuf', False): m['g'] = m['g'][1:]   # pas de décalage au cycle de création
                 for _ in range(1):
                     eps = self.rng.normal(0, 1, (self.N, self.T, 2)) * self.SIG
                     U = m['U'][None] + eps; U[0] = m['U']; U[1] = 0
@@ -1221,7 +1228,7 @@ class TubeMixin:
         ua = 0.02 + 0.30 * self.tr.u(obs)
         gt = spacetime_plan2(s, self.goal, obs, self.D, unc_agent=ua)
         if gt is not None and len(gt) > 3:
-            self.modes.append(dict(g=gt, U=timed_controls(s, gt, self.T), st=True))
+            self.modes.append(dict(g=gt, U=timed_controls(s, gt, self.T), st=True, neuf=True))
 
     def act(self, t, s, obs):
         if not hasattr(self, 'tr'): self.tr = SurpriseTracker()
@@ -1396,3 +1403,234 @@ class Vigie2C(InternalModelMixin, VigieV2):
 
 
 ALL += [Vigie2C]
+
+
+# =====================================================================================
+# Séance 5 : profil de vitesse espace-temps compatible avec la dynamique réelle
+# =====================================================================================
+def speed_profile(path, obs, ua, acc=1.2, dec=1.6, vmax=VMAX, a_lat=1.0, v0=0.0, H=8.0, dt=0.2, ds=0.2, margin=0.25):
+    """Décomposition chemin-vitesse : le chemin (x, y) est fixé, on cherche quand y passer.
+    Programmation dynamique dans (temps, abscisse le long du chemin, vitesse) avec les accélérations
+    atteignables par le robot (acc, dec), la vitesse limitée dans les virages, et les agents prédits
+    (tube qui s'élargit selon l'imprévisibilité ua de chacun). Renvoie la trajectoire horodatée la plus
+    avancée possible sans conflit, ou None."""
+    seg = np.hypot(*np.diff(path, axis=0).T); L = np.r_[0, np.cumsum(seg)]
+    if L[-1] < 0.3: return None
+    sg = np.arange(0, L[-1] + 1e-9, ds); n = len(sg)
+    px = np.interp(sg, L, path[:, 0]); py = np.interp(sg, L, path[:, 1])
+    # vitesse maximale selon la courbure locale
+    hd = np.unwrap(np.arctan2(np.gradient(py), np.gradient(px)))
+    kappa = np.abs(np.gradient(hd)) / ds
+    vcap = np.minimum(vmax, np.sqrt(a_lat / np.maximum(kappa, 1e-3)))
+    K = int(H / dt)
+    mob = obs[:, 5] > 0; A = obs[mob]; U_ = ua[mob] if ua is not None else np.full(mob.sum(), 0.05)
+    occ = np.zeros((K + 1, n), bool)
+    if len(A):
+        for k in range(K + 1):
+            t = k * dt
+            ax_ = A[:, 0] + A[:, 2] * t; ay_ = A[:, 1] + A[:, 3] * t
+            rr = A[:, 4] + R_ROB + margin + U_ * t
+            d = np.hypot(px[:, None] - ax_[None], py[:, None] - ay_[None]) - rr[None]
+            occ[k] = (d < 0).any(1)
+    vs = np.arange(0, vmax + 1e-9, 0.1); nv = len(vs)
+    accs = np.array([-dec, -dec / 2, 0, acc / 2, acc])
+    reach = np.zeros((K + 1, n, nv), bool); par = np.full((K + 1, n, nv, 2), -1, int)
+    sval = np.zeros((K + 1, n, nv)); vval = np.zeros((K + 1, n, nv))   # position et vitesse continues (pas arrondies)
+    j0 = 0; v0c = float(np.clip(v0, 0, vmax)); v0i = int(round(v0c / 0.1))
+    if occ[0, j0]: occ[0, j0] = False
+    reach[0, j0, v0i] = True; sval[0, j0, v0i] = 0.0; vval[0, j0, v0i] = v0c
+    goal_hit = None
+    for k in range(K):
+        js, vis = np.nonzero(reach[k])
+        for j, vi in zip(js, vis):
+            v = vval[k, j, vi]; s0 = sval[k, j, vi]
+            for a in accs:
+                v2 = float(np.clip(v + a * dt, 0, vmax))
+                s2 = min(L[-1], s0 + (v + v2) / 2 * dt)
+                j2 = min(n - 1, int(s2 / ds))
+                jlo = int(s0 / ds)
+                if v2 > vcap[j2] + 1e-9: continue
+                if occ[k + 1, jlo:j2 + 1].any() or occ[k, jlo:j2 + 1].any(): continue   # balayage des cases traversées
+                vi2 = int(round(v2 / 0.1))
+                if not reach[k + 1, j2, vi2] or s2 > sval[k + 1, j2, vi2]:
+                    reach[k + 1, j2, vi2] = True; par[k + 1, j2, vi2] = (j, vi); sval[k + 1, j2, vi2] = s2; vval[k + 1, j2, vi2] = v2
+                    if s2 >= L[-1] - 1e-6 and goal_hit is None: goal_hit = (k + 1, j2, vi2)
+        if goal_hit: break
+    if goal_hit: kf, jf, vf = goal_hit
+    else:
+        kf = K
+        while kf > 0 and not reach[kf].any(): kf -= 1
+        if kf == 0: return None
+        js, vis = np.nonzero(reach[kf]); b = np.lexsort((vis, js))[-1]; jf, vf = js[b], vis[b]
+    seq = [(kf, jf, vf)]
+    while seq[-1][0] > 0:
+        k, j, vi = seq[-1]; pj, pv = par[k, j, vi]; seq.append((k - 1, pj, pv))
+    seq = seq[::-1]
+    tk = np.array([q[0] * dt for q in seq]); sk = np.array([sval[q] for q in seq]); vk = np.array([vval[q] for q in seq])
+    tq = np.arange(1, int(round(tk[-1] / DT)) + 1) * DT
+    # interpolation exacte : accélération constante entre deux points du plan
+    idx = np.clip(np.searchsorted(tk, tq, side='right') - 1, 0, len(tk) - 2)
+    tau = tq - tk[idx]; acc_k = (vk[idx + 1] - vk[idx]) / dt
+    sq = np.minimum(sk[idx] + vk[idx] * tau + 0.5 * acc_k * tau ** 2, L[-1])
+    return np.stack([np.interp(sq, L, path[:, 0]), np.interp(sq, L, path[:, 1])], 1)
+
+
+class Vigie4Core(MultiModalMPPI):
+    """Cœur de VIGIE 4 : routes topologiques + pour chacune, un profil de vitesse espace-temps calculé avec les
+    accélérations identifiées en ligne et des tubes calibrés sur l'imprévisibilité de chaque agent."""
+    name = 'VIGIE 4 (cœur)'
+
+    def sample_cost_t(self, s, U, obs, gt):
+        tr = self._roll(s, U); c = self.eval_cost(s, U, obs)
+        n = min(self.T, len(gt)); return c + 2.0 * ((tr[..., :n, :2] - gt[:n]) ** 2).sum(-1).sum(-1)
+
+    def refresh_modes(self, s, obs):
+        MultiModalMPPI.refresh_modes(self, s, obs)
+        if not hasattr(self, 'tr'): self.tr = SurpriseTracker()
+        ua = 0.02 + 0.30 * self.tr.u(obs)
+        tv, tw, av, aw = getattr(self, 'im_par', [0.1, 0.1, AMAX, 4.0])
+        acc = min(av, 2.0) * 0.8                         # marge sur l'accélération identifiée
+        timed = []
+        for m in self.modes:
+            g = np.vstack([s[:2], m['g']])
+            gt = speed_profile(g, obs, ua, acc=acc, dec=acc * 1.3, v0=max(0.0, getattr(self, 'im_v', 0.0)))
+            if gt is not None and len(gt) > 3:
+                timed.append(dict(g=gt, U=timed_controls(s, gt, self.T), st=True, neuf=True))
+        self.modes += timed
+
+    def act(self, t, s, obs):
+        if not hasattr(self, 'tr'): self.tr = SurpriseTracker()
+        self.tr.update(obs, t)
+        if self.k % 10 == 0 or not self.modes: self.refresh_modes(s, obs)
+        self.k += 1
+        if not self.modes: return 0.0, 0.0
+        for m in self.modes:
+            if m.get('st'):
+                if len(m['g']) > 1 and not m.pop('neuf', False): m['g'] = m['g'][1:]   # pas de décalage au cycle de création
+                eps = self.rng.normal(0, 1, (self.N, self.T, 2)) * self.SIG
+                U = m['U'][None] + eps; U[0] = m['U']; U[1] = 0
+                U[..., 0] = np.clip(U[..., 0], 0, VMAX); U[..., 1] = np.clip(U[..., 1], -WMAX, WMAX)
+                J = self.sample_cost_t(s, U, obs, m['g'])
+                lam = max(1e-6, (np.percentile(J, 10) - J.min()) / 2.0); w = np.exp(-(J - J.min()) / lam); w /= w.sum()
+                m['U'] = (w[:, None, None] * U).sum(0)
+            else:
+                m['U'] = self.mppi_step(s, m['U'], obs, None, m['g'])
+        Us = np.stack([m['U'] for m in self.modes])
+        J = self.eval_cost(s, Us, obs)
+        i = int(np.argmin(J)); u = Us[i, 0].copy()
+        for m in self.modes: m['U'] = np.roll(m['U'], -1, 0); m['U'][-1] = m['U'][-2]
+        return u
+
+
+
+
+class VigieQuatre(InternalModelMixin, PhantomMixin, SmithMixin, Vigie4Core):
+    """VIGIE 4 : le robot peut ralentir ou attendre avant un flux, puis passer dans un trou, avec un horaire
+    qu'il est réellement capable de tenir (accélérations identifiées en ligne), plus compensation du retard
+    et vitesse prudente aux angles morts. Les briques héritées s'exécutent avant le cœur (ordre des classes)."""
+    name = 'VIGIE 4 (proposé)'
+
+
+ALL += [VigieQuatre]
+
+
+# ---------------------------------------------------------------- modèle interne v2 : par roue, tenant compte du retard
+WB = 0.45   # entraxe supposé connu (donnée de construction du robot)
+
+
+def wheel_step(vl, vr, vc, wc, tau, a, dt=DT):
+    """Un pas du modèle par roue : consignes de roues saturées (courbure conservée), premier ordre de constante tau,
+    accélération limitée à a, réduite à haute vitesse (force contre-électromotrice), freinage 30 % plus fort."""
+    l, r = vc - wc * WB / 2, vc + wc * WB / 2
+    k = np.maximum(1.0, np.maximum(np.abs(l), np.abs(r)) / VMAX); l = l / k; r = r / k
+    g = np.minimum(1.0, dt / tau)
+    al = a * (1 - np.abs(vl) / 1.9); ar = a * (1 - np.abs(vr) / 1.9)
+    vl = vl + np.clip((l - vl) * g, -1.3 * a * dt, al * dt); vr = vr + np.clip((r - vr) * g, -1.3 * a * dt, ar * dt)
+    return vl, vr
+
+
+def rollout_wheels(s, U, vl0, vr0, tau, a):
+    T = U.shape[-2]; out = np.empty(U.shape[:-1] + (3,))
+    x = np.full(U.shape[:-2], s[0]); y = np.full(U.shape[:-2], s[1]); th = np.full(U.shape[:-2], s[2])
+    vl = np.full(U.shape[:-2], vl0); vr = np.full(U.shape[:-2], vr0)
+    for t in range(T):
+        vl, vr = wheel_step(vl, vr, U[..., t, 0], U[..., t, 1], tau, a)
+        v, w = (vl + vr) / 2, (vr - vl) / WB
+        x = x + DT * v * np.cos(th); y = y + DT * v * np.sin(th); th = th + DT * w
+        out[..., t, 0] = x; out[..., t, 1] = y; out[..., t, 2] = th
+    return out
+
+
+class WheelModelMixin:
+    """Modèle interne v2. Structure supposée connue (deux roues motrices à moteurs à courant continu),
+    paramètres appris en ligne : constante de temps et accélération des roues. Le retard des mesures (connu,
+    voir SmithMixin) est pris en compte : la mesure reçue maintenant décrit le robot d'il y a « lat » pas,
+    on rejoue donc les commandes envoyées depuis pour estimer sa vitesse présente."""
+    TAUS = np.array([0.05, 0.08, 0.1, 0.15, 0.2, 0.3, 0.4])
+    ACCS = np.array([0.8, 1.0, 1.2, 1.4, 1.6, 2.0, 2.5, 3.0, 4.0])
+
+    def _wm_init(self):
+        self.wm_cmd = []; self.wm_meas = []; self.wm_par = (0.15, 2.0); self.wm_last = None; self.wm_k = 0
+        self.wm_now = (0.0, 0.0)
+
+    def _roll(self, s, U):
+        tau, a = self.wm_par; vl, vr = self.wm_now
+        return rollout_wheels(s, U, vl, vr, tau, a)
+
+    def _wm_fit(self, d):
+        C = np.array(self.wm_cmd[-60 - d:]); M = np.array(self.wm_meas[-60 - d:])
+        m = len(C) - 1 - d
+        if m < 20: return None
+        tg, ag = np.meshgrid(self.TAUS, self.ACCS, indexing='ij'); tg = tg.ravel(); ag = ag.ravel()
+        v0, w0 = M[d]
+        vl = np.full(len(tg), v0 - w0 * WB / 2); vr = np.full(len(tg), v0 + w0 * WB / 2); err = np.zeros(len(tg))
+        for i in range(m):
+            vl, vr = wheel_step(vl, vr, C[i, 0], C[i, 1], tg, ag)
+            vm, wm = M[i + 1 + d]
+            err += ((vl + vr) / 2 - vm) ** 2 + (0.25 * ((vr - vl) / WB - wm)) ** 2
+        b = int(np.argmin(err)); return err[b] / m, (float(tg[b]), float(ag[b]))
+
+    def _wm_identify(self):
+        """Paramètres des roues. Alignement commandes / mesures : retard des mesures (connu) + 1 pas pour la chaîne
+        de commande (50 ms) et le fait que la vitesse mesurée est une moyenne sur le pas écoulé. Cette règle a été
+        établie expérimentalement : c'est elle qui donne l'estimation la plus juste de la vitesse présente,
+        pour 1 comme pour 3 pas de retard (voir tests_banc.py)."""
+        d = getattr(self, 'lat', 0) + 1
+        if len(self.wm_cmd) < 30 + d: return
+        f = self._wm_fit(d)
+        if f is not None: self.wm_par = f[1]; self.wm_d = d
+
+    def act(self, t, s, obs):
+        if not hasattr(self, 'wm_cmd'): self._wm_init()
+        if self.wm_last is not None:
+            dxy = s[:2] - self.wm_last[:2]; dth = np.arctan2(np.sin(s[2] - self.wm_last[2]), np.cos(s[2] - self.wm_last[2]))
+            vm = (dxy @ np.array([np.cos(s[2]), np.sin(s[2])])) / DT; wm = dth / DT
+        else: vm, wm = 0.0, 0.0
+        self.wm_last = np.array(s, float); self.wm_meas.append((vm, wm)); self.wm_k += 1
+        if self.wm_k % 10 == 0: self._wm_identify()
+        # vitesse présente : dernière mesure (vieille de « lat » pas), lissée, puis commandes rejouées
+        d = getattr(self, 'lat', 0) + 1; tau, a = self.wm_par
+        M = np.array(self.wm_meas[-3:]).mean(0)
+        vl, vr = M[0] - M[1] * WB / 2, M[0] + M[1] * WB / 2
+        for c in self.wm_cmd[len(self.wm_cmd) - d:] if d else []:
+            vl, vr = wheel_step(vl, vr, c[0], c[1], tau, a)
+        self.wm_now = (float(vl), float(vr))
+        u = np.array(super().act(t, s, obs), float)
+        self.wm_cmd.append((float(np.clip(u[0], 0, VMAX)), float(np.clip(u[1], -WMAX, WMAX))))
+        return u
+
+
+class Vigie3W(WheelModelMixin, Vigie3):
+    name = 'VIGIE 3 + modèle par roue (proposé)'
+
+
+class VigieQuatreW(WheelModelMixin, PhantomMixin, SmithMixin, Vigie4Core):
+    name = 'VIGIE 4 + modèle par roue (proposé)'
+
+    def refresh_modes(self, s, obs):
+        tau, a = getattr(self, 'wm_par', (0.15, 2.0))
+        self.im_par = [tau, tau, a, 2 * a / WB]; self.im_v = sum(getattr(self, 'wm_now', (0, 0))) / 2
+        Vigie4Core.refresh_modes(self, s, obs)
+
+
+ALL += [Vigie3W, VigieQuatreW]

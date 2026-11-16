@@ -309,3 +309,47 @@ Par scène, VIGIE 3 et sa variante font mieux dans le goulot (67 % contre 60 %) 
 - Rendre la route espace-temps compatible avec la dynamique réelle : la planifier avec le modèle interne identifié (accélérations atteignables), et non avec des déplacements d'une case par pas.
 - Recalibrer les scènes dures pour un robot réaliste (agents moins rapides que le robot), sinon elles ne départagent personne.
 - Évaluer les briques prometteuses (angles morts, goulot) sur des échantillons plus grands avant toute conclusion.
+
+## Séance 5 · Audit du banc d'essai et VIGIE 4
+
+### Tests de cohérence permanents (`tests_banc.py`)
+
+À la demande de l'utilisateur (« la moindre erreur pourrait fausser les résultats »), un fichier de tests vérifie avant chaque campagne : catalogue sans doublon, reproductibilité, indépendance du monde vis-à-vis du bruit de mesure, détection de collision (instant du contact calculé à la main), latence exacte, portée et masquage des capteurs, exactitude de l'oracle, caractéristiques du robot réaliste, qualité de l'estimation des vitesses, mémoire de carte, faisabilité des mondes, intégrité des fichiers de résultats (mêmes mondes pour chaque méthode, sans doublon), séparation développement / évaluation, exactitude du prédicteur de Smith, latence communiquée, épisodes complets de chaque candidat sous robot réaliste, exécution effective de chaque brique, calcul statistique, respect des limites par le profil de vitesse.
+
+État : **96 vérifications réussies, 0 échec.**
+
+### Erreurs trouvées grâce à ces tests
+
+| Erreur | Portée | Correction |
+|---|---|---|
+| attendu faux dans un test de collision (rayon du robot oublié) | le test seulement, le simulateur était juste | attendu recalculé : contact à 2,95 s |
+| l'oracle simulait les poursuivants sans le robot (écart 2,3 m) | résultats de l'oracle en scène « poursuite » de la séance 4, qui ne servaient à aucune conclusion | futur simulé face au plan du robot ; exact quand le robot suit son plan |
+| profil de vitesse : positions arrondies à la grille, d'où des vitesses de 2 m/s et des accélérations de 10 m/s² | code nouveau, avant toute campagne | positions continues et interpolation à accélération constante ; limites vérifiées (1,5 m/s, 1,2 et 1,6 m/s²) |
+| constante non importée dans VIGIE 4 | campagne arrêtée au premier épisode, aucun résultat produit | corrigée |
+| **VIGIE 4 court-circuitait ses briques héritées** (modèle interne, Smith, angles morts ne s'exécutaient pas) | code nouveau, avant toute campagne | architecture corrigée ; test qui vérifie l'exécution effective de chaque brique |
+| deux classes portaient le même nom | risque de tester la mauvaise version | doublon supprimé ; test permanent d'unicité |
+
+Vérification rétroactive : VIGIE 2, VIGIE 3, VIGIE 3 avec modèle interne et la référence avec prédicteur de Smith exécutaient bien toutes leurs briques ; leurs résultats antérieurs restent valables.
+
+### Scènes recalibrées pour le robot réaliste
+
+`traversee` : 26 personnes à 0,8 à 1,4 m/s (au lieu de 34 à 1,5 à 2,4) ; `poursuite` : 6 poursuivants à 0,75 à 1,05 m/s. Sur robot réaliste (graines 1200 à 1209) : référence 40 % dans le goulot contre 90 % pour l'oracle, 80 % contre 100 % dans la traversée, 60 % contre 80 % aux angles morts.
+
+### VIGIE 4
+
+Profil de vitesse espace-temps compatible avec la dynamique : pour chaque route topologique, programmation dynamique dans (temps, abscisse le long de la route, vitesse) avec les accélérations identifiées en ligne (avec 20 % de marge), la vitesse limitée dans les virages, et des tubes calibrés sur l'imprévisibilité de chaque agent. Plus prédicteur de Smith, vitesse prudente aux angles morts et modèle interne.
+
+### Erreurs trouvées en examinant les échecs de VIGIE 4
+
+Sur les graines 1200 à 1209 (robot réaliste), VIGIE 4 faisait 63 % contre 72 % pour la référence (−9,4 points, significatif). Examen d'un épisode raté dans la traversée :
+
+1. **Le modèle interne v1 se trompait lourdement** : il estimait une constante de temps de 1,2 s en rotation. Cause : il associait chaque commande à la mesure suivante sans tenir compte du retard des mesures, et « expliquait » ce retard par un robot très lent. Ce défaut touchait aussi VIGIE 3 avec modèle interne (séance 4).
+2. **Un premier ordre séparé pour la vitesse et la rotation ne peut pas représenter le robot** : quand il accélère et tourne à la fois, les deux roues se partagent le couple et le virage ralentit. Même ajusté sur les vraies vitesses, ce modèle garde 0,32 rad/s d'erreur en rotation.
+3. **Décalage d'horaire d'un pas** dans les routes horodatées de VIGIE 3 et VIGIE 4 au cycle de leur création.
+
+Corrections :
+- **Modèle interne v2, par roue** (`WheelModelMixin`) : chaque roue a sa constante de temps et son accélération, réduite à haute vitesse (force contre-électromotrice). Erreur sur les vraies vitesses : 0,03 à 0,05 m/s et 0,12 à 0,17 rad/s.
+- **Retard pris en compte** : identification et estimation de la vitesse présente alignées sur le retard des mesures + 1 pas. Règle établie en comparant aux vraies vitesses : l'erreur sur la vitesse présente passe de 0,16 à 0,05 m/s et de 0,39 à 0,17 rad/s (retard de 1 pas), de 0,24 à 0,05 m/s et de 0,64 à 0,17 rad/s (3 pas).
+- Décalage d'horaire corrigé, avec un test dédié.
+
+Tests de cohérence : **112 vérifications réussies, 0 échec.**

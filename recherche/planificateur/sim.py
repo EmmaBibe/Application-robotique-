@@ -115,8 +115,8 @@ class World:
 
     def build_traversee(self):
         """Un flux continu de piétons rapides à traverser, dans les deux sens : il faut choisir son trou."""
-        for i in range(34):
-            x = self.rng.uniform(6.3, 13.7); s = self.rng.uniform(1.5, 2.4) * (1 if i % 2 else -1)
+        for i in range(26):
+            x = self.rng.uniform(6.3, 13.7); s = self.rng.uniform(0.8, 1.4) * (1 if i % 2 else -1)   # recalibré pour un robot réaliste
             self._flux((x, self.rng.uniform(0.5, 19.5)), (0.0, s))
 
     def build_goulot(self):
@@ -148,12 +148,12 @@ class World:
     def build_poursuite(self):
         """Des agents qui foncent vers le robot (ils visent sa position, avec un temps de réaction)."""
         self._rand_static(10)
-        for _ in range(7):
+        for _ in range(6):
             while True:
                 x, y = self.rng.uniform(6, 19), self.rng.uniform(1, 19)
                 if self._free(x, y, 0.35, 4.0): break
             self.dyn.append(dict(p=np.array([x, y]), v=np.zeros(2), r=0.35, mode='tout_droit', t_switch=1e9, kind='chasseur', done=True,
-                                 sp=self.rng.uniform(1.0, 1.35), reactif=False))
+                                 sp=self.rng.uniform(0.75, 1.05), reactif=False))   # recalibré pour un robot réaliste
 
     # ------------------------------------------------------------ évolution
     def step_obstacles(self, t, robot=None, react=False):
@@ -256,6 +256,7 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
     known = world.static.copy()
     if C.get('unknown'): known = known[np.hypot(known[:, 0] - s[0], known[:, 1] - s[1]) - known[:, 2] < C.get('range', 6.0)]
     planner.reset(known, world.goal.copy())
+    world.react = C.get('react', False)
     if hasattr(planner, 'bind'): planner.bind(world)
     try: planner.set_perception(bool(C.get('occl')), C.get('range') or 0.0)
     except AttributeError: pass
