@@ -269,5 +269,32 @@ for C in (P.Vigie3, P.VigieQuatre):
     else:
         check(f'{C.name} : route horodatée créée au premier cycle', False)
 
+print('21. Scène de la porte : personne ne surgit à côté du robot')
+w = sim.World('goulot', 1302); bad = 0; rob = np.array([18.0, w.door[1]])
+for k in range(600):
+    before = {id(o): o['p'].copy() for o in w.dyn}
+    w.step_obstacles(k * 0.1, robot=rob)
+    for o in w.dyn:
+        jump = np.hypot(*(o['p'] - before[id(o)]))
+        if jump > 1.0 and o['p'][0] > 0 and np.hypot(*(o['p'] - rob)) < 3.0: bad += 1
+check('aucune réapparition à moins de 3 m du robot (robot posté près de l\'entrée, 60 s)', bad == 0, f'{bad} réapparitions')
+w2 = sim.World('goulot', 1302); n_in = 0
+for k in range(600):
+    w2.step_obstacles(k * 0.1, robot=np.array([2.0, 2.0]))
+n_active = sum(1 for o in w2.dyn if o['p'][0] > 0)
+check('robot loin : le flux continue normalement', n_active >= len(w2.dyn) - 2, f'{n_active}/{len(w2.dyn)} actifs')
+
+print('22. Aucune scène ne fait surgir d\'agent à côté du robot')
+for sc in ['foret', 'carrefour', 'couloir', 'piege', 'foule', 'foule_dense', 'carrefour_rapide', 'traversee', 'goulot', 'coin_aveugle', 'poursuite']:
+    bad = 0
+    for rob in (np.array([1.5, 10.0]), np.array([10.0, 10.0]), np.array([18.5, 10.0])):
+        w = sim.World(sc, 1311)
+        for k in range(450):
+            before = [o['p'].copy() for o in w.dyn]
+            w.step_obstacles(k * 0.1, robot=rob)
+            for o, b0 in zip(w.dyn, before):
+                if np.hypot(*(o['p'] - b0)) > 1.0 and 0 < o['p'][0] < 20 and np.hypot(*(o['p'] - rob)) < 3.0: bad += 1
+    check(f'{sc} : aucun saut de plus de 1 m à moins de 3 m du robot', bad == 0, f'{bad}')
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

@@ -174,7 +174,14 @@ class World:
                     d = door - o['p']; n = np.hypot(*d); o['v'] = o['sp'] * d / max(n, 1e-6)
                 else: o['v'] = np.array([-o['sp'], 0.0])
                 if o['p'][0] < 0.8:
-                    o['p'] = np.array([19.5, door[1] + self.rng.uniform(-3, 3)])
+                    # la personne sort par la gauche ; elle ne revient par la droite que si le robot n'est pas
+                    # juste devant le point d'entrée (sinon elle surgirait de nulle part à côté de lui)
+                    y_in = door[1] + self.rng.uniform(-3, 3)
+                    if robot is None or np.hypot(19.5 - robot[0], y_in - robot[1]) > 3.5:
+                        o['p'] = np.array([19.5, y_in])
+                    else:
+                        o['p'] = np.array([-5.0, -5.0]); o['v'] = np.zeros(2)   # attend hors de l'arène
+                        continue
             if o['kind'] == 'flux':
                 o['p'] = o['p'] + o['v'] * DT
                 if o['p'][1] > SIZE + 0.4: o['p'][1] -= SIZE + 0.8
@@ -308,7 +315,9 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
     length = float(np.sum(np.hypot(*np.diff(path, axis=0).T)))
     acc = np.diff(vs) / DT if len(vs) > 1 else np.zeros(1)
     jerk = float(np.mean(np.abs(np.diff(acc) / DT))) if len(acc) > 1 else 0.0
+    v_fin = float(vs[-1]) if len(vs) else 0.0
     res = dict(outcome=outcome, temps=t, longueur=length, marge_min=float(minclear), jerk=jerk,
+               collision_a_larret=bool(outcome == 'collision' and abs(v_fin) < 0.1), v_fin=v_fin,
                lissage_w=float(np.mean(np.abs(np.diff(ws)))) if len(ws) > 1 else 0.0,
                calcul_ms=1000 * float(np.mean(comp)), calcul_max_ms=1000 * float(np.max(comp)))
     if record: res['path'] = path

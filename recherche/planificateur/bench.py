@@ -31,7 +31,7 @@ if __name__ == '__main__':
         for i, r in enumerate(pool.imap_unordered(job, jobs)):
             rows.append(r)
             if i % 25 == 0: print(f'{i}/{len(jobs)} {time.time() - t0:.0f}s', flush=True)
-    keys = ['planner', 'cond', 'scene', 'seed', 'outcome', 'temps', 'longueur', 'marge_min', 'jerk', 'lissage_w', 'calcul_ms', 'calcul_max_ms', 'changements', 'reflexes']
+    keys = ['planner', 'cond', 'scene', 'seed', 'outcome', 'temps', 'longueur', 'marge_min', 'jerk', 'lissage_w', 'calcul_ms', 'calcul_max_ms', 'changements', 'reflexes', 'collision_a_larret', 'v_fin']
     with open(out, 'w', newline='') as f:
         w = csv.DictWriter(f, keys, extrasaction='ignore'); w.writeheader(); w.writerows(rows)
     print('fini', time.time() - t0)
