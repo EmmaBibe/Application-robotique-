@@ -15,11 +15,11 @@ def job(args):
     scene, seed, pi, cond = args
     P = planners.ALL[pi]
     p = planners.Memory(P); r = sim.run_episode(sim.World(scene, seed), p, cond=cond)
-    r.update(scene=scene, seed=seed, planner=P.name, cond=cond, changements=getattr(p.p, 'switches', 0), reflexes=getattr(p.p, 'reflex_n', 0))
+    r.update(scene=scene, seed=seed, planner=P.name, cond=cond, changements=getattr(p.p, 'switches', 0), reflexes=getattr(p.p, 'reflex_n', 0), sans_route=getattr(p.p, 'empty_refresh', 0))
     return r
 
 
-KEYS = ['planner', 'cond', 'scene', 'seed', 'outcome', 'temps', 'longueur', 'marge_min', 'jerk', 'lissage_w', 'calcul_ms', 'calcul_max_ms', 'changements', 'reflexes', 'collision_a_larret', 'v_fin']
+KEYS = ['planner', 'cond', 'scene', 'seed', 'outcome', 'temps', 'longueur', 'marge_min', 'jerk', 'lissage_w', 'calcul_ms', 'calcul_max_ms', 'changements', 'reflexes', 'collision_a_larret', 'v_fin', 'sans_route']
 
 
 if __name__ == '__main__':

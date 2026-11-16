@@ -296,5 +296,20 @@ for sc in ['foret', 'carrefour', 'couloir', 'piege', 'foule', 'foule_dense', 'ca
                 if np.hypot(*(o['p'] - b0)) > 1.0 and 0 < o['p'][0] < 20 and np.hypot(*(o['p'] - rob)) < 3.0: bad += 1
     check(f'{sc} : aucun saut de plus de 1 m à moins de 3 m du robot', bad == 0, f'{bad}')
 
+print('23. Passage bouché : les routes horodatées ne s\'empilent pas')
+import planners as _pl
+_dg = _pl.diverse_guides
+for C in [_pl.MMST, _pl.Vigie3, _pl.Vigie3W, _pl.VigieQuatre, _pl.VigieQuatreW]:
+    w = sim.World('foule', 1302); p = C(); p.reset(w.static, w.goal)
+    s0 = w.start.copy(); obs = w.obstacles()
+    p.act(0.0, s0, obs); n0 = len(p.modes)
+    _pl.diverse_guides = lambda *a, **k: []          # plus aucune route trouvée
+    try:
+        sizes = []
+        for _ in range(8): p.refresh_modes(s0, obs); sizes.append(len(p.modes))
+    finally:
+        _pl.diverse_guides = _dg
+    check(f'{C.name} : nombre de routes borné ({n0} au départ)', n0 >= 2 and max(sizes) <= n0, str(sizes))
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

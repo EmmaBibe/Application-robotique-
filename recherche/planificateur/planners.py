@@ -284,7 +284,10 @@ class MultiModalMPPI(MPPI):
                 if d < bd: best, bd = m, d
             U = best['U'] if best is not None and bd < 1.0 else guide_to_controls(s, g, self.T)
             new.append(dict(g=g, U=U))
-        if new: self.modes = new
+        # sans route trouvée (passage bouché), on garde les modes topologiques précédents mais pas les routes
+        # horodatées : les sous-classes les recalculent, sinon elles s'empileraient à chaque rafraîchissement
+        self.modes = new if new else [m for m in self.modes if not m.get('st')]
+        self.empty_refresh = getattr(self, 'empty_refresh', 0) + (not new)
 
     sample_ensemble = True   # v1 : les échantillons MPPI sont notés sur tous les futurs (trop prudent)
 
