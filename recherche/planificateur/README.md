@@ -1,6 +1,6 @@
 # Laboratoire de planification et de suivi de trajectoire
 
-C'est ici qu'a été mis au point **VIGIE**, un planificateur qui mesure en ligne l'imprévisibilité de chaque agent, n'ouvre l'éventail des futurs possibles que pour ceux qui le méritent, et choisit entre plusieurs routes et des gestes réflexes par valeur d'option. Version actuelle : classe `VigieV2` dans `planners.py`, version JavaScript dans `js/sims/vigie-core.js`. Évaluation finale (11 760 épisodes) : aussi sûre que la meilleure référence récente (95 %), et significativement plus rapide qu'elle à sécurité égale. Détails, réussites et limites dans `JOURNAL.md`.
+C'est ici qu'a été mis au point **VIGIE**, un planificateur qui mesure en ligne l'imprévisibilité de chaque agent, n'ouvre l'éventail des futurs possibles que pour ceux qui le méritent, cherche ses routes dans l'espace et le temps, et anticipe les personnes qui peuvent surgir d'un angle mort. Version actuelle : classe `Vigie3` dans `planners.py` (VIGIE 3), version JavaScript dans `js/sims/vigie-core.js`. Dernière évaluation, sur robot réaliste (retard, régulateur de roues, accélération limitée) et sur des mondes neufs (5 280 essais) : en vision complète, VIGIE 3 bat significativement la meilleure référence (+5,6 points) ; il gagne nettement aux portes étroites (+10,8) et aux angles morts (+11,7) ; en perception limitée, son avance disparaît, et sur l'ensemble des scènes l'écart (+1,9) n'est pas significatif. Détails, réussites et limites dans `JOURNAL.md` (séance 6).
 
 Banc d'essai pour inventer et évaluer de nouveaux algorithmes de planification et de suivi, en les comparant honnêtement aux méthodes existantes : mêmes mondes, mêmes perturbations, mêmes graines aléatoires.
 
@@ -14,6 +14,9 @@ Banc d'essai pour inventer et évaluer de nouveaux algorithmes de planification 
 | `analyse.py` | tableaux par scène, comparaisons appariées avec intervalles de confiance (bootstrap) |
 | `figures.py` | trajectoires de plusieurs planificateurs sur un même monde |
 | `CARTOGRAPHIE.md` | revue des domaines d'inspiration (physique, biologie, finance, navigation maritime…) |
+| `robot_reel.py` | chaîne d'actionneurs réaliste (retard, régulateur de roues, masse) et filtre de suivi des personnes (Kalman) |
+| `tests_banc.py` | 149 vérifications de cohérence du banc, à lancer avant toute campagne |
+| `faisabilite.py` | borne de faisabilité : le meilleur temps possible en connaissant le futur |
 | `JOURNAL.md` | journal de recherche : hypothèses, essais, résultats, conclusions |
 
 ## Scènes

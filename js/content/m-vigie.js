@@ -124,7 +124,24 @@ export const labo = {
 <ul><li><b>VIGIE est nouveau dans sa combinaison.</b> Nous n'avons trouvé aucune publication qui règle l'éventail des futurs de chaque agent par son imprévisibilité mesurée en ligne, et qui choisit entre routes topologiques et réflexes par valeur d'option. Chaque brique a des parents connus.</li>
 <li><b>VIGIE 2 fonctionne et résiste</b> aux sept conditions de perturbation, au niveau de la meilleure méthode récente, et il arrive plus vite qu'elle.</li>
 <li><b>Il ne la surpasse pas en sécurité.</b> L'écart n'est pas significatif.</li>
+<li><b>Sur robot réaliste, VIGIE 3 gagne là où il voit bien</b> (portes étroites, angles morts en vision complète), pas partout.</li>
 <li><b>Tout cela est en simulation.</b> Le vrai juge sera un robot réel.</li></ul>
+<h3>Sur un robot réaliste : VIGIE 3</h3>
+<p>Les résultats ci-dessus supposaient un robot qui obéit instantanément. Le banc a ensuite été rendu plus exigeant : commande transmise avec 50 ms de retard, régulateur sur chaque roue, robot de 25 kg qui met plus d'une seconde à atteindre sa vitesse, personnes suivies par un filtre de Kalman à partir de mesures bruitées. Quatre scènes plus dures ont été ajoutées : traversée, porte étroite, angles morts, poursuite. Sur ce robot, VIGIE 2 perdait du terrain. VIGIE 3 le remplace : routes cherchées dans l'espace et le temps, marges calculées agent par agent, et vitesse limitée près des angles morts, comme si quelqu'un pouvait en surgir.</p>
+<p>Évaluation finale sur 60 mondes neufs, 11 scènes, vision complète et perception limitée (5 280 essais) :</p>
+<table><thead><tr><th>Situation</th><th>Référence</th><th>VIGIE 3</th><th>Écart (IC 95 %)</th></tr></thead><tbody>
+<tr><td>Vision complète</td><td>84 %</td><td><b>90 %</b></td><td><b>+5,6</b> (+2,6 à +8,5)</td></tr>
+<tr><td>Perception limitée</td><td>78 %</td><td>77 %</td><td>−1,8 (−5,2 à +1,5)</td></tr>
+<tr><td>Porte étroite</td><td>71 %</td><td><b>82 %</b></td><td><b>+10,8</b> (+1,7 à +20,0)</td></tr>
+<tr><td>Angles morts</td><td>57 %</td><td><b>69 %</b></td><td><b>+11,7</b> (+1,7 à +22,5)</td></tr>
+<tr><td>Foule dense</td><td>72 %</td><td>68 %</td><td>−5,0 (−15,0 à +5,0)</td></tr>
+<tr><td>Toutes scènes</td><td>81 %</td><td>83 %</td><td>+1,9 (−0,4 à +4,1)</td></tr>
+</tbody></table>
+<p>Référence : MPPI multimodal avec prédicteur de Smith, sur le même robot et avec le même filtre de suivi.</p>
+<ul><li><b>Ce qui tient :</b> l'avance aux portes étroites, déjà vue pendant la mise au point, se retrouve sur les mondes neufs. En vision complète, VIGIE 3 bat la référence de façon significative.</li>
+<li><b>Ce qui ne tient pas :</b> quand la vue est coupée, l'avance disparaît. Les briques de VIGIE supposent de bien voir ce qui bouge ; le prochain progrès viendra de la perception, pas du planificateur.</li>
+<li><b>Une fausse bonne idée :</b> une règle inspirée du code de la route (ne pas s'engager dans une zone si l'on risque d'y rester bloqué) gagnait 2 points en développement. Sur les mondes neufs, elle n'apporte rien et fait même perdre 8 points dans la foule dense. Elle n'a pas été gardée. C'est la troisième fois que les mondes neufs corrigent une conclusion tirée pendant la mise au point.</li>
+<li><b>Le filtre de suivi comptait plus que le planificateur :</b> l'ancien filtre se trompait de plus de 1 m/s sur la vitesse d'une personne dans 28 % des cas aux angles morts, contre 5 % pour le filtre de Kalman. Avant d'accuser l'algorithme, vérifie ce qu'il voit.</li></ul>
 <h3>Vers un prototype</h3>
 <p>Plateforme envisagée : robot à deux roues motrices (vitesse maximale 1,5 m/s), lidar 2D pour détecter et suivre les personnes, ordinateur embarqué de type Raspberry Pi 5 ou Jetson, VIGIE intégré comme module de commande de ROS 2 (Nav2). Les essais iront du plus sûr au plus exigeant : mannequins sur chariots poussés, puis personnes qui marchent selon un scénario connu, puis circulation libre, toujours avec arrêt d'urgence et vitesse limitée.</p>`),
         Dossier('dos-vigie', 'Mon plan d\'essai sur un vrai robot', `Prépare le passage de la simulation au réel. Tes réponses sont gardées dans ton carnet.`, [

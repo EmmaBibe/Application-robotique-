@@ -425,4 +425,55 @@ Avec le nouveau filtre, la référence passe de 62 à 78 % à la porte. « Déga
 
 En perception limitée, aux angles morts, les collisions restent autour de 60 à 70 % pour toutes les méthodes, même avec des vitesses fiables. La personne heurtée était visible depuis 1,4 s en médiane, et le robot presque arrêté dans 17 cas sur 40.
 
-Tests de cohérence : **148 vérifications réussies, 0 échec.**
+Tests de cohérence à la fin de l'étape 2 : 148 vérifications réussies, 0 échec.
+
+### Étape 3 : évaluation finale sur des mondes neufs (graines 3000 à 3059, 11 scènes, vision complète et perception limitée, 5 280 essais)
+
+Graines jamais utilisées pendant la mise au point ; le test 12 vérifie qu'elles ne recoupent aucune campagne de développement. Quatre méthodes, toutes avec le même robot réaliste et le même filtre de suivi : la référence (MPPI multimodal + prédicteur de Smith), la référence + règle du carrefour, VIGIE 3, VIGIE 5. 1 320 essais par méthode, aucun doublon, aucune ligne manquante. Détail par scène : `final_etape3_analyse.md`.
+
+| Méthode | Succès | Collisions | Écart / référence | IC 95 % | Gagnés / perdus |
+|---|---|---|---|---|---|
+| référence | 81 % | 18 % | – | – | – |
+| référence + règle | 81 % | 18 % | −0,3 | [−2,0 ; +1,4] | 64 / 68 |
+| VIGIE 3 | 83 % | 16 % | +1,9 | [−0,4 ; +4,1] | 127 / 102 |
+| VIGIE 5 | 83 % | 16 % | +2,1 | [−0,2 ; +4,4] | 131 / 103 |
+
+Face à face, VIGIE 5 contre VIGIE 3 : +0,2 point, IC [−1,3 ; +1,8].
+
+**Par condition**
+
+| Condition | Référence | VIGIE 3 | VIGIE 5 |
+|---|---|---|---|
+| vision complète | 83,9 % | 89,5 % (+5,6 ; IC [+2,6 ; +8,5]) | 88,6 % (+4,7 ; IC [+1,8 ; +7,6]) |
+| perception limitée | 78,3 % | 76,5 % (−1,8 ; IC [−5,2 ; +1,5]) | 77,9 % (−0,5 ; IC [−3,9 ; +3,0]) |
+
+**Par scène** (écarts par rapport à la référence, significatifs en gras)
+
+| Scène | Référence | VIGIE 3 | VIGIE 5 | Référence + règle |
+|---|---|---|---|---|
+| porte (goulot) | 71 % | 82 % (**+10,8**) | 86 % (**+15,0**) | 76 % (+5,0) |
+| angles morts | 57 % | 69 % (**+11,7**) | 68 % (+10,8 ; IC [+0,0 ; +21,7]) | 56 % (−1,7) |
+| couloir | 92 % | 96 % (+3,3) | 97 % (+4,2 ; IC [+0,0 ; +9,2]) | 95 % (+2,5) |
+| foule | 84 % | 89 % (+5,0) | 88 % (+3,3) | 88 % (+3,3) |
+| traversée | 78 % | 81 % (+2,5) | 84 % (+5,8) | 76 % (−2,5) |
+| foule dense | 72 % | 68 % (−5,0) | 65 % (−7,5) | 64 % (**−8,3**) |
+| poursuite | 79 % | 74 % (−5,0) | 75 % (−4,2) | 79 % (+0,0) |
+| forêt, piège, carrefours | 77 à 98 % | à moins de 3 points | à moins de 4 points | à moins de 2 points |
+
+### Ce que l'étape 3 confirme et ce qu'elle infirme
+
+1. **La porte est confirmée.** L'avance de VIGIE à la porte, vue en développement (+10,8 puis +12,5), se retrouve sur les mondes neufs : +10,8 pour VIGIE 3, +15,0 pour VIGIE 5, toutes deux significatives. C'est le résultat le plus solide de tout le projet.
+2. **Les angles morts aussi, en partie.** VIGIE 3 y fait +11,7, significatif ; VIGIE 5 +10,8, à la limite. En développement, l'écart n'était pas significatif : il faut le lire avec prudence, car c'est la seule scène où la conclusion change entre les deux campagnes.
+3. **La règle du carrefour n'apporte rien.** Seule, elle laisse la référence au même niveau (−0,3) et la dégrade nettement en foule dense (−8,3, significatif) : quand les zones balayées se recouvrent, le robot attend des créneaux qui ne viennent pas. Ajoutée à VIGIE 3, elle ne change rien (+0,2). Le gain de 2 points vu en développement (VIGIE 3 + règle contre VIGIE 3) venait du choix de la meilleure version sur ces mêmes mondes. C'est la troisième fois que les mondes neufs corrigent une conclusion de développement.
+4. **VIGIE 3 est retenu, VIGIE 5 n'est pas adopté.** À performance égale, on garde le plus simple. La règle reste dans le code (`Vigie5`, `MMSmithCarrefour`) pour la traçabilité, mais elle n'est pas portée dans l'application.
+5. **En vision complète, VIGIE bat la référence**, et l'écart est significatif : +5,6 points. C'est la première fois sur le robot réaliste.
+6. **En perception limitée, l'avance disparaît.** Les briques de VIGIE (routes dans l'espace-temps, tubes par agent, fantômes aux angles morts) supposent de bien voir ce qui bouge ; quand la vue est coupée, elles n'ont rien de plus que la référence pour décider. Pour progresser ici, il faudra travailler la perception, pas le planificateur.
+7. **Écart global sur les onze scènes : +1,9 point, non significatif.** Les gains à la porte, aux angles morts, au couloir et dans la foule sont compensés par des pertes en foule dense et en poursuite. On ne peut pas affirmer que VIGIE est meilleur partout, seulement là où il l'est.
+
+### Pistes pour la suite
+
+- Foule dense : VIGIE y perd 5 à 7,5 points (non significatif). Cette scène ne faisait pas partie des campagnes de développement : à examiner essai par essai, comme les angles morts à l'étape 2. En poursuite, le signe change d'une campagne à l'autre (−2 à l'étape 1, +5 en développement, −5 ici) : rien ne distingue ces écarts du bruit.
+- Perception limitée : mesurer combien on gagnerait avec une vue complète des zones masquées (borne haute), avant de chercher un remède.
+- Prototype : l'avance de VIGIE se concentre sur les passages étroits avec des personnes. C'est le scénario à reproduire en premier sur le robot réel.
+
+Tests de cohérence à la fin de l'étape 3 : **149 vérifications réussies, 0 échec.**
