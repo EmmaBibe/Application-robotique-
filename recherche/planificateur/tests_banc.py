@@ -429,5 +429,30 @@ check('adaptatif : écart moyen gaussien 2D = s·sqrt(pi/2) (Rayleigh)', abs(_e.
 _va.tr.e = {}
 check('adaptatif : sans historique, identique à la version fixe', np.allclose(_va.risk(_tr3, _ob3), _v.risk(_tr3, _ob3)))
 
+_F = _VR.DIAG_FANTOMES[1]; _f = _F(); _f.reset(np.zeros((0, 3)), np.array([18., 10.]))
+_wall = np.array([[9.8, 11.0 + 0.8 * k, 0, 0, 0.45, 0, -1] for k in range(8)])   # coin masqué en haut à droite
+_s5 = np.array([8.6, 10.0, 0.0])
+check('fantômes : ignorés en vision complète', len(_f.phantom_rows(_s5, _wall)) == 0)
+_f.set_perception(True, 5.0)
+_ph = _f.phantom_rows(_s5, _wall)
+_trf = _R.rollout(_s5, np.tile([1.0, 0.0], (_f.T, 1))[None])
+check('fantômes : présents derrière des bords masquants en perception limitée', len(_ph) > 0, str(len(_ph)))
+check('fantômes : un risque non nul en passant près d\'un bord masquant', _f.risk(_trf, _wall, _s5)[0] > 0)
+_hard = _F(); _hard.reset(np.zeros((0, 3)), np.array([18., 10.])); _hard.set_perception(True, 5.0); _hard.W_SOFT = 0.0
+_gx, _gy = np.meshgrid(np.linspace(8.0, 13.0, 41), np.linspace(8.0, 13.0, 41))
+_pts = np.stack([_gx.ravel(), _gy.ravel(), np.zeros(_gx.size)], -1)
+_trg = np.repeat(_pts[:, None, :], _hard.T, 1)           # robot immobile en chaque point, à chaque instant de l'horizon
+_hard._ph_key = None; _hard.phantom_rows(_s5, _wall)
+check('fantômes : une zone seule ne déclenche jamais le seuil dur (grille dense, tous instants)',
+      _F.P_EXIST < _VR.P_MAX_FANTOME and _hard.risk(_trg, _wall, _s5).max() == 0, f'p={_F.P_EXIST}, max={_hard.risk(_trg, _wall, _s5).max()}')
+_bad = _VR.DIAG_FANTOMES[1]; _hb = type('X', (_bad,), dict(P_EXIST=0.04))(); _hb.reset(np.zeros((0, 3)), np.array([18., 10.])); _hb.set_perception(True, 5.0); _hb.W_SOFT = 0.0
+check('fantômes : la borne est atteinte (p = 0,04 la dépasse, la vérification n\'est pas vide)', _hb.risk(_trg, _wall, _s5).max() > 0)
+_trs = _R.rollout(_s5, np.zeros((_f.T, 2))[None])
+_rk = _f.risk(np.concatenate([_trf, _trs]), _wall, _s5)
+check('fantômes : traverser la sortie du coin coûte plus que rester en retrait', _rk[0] > _rk[1], str(np.round(_rk)))
+_f0 = _VR.Vigie3R(); _f0.reset(np.zeros((0, 3)), np.array([18., 10.])); _f0.set_perception(True, 5.0)
+check('fantômes : sans probabilité d\'existence, risque identique à la version de base', np.allclose(_f0.risk(_tr3, _ob3, np.array([5., 10., 0.])), _v.risk(_tr3, _ob3)))
+check('sans plafond : le plafond de vitesse est bien retiré de la chaîne', _VR.SansPlafondMixin.act.__qualname__.startswith('SansPlafondMixin') and P.PhantomMixin in _VR.DIAG_FANTOMES[3].__mro__)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

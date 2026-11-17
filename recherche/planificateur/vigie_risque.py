@@ -30,18 +30,37 @@ class RiskCostMixin:
         v = np.full(len(o), self.VAR_RATE)
         if not self.adaptive or not hasattr(self, 'tr'): return v
         for k, row in enumerate(o):
+            if row[6] < 0: continue                                          # fantôme : pas d'historique
             e = self.tr.e.get(int(row[6]))
             if e is not None: v[k] = max(self.VAR_RATE, (e / RAYLEIGH) ** 2)
         return v
 
-    def risk(self, tr, obs):
+    P_EXIST = 0.0           # fantômes d'angle mort dans le risque (0 : non utilisés)
+    DELAIS = np.array([0.0, 0.5, 1.0, 1.5])   # délais de sortie d'un fantôme (s)
+
+    def phantom_rows(self, s, obs):
+        """Personnes hypothétiques derrière les bords qui masquent une zone libre (perception limitée seulement),
+        mises en cache pour l'état du cycle en cours."""
+        if self.P_EXIST <= 0 or not getattr(self, 'occl', False): return np.zeros((0, obs.shape[1]))
+        key = (s.tobytes(), obs.shape)
+        if getattr(self, '_ph_key', None) != key:
+            self._ph_key = key; self._ph = P.phantoms(s, obs, getattr(self, 'sense', 5.0))
+        return self._ph
+
+    def risk(self, tr, obs, s=None):
         mob = obs[:, 5] > 0
-        if not mob.any(): return np.zeros(tr.shape[:-2])
-        o = obs[mob]; t = np.arange(1, self.T + 1) * DT
-        mu = o[None, :, :2] + o[None, :, 2:4] * t[:, None, None]          # (T, M, 2)
+        ph = self.phantom_rows(s, obs) if s is not None else np.zeros((0, obs.shape[1]))
+        if not mob.any() and not len(ph): return np.zeros(tr.shape[:-2])
+        # chaque fantôme est répété avec un délai de sortie (arrivées de Poisson : probabilité P_EXIST par fenêtre de 0,5 s)
+        nph = len(ph); ph = np.repeat(ph, len(self.DELAIS), 0)
+        o = np.vstack([obs[mob], ph]); w_ex = np.r_[np.ones(mob.sum()), np.full(len(ph), self.P_EXIST)]
+        tau = np.r_[np.zeros(mob.sum()), np.tile(self.DELAIS, nph)]
+        t = np.arange(1, self.T + 1) * DT
+        mu = o[None, :, :2] + o[None, :, 2:4] * np.maximum(t[:, None] - tau[None, :], 0)[..., None]   # (T, M, 2)
         sig = np.sqrt(self.var_rates(o)[None, :] * t[:, None])              # (T, M)
         d = np.sqrt(((tr[..., :, None, :2] - mu) ** 2).sum(-1))             # (..., T, M)
-        p = REF.collision_prob(d, o[:, 4] + R_ROB, sig)
+        present = (t[:, None] >= tau[None, :] - 1e-9)                       # une arrivée n'existe qu'à partir de son instant
+        p = REF.collision_prob(d, o[:, 4] + R_ROB, sig) * w_ex * present    # fantômes : pondérés par leur probabilité d'exister
         pj = 1 - np.prod(1 - p, axis=-1)
         tw = self.DISC ** np.arange(self.T)
         return ((self.W_SOFT * pj + self.W_HARD * (pj > self.SIGMA)) * tw).sum(-1)
@@ -55,7 +74,7 @@ class RiskCostMixin:
         if guide is not None:                                              # suivi de route, comme MPPI.eval_cost
             d = np.sqrt(((tr[..., None, :2] - guide) ** 2).sum(-1)).min(-1)
             c = c + 1.5 * (d ** 2).sum(-1)
-        return c + self.risk(tr, obs)
+        return c + self.risk(tr, obs, s)
 
 
 class Vigie3R(RiskCostMixin, P.Vigie3):
@@ -74,3 +93,18 @@ P.ALL += [Vigie3R, Vigie3RA]
 REGLAGE = [REF._variant(Vigie3R, 'soft1000', W_SOFT=1000.0), REF._variant(Vigie3R, 'soft300', W_SOFT=300.0),
            REF._variant(Vigie3R, 'escompte0.97', DISC=0.97)]
 P.ALL += REGLAGE
+
+
+class SansPlafondMixin:
+    """Retire le plafond de vitesse aux angles morts (PhantomMixin) : le risque des fantômes le remplace."""
+    def act(self, t, s, obs):
+        return np.array(super(P.PhantomMixin, self).act(t, s, obs), float)
+
+
+# Une zone seule ne doit jamais déclencher le seuil dur (sinon chaque ouverture devient un mur). Les copies d'un fantôme
+# sont espacées de 1,5 m/s x 0,5 s = 0,75 m : le robot (rayon cumulé 0,65 m) en recouvre au plus deux, d'où
+# 1 - (1 - p)² < 0,05, soit p < 1 - sqrt(0,95) = 0,0253.
+P_MAX_FANTOME = 1 - np.sqrt(1 - REF.DRAMPPI.SIGMA)
+DIAG_FANTOMES = [REF._variant(Vigie3R, 'fantômes0.01', P_EXIST=0.01), REF._variant(Vigie3R, 'fantômes0.02', P_EXIST=0.02)]
+DIAG_FANTOMES += [type(c.__name__ + '_sp', (SansPlafondMixin, c), dict(name=c.name + ' sans plafond')) for c in DIAG_FANTOMES]
+P.ALL += DIAG_FANTOMES
