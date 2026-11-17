@@ -64,3 +64,18 @@ Chaque piste sera d'abord testée en ablation, une brique à la fois, contre la 
 - **Piste testée à part : incertitude adaptative** (variance de chaque personne tirée de l'erreur de prédiction observée sur elle, plancher publié de DRA-MPPI), en ablation contre la version fixe.
 - Un premier diagnostic sur goulot (graines 1400 à 1409) a montré que les poids de DRA-MPPI figent le robot devant une porte à contre-flux (3 essais sur 10 au temps limite) : c'est ce qui a motivé d'inclure des poids plus faibles dans le réglage.
 - Puis comparaison de développement sur les graines 1420 à 1459 (VIGIE 3, VIGIE retenu, DRA-MPPI réglé, T-MPC++), et seulement ensuite l'évaluation finale sur 5000 à 5099.
+
+## 7. Comparaison de développement (fixée avant l'essai)
+
+**Résultat du réglage de VIGIE 3 + risque calibré** (graines 1400 à 1419) : 83,2 % pour 3000/3000 et pour l'escompte 0,97, 83,0 % pour 1000/3000, 80,0 % pour 300/3000. Égalité départagée par le critère secondaire fixé au §5 (collisions en mouvement : 13,4 % contre 13,9 %) : **escompte 0,97 retenu**. L'incertitude adaptative est rejetée (66,1 %, −17,5 points, significatif : le robot se fige).
+
+**Deux défauts structurels de VIGIE 3 trouvés en examinant les échecs en forêt** (les seuls échecs de VIGIE en forêt sont des temps limites, sur deux mondes sans aucune personne) :
+1. La route espace-temps voyait les obstacles fixes avec 0,3 m de marge, les routes topologiques avec 0,1 m : un passage de 0,98 m était fermé pour l'une et ouvert pour les autres, et le robot hésitait entre les deux. Correction : même marge pour les obstacles fixes (0,3 m gardés autour des personnes).
+2. Aucune cohérence de route : changement de route à un cycle sur trois ou quatre. Correction : la règle de T-MPC (éq. 12, facteur 0,75), classe jugée sur la route guide restante.
+
+Ces corrections ont été vérifiées sur les mondes où le défaut a été observé, mais **leur effet réel ne sera jugé que sur des mondes qu'elles n'ont pas vus**.
+
+**Comparaison** sur les graines 1420 à 1459 (jamais utilisées pour régler quoi que ce soit), 11 scènes, deux conditions :
+VIGIE 3 ; DRA-MPPI réglé (référence officielle) ; T-MPC++ ; VIGIE 3 + risque calibré ; VIGIE 3 + carte commune + cohérence ; VIGIE 3 + risque + carte commune + cohérence ; la même + fantômes (2 %).
+
+**Règle de décision** : la version proposée pour l'évaluation finale est celle des variantes VIGIE qui a le meilleur taux de succès sur ces mondes ; égalité (moins de 3 essais d'écart) départagée par les collisions en mouvement, puis par la simplicité (moins de briques). L'évaluation finale (graines 5000 à 5099) l'opposera à DRA-MPPI réglé, T-MPC++ et VIGIE 3.

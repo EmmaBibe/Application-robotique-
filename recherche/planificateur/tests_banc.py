@@ -454,5 +454,36 @@ _f0 = _VR.Vigie3R(); _f0.reset(np.zeros((0, 3)), np.array([18., 10.])); _f0.set_
 check('fantômes : sans probabilité d\'existence, risque identique à la version de base', np.allclose(_f0.risk(_tr3, _ob3, np.array([5., 10., 0.])), _v.risk(_tr3, _ob3)))
 check('sans plafond : le plafond de vitesse est bien retiré de la chaîne', _VR.SansPlafondMixin.act.__qualname__.startswith('SansPlafondMixin') and P.PhantomMixin in _VR.DIAG_FANTOMES[3].__mro__)
 
+print('28. Cohérence de route (T-MPC, éq. 12) pour VIGIE')
+_c = _VR.Vigie3C(); _c.reset(np.zeros((0, 3)), np.array([18., 10.]))
+_obc = np.array([[10.0, 10.0, 0, 0, 0.8, 0, -1]])
+_s6 = np.array([6.0, 10.0, 0.0])
+_gl = np.array([[6, 10], [8, 10], [10, 11.6], [12, 10], [18, 10]], float)     # route guide par la gauche
+_gr = np.array([[6, 10], [8, 10], [10, 8.4], [12, 10], [18, 10]], float)      # par la droite
+_gl2 = np.array([[6, 10], [8, 10.5], [10, 12.5], [13, 11], [18, 10]], float)  # autre tracé, même côté que _gl
+_z = np.zeros(60)
+check('classe de route : gauche et droite différentes, deux tracés à gauche identiques',
+      not _R.same_class(_VR._route_ahead(_gl, _s6), _VR._route_ahead(_gr, _s6), _obc, _z) and _R.same_class(_VR._route_ahead(_gl, _s6), _VR._route_ahead(_gl2, _s6), _obc, _z))
+_rk = _VR._route_ahead(np.array([[0, 0], [3, 0], [3, 4]], float), np.array([0., 0.]), 8)
+check('route restante : rééchantillonnage à pas constant', np.allclose(np.hypot(*np.diff(_rk, axis=0).T), 1.0))
+_U2 = np.stack([np.tile([1.0, 0.0], (_c.T, 1))] * 2)
+_c.modes = [dict(g=_gl, U=_U2[0]), dict(g=_gr, U=_U2[1])]
+_cst = lambda s, U, o: np.array([100.0, 95.0]) + _c.ideal_cost(s)        # coûts imposés, la droite un peu meilleure
+_c.eval_cost = _cst
+_c.prev_g = _gl.copy()
+check('cohérence : à coûts proches (100 contre 95), on garde la classe suivie', _c.select(_s6, _U2, _obc) == 0)
+_c.eval_cost = lambda s, U, o: np.array([100.0, 70.0]) + _c.ideal_cost(s)
+_sw0 = _c.switches; _c.prev_g = _gl.copy()
+check('cohérence : on change si l\'autre est nettement meilleure (100 contre 70 < 75), et on le compte', _c.select(_s6, _U2, _obc) == 1 and _c.switches == _sw0 + 1)
+_c.prev_g = None; _c.eval_cost = _cst
+check('cohérence : sans historique, coût minimal pur', _c.select(_s6, _U2, _obc) == 1)
+
+_wf = sim.World('foret', 1412); _obf = np.array([[x, y, 0, 0, r, 0, -1] for x, y, r in _wf.static])
+_sf = np.array([9.8, 13.4, 0.3]); _Df = P.dijkstra(P.occupancy([tuple(c) for c in _wf.static], sim.R_ROB + 0.1), _wf.goal)
+_g3 = P.spacetime_plan2(_sf, _wf.goal, _obf, _Df); _g1 = P.spacetime_plan2(_sf, _wf.goal, _obf, _Df, margin_static=_VR.CarteCommuneMixin.MARGE_FIXE)
+check('carte commune : le passage de 0,98 m (forêt 1412) est fermé pour la route espace-temps avec 0,3 m, ouvert avec la marge des routes topologiques',
+      _g3[9, 0] - _sf[0] < 0.3 and _g1[9, 0] - _sf[0] > 1.0, f'avance en 3 s : {_g3[9, 0] - _sf[0]:.2f} m contre {_g1[9, 0] - _sf[0]:.2f} m')
+check('carte commune : marge des personnes inchangée (0,3 m) et VIGIE 3 inchangé', _VR.CarteCommuneMixin.MARGE_FIXE == 0.1 and P.spacetime_plan2.__defaults__[1] == 0.3 and 'refresh_modes' not in P.Vigie3.__dict__)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

@@ -1120,7 +1120,7 @@ ST2_RES, ST2_DT, ST2_K, ST2_SUB = 0.35, 1.0 / 3.0, 24, 4      # 0,35 m, 1/3 s, h
 ST2_N = int(round(SIZE / ST2_RES))
 
 
-def spacetime_plan2(s, goal, obs, D, unc=0.05, margin=0.3, unc_agent=None):
+def spacetime_plan2(s, goal, obs, D, unc=0.05, margin=0.3, unc_agent=None, margin_static=None):
     """A* espace-temps avec vérification continue : entre deux instants du plan, on vérifie
     4 positions intermédiaires contre la position prédite des agents aux mêmes instants.
     Un agent rapide ne peut plus « traverser » le plan entre deux couches de temps."""
@@ -1128,7 +1128,7 @@ def spacetime_plan2(s, goal, obs, D, unc=0.05, margin=0.3, unc_agent=None):
     gx, gy = np.meshgrid(xs, xs, indexing='ij')
     stat = np.zeros((ST2_N, ST2_N), bool)
     for o in obs[obs[:, 5] == 0]:
-        stat |= (gx - o[0]) ** 2 + (gy - o[1]) ** 2 < (o[4] + R_ROB + margin) ** 2
+        stat |= (gx - o[0]) ** 2 + (gy - o[1]) ** 2 < (o[4] + R_ROB + (margin if margin_static is None else margin_static)) ** 2
     stat[0, :] = stat[-1, :] = stat[:, 0] = stat[:, -1] = True
     mobmask = obs[:, 5] > 0
     mob = obs[mobmask]
@@ -1213,11 +1213,14 @@ class MMST(MultiModalMPPI):
             else:
                 m['U'] = self.mppi_step(s, m['U'], obs, self.scen(), m['g'])
         Us = np.stack([m['U'] for m in self.modes])
-        J = self.eval_cost(s, Us, obs)
-        i = int(np.argmin(J))
+        i = self.select(s, Us, obs)
         u = Us[i, 0].copy(); self.chosen_g = self.modes[i]['g']
         for m in self.modes: m['U'] = np.roll(m['U'], -1, 0); m['U'][-1] = m['U'][-2]
         return u
+
+    def select(self, s, Us, obs):
+        """Choix du mode exécuté : coût minimal."""
+        return int(np.argmin(self.eval_cost(s, Us, obs)))
 
 
 ALL += [MMST]

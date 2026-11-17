@@ -108,3 +108,77 @@ P_MAX_FANTOME = 1 - np.sqrt(1 - REF.DRAMPPI.SIGMA)
 DIAG_FANTOMES = [REF._variant(Vigie3R, 'fantômes0.01', P_EXIST=0.01), REF._variant(Vigie3R, 'fantômes0.02', P_EXIST=0.02)]
 DIAG_FANTOMES += [type(c.__name__ + '_sp', (SansPlafondMixin, c), dict(name=c.name + ' sans plafond')) for c in DIAG_FANTOMES]
 P.ALL += DIAG_FANTOMES
+
+
+def _route_ahead(g, s, n=60):
+    """Partie restante d'une route guide, depuis le robot, rééchantillonnée en n points à pas d'abscisse constant."""
+    g = np.asarray(g, float)[:, :2]
+    k = int(np.argmin(np.hypot(g[:, 0] - s[0], g[:, 1] - s[1])))
+    p = np.vstack([s[None, :2], g[k:]])
+    L = np.r_[0, np.cumsum(np.hypot(*np.diff(p, axis=0).T))]
+    if L[-1] < 1e-6: return np.repeat(p[:1], n, 0)
+    u = np.linspace(0, L[-1], n)
+    return np.stack([np.interp(u, L, p[:, 0]), np.interp(u, L, p[:, 1])], -1)
+
+
+class ConsistencyMixin:
+    """Cohérence de T-MPC (de Groot et al., T-RO 2024, éq. 12) : le coût du mode resté dans la classe d'homotopie
+    suivie au cycle précédent est multiplié par 0,75, après soustraction du coût idéal (même code que notre T-MPC++).
+    Différence déclarée : la classe est jugée sur la route guide restante jusqu'au but, par rapport aux obstacles fixes,
+    et non sur la trajectoire de 2,5 s. Dans VIGIE, les routes ne se séparent souvent qu'au-delà de l'horizon : jugées
+    sur 2,5 s, toutes tombaient dans la même classe et la remise n'avait aucun effet (vérifié en forêt, graine 1412).
+    Sans cohérence, VIGIE 3 change de route à un cycle sur trois ou quatre et peut osciller sans fin."""
+    C_CONS = REF.TMPC.C_CONS
+
+    def reset(self, static, goal):
+        super().reset(static, goal)
+        self.prev_g = None; self.switches = 0; self.times = np.arange(1, self.T + 1) * DT
+
+    def ideal_cost(self, s):
+        return REF.TMPC.ideal_cost(self, s)
+
+    def select(self, s, Us, obs):
+        J = np.maximum(self.eval_cost(s, Us, obs) - self.ideal_cost(s), 0.0)
+        w = np.ones(len(Us))
+        st = obs[obs[:, 5] == 0]
+        if self.prev_g is not None and len(st):
+            pg = _route_ahead(self.prev_g, s); z = np.zeros(len(pg))
+            for i, m in enumerate(self.modes):
+                if REF.same_class(_route_ahead(m['g'], s), pg, st, z): w[i] = self.C_CONS
+        i = int(np.argmin(w * J))
+        if self.prev_g is not None and w[i] == 1.0: self.switches += 1
+        self.prev_g = np.array(self.modes[i]['g'], float)
+        return i
+
+
+class CarteCommuneMixin:
+    """La route espace-temps voit les obstacles fixes avec la même marge que les routes topologiques
+    (R_ROB + 0,1 m, comme diverse_guides) ; la marge de 0,3 m reste autour des personnes. Avec 0,3 m partout,
+    un passage de 0,98 m entre deux obstacles fixes était ouvert pour les routes topologiques et fermé pour
+    la route espace-temps, qui proposait un long détour : le robot hésitait sans fin entre les deux
+    (forêt, graines 1412 et 1419, aucune personne dans la scène)."""
+    MARGE_FIXE = 0.1
+
+    def refresh_modes(self, s, obs):
+        P.MultiModalMPPI.refresh_modes(self, s, obs)
+        ua = 0.02 + 0.30 * self.tr.u(obs)
+        gt = P.spacetime_plan2(s, self.goal, obs, self.D, unc_agent=ua, margin_static=self.MARGE_FIXE)
+        if gt is not None and len(gt) > 3:
+            self.modes.append(dict(g=gt, U=P.timed_controls(s, gt, self.T), st=True, neuf=True))
+
+
+_BASE = REGLAGE[2]                               # configuration retenue au réglage (escompte 0,97)
+class Vigie3C(ConsistencyMixin, CarteCommuneMixin, P.Vigie3):
+    name = 'VIGIE 3 + carte commune + cohérence'
+
+
+class Vigie3RC(ConsistencyMixin, CarteCommuneMixin, _BASE):
+    name = 'VIGIE 3 + risque calibré + carte commune + cohérence'
+
+
+class Vigie3RCF(ConsistencyMixin, CarteCommuneMixin, _BASE):
+    name = 'VIGIE 3 + risque calibré + carte commune + cohérence + fantômes'
+    P_EXIST = 0.02
+
+
+P.ALL += [Vigie3C, Vigie3RC, Vigie3RCF]
