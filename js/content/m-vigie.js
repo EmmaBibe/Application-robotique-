@@ -17,7 +17,7 @@ export const labo = {
       blocks: [
         Brief('Le projet', `<p>Objectif : mettre au point un planificateur de trajectoire nouveau, plus robuste que les méthodes actuelles quand le monde est imprévisible : foules, croisements rapides, capteurs limités, latence, roues qui patinent.</p>`, ['Recherche', 'Planification', 'Statistiques']),
         Pipe('Les étapes réellement suivies', [
-          ['État de l\'art', 'Lire ce qui existe pour ne pas réinventer.', 'MPPI, MPPI multimodal (2025), commande contingente', 'On a découvert que plusieurs de nos premières idées existaient déjà : c\'est normal, et c\'est pour ça qu\'on cherche d\'abord.'],
+          ['État de l\'art', 'Lire ce qui existe pour ne pas réinventer.', 'MPPI, T-MPC (2024), DRA-MPPI (2025), commande contingente', 'On a découvert que plusieurs de nos premières idées existaient déjà : c\'est normal, et c\'est pour ça qu\'on cherche d\'abord.'],
           ['Cartographie des inspirations', 'Passer en revue une trentaine de domaines.', 'finance, météorologie, psychologie, navigation maritime…', 'Le tableau complet est dans recherche/planificateur/CARTOGRAPHIE.md.'],
           ['Banc d\'essai', 'Construire un simulateur reproductible et des scènes difficiles.', '7 scènes, 7 conditions de perturbation', 'Sans banc d\'essai fiable, on ne peut rien affirmer.'],
           ['Références et oracle', 'Comparer à ce qui marche le mieux aujourd\'hui, et à un planificateur qui connaît le futur.', 'oracle : 99 % de succès', 'L\'oracle dit combien il reste réellement à gagner.'],
@@ -108,7 +108,7 @@ export const labo = {
 <table><thead><tr><th>Méthode</th><th>Succès</th><th>Collisions</th><th>Temps moyen</th><th>Calcul par cycle</th></tr></thead><tbody>
 <tr><td><b>VIGIE 2</b></td><td><b>95 %</b></td><td>4 %</td><td><b>19,0 s</b></td><td>18,0 ms</td></tr>
 <tr><td>MPPI multimodal + prédicteur de Smith</td><td>95 %</td><td>4 %</td><td>19,3 s</td><td>17,4 ms</td></tr>
-<tr><td>MPPI multimodal (référence récente, 2025)</td><td>94 %</td><td>5 %</td><td>19,7 s</td><td>17,2 ms</td></tr>
+<tr><td>MPPI multimodal (sans prédicteur)</td><td>94 %</td><td>5 %</td><td>19,7 s</td><td>17,2 ms</td></tr>
 <tr><td>MPPI</td><td>94 %</td><td>5 %</td><td>18,5 s</td><td>2,8 ms</td></tr>
 <tr><td>DWA</td><td>74 %</td><td>4 %</td><td>15,3 s</td><td>1,4 ms</td></tr>
 <tr><td>A* + poursuite pure</td><td>61 %</td><td>39 %</td><td>13,5 s</td><td>0,9 ms</td></tr>
@@ -124,7 +124,7 @@ export const labo = {
 <ul><li><b>VIGIE est nouveau dans sa combinaison.</b> Nous n'avons trouvé aucune publication qui règle l'éventail des futurs de chaque agent par son imprévisibilité mesurée en ligne, et qui choisit entre routes topologiques et réflexes par valeur d'option. Chaque brique a des parents connus.</li>
 <li><b>VIGIE 2 fonctionne et résiste</b> aux sept conditions de perturbation, au niveau de la meilleure méthode récente, et il arrive plus vite qu'elle.</li>
 <li><b>Il ne la surpasse pas en sécurité.</b> L'écart n'est pas significatif.</li>
-<li><b>Sur robot réaliste, VIGIE 3 gagne là où il voit bien</b> (portes étroites, angles morts en vision complète), pas partout.</li>
+<li><b>Sur robot réaliste, VIGIE 3 battait l'ancienne référence</b> aux portes étroites, mais <b>pas les références fidèles de l'état de l'art</b> (T-MPC, DRA-MPPI) : face à elles, aucune avance mesurable.</li>
 <li><b>Tout cela est en simulation.</b> Le vrai juge sera un robot réel.</li></ul>
 <h3>Sur un robot réaliste : VIGIE 3</h3>
 <p>Les résultats ci-dessus supposaient un robot qui obéit instantanément. Le banc a ensuite été rendu plus exigeant : commande transmise avec 50 ms de retard, régulateur sur chaque roue, robot de 25 kg qui met plus d'une seconde à atteindre sa vitesse, personnes suivies par un filtre de Kalman à partir de mesures bruitées. Quatre scènes plus dures ont été ajoutées : traversée, porte étroite, angles morts, poursuite. Sur ce robot, VIGIE 2 perdait du terrain. VIGIE 3 le remplace : routes cherchées dans l'espace et le temps, marges calculées agent par agent, et vitesse limitée près des angles morts, comme si quelqu'un pouvait en surgir.</p>
@@ -138,6 +138,7 @@ export const labo = {
 <tr><td>Toutes scènes</td><td>81 %</td><td>83 %</td><td>+1,9 (−0,4 à +4,1)</td></tr>
 </tbody></table>
 <p>Référence : MPPI multimodal avec prédicteur de Smith, sur le même robot et avec le même filtre de suivi.</p>
+<p><b>Correction importante.</b> En relisant les publications, on s'est aperçu que cette référence était mal attribuée : elle imitait T-MPC (de Groot et al., 2024), mais en plus faible. Une fois T-MPC et DRA-MPPI (Trevisan et al., 2025) codés fidèlement d'après leurs publications et réglés avec le même effort que VIGIE, <b>l'avance de VIGIE 3 disparaît</b> sur les mondes de mise au point. Elle tenait surtout à une référence trop faible. Leçon : une méthode ne vaut que face au meilleur adversaire réellement disponible.</p>
 <ul><li><b>Ce qui tient :</b> l'avance aux portes étroites, déjà vue pendant la mise au point, se retrouve sur les mondes neufs. En vision complète, VIGIE 3 bat la référence de façon significative.</li>
 <li><b>Ce qui ne tient pas :</b> quand la vue est coupée, l'avance disparaît. Les briques de VIGIE supposent de bien voir ce qui bouge ; le prochain progrès viendra de la perception, pas du planificateur.</li>
 <li><b>Une fausse bonne idée :</b> une règle inspirée du code de la route (ne pas s'engager dans une zone si l'on risque d'y rester bloqué) gagnait 2 points en développement. Sur les mondes neufs, elle n'apporte rien et fait même perdre 8 points dans la foule dense. Elle n'a pas été gardée. C'est la troisième fois que les mondes neufs corrigent une conclusion tirée pendant la mise au point.</li>
