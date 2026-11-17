@@ -259,7 +259,8 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
     if C.get('reel'):
         import robot_reel
         robot = robot_reel.RealRobot(s, np.random.default_rng(777 + world.seed))
-        tracker = robot_reel.Tracker() if os.environ.get('TRACKER') == 'naif' else robot_reel.TrackerKF()   # TRACKER=naif : ancien filtre alpha-bêta
+        tk = os.environ.get('TRACKER')   # naif : ancien filtre alpha-bêta ; sans_prolongation : Kalman d'avant l'audit (pistes non vues effacées de la sortie)
+        tracker = robot_reel.Tracker() if tk == 'naif' else robot_reel.TrackerKF(prolonger=(tk != 'sans_prolongation'))
         C['lat'] = C.get('lat', 0) + 1          # chaîne lidar + traitement : une période de retard de plus
     known = world.static.copy()
     if C.get('unknown'): known = known[np.hypot(known[:, 0] - s[0], known[:, 1] - s[1]) - known[:, 2] < C.get('range', 6.0)]

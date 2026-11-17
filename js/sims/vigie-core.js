@@ -659,10 +659,17 @@ export function makeTracker() {
           k = { x: xp, P: Pp, t };
         }
       }
-      k.t = t; st.set(o[6], k);
+      k.t = t; k.r = o[4]; st.set(o[6], k);
       return [k.x[0], k.x[1], k.x[2], k.x[3], o[4], o[5], o[6]];
     });
     for (const [id, k] of st) if (t - k.t > OUBLI) st.delete(id);
+    // pistes non revues à ce cycle (détection manquée, masquage) : on continue de les prédire jusqu'à leur effacement
+    const vus = new Set(obs.filter(o => o[5]).map(o => o[6]));
+    for (const [id, k] of st) {
+      if (vus.has(id)) continue;
+      const d = t - k.t;
+      out.push([k.x[0] + d * k.x[2], k.x[1] + d * k.x[3], k.x[2], k.x[3], k.r, 1, id]);
+    }
     return out;
   };
 }
@@ -673,7 +680,8 @@ export function createEpisode(scene, seed, Planner, cond = {}) {
   const lat = (cond.latence ? 2 : 0) + (cond.reel ? 1 : 0);
   const mem = withMemory(new Planner(seed));
   if (cond.perception && mem.planner) mem.planner.occl = true;
-  const pl = lat && (Planner === Vigie || Planner === Vigie3) ? withSmith(mem, lat) : mem;
+  // compensation du retard appliquée à toutes les méthodes, pour une comparaison symétrique (audit du 17 novembre 2026)
+  const pl = lat ? withSmith(mem, lat) : mem;
   let s = [...w.start], v = 0, om = 0, t = 0, outcome = null, minc = Infinity; const path = [[s[0], s[1]]], queue = [];
   const gv = cond.glissement ? R.u(0.75, 1.15) : 1, gw = cond.glissement ? R.u(0.75, 1.2) : 1, bw = cond.glissement ? R.u(-0.12, 0.12) : 0;
   const known = cond.carte ? w.static.filter(([x, y, r]) => Math.hypot(x - s[0], y - s[1]) - r < 6) : w.static;

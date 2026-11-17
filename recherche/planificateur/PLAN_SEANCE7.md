@@ -89,3 +89,9 @@ VIGIE 3 ; DRA-MPPI réglé (référence officielle) ; T-MPC++ ; VIGIE 3 + risque
 Contrôle rapide sur 4 mondes de foule perdus (choisis *parce que* perdus, donc sans valeur de preuve) : 3 récupérés.
 
 **Validation** sur les graines 1460 à 1499, jamais utilisées, 11 scènes, deux conditions : VIGIE 6, la version précédente (sans planificateur libre) et DRA-MPPI réglé. **Règle** : la brique est adoptée si VIGIE 6 fait au moins 3 essais de mieux que la version précédente ; sinon on garde la plus simple. Les graines 5000 à 5099 restent intactes pour l'évaluation finale.
+
+## 9. Correction du banc après un audit indépendant (17 novembre 2026)
+
+Un audit indépendant de l'application a relevé, entre autres, que **le suivi des personnes effaçait de sa sortie toute piste non détectée au cycle courant**. Vérifié : c'est vrai dans le banc de recherche comme dans l'application. En perception limitée, où 10 % des détections manquent au hasard à chaque cycle, une personne visible « clignotait » donc pour le planificateur, et une personne masquée par une autre disparaissait aussitôt. Correction, commune à toutes les méthodes : les pistes non revues continuent d'être prédites jusqu'à leur effacement (1 s). L'ancien comportement reste reproductible (`TRACKER=sans_prolongation`).
+
+Conséquence : la validation de VIGIE 6 est **arrêtée et relancée à l'identique sur le banc corrigé** (même graines 1460 à 1499, mêmes méthodes, même règle de décision). Les 874 essais déjà joués avec l'ancien suivi sont gardés à part (`dev7_validation_ancien_suivi.csv`) pour mesurer l'effet de la correction. Toutes les comparaisons antérieures restent valables pour l'ancien suivi ; l'évaluation finale se fera sur le banc corrigé, pour toutes les méthodes.

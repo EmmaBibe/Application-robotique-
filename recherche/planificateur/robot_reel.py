@@ -105,7 +105,7 @@ class TrackerKF:
     Bruit de mesure : celui du capteur (5 cm). Bruit de modèle : accélérations de piéton (1,5 m/s²)."""
     R_MES, SIG_A, V0_SIG, OUBLI, PORTE = 0.05, 1.5, 2.0, 1.0, 3.5
 
-    def __init__(self): self.s = {}; self.t = 0.0
+    def __init__(self, prolonger=True): self.s = {}; self.t = 0.0; self.prolonger = prolonger
 
     def __call__(self, obs, dt=0.1):
         self.t += dt; out = obs.copy(); vus = set()
@@ -113,7 +113,7 @@ class TrackerKF:
             if o[5] <= 0: continue
             i = int(o[6]); z = o[:2].astype(float); vus.add(i)
             if i in self.s:
-                x, P, t0 = self.s[i]; d = self.t - t0
+                x, P, t0, _ = self.s[i]; d = self.t - t0
                 F = np.eye(4); F[0, 2] = F[1, 3] = d
                 q = self.SIG_A ** 2; G = np.array([[d * d / 2, 0], [0, d * d / 2], [d, 0], [0, d]])
                 x = F @ x; P = F @ P @ F.T + q * G @ G.T
@@ -126,7 +126,17 @@ class TrackerKF:
             else: i_new = True
             if i_new:
                 x = np.array([z[0], z[1], 0.0, 0.0]); P = np.diag([self.R_MES ** 2] * 2 + [self.V0_SIG ** 2] * 2)
-            self.s[i] = (x, P, self.t)
+            self.s[i] = (x, P, self.t, float(o[4]))
             out[k, :2] = x[:2]; out[k, 2:4] = x[2:]
-        for i in [i for i, (_, _, t0) in self.s.items() if self.t - t0 > self.OUBLI]: del self.s[i]
+        for i in [i for i, v in self.s.items() if self.t - v[2] > self.OUBLI]: del self.s[i]
+        if self.prolonger:
+            # pistes non revues à ce cycle (détection manquée, masquage) : on continue de les prédire, comme tout
+            # système de suivi, jusqu'à leur effacement. Avant cette correction, une personne non détectée disparaissait
+            # aussitôt pour le planificateur, même 0,1 s (audit indépendant du 17 novembre 2026).
+            extra = []
+            for i, (x, P, t0, r) in self.s.items():
+                if i in vus: continue
+                d = self.t - t0
+                extra.append((x[0] + d * x[2], x[1] + d * x[3], x[2], x[3], r, 1, i))
+            if extra: out = np.vstack([out, np.array(extra, float)])
         return out

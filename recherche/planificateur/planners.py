@@ -1232,7 +1232,8 @@ ALL += [MMST]
 
 
 class TubeMixin:
-    """Tubes espace-temps calibrés : la place réservée autour de chaque agent dans le plan espace-temps
+    """Marges espace-temps croissantes (règle heuristique, non calibrée statistiquement, malgré le nom historique
+    « tubes calibrés » gardé dans les fichiers de résultats) : la place réservée autour de chaque agent dans le plan espace-temps
     s'élargit avec le temps d'autant plus vite que l'agent s'est montré imprévisible."""
     def refresh_modes(self, s, obs):
         MultiModalMPPI.refresh_modes(self, s, obs)
@@ -1261,7 +1262,7 @@ class PhantomMixin:
 
 
 class Vigie3(PhantomMixin, SmithMixin, TubeMixin, MMST):
-    """VIGIE 3 : route espace-temps à tubes calibrés sur l'imprévisibilité de chaque agent,
+    """VIGIE 3 : route espace-temps (guide holonome x, y, t, sans garantie cinématique) à marges croissantes selon l'imprévisibilité de chaque agent,
     plus les routes topologiques, compensation du retard et vitesse prudente aux angles morts."""
     name = 'VIGIE 3 (proposé)'
 

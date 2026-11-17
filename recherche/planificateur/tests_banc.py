@@ -500,5 +500,23 @@ check('libre : choisi quand il est meilleur', _v6.select(_s7, np.stack([_Ug, _ex
 check('libre : sa « route » mène au but (cohérence possible)', np.allclose(_ex[0]['g'][-1], [18, 10]) and len(_ex[0]['g']) == _v6.T + 1)
 check('libre : 400 tirages pour lui, 128 pour les options guidées', _v6.N == 128 and _VR.FreeModeMixin.N_FREE == 400)
 
+print('30. Suivi : une personne non détectée reste prédite (correction issue de l\'audit indépendant)')
+_tk = _rr.TrackerKF()
+for _k in range(10): _o7 = _tk(np.array([[2.0 + 0.1 * _k, 5.0, 0, 0, 0.35, 1, 1001]]))   # marche à 1 m/s vers +x
+_vit = _o7[0, 2]
+_out = [_tk(np.zeros((0, 7))) for _ in range(3)]                                           # 0,3 s sans détection
+check('suivi : la personne masquée reste visible du planificateur, prédite à sa vitesse',
+      all(len(o) == 1 for o in _out) and abs(_out[-1][0, 0] - (_o7[0, 0] + 0.3 * _vit)) < 1e-9 and _out[-1][0, 6] == 1001 and _out[-1][0, 4] == 0.35,
+      f'x = {_out[-1][0, 0]:.3f}, vitesse estimée {_vit:.2f} m/s')
+for _ in range(8): _o8 = _tk(np.zeros((0, 7)))
+check('suivi : piste effacée après 1 s sans détection', len(_o8) == 0)
+_tk0 = _rr.TrackerKF(prolonger=False)
+for _k in range(10): _tk0(np.array([[2.0 + 0.1 * _k, 5.0, 0, 0, 0.35, 1, 1001]]))
+check('suivi : l\'ancien comportement reste reproductible (TRACKER=sans_prolongation)', len(_tk0(np.zeros((0, 7)))) == 0)
+_tk2 = _rr.TrackerKF()
+for _k in range(10): _tk2(np.array([[2.0 + 0.1 * _k, 5.0, 0, 0, 0.35, 1, 1001], [8.0, 8.0, 0, 0, 0.5, 0, 3]]))
+_o9 = _tk2(np.array([[8.0, 8.0, 0, 0, 0.5, 0, 3]]))
+check('suivi : obstacles fixes inchangés, une seule ligne par personne', len(_o9) == 2 and (_o9[:, 6] == 1001).sum() == 1)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)
