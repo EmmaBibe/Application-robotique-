@@ -518,5 +518,28 @@ for _k in range(10): _tk2(np.array([[2.0 + 0.1 * _k, 5.0, 0, 0, 0.35, 1, 1001], 
 _o9 = _tk2(np.array([[8.0, 8.0, 0, 0, 0.5, 0, 3]]))
 check('suivi : obstacles fixes inchangés, une seule ligne par personne', len(_o9) == 2 and (_o9[:, 6] == 1001).sum() == 1)
 
+print('31. Incertitude du suivi dans le risque')
+_tk3 = _rr.TrackerKF(); _tk3(np.array([[5.0, 5.0, 0, 0, 0.35, 1, 1002]]))
+_c0 = _tk3.last_cov[1002]
+check('covariance : une piste neuve a la variance du capteur en position et une vitesse très incertaine',
+      abs(_c0[0] - 0.05 ** 2) < 1e-12 and abs(_c0[2] - 2.0 ** 2) < 1e-12 and _c0[1] == 0)
+for _k in range(1, 15): _tk3(np.array([[5.0 + 0.1 * _k, 5.0, 0, 0, 0.35, 1, 1002]]))
+check('covariance : la vitesse devient sûre après quelques mesures', _tk3.last_cov[1002][2] < 0.3, f'{_tk3.last_cov[1002][2]:.3f}')
+_pv = _tk3.last_cov[1002][0]; _tk3(np.zeros((0, 7))); _tk3(np.zeros((0, 7)))
+check('covariance : elle grandit pendant le masquage', _tk3.last_cov[1002][0] > 2 * _pv, f'{_pv:.4f} -> {_tk3.last_cov[1002][0]:.4f}')
+_k6 = _VR.Vigie6K(); _k6.reset(np.zeros((0, 3)), np.array([18., 10.])); _k6.lat = 2
+_k5 = _VR.Vigie6(); _k5.reset(np.zeros((0, 3)), np.array([18., 10.]))
+_obk = np.array([[7.0, 10.0, -0.5, 0.0, 0.35, 1, 1003]])
+_cv = {1003: (0.04, 0.05, 0.9)}
+_trk = _R.rollout(np.array([5., 10., 0.]), np.stack([np.tile([1.0, w], (_k6.T, 1)) for w in (0.0, 0.6)]))
+_k5.set_track_cov(_cv)
+check('incertitude du suivi : sans l\'option, le canal ne change rien', np.allclose(_k5.risk(_trk, _obk), _k5.risk(_trk, _obk) * 0 + _VR.Vigie3R.risk(_k5, _trk, _obk)))
+_k6.set_track_cov(_cv); _k6.W_HARD = 0.0; _k6.W_SOFT = 1.0; _k6.DISC = 1.0
+_tt = np.arange(1, _k6.T + 1) * sim.DT; _tau = _tt + 2 * sim.DT
+_s2 = _k6.VAR_RATE * _tt + 0.04 + 2 * _tau * 0.05 + _tau ** 2 * 0.9
+_mu = _obk[0, :2] + _obk[0, 2:4] * _tt[:, None]
+_pref = np.array([(1 - (1 - _R.collision_prob(np.hypot(*(_trk[i, :, :2] - _mu).T), 0.35 + sim.R_ROB, np.sqrt(_s2)))).sum() for i in range(2)])
+check('incertitude du suivi : variance propagée exactement (p + 2τ cov + τ² v, décalage de Smith inclus)', np.allclose(_k6.risk(_trk, _obk), _pref), f'{np.round(_k6.risk(_trk, _obk), 3)} contre {np.round(_pref, 3)}')
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

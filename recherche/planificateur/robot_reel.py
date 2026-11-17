@@ -105,7 +105,7 @@ class TrackerKF:
     Bruit de mesure : celui du capteur (5 cm). Bruit de modèle : accélérations de piéton (1,5 m/s²)."""
     R_MES, SIG_A, V0_SIG, OUBLI, PORTE = 0.05, 1.5, 2.0, 1.0, 3.5
 
-    def __init__(self, prolonger=True): self.s = {}; self.t = 0.0; self.prolonger = prolonger
+    def __init__(self, prolonger=True): self.s = {}; self.t = 0.0; self.prolonger = prolonger; self.last_cov = {}
 
     def __call__(self, obs, dt=0.1):
         self.t += dt; out = obs.copy(); vus = set()
@@ -129,6 +129,16 @@ class TrackerKF:
             self.s[i] = (x, P, self.t, float(o[4]))
             out[k, :2] = x[:2]; out[k, 2:4] = x[2:]
         for i in [i for i, v in self.s.items() if self.t - v[2] > self.OUBLI]: del self.s[i]
+        # covariance de chaque piste à l'instant courant (moyenne des axes x et y) : variance de position,
+        # covariance position-vitesse, variance de vitesse. Propagée sur le temps écoulé pour les pistes non revues.
+        self.last_cov = {}
+        for i, (x, P, t0, r) in self.s.items():
+            d = self.t - t0
+            if d > 0:
+                F = np.eye(4); F[0, 2] = F[1, 3] = d
+                G = np.array([[d * d / 2, 0], [0, d * d / 2], [d, 0], [0, d]])
+                P = F @ P @ F.T + self.SIG_A ** 2 * G @ G.T
+            self.last_cov[i] = ((P[0, 0] + P[1, 1]) / 2, (P[0, 2] + P[1, 3]) / 2, (P[2, 2] + P[3, 3]) / 2)
         if self.prolonger:
             # pistes non revues à ce cycle (détection manquée, masquage) : on continue de les prédire, comme tout
             # système de suivi, jusqu'à leur effacement. Avant cette correction, une personne non détectée disparaissait

@@ -282,13 +282,16 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
             meas = robot.est.copy()                                   # pose estimée (odométrie + recalage lidar)
             obs = world.obstacles(noise=0.05, robot=s, rng_range=C.get('range'), occl=C.get('occl', False), drop=C.get('drop', 0.0))
             if not os.environ.get('VITESSES_EXACTES'): obs = tracker(obs)   # vitesses estimées, pas données (diagnostic : VITESSES_EXACTES=1)
+            cov = dict(getattr(tracker, 'last_cov', {}))
         else:
             meas = s + (rng.normal(0, [0.03, 0.03, 0.02]) if perturb else 0)
             obs = world.obstacles(noise=0.05 if perturb else 0.0, robot=s, rng_range=C.get('range'), occl=C.get('occl', False), drop=C.get('drop', 0.0))
+        if robot is None: cov = {}
         if C.get('lat'):
-            queue.append((meas, obs))
-            meas, obs = queue[0]
+            queue.append((meas, obs, cov))
+            meas, obs, cov = queue[0]
             if len(queue) > C['lat']: queue.popleft()
+        if hasattr(planner, 'set_track_cov'): planner.set_track_cov(cov)   # incertitude du suivi, retardée comme les mesures
         t0 = time.perf_counter()
         vc, wc = planner.act(t, meas, obs)
         comp.append(time.perf_counter() - t0)

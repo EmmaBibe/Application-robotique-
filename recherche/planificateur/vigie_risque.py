@@ -23,7 +23,11 @@ class RiskCostMixin:
     SIGMA = REF.DRAMPPI.SIGMA
     VAR_RATE = REF.DRAMPPI.VAR_RATE
     adaptive = False
+    COV_SUIVI = False       # ajouter l'incertitude du suivi (covariance du filtre de Kalman) au risque
     DISC = 1.0              # escompte temporel du risque (1 : aucun, comme DRA-MPPI)
+
+    def set_track_cov(self, cov):
+        self._cov = cov
 
     def var_rates(self, o):
         """Variance de position par seconde pour chaque personne de o (lignes mobiles)."""
@@ -57,7 +61,14 @@ class RiskCostMixin:
         tau = np.r_[np.zeros(mob.sum()), np.tile(self.DELAIS, nph)]
         t = np.arange(1, self.T + 1) * DT
         mu = o[None, :, :2] + o[None, :, 2:4] * np.maximum(t[:, None] - tau[None, :], 0)[..., None]   # (T, M, 2)
-        sig = np.sqrt(self.var_rates(o)[None, :] * t[:, None])              # (T, M)
+        sig2 = self.var_rates(o)[None, :] * t[:, None]                       # (T, M) : bruit de manœuvre (DRA-MPPI)
+        if self.COV_SUIVI and getattr(self, '_cov', None):
+            # incertitude du suivi propagée par le modèle à vitesse constante, sur l'horizon décalé du prédicteur de Smith
+            th = t + getattr(self, 'lat', 0) * DT                             # (ne pas confondre avec tau, délais des fantômes)
+            for j, row in enumerate(o):
+                c = self._cov.get(int(row[6]))
+                if c is not None: sig2[:, j] += np.maximum(c[0] + 2 * th * c[1] + th ** 2 * c[2], 0.0)
+        sig = np.sqrt(sig2)
         d = np.sqrt(((tr[..., :, None, :2] - mu) ** 2).sum(-1))             # (..., T, M)
         present = (t[:, None] >= tau[None, :] - 1e-9)                       # une arrivée n'existe qu'à partir de son instant
         p = REF.collision_prob(d, o[:, 4] + R_ROB, sig) * w_ex * present    # fantômes : pondérés par leur probabilité d'exister
@@ -214,3 +225,11 @@ class Vigie6(FreeModeMixin, ConsistencyMixin, CarteCommuneMixin, _BASE):
 
 
 P.ALL += [Vigie6]
+
+
+class Vigie6K(Vigie6):
+    name = 'VIGIE 6 + incertitude du suivi'
+    COV_SUIVI = True
+
+
+P.ALL += [Vigie6K]
