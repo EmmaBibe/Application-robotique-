@@ -481,3 +481,17 @@ Tests de cohérence à la fin de l'étape 3 : **149 vérifications réussies, 0 
 ## Séance 7 · Correction d'attribution et mise à niveau des références
 
 En relisant les publications citées, une erreur est apparue : la référence « MPPI multimodal (2025) » était attribuée à Bertipaglia et al. (arXiv 2508.21364), qui décrit en fait quatre modes d'échantillonnage pour une voiture, sans routes topologiques. Notre code imite T-MPC (de Groot et al., T-RO 2024), mais en plus faible : routes guides tracées sur une carte figée au lieu de l'espace libre dynamique, et pas de préférence de cohérence. Les résultats des séances 1 à 6 restent valables pour la méthode réellement codée, mais pas comme comparaison à T-MPC. L'avance de VIGIE 3 est probablement surestimée. Plan de correction et nouvelles références : `PLAN_SEANCE7.md`.
+
+### Références codées d'après leurs publications (`references.py`)
+
+- **T-MPC++** (de Groot et al., T-RO 2024) : guidage Visibility-PRM dans l'espace-temps (30 tirages, 4 routes, cibles en grille 5 × 5), classes distinguées par nombres d'enroulement, contraintes d'homotopie de l'équation 8, remise de 0,75 sur la classe suivie au cycle précédent (équation 12), planificateur supplémentaire non guidé. Planificateurs locaux MPPI avec le coût commun du banc.
+- **DRA-MPPI** (Trevisan et al., IROS 2025) : prédiction à vitesse constante avec bruit gaussien (variance 0,018 m² par seconde, comme la publication), probabilité de collision jointe sur les personnes à chaque instant, coût w_soft P + w_hard 1(P > 0,05), 400 trajectoires tirées.
+- Toutes les adaptations au banc sont listées dans `references.py` (ADAPTATIONS). La probabilité de collision est calculée exactement (table vérifiée contre la formule fermée et contre un tirage de 10⁶ points, écart maximal 0,0006) au lieu de l'estimation de Monte-Carlo de la publication.
+
+**Deux erreurs trouvées en testant T-MPC++ avant toute campagne :**
+1. Dès qu'une personne était à moins de la marge du robot, aucune arête du guidage ne pouvait partir du robot : le guidage devenait aveugle au moment où il servait le plus (une seule route ou aucune, collision à 4,1 s à la porte). Corrigé : une arête qui part du robot doit seulement ne pas le rapprocher davantage des personnes.
+2. La publication place ses cibles le long d'une seule route de référence. Dans nos scènes, toutes les cibles tombaient alors du même côté des obstacles fixes et le guidage ne voyait qu'une classe. On ajoute la même grille le long de deux routes globales de plus. C'est une extension, qui ne peut que renforcer la référence.
+
+Après correction : 1 à 3 routes distinctes par cycle selon la scène, contre 0 ou 1 avant. Onze vérifications ajoutées (test 26), 160 au total, toutes réussies.
+
+**Réglage à budget égal** (graines 1400 à 1419, 11 scènes, vision complète et perception limitée) : trois variantes de poids pour DRA-MPPI, trois pour T-MPC++ (poids des contraintes d'homotopie, marge du guidage), en plus des réglages par défaut.
