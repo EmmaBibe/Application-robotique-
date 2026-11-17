@@ -130,7 +130,8 @@ for f in sorted(glob.glob('*.csv')):
     check(f'{f} : chaque méthode a joué exactement les mêmes mondes, sans doublon', same and not dup, f'{len(R)} lignes')
 
 print('12. Séparation développement / évaluation')
-plages = {'final_v2.csv': (600, 620), 'final_v3.csv': (900, 940), 'final_etape3.csv': (3000, 3060)}
+plages = {'final_v2.csv': (600, 620), 'final_v3.csv': (900, 940), 'final_etape3.csv': (3000, 3060),
+          'final_seance7.csv': (5000, 5100)}   # réservées avant tout essai (PLAN_SEANCE7.md)
 # tout autre fichier de résultats compte comme développement (réglages, diagnostics, ablations)
 dev = [f for f in glob.glob('*.csv') if f not in plages and not f.startswith('js_') and not f.startswith('ablation')]
 dev_seeds = set()
@@ -359,6 +360,48 @@ if _sh.which('node'):
     check('mêmes sorties à 1e-9 près (détections manquées et sauts compris)', d < 1e-9 and sum(map(len, py)) == sum(map(len, js)), f'écart {d:.1e}')
 else:
     check('node disponible pour comparer avec l\'application', False)
+
+print('26. Références de l\'état de l\'art (T-MPC++, DRA-MPPI)')
+import references as _R
+_b = np.linspace(0.05, 6, 120)
+check('probabilité de collision : formule exacte pour un obstacle centré (1 - exp(-b²/2))',
+      np.abs(_R.collision_prob(np.zeros_like(_b), _b, 1.0) - (1 - np.exp(-_b ** 2 / 2))).max() < 1e-4)
+_g = np.random.default_rng(11); _X = _g.normal(size=(1_000_000, 2)); _e = []
+for _a, _bb in [(0.5, 0.6), (2, 1), (3, 2.5), (1, 3), (8, 7), (0.3, 0.15)]:
+    _e.append(abs(_R.collision_prob(np.array(_a), np.array(_bb), 1.0) - np.mean(np.hypot(_X[:, 0] - _a, _X[:, 1]) <= _bb)))
+check('probabilité de collision : accord avec un tirage de Monte-Carlo (10⁶ points)', max(_e) < 0.002, f'écart max {max(_e):.4f}')
+check('probabilité de collision : invariante par changement d\'échelle',
+      abs(_R.collision_prob(np.array(0.6), np.array(0.65), 0.1) - _R.collision_prob(np.array(6.0), np.array(6.5), 1.0)) < 1e-6)
+_tt = np.linspace(0, 1, 41)
+def _path(pts):
+    pts = np.array(pts, float); u = np.linspace(0, 1, len(pts))
+    return np.stack([np.interp(_tt, u, pts[:, 0]), np.interp(_tt, u, pts[:, 1])], -1)
+_ob = np.array([[5, 5, 0, 0, 0.4, 0]])
+check('homotopie : gauche et droite d\'un obstacle sont deux classes', not _R.same_class(_path([(3, 5), (5, 6.5), (7, 5)]), _path([(3, 5), (5, 3.5), (7, 5)]), _ob, _tt))
+check('homotopie : deux passages du même côté sont une seule classe', _R.same_class(_path([(3, 5), (5, 6.5), (7, 5)]), _path([(3, 5), (5, 7.5), (7, 6)]), _ob, _tt))
+_mob = np.array([[5, 2, 0, 4, 0.3, 1]])
+_late = np.stack([np.where(_tt < 0.8, 3 + 0 * _tt, 3 + (_tt - 0.8) / 0.2 * 4), 5 + 0 * _tt], -1)
+check('homotopie : passer devant ou après une personne qui traverse sont deux classes', not _R.same_class(_path([(3, 5), (7, 5)]), _late, _mob, _tt))
+_D = P.dijkstra(P.occupancy([], 0.4), np.array([18., 10.]))
+_gp = _R.GuidancePlanner(2.5, np.random.default_rng(1))
+_out = _gp.plan(np.array([4.5, 10., 0.]), np.array([[8.0, 10.0, -1.0, 0, 0.35, 1]]), _D)
+_side = sorted(np.sign(o[-1, 1] - 10) for o in _out)
+check('guidage : une personne de face donne deux routes, une de chaque côté', len(_out) == 2 and _side == [-1, 1], str([np.round(o[-1], 1) for o in _out]))
+_ok = True
+for o in _out:
+    _sp = np.hypot(*np.diff(np.vstack([[4.5, 10.], o]), axis=0).T) / sim.DT
+    _ok &= bool(_sp.max() <= sim.VMAX + 1e-6)
+check('guidage : routes faisables en vitesse', _ok)
+_t = _R.TMPC(); _t.reset(np.zeros((0, 3)), np.array([18., 10.]))
+_g2 = np.stack([np.linspace(5, 8, _t.T), np.full(_t.T, 11.0)], -1)      # guide au-dessus de la personne
+_U_up = np.tile([1.2, 0.0], (_t.T, 1)); _s0 = np.array([5., 11., 0.])
+_U_dn = _U_up.copy(); _U_dn[:6, 1] = -1.5
+_pen = _t.h_penalty(_s0, np.stack([_U_up, _U_dn]), _g2, np.array([[8.0, 10.0, -1.0, 0, 0.35, 1]]))
+check('contrainte d\'homotopie : nulle si l\'on reste du côté du guide, forte sinon', _pen[0] == 0 and _pen[1] > 500, str(np.round(_pen)))
+_d = _R.DRAMPPI(); _d.reset(np.zeros((0, 3)), np.array([18., 10.]))
+_ob2 = np.array([[7.0, 10.0, 0, 0, 0.35, 1]])
+_c, _pj = _d.risk(_R.rollout(np.array([5., 10., 0.]), np.stack([np.tile([1.0, 0.], (_d.T, 1)), np.tile([1.0, 1.2], (_d.T, 1))])), _ob2)
+check('DRA-MPPI : foncer sur une personne est plus risqué que l\'éviter', _c[0] > _c[1] and _pj[0].max() > 0.9 and _pj[1].max() < 0.5, f'{np.round(_c)}')
 
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)
