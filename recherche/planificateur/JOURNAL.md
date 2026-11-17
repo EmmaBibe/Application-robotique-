@@ -600,3 +600,23 @@ Détail : `dev7_comparaison_scenes.md`, `dev7_comparaison_resume.md`, pertes : `
 - Elle passe devant les deux références et heurte le moins en roulant, mais **l'avance n'est pas significative**. Par scène, elle gagne au goulot (+11,2, significatif) et au couloir (+6,2, significatif) ; elle **perd dans la foule (−11,2, significatif)**.
 - Les briques se combinent : le risque calibré est indispensable (sans lui, −0,5), la carte commune et la cohérence ajoutent un demi-point par-dessus. **Les fantômes n'apportent rien** sur 880 essais (−1,1) : le 10 sur 20 du diagnostic était du hasard. Brique écartée.
 - **Analyse des pertes face à DRA-MPPI** (`analyse_echecs.py`) : 69 essais perdus, dont 54 collisions en mouvement, concentrées dans la foule (12), la foule dense (12), les carrefours (14) et la poursuite (9). Ce sont les scènes où des personnes croisent la route du robot. Prochain chantier.
+
+## Audit indépendant de l'application (17 novembre 2026)
+
+Un audit externe de l'APK a été reçu. Il ne portait que sur l'application : le banc de recherche (ce dossier) n'y est pas embarqué, d'où plusieurs constats d'absence. Chaque point a été vérifié sur le code avant d'être accepté ou nuancé.
+
+| Point de l'audit | Vérification | Suite donnée |
+|---|---|---|
+| Compensation du retard (Smith) appliquée à VIGIE seul dans l'application | **Exact** : `createEpisode` ne l'appliquait qu'à VIGIE, alors que le robot réaliste est activé par défaut. Le banc de recherche, lui, l'applique à toutes les méthodes. | Corrigé : appliquée à toutes les méthodes ; texte de l'interface mis en accord. |
+| Pistes non détectées effacées de la sortie du suivi | **Exact, dans l'application et dans le banc de recherche.** Avec 10 % de détections manquées par cycle en perception limitée, une personne visible clignotait pour le planificateur. | Corrigé des deux côtés (sorties identiques à 1e-14 près) ; quatre vérifications ajoutées (test 30). Ancien comportement : `TRACKER=sans_prolongation`. Toutes les méthodes seront réévaluées. |
+| « Tubes calibrés » : marge heuristique, pas de calibration | **Exact.** La marge croît selon une règle choisie à la main, sans mesure de couverture. | Vocabulaire corrigé dans le code et la leçon. Les noms des méthodes restent, car ils servent de clés aux fichiers de résultats publiés. « Risque calibré » est tout aussi impropre (variance publiée par DRA-MPPI, non mesurée sur nos données) : corrigé dans la leçon. |
+| « Carte commune » : résolution et inflation différentes | **Exact en partie.** Depuis la séance 7, la marge des obstacles fixes est la même ; la résolution des grilles diffère (0,35 m contre la grille de navigation). | Leçon précisée : « même marge ». Harmoniser la résolution reste à faire. |
+| A* espace-temps holonome, non cinématique | **Exact.** | Déclaré dans le code et la leçon : guide géométrique, sans garantie de faisabilité. |
+| VIGIE 3 sans cohérence de route | **Exact pour VIGIE 3** (constaté aussi ici en forêt : 133 changements de route en 450 cycles). | Règle de cohérence de T-MPC ajoutée et vérifiée en séance 7, absente de VIGIE 3 lui-même. |
+| Modèle interne de VIGIE 3 sans retard | Exact pour l'application ; le modèle par roue du banc (séance 5) tient compte du retard, mais n'est pas utilisé par les versions retenues. | Pas de changement. |
+| Plafond de vitesse aux angles morts avec un plancher de 0,15 m/s, sans budget d'arrêt | **Exact.** | À traiter : l'arrêt doit rester possible ; ablation prévue (s'arrêter dans la voie d'une personne qui ne voit pas le robot n'est pas forcément plus sûr dans ce banc). |
+| Références T-MPC++ et DRA-MPPI absentes | Absentes de l'APK, présentes ici (`references.py`, adaptations déclarées, tests 26 et 27). | La leçon indique désormais d'où viennent les chiffres. |
+| Données brutes et scripts absents | Absents de l'APK, présents ici : une ligne par essai, graines, scripts d'analyse. | Idem. |
+| Avance de +1,6 point non significative | **Exact**, et déjà écrit comme tel dans le journal et la leçon. | – |
+
+L'audit relève aussi, à juste titre, que plusieurs briques de VIGIE sont proches de travaux existants (T-MPC pour les routes et la cohérence, DRA-MPPI pour le risque, OA-MPC pour les zones masquées). Aucune n'est présentée comme une invention : l'enjeu ici est la combinaison et sa mesure honnête.
