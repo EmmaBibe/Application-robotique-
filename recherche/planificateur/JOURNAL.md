@@ -521,3 +521,63 @@ D'après la complémentarité observée : tout VIGIE 3 est gardé (routes topolo
 Six vérifications ajoutées (test 27, 167 au total, toutes réussies) : risque identique à DRA-MPPI à poids égaux, coût des obstacles fixes et du suivi de route inchangé, plancher respecté, relation de Rayleigh vérifiée par tirage. Une vérification trop faible (elle appelait la méthode sur le mauvais objet) a été corrigée avant la campagne.
 
 Premier essai : au goulot, les poids de DRA-MPPI figent le robot devant la porte (3 essais sur 10 au temps limite, aucun pour VIGIE 3). Un risque de quelques dixièmes de pour cent pèse plus qu'un mètre de progrès, et dans un contre-flux continu l'instant sans risque n'arrive jamais. Avec des poids plus faibles, 1 seul blocage sur 10 et aucune collision. D'où un réglage à budget égal (4 configurations) sur les graines 1400 à 1419.
+
+**Résultat du réglage** (2 200 essais, mêmes mondes que les références) :
+
+| Configuration | Succès | Vision complète | Perception limitée | Collisions en mouvement |
+|---|---|---|---|---|
+| DRA-MPPI réglé (rappel) | 83,6 % | 87,7 % | 79,5 % | 14,8 % |
+| VIGIE 3 + risque, escompte 0,97 | 83,2 % | 85,5 % | 80,9 % | **13,4 %** |
+| VIGIE 3 + risque, 3000 / 3000 | 83,2 % | 86,4 % | 80,0 % | 13,9 % |
+| VIGIE 3 + risque, 1000 / 3000 | 83,0 % | 88,6 % | 77,3 % | 15,0 % |
+| VIGIE 3 (rappel) | 82,5 % | 85,9 % | 79,1 % | 14,5 % |
+| VIGIE 3 + risque, 300 / 3000 | 80,0 % | 85,5 % | 74,5 % | 17,5 % |
+| VIGIE 3 + risque adaptatif | 66,1 % | 61,8 % | 70,5 % | 16,4 % |
+
+- Le risque calibré rapproche VIGIE de DRA-MPPI (+0,7 point) sans le dépasser. Égalité entre 3000/3000 et l'escompte 0,97, départagée par les collisions en mouvement : **escompte retenu**.
+- **L'incertitude adaptative échoue nettement** (−17,5 points, significatif). Les personnes qui changent de direction gonflent l'erreur mesurée, l'incertitude explose et le robot se fige (26 temps limites sur 40 à la traversée). Rejetée.
+- Par scène, la complémentarité demeure : le mélange gagne au goulot (+20, significatif) et au couloir (+10, significatif), mais **perd toujours 10 points en forêt**.
+
+### Angles morts : fantômes dans le risque
+
+Aux angles morts, l'écart vient presque entièrement de la perception limitée : DRA-MPPI réussit 18 essais sur 20 en vision complète et 7 en perception limitée, VIGIE 3 16 puis 9. Quatre des onze collisions de VIGIE 3 ont lieu robot arrêté : le plafond de vitesse le fait freiner et une personne qui ne le voit pas le heurte.
+
+Idée : faire entrer les fantômes (personnes hypothétiques derrière chaque bord masquant) dans le calcul du risque, avec une probabilité d'exister. Ramper dans la voie coûte alors cher, la traverser vite ou la prendre large coûte peu.
+
+**Deux erreurs de modélisation trouvées par les tests avant tout essai :**
+1. Un fantôme ne représentait qu'une personne qui sort *maintenant* : elle croisait la ligne du robot bien avant son arrivée et ne comptait pas. Une personne peut sortir à tout moment : on modélise un flux d'arrivées (Poisson), chaque fantôme répété avec un délai de sortie de 0 ; 0,5 ; 1 et 1,5 s.
+2. Avant son instant de sortie, chaque copie attendait sur place : les copies s'empilaient au même point. Une arrivée n'existe qu'à partir de son instant ; corrigé.
+
+**Borne sur la probabilité.** Un fantôme seul ne doit jamais déclencher le seuil dur de 5 %, sinon chaque ouverture devient un mur. Les copies étant espacées de 0,75 m, le robot (0,65 m de rayon cumulé) peut en recouvrir deux : il faut 1 − (1 − p)² < 0,05, soit p < 2,53 %. Une première affirmation (« p < 5 % suffit ») était fausse ; elle est maintenant vérifiée sur une grille dense à tous les instants, avec un cas témoin à 4 % qui dépasse bien la borne.
+
+Diagnostic (angles morts, perception limitée, graines 1400 à 1419) :
+
+| Variante | Succès |
+|---|---|
+| VIGIE 3 | 9 / 20 |
+| VIGIE 3 + risque, sans fantômes | 6 / 20 |
+| + fantômes 1 % | 6 / 20 |
+| **+ fantômes 2 %** | **10 / 20** |
+| fantômes 1 %, sans plafond de vitesse | 9 / 20 |
+| fantômes 2 %, sans plafond de vitesse | 3 / 20 |
+| DRA-MPPI réglé | 7 / 20 |
+
+Le risque seul fait moins bien que VIGIE 3 aux angles morts : le coût de DRA-MPPI ignore tout ce qui est masqué. Les fantômes à 2 % donnent le meilleur score, mais sur 20 essais un écart de 3 ou 4 reste dans le bruit. Retirer le plafond est instable : il est gardé. La variante à 2 % entre dans la comparaison de développement, sans être adoptée d'avance.
+
+### Foule dense : un plancher commun
+
+Rejoué essai par essai : près de la moitié des échecs (4 sur 9 pour VIGIE 3, 5 sur 11 pour DRA-MPPI) sont des collisions dans les 3 premières secondes. Exemple (graine 1417) : une personne à 3,1 m vient droit sur le point de départ à 1,1 m/s. Le robot la voit bien (vitesse estimée à 0,1 ou 0,2 m/s près dès 0,8 s) et tente de l'éviter, mais son cap ne tourne que de 30° en 1 s alors qu'il commande 1,8 rad/s : à l'arrêt, un robot de 25 kg dont les roues partagent leur vitesse entre avance et rotation tourne bien plus lentement que ne le croit le modèle du planificateur. Le modèle par roue (VIGIE 3W, séance 5) n'apprend ses paramètres qu'après 3 s et n'avait rien apporté. Ces collisions frappent toutes les méthodes : on ne lance pas de piste dessus.
+
+### Forêt : deux défauts structurels de VIGIE 3
+
+En forêt, les seuls échecs de VIGIE sont des temps limites, toujours sur les deux mêmes mondes (1412 et 1419), en vision complète comme en perception limitée, avec ou sans risque calibré. **Ces mondes ne contiennent aucune personne** : la cause est dans VIGIE lui-même.
+
+**Mesure manquante.** La colonne « changements de route » valait 0 pour VIGIE dans tous les essais : la méthode de choix de VIGIE 3 ne la mettait jamais à jour. Aucune conclusion sur VIGIE ne s'appuyait sur cette colonne. Mesure refaite directement : **133 changements de route en 450 cycles** sur le monde 1412, et un cycle sur trois ou quatre même dans les essais réussis.
+
+**Première hypothèse : l'hésitation entre routes.** VIGIE choisit à chaque cycle la route la moins chère, sans préférence pour celle qu'il suit. On reprend la règle de cohérence de T-MPC (éq. 12, facteur 0,75), avec le code de notre T-MPC++. Premier essai : aucun effet, à l'identique. Vérification : la remise s'appliquait à toutes les routes à la fois. Jugées sur la trajectoire de 2,5 s, les routes de VIGIE tombent toutes dans la même classe, car elles ne se séparent qu'au-delà de l'horizon. La classe est désormais jugée sur la route guide restante jusqu'au but, par rapport aux obstacles fixes. Les changements de route sont divisés par deux (133 → 63)… mais le robot reste bloqué. L'hésitation n'était pas la seule cause.
+
+**Cause trouvée par élimination** (trois hypothèses testées séparément sur les deux mondes) : 400 tirages au lieu de 128 corrigent un monde sur deux, retirer le suivi de route aussi, et **retirer la route espace-temps corrige les deux**. La route espace-temps voyait les obstacles fixes avec 0,3 m de marge, les routes topologiques avec 0,1 m. Le passage de 0,98 m était fermé pour elle : sur ce passage, son plan reste figé (0,17 m d'avance en 3 s contre 1,22 m avec la marge commune), et elle proposait un détour vers l'arrière pendant que les autres traversaient. Correction : même marge pour les obstacles fixes, 0,3 m gardés autour des personnes (« carte commune »). Le monde 1412 est alors réussi en 25,1 s, plus vite que DRA-MPPI (26,1 s).
+
+Le monde 1419 reste bloqué : un passage de 0,82 m, 11 cm de chaque côté, que DRA-MPPI franchit et où VIGIE dérive. On s'arrête là, pour ne pas régler la méthode monde par monde.
+
+Refactorisation préalable (choix du mode dans une méthode à part) vérifiée sans effet : trajectoires identiques au bit près sur six épisodes. VIGIE 3 lui-même n'est pas modifié. Tests ajoutés : cohérence (seuil exact de 0,75, classes de routes), carte commune (le passage de 1412). **185 vérifications réussies, 0 échec.**
