@@ -620,3 +620,19 @@ Un audit externe de l'APK a été reçu. Il ne portait que sur l'application : l
 | Avance de +1,6 point non significative | **Exact**, et déjà écrit comme tel dans le journal et la leçon. | – |
 
 L'audit relève aussi, à juste titre, que plusieurs briques de VIGIE sont proches de travaux existants (T-MPC pour les routes et la cohérence, DRA-MPPI pour le risque, OA-MPC pour les zones masquées). Aucune n'est présentée comme une invention : l'enjeu ici est la combinaison et sa mesure honnête.
+
+### Validation de VIGIE 6 sur le banc corrigé (graines 1460 à 1499, jamais utilisées, 2 640 essais)
+
+| Méthode | Succès | Vision complète | Perception limitée | Écart / DRA-MPPI (IC 95 %) | Gagnés / perdus | Collisions en mouvement | Calcul (ms) |
+|---|---|---|---|---|---|---|---|
+| **VIGIE 6** (VIGIE 3 + risque + même marge + cohérence + planificateur libre) | **86,7 %** | 89,3 % | 84,1 % | **+5,3 [+2,8 ; +8,0]** | 95 / 48 | **10,7 %** | 51 |
+| version précédente (sans planificateur libre) | 86,1 % | 88,2 % | 84,1 % | +4,8 [+1,9 ; +7,6] | 104 / 62 | 10,7 % | 40 |
+| DRA-MPPI réglé (référence) | 81,4 % | 84,3 % | 78,4 % | – | – | 15,9 % | 7 |
+
+Par scène, face à DRA-MPPI : goulot +22,5 (significatif), angles morts +13,8 (significatif), traversée +11,2, couloir +7,5, poursuite +5,0 ; foule −3,8 (non significatif, contre −11,2 significatif sur les graines 1420 à 1459). Détail : `dev7_validation_scenes.md`, pertes : `dev7_validation_echecs.md`.
+
+- **Pour la première fois, l'avance sur la référence fidèle est significative.**
+- **Planificateur libre : adopté selon la règle fixée** (5 essais de mieux, seuil 3), mais son apport propre (+0,6 point, IC [−1,8 ; +3,1]) n'est pas distinguable du bruit. L'essentiel de l'avance vient des briques précédentes.
+- **Prudence sur l'ampleur.** Sur les graines 1420 à 1459 (ancien suivi), la même famille ne faisait que +1,6 (non significatif). La correction du suivi n'explique pas l'écart : en vision complète, où elle ne change rien, VIGIE 6 fait exactement les mêmes 393 succès avec l'ancien et le nouveau suivi, et en perception limitée 370 contre 366. L'écart entre les deux séries de mondes relève donc surtout de la variabilité des mondes tirés. Seule l'évaluation finale (100 mondes jamais vus, trois conditions) dira l'ampleur réelle.
+
+Erreur évitée : une seconde analyse avait écrasé le fichier de la première (comparaison à la version précédente prise pour une comparaison à DRA-MPPI) ; repéré à la lecture des chiffres, les deux fichiers sont désormais séparés.
