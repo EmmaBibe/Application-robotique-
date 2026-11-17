@@ -495,3 +495,29 @@ En relisant les publications citées, une erreur est apparue : la référence «
 Après correction : 1 à 3 routes distinctes par cycle selon la scène, contre 0 ou 1 avant. Onze vérifications ajoutées (test 26), 160 au total, toutes réussies.
 
 **Réglage à budget égal** (graines 1400 à 1419, 11 scènes, vision complète et perception limitée) : trois variantes de poids pour DRA-MPPI, trois pour T-MPC++ (poids des contraintes d'homotopie, marge du guidage), en plus des réglages par défaut.
+
+### Résultat du réglage (4 400 essais)
+
+| Méthode | Succès | Vision complète | Perception limitée | Collisions en mouvement | Temps (essais réussis par tous) | Calcul (ms) |
+|---|---|---|---|---|---|---|
+| DRA-MPPI réglé (3000 / 3000) | **83,6 %** | 87,7 % | 79,5 % | 14,8 % | 18,8 s | 7 |
+| DRA-MPPI (1000 / 3000) | 83,0 % | 86,4 % | 79,5 % | 15,7 % | 18,4 s | 7 |
+| VIGIE 3 | 82,5 % | 85,9 % | 79,1 % | 14,5 % | 19,8 s | 34 |
+| T-MPC++ (par défaut, meilleur réglage) | 82,3 % | 87,7 % | 76,8 % | 17,3 % | 17,3 s | 77 |
+| ancienne référence | 81,1 % | 84,1 % | 78,2 % | 16,6 % | 20,4 s | 22 |
+
+Détail par scène et intervalles de confiance : `dev7_reglage_scenes_dra.md`, résumé : `dev7_reglage_resume.md`.
+
+**Ce qu'il faut en retenir :**
+- **Référence officielle : DRA-MPPI réglé (3000 / 3000).** Les écarts entre configurations tiennent en quelques essais sur 440 ; on applique la règle fixée à l'avance sans y voir une différence réelle.
+- **VIGIE 3 n'a pas d'avance mesurable sur les références fidèles** : −0,5 point face à DRA-MPPI, IC à 95 % [−4,5 ; +3,4]. Sur ces mêmes mondes, il ne fait que +1,4 point face à l'ancienne référence. L'avance publiée aux séances précédentes tenait à une référence trop faible, comme l'audit le laissait craindre.
+- Les familles sont **complémentaires**. DRA-MPPI gagne nettement en forêt (+10 points, significatif) et au carrefour (+12,5, significatif), un peu au piège et en poursuite. VIGIE 3 gagne au goulot (+17,5) et en foule dense (+10). DRA-MPPI échoue au goulot surtout par blocage (12 % des essais au temps limite).
+- T-MPC++ va le plus vite (17,3 s) mais heurte davantage (17,3 % de collisions en mouvement) et perd 11 points entre vision complète et perception limitée.
+
+### Piste : VIGIE 3 + risque calibré (`vigie_risque.py`)
+
+D'après la complémentarité observée : tout VIGIE 3 est gardé (routes topologiques et espace-temps, tubes, compensation du retard, prudence aux angles morts), et seule la pénalité de distance aux personnes est remplacée par le coût de risque de DRA-MPPI. Une variante tire en plus l'incertitude de chaque personne de l'erreur de prédiction réellement observée sur elle (écart moyen d'une erreur gaussienne 2D = s·√(π/2), plancher : la valeur publiée).
+
+Six vérifications ajoutées (test 27, 167 au total, toutes réussies) : risque identique à DRA-MPPI à poids égaux, coût des obstacles fixes et du suivi de route inchangé, plancher respecté, relation de Rayleigh vérifiée par tirage. Une vérification trop faible (elle appelait la méthode sur le mauvais objet) a été corrigée avant la campagne.
+
+Premier essai : au goulot, les poids de DRA-MPPI figent le robot devant la porte (3 essais sur 10 au temps limite, aucun pour VIGIE 3). Un risque de quelques dixièmes de pour cent pèse plus qu'un mètre de progrès, et dans un contre-flux continu l'instant sans risque n'arrive jamais. Avec des poids plus faibles, 1 seul blocage sur 10 et aucune collision. D'où un réglage à budget égal (4 configurations) sur les graines 1400 à 1419.
