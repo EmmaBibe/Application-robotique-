@@ -477,3 +477,7 @@ Face à face, VIGIE 5 contre VIGIE 3 : +0,2 point, IC [−1,3 ; +1,8].
 - Prototype : l'avance de VIGIE se concentre sur les passages étroits avec des personnes. C'est le scénario à reproduire en premier sur le robot réel.
 
 Tests de cohérence à la fin de l'étape 3 : **149 vérifications réussies, 0 échec.**
+
+## Séance 7 · Correction d'attribution et mise à niveau des références
+
+En relisant les publications citées, une erreur est apparue : la référence « MPPI multimodal (2025) » était attribuée à Bertipaglia et al. (arXiv 2508.21364), qui décrit en fait quatre modes d'échantillonnage pour une voiture, sans routes topologiques. Notre code imite T-MPC (de Groot et al., T-RO 2024), mais en plus faible : routes guides tracées sur une carte figée au lieu de l'espace libre dynamique, et pas de préférence de cohérence. Les résultats des séances 1 à 6 restent valables pour la méthode réellement codée, mais pas comme comparaison à T-MPC. L'avance de VIGIE 3 est probablement surestimée. Plan de correction et nouvelles références : `PLAN_SEANCE7.md`.

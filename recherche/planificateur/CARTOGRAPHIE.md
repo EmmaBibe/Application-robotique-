@@ -63,7 +63,8 @@ Légende de l'exploitation en robotique : **forte** (technique standard), **moye
 ## 5. Ce que dit l'état de l'art récent
 
 - **MPPI** (commande prédictive par intégrale de chemin) est devenu une référence pour la navigation réactive. Son défaut connu : ses échantillons restent autour d'une seule solution, d'où des minima locaux.
-- **MPPI multimodal** (2025) : plusieurs MPPI en parallèle, chacun guidé par une route topologiquement différente, et on exécute la moins coûteuse. C'est notre référence la plus forte.
+- **Planification topologique en parallèle** (T-MPC, de Groot et al., T-RO 2024) : plusieurs planificateurs locaux en parallèle, chacun initialisé par une route d'une classe topologique différente dans l'espace libre dynamique, et on exécute le moins coûteux. C'est ce que notre référence « MPPI multimodal » imite, en plus faible (voir `PLAN_SEANCE7.md`).
+- **MPPI multimodal** (Bertipaglia et al., 2025, prépublication) : quatre modes d'échantillonnage pour une voiture (commande précédente, freinage, accélération, évitement). Attribué à tort à notre référence jusqu'à la séance 6.
 - **Commande contingente** ou **en branches** : un début de trajectoire commun, puis une suite par futur possible. Une version MPPI existe pour garantir une zone de repli (« Contingency-MPPI », 2024).
 - **Planificateurs par diffusion** : très étudiés depuis 2023, mais demandent des données d'entraînement et un GPU.
 
@@ -81,6 +82,8 @@ Légende de l'exploitation en robotique : **forte** (technique standard), **moye
 ## Sources consultées
 
 - [MPPI multimodal pour l'évitement de collision (2025)](https://arxiv.org/html/2508.21364)
+- [T-MPC : optimisation de trajectoires en parallèle guidée par la topologie (T-RO 2024)](https://arxiv.org/abs/2401.06021)
+- [DRA-MPPI : MPPI tenant compte du risque dynamique (IROS 2025)](https://arxiv.org/abs/2506.21205)
 - [Contingency-MPPI, MPPI dans MPPI (2024)](https://arxiv.org/html/2412.09777v1)
 - [Commande en branches contre des prédictions multimodales (2025)](https://arxiv.org/html/2502.02550)
 - [Navigation multi-agents tenant compte de l'homotopie (2025)](https://arxiv.org/html/2507.19860)
