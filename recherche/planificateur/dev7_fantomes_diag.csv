@@ -1,0 +1,2 @@
+planner,cond,scene,seed,outcome,temps,longueur,marge_min,jerk,lissage_w,calcul_ms,calcul_max_ms,changements,reflexes,collision_a_larret,v_fin,sans_route
+VIGIE 3 + risque calibré [fantômes0.02] sans plafond,perception,coin_aveugle,1400,collision,8.799999999999985,4.970292527505107,-0.03942018676462661,5.277891384827539,0.1557336384202718,117.25828138636726,514.4761930005188,0,0,False,0.8133011762452399,0
