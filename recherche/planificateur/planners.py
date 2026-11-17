@@ -1746,3 +1746,4 @@ class Vigie5(Vigie3CarrefourSansDegager):
 ALL += [MMSmithCarrefour, Vigie3Carrefour, Vigie3CarrefourSansDegager, Vigie5]
 
 import references  # références de l'état de l'art (ajoutées à ALL)
+import vigie_risque  # VIGIE 3 + risque calibré (séance 7)

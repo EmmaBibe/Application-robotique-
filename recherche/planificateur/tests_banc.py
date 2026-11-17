@@ -403,5 +403,31 @@ _ob2 = np.array([[7.0, 10.0, 0, 0, 0.35, 1]])
 _c, _pj = _d.risk(_R.rollout(np.array([5., 10., 0.]), np.stack([np.tile([1.0, 0.], (_d.T, 1)), np.tile([1.0, 1.2], (_d.T, 1))])), _ob2)
 check('DRA-MPPI : foncer sur une personne est plus risqué que l\'éviter', _c[0] > _c[1] and _pj[0].max() > 0.9 and _pj[1].max() < 0.5, f'{np.round(_c)}')
 
+print('27. VIGIE 3 + risque calibré')
+import vigie_risque as _VR
+_v = _VR.Vigie3R(); _v.reset(np.zeros((0, 3)), np.array([18., 10.]))
+_dr = _R.DRAMPPI(); _dr.reset(np.zeros((0, 3)), np.array([18., 10.])); _dr.W_SOFT = _dr.W_HARD = 3000.0
+_ob3 = np.array([[7.0, 10.0, -0.5, 0.2, 0.35, 1, 7], [9.0, 12.0, 0.0, -1.0, 0.3, 1, 8], [6.0, 7.0, 0, 0, 0.5, 0, -1]])
+_Us = np.stack([np.tile([1.0, w], (_v.T, 1)) for w in (-0.8, 0.0, 0.8)])
+_tr3 = _R.rollout(np.array([5., 10., 0.]), _Us)
+check('risque : identique à DRA-MPPI (mêmes poids) sans adaptation', np.allclose(_v.risk(_tr3, _ob3), _dr.risk(_tr3, _ob3)[0]))
+_full = _v.eval_cost(np.array([5., 10., 0.]), _Us, _ob3)
+_st = _ob3[_ob3[:, 5] == 0]
+_ref = P.MPPI.eval_cost(_v, np.array([5., 10., 0.]), _Us, _st) + _v.risk(_tr3, _ob3)
+check('coût : obstacles fixes et navigation inchangés, personnes par le risque', np.allclose(_full, _ref))
+_g = np.stack([np.linspace(5, 12, 20), np.full(20, 10.0)], -1)
+_dg = _v.eval_cost(np.array([5., 10., 0.]), _Us, _ob3, guide=_g) - _full
+check('coût : le suivi de route est conservé', _dg[1] < _dg[0] and _dg[1] < _dg[2] and _dg.min() >= 0)
+_va = _VR.Vigie3RA(); _va.reset(np.zeros((0, 3)), np.array([18., 10.])); _va.tr = P.SurpriseTracker()
+_va.tr.e = {7: 0.02, 8: 0.9}
+_vr = _va.var_rates(_ob3[_ob3[:, 5] > 0])
+check('adaptatif : plancher publié respecté, personne imprévisible plus incertaine',
+      abs(_vr[0] - _va.VAR_RATE) < 1e-12 and abs(_vr[1] - (0.9 / np.sqrt(np.pi / 2)) ** 2) < 1e-12, str(_vr))
+_rng = np.random.default_rng(5); _sg = 0.4
+_e = np.hypot(*(_rng.normal(0, _sg, (2, 200000))))
+check('adaptatif : écart moyen gaussien 2D = s·sqrt(pi/2) (Rayleigh)', abs(_e.mean() / np.sqrt(np.pi / 2) - _sg) < 0.005, f'{_e.mean() / np.sqrt(np.pi / 2):.4f}')
+_va.tr.e = {}
+check('adaptatif : sans historique, identique à la version fixe', np.allclose(_va.risk(_tr3, _ob3), _v.risk(_tr3, _ob3)))
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

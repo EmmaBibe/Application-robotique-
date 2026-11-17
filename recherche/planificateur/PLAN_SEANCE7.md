@@ -54,3 +54,13 @@ Chaque piste sera d'abord testée en ablation, une brique à la fois, contre la 
 - Critère principal : taux de succès, comparaison appariée, intervalle de confiance bootstrap à 95 %. Critères secondaires : collisions dont le robot est responsable, temps de trajet.
 - Toutes les scènes et les deux conditions (vision complète, perception limitée) sont publiées, qu'elles soient favorables ou non.
 - **Première étape : réévaluer VIGIE 3 contre T-MPC fidèle et DRA-MPPI** sur les mondes de développement. Si l'avance de VIGIE 3 disparaît, on le dira.
+
+## 6. Résultat du réglage des références et suite (ajouté après le réglage, avant tout essai de la suite)
+
+- **Référence officielle : DRA-MPPI réglé (3000 / 3000)**, meilleur du panel sur les mondes de développement (83,6 % de succès). Les écarts entre configurations sont faibles (quelques essais sur 440) : le choix suit la règle fixée, sans prétendre à une différence réelle.
+- **VIGIE 3 n'a pas d'avance mesurable** sur les références fidèles (82,5 % contre 83,0 % pour DRA-MPPI non réglé, IC [−4,5 ; +3,4]). L'avance des séances précédentes venait d'une référence trop faible. On le publie tel quel.
+- Les deux familles sont **complémentaires** : DRA-MPPI gagne en espace ouvert (forêt, carrefour, piège, poursuite), VIGIE 3 dans les passages étroits et la foule dense (goulot, foule dense).
+- **Piste testée : VIGIE 3 + risque calibré.** Tout VIGIE 3 est gardé ; pour les personnes, la pénalité de distance est remplacée par le coût de risque de DRA-MPPI. Budget de réglage identique aux références (4 configurations, graines 1400 à 1419) : poids 3000/3000, 1000/3000, 300/3000, et 3000/3000 avec escompte temporel 0,97. La meilleure sur ces mondes est retenue.
+- **Piste testée à part : incertitude adaptative** (variance de chaque personne tirée de l'erreur de prédiction observée sur elle, plancher publié de DRA-MPPI), en ablation contre la version fixe.
+- Un premier diagnostic sur goulot (graines 1400 à 1409) a montré que les poids de DRA-MPPI figent le robot devant une porte à contre-flux (3 essais sur 10 au temps limite) : c'est ce qui a motivé d'inclure des poids plus faibles dans le réglage.
+- Puis comparaison de développement sur les graines 1420 à 1459 (VIGIE 3, VIGIE retenu, DRA-MPPI réglé, T-MPC++), et seulement ensuite l'évaluation finale sur 5000 à 5099.
