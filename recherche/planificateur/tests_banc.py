@@ -485,5 +485,20 @@ check('carte commune : le passage de 0,98 m (forêt 1412) est fermé pour la rou
       _g3[9, 0] - _sf[0] < 0.3 and _g1[9, 0] - _sf[0] > 1.0, f'avance en 3 s : {_g3[9, 0] - _sf[0]:.2f} m contre {_g1[9, 0] - _sf[0]:.2f} m')
 check('carte commune : marge des personnes inchangée (0,3 m) et VIGIE 3 inchangé', _VR.CarteCommuneMixin.MARGE_FIXE == 0.1 and P.spacetime_plan2.__defaults__[1] == 0.3 and 'refresh_modes' not in P.Vigie3.__dict__)
 
+print('29. VIGIE 6 : planificateur libre parmi les options')
+_v6 = _VR.Vigie6(); _v6.reset(np.zeros((0, 3)), np.array([18., 10.]))
+_obp = np.array([[8.0, 10.0, -1.0, 0.0, 0.35, 1, 5]])                    # une personne vient de face
+_s7 = np.array([5.0, 10.0, 0.0])
+_Ug = np.tile([1.2, 0.0], (_v6.T, 1))                                     # route guidée : tout droit sur elle
+_v6.modes = [dict(g=np.array([[5, 10], [18, 10]], float), U=_Ug.copy())]
+for _ in range(15): _ex = _v6.extra_candidates(_s7, _obp)                   # 1,5 s d'optimisation, reprise d'un cycle à l'autre comme en marche
+_v6._cands = _v6.modes + _ex
+_Jg, _Jf = _v6.eval_cost(_s7, np.stack([_Ug, _ex[0]['U']]), _obp)
+check('libre : propose une option nettement moins risquée que la route guidée qui fonce', _Jf < 0.5 * _Jg, f'{_Jg:.0f} contre {_Jf:.0f}')
+_v6.prev_g = None
+check('libre : choisi quand il est meilleur', _v6.select(_s7, np.stack([_Ug, _ex[0]['U']]), _obp) == 1)
+check('libre : sa « route » mène au but (cohérence possible)', np.allclose(_ex[0]['g'][-1], [18, 10]) and len(_ex[0]['g']) == _v6.T + 1)
+check('libre : 400 tirages pour lui, 128 pour les options guidées', _v6.N == 128 and _VR.FreeModeMixin.N_FREE == 400)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

@@ -79,3 +79,13 @@ Ces corrections ont été vérifiées sur les mondes où le défaut a été obse
 VIGIE 3 ; DRA-MPPI réglé (référence officielle) ; T-MPC++ ; VIGIE 3 + risque calibré ; VIGIE 3 + carte commune + cohérence ; VIGIE 3 + risque + carte commune + cohérence ; la même + fantômes (2 %).
 
 **Règle de décision** : la version proposée pour l'évaluation finale est celle des variantes VIGIE qui a le meilleur taux de succès sur ces mondes ; égalité (moins de 3 essais d'écart) départagée par les collisions en mouvement, puis par la simplicité (moins de briques). L'évaluation finale (graines 5000 à 5099) l'opposera à DRA-MPPI réglé, T-MPC++ et VIGIE 3.
+
+## 8. VIGIE 6 : planificateur libre parmi les options (fixé avant l'essai)
+
+**Constat** (comparaison de développement, `dev7_comparaison_echecs.md`) : face à DRA-MPPI, 54 des 69 essais perdus sont des collisions en mouvement parmi des personnes. Chaque option de VIGIE est optimisée en restant près de sa route guide ; quand toutes les routes passent devant quelqu'un, aucune option prudente n'est proposée.
+
+**Brique** : un planificateur sans route imposée (400 tirages, même coût de risque, gardé d'un cycle à l'autre) ajouté aux options, comme le planificateur non guidé de T-MPC++. VIGIE 6 = VIGIE 3 + risque calibré + carte commune + cohérence + planificateur libre.
+
+Contrôle rapide sur 4 mondes de foule perdus (choisis *parce que* perdus, donc sans valeur de preuve) : 3 récupérés.
+
+**Validation** sur les graines 1460 à 1499, jamais utilisées, 11 scènes, deux conditions : VIGIE 6, la version précédente (sans planificateur libre) et DRA-MPPI réglé. **Règle** : la brique est adoptée si VIGIE 6 fait au moins 3 essais de mieux que la version précédente ; sinon on garde la plus simple. Les graines 5000 à 5099 restent intactes pour l'évaluation finale.

@@ -140,14 +140,15 @@ class ConsistencyMixin:
     def select(self, s, Us, obs):
         J = np.maximum(self.eval_cost(s, Us, obs) - self.ideal_cost(s), 0.0)
         w = np.ones(len(Us))
+        cands = self._cands if len(getattr(self, '_cands', ())) == len(Us) else self.modes
         st = obs[obs[:, 5] == 0]
         if self.prev_g is not None and len(st):
             pg = _route_ahead(self.prev_g, s); z = np.zeros(len(pg))
-            for i, m in enumerate(self.modes):
+            for i, m in enumerate(cands):
                 if REF.same_class(_route_ahead(m['g'], s), pg, st, z): w[i] = self.C_CONS
         i = int(np.argmin(w * J))
         if self.prev_g is not None and w[i] == 1.0: self.switches += 1
-        self.prev_g = np.array(self.modes[i]['g'], float)
+        self.prev_g = np.array(cands[i]['g'], float)
         return i
 
 
@@ -182,3 +183,34 @@ class Vigie3RCF(ConsistencyMixin, CarteCommuneMixin, _BASE):
 
 
 P.ALL += [Vigie3C, Vigie3RC, Vigie3RCF]
+
+
+class FreeModeMixin:
+    """Planificateur libre ajouté aux options de VIGIE, comme le planificateur non guidé de T-MPC++
+    (de Groot et al., T-RO 2024) : un MPPI sans route imposée, 400 tirages comme DRA-MPPI, optimisé sur le même
+    coût de risque et gardé d'un cycle à l'autre. Le choix final compare toutes les options sur ce coût.
+    Motif : face à DRA-MPPI, 54 des 69 essais perdus étaient des collisions en mouvement parmi des personnes ;
+    chaque option de VIGIE était tirée vers sa route guide, et quand toutes les routes passaient devant quelqu'un,
+    aucune option prudente n'était proposée. Pour la cohérence, la « route » du planificateur libre est sa
+    trajectoire prévue prolongée jusqu'au but."""
+    N_FREE = 400
+
+    def reset(self, static, goal):
+        super().reset(static, goal)
+        U = np.zeros((self.T, 2)); U[:, 0] = 0.5
+        self._free = dict(U=U, g=None, libre=True)
+
+    def extra_candidates(self, s, obs):
+        n0 = self.N; self.N = self.N_FREE
+        try: self._free['U'] = self.mppi_step(s, self._free['U'], obs)
+        finally: self.N = n0
+        tr = self._roll(s, self._free['U'][None])[0, :, :2]
+        self._free['g'] = np.vstack([tr, self.goal[None]])
+        return [self._free]
+
+
+class Vigie6(FreeModeMixin, ConsistencyMixin, CarteCommuneMixin, _BASE):
+    name = 'VIGIE 6 (proposé)'
+
+
+P.ALL += [Vigie6]

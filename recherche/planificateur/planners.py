@@ -1212,11 +1212,16 @@ class MMST(MultiModalMPPI):
                     m['U'] = (w[:, None, None] * U).sum(0)
             else:
                 m['U'] = self.mppi_step(s, m['U'], obs, self.scen(), m['g'])
-        Us = np.stack([m['U'] for m in self.modes])
+        self._cands = self.modes + self.extra_candidates(s, obs)
+        Us = np.stack([m['U'] for m in self._cands])
         i = self.select(s, Us, obs)
-        u = Us[i, 0].copy(); self.chosen_g = self.modes[i]['g']
-        for m in self.modes: m['U'] = np.roll(m['U'], -1, 0); m['U'][-1] = m['U'][-2]
+        u = Us[i, 0].copy(); self.chosen_g = self._cands[i]['g']
+        for m in self._cands: m['U'] = np.roll(m['U'], -1, 0); m['U'][-1] = m['U'][-2]
         return u
+
+    def extra_candidates(self, s, obs):
+        """Options supplémentaires, optimisées à part (aucune par défaut)."""
+        return []
 
     def select(self, s, Us, obs):
         """Choix du mode exécuté : coût minimal."""
