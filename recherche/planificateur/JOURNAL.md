@@ -581,3 +581,22 @@ En forêt, les seuls échecs de VIGIE sont des temps limites, toujours sur les d
 Le monde 1419 reste bloqué : un passage de 0,82 m, 11 cm de chaque côté, que DRA-MPPI franchit et où VIGIE dérive. On s'arrête là, pour ne pas régler la méthode monde par monde.
 
 Refactorisation préalable (choix du mode dans une méthode à part) vérifiée sans effet : trajectoires identiques au bit près sur six épisodes. VIGIE 3 lui-même n'est pas modifié. Tests ajoutés : cohérence (seuil exact de 0,75, classes de routes), carte commune (le passage de 1412). **185 vérifications réussies, 0 échec.**
+
+### Comparaison de développement (graines 1420 à 1459, jamais utilisées pour régler, 11 scènes, deux conditions, 6 160 essais)
+
+| Méthode | Succès | Vision complète | Perception limitée | Écart / DRA-MPPI (IC 95 %) | Gagnés / perdus | Collisions en mouvement | Calcul (ms) |
+|---|---|---|---|---|---|---|---|
+| **VIGIE 3 + risque + carte commune + cohérence** | **83,1 %** | 85,9 % | 80,2 % | +1,6 [−1,2 ; +4,3] | 83 / 69 | **14,2 %** | 40 |
+| VIGIE 3 + risque calibré | 82,6 % | 86,6 % | 78,6 % | +1,1 [−1,5 ; +4,0] | 78 / 68 | 14,4 % | 39 |
+| la première + fantômes 2 % | 82,0 % | 85,9 % | 78,2 % | +0,6 [−2,2 ; +3,3] | 78 / 73 | 15,0 % | 43 |
+| T-MPC++ | 81,7 % | 86,8 % | 76,6 % | +0,2 [−2,6 ; +3,2] | 87 / 85 | 17,4 % | 81 |
+| VIGIE 3 | 81,7 % | 85,2 % | 78,2 % | +0,2 [−2,8 ; +3,3] | 93 / 91 | 15,5 % | 34 |
+| DRA-MPPI réglé (référence) | 81,5 % | 83,2 % | 79,8 % | – | – | 16,9 % | 7 |
+| VIGIE 3 + carte commune + cohérence | 81,0 % | 84,3 % | 77,7 % | −0,5 [−3,4 ; +2,5] | 87 / 91 | 17,2 % | 36 |
+
+Détail : `dev7_comparaison_scenes.md`, `dev7_comparaison_resume.md`, pertes : `dev7_comparaison_echecs.md`.
+
+- **Version retenue pour l'évaluation finale, selon la règle fixée** : VIGIE 3 + risque calibré + carte commune + cohérence (meilleur succès, avance de plus de 3 essais sur la suivante).
+- Elle passe devant les deux références et heurte le moins en roulant, mais **l'avance n'est pas significative**. Par scène, elle gagne au goulot (+11,2, significatif) et au couloir (+6,2, significatif) ; elle **perd dans la foule (−11,2, significatif)**.
+- Les briques se combinent : le risque calibré est indispensable (sans lui, −0,5), la carte commune et la cohérence ajoutent un demi-point par-dessus. **Les fantômes n'apportent rien** sur 880 essais (−1,1) : le 10 sur 20 du diagnostic était du hasard. Brique écartée.
+- **Analyse des pertes face à DRA-MPPI** (`analyse_echecs.py`) : 69 essais perdus, dont 54 collisions en mouvement, concentrées dans la foule (12), la foule dense (12), les carrefours (14) et la poursuite (9). Ce sont les scènes où des personnes croisent la route du robot. Prochain chantier.
