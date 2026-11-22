@@ -5,3 +5,9 @@ desktop/dist/
 desktop/cache/
 __pycache__/
 recherche/planificateur/*.log
+
+# application VIGIE : fichiers assemblés et construits
+vigie-app/dist/
+vigie-app/android/build/
+vigie-app/android/VIGIE.apk
+vigie-app/android/VIGIE.apk.idsig

@@ -140,4 +140,22 @@ for (const ep of V.episodes) {
     `écart max ${m.toExponential(1)}${first >= 0 ? `, premier écart au pas ${first}` : ''}${ch ? `, ${ch} choix d'option différents` : ''}` +
     (ep.which === 'vigie' ? ` ; options choisies ${JSON.stringify(used)}, ${sw} changements de route, plafond actif ${caps} fois` : ''));
 }
+// --- réglages de l'Atelier (application VIGIE) : défauts identiques, chaque interrupteur agit vraiment
+{
+  const Ep = await import(new URL(J + 'episode.js', import.meta.url));
+  const run = (params, scene = 'goulot', seed = 4, cond = 'nominal', n = 90) => {
+    const e = Ep.createEpisode(scene, seed, 'vigie', cond, params); const types = new Set(); let caps = 0, wNot1 = 0;
+    for (let k = 0; k < n && !e.outcome; k++) { e.step(); const b = e.planner.brain; if (b && b.cands) { b.cands.forEach(c => { types.add(c.type); if (c.w !== 1) wNot1++; }); } if (e.planner.cap && e.planner.cap.active) caps++; }
+    return { path: e.path.map(p => p.join(',')).join(';'), types, caps, wNot1, modified: e.planner.modified };
+  };
+  const base = run(undefined), same = run({ ...Pl.VIGIE_DEFAUTS });
+  check('Atelier : VIGIE réglé sur ses valeurs par défaut refait exactement le même trajet', base.path === same.path && !same.modified);
+  const a = run({ attendre: false }), b = run({ improvisation: false }), c = run({ itineraires: 0 }), f = run({ fidelite: 1.0 });
+  check('Atelier : sans « chemin qui sait attendre », aucune option espace-temps', !a.types.has('espace-temps') && base.types.has('espace-temps') && a.modified);
+  check('Atelier : sans improvisation, aucune option libre', !b.types.has('libre') && base.types.has('libre'));
+  check('Atelier : sans itinéraires, aucune route topologique', !c.types.has('route'));
+  check('Atelier : fidélité à 1, plus aucun bonus', f.wNot1 === 0 && base.wNot1 > 0);
+  const pc = run(undefined, 'coin_aveugle', 2, 'perception', 120), pn = run({ prudenceAngles: false }, 'coin_aveugle', 2, 'perception', 120);
+  check('Atelier : sans prudence aux angles morts, le plafond de vitesse ne joue plus', pc.caps > 0 && pn.caps === 0, `plafond actif ${pc.caps} fois avec, ${pn.caps} sans`);
+}
 process.stdout.write(JSON.stringify(out));

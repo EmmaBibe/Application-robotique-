@@ -673,3 +673,9 @@ Même avantage, significatif dans les deux cas, même répartition par scène (p
 Observation faite en construisant l'affichage : la route espace-temps propose parfois de **reculer** (porte étroite, flux venant vers le robot sur 8 s). Vérifié identique en Python : c'est le comportement réel de l'algorithme, montré tel quel.
 
 Tests de cohérence : **228 vérifications réussies, 0 échec.**
+
+## Application mobile dédiée : VIGIE 1.0
+
+Une application séparée (`vigie-app/`, identifiant Android `fr.robomaster.vigie`) reprend le simulateur 3D et y ajoute : un mode pronostic, un Atelier « et si… ? » qui modifie les réglages de VIGIE et le fait courir contre le VIGIE officiel et la référence, un banc de poche (comparaison appariée avec intervalle de confiance bootstrap, comme `analyse_scenes.py`), et un écran « Savoir » (histoire, résultats, idées abandonnées, références, limites), dont chaque chiffre a été relu contre ce journal. Une affirmation erronée a été retirée avant livraison : T-MPC++ n'a pas couru dans la validation de VIGIE 6, on ne peut donc pas dire que VIGIE 6 le bat sur ces mondes.
+
+Pas de copie du planificateur : le script d'assemblage reprend le cœur partagé avec RoboMaster, celui que vérifie le test 32. Les réglages de l'Atelier ont des valeurs par défaut identiques au VIGIE officiel ; six vérifications ajoutées (même trajet au bit près avec les valeurs par défaut, et chaque interrupteur qui agit réellement : sans chemin qui sait attendre, plus d'option espace-temps ; sans improvisation, plus d'option libre ; sans itinéraires, plus de route ; fidélité à 1, plus de bonus ; sans prudence, plafond de vitesse jamais actif). Statistiques de l'application recoupées avec numpy sur les 880 paires de la campagne JavaScript : +4,3 points, intervalle [+2,0 ; +6,7] contre [+1,9 ; +6,8] (différence due au seul tirage du bootstrap).

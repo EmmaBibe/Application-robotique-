@@ -6,10 +6,10 @@ import { DT, VMAX, WMAX, RealRobot, makeTracker, makeRand } from '../vigie-core.
 import { World, COND, T_MAX } from './world.js';
 import { PLANNERS } from './planners.js';
 
-export function createEpisode(scene, seed, which, condName = 'nominal') {
+export function createEpisode(scene, seed, which, condName = 'nominal', params = {}) {
   const C = { ...COND[condName] };
   const world = new World(scene, seed);
-  const planner = new PLANNERS[which](seed);
+  const planner = new PLANNERS[which](seed, params);
   const robot = new RealRobot([...world.start], makeRand(777 + seed));
   const tracker = makeTracker();
   const lat = (C.lat || 0) + 1;                         // chaîne lidar et traitement : une période de retard

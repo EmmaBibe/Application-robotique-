@@ -433,11 +433,21 @@ function sampleFan(s, keep, k) {
 }
 
 // ------------------------------------------------------------------ VIGIE 6
+/** Réglages de VIGIE 6. Les valeurs par défaut sont celles du banc ; l'Atelier de l'application VIGIE peut les changer
+ *  pour des expériences « et si… ? », sans jamais toucher au VIGIE officiel. */
+export const VIGIE_DEFAUTS = Object.freeze({ fidelite: 0.75, poidsDanger: 3000.0, seuilDur: 3000.0, itineraires: 3, attendre: true, improvisation: true, prudenceAngles: true, essais: 128 });
+
 export class Vigie6 extends Base {
-  constructor(seed = 0) { super(seed); this.name = 'VIGIE 6'; this.N = 128; this.NFREE = 400; this.K = 3; this.C_CONS = 0.75; this.MARGE_FIXE = 0.1; }
+  constructor(seed = 0, params = {}) {
+    super(seed);
+    const p = { ...VIGIE_DEFAUTS, ...params };
+    this.params = p; this.modified = Object.keys(VIGIE_DEFAUTS).some(k => p[k] !== VIGIE_DEFAUTS[k]);
+    this.name = this.modified ? 'VIGIE 6 (modifié)' : 'VIGIE 6';
+    this.N = p.essais; this.NFREE = 400; this.K = p.itineraires; this.C_CONS = p.fidelite; this.MARGE_FIXE = 0.1;
+  }
   reset(stat, goal) {
     super.reset(stat, goal);
-    this.risk = { wSoft: 3000.0, wHard: 3000.0, sigma: 0.05, tw: Float64Array.from({ length: T }, (_, t) => 0.97 ** t), varRate: () => 0.3 ** 2 * 0.2 };
+    this.risk = { wSoft: this.params.poidsDanger, wHard: this.params.seuilDur, sigma: 0.05, tw: Float64Array.from({ length: T }, (_, t) => 0.97 ** t), varRate: () => 0.3 ** 2 * 0.2 };
     this.modes = []; this.k = 0; this.switches = 0; this.prevG = null; this.tr = null;
     const U = new Float64Array(2 * T); for (let t = 0; t < T; t++) U[2 * t] = 0.5;
     this.free = { U, g: null, libre: true };
@@ -446,7 +456,7 @@ export class Vigie6 extends Base {
   outer(t, s, obs) {
     const u = this.smith(t, s, obs).slice();
     this.cap = null;
-    if (this.occl) {
+    if (this.occl && this.params.prudenceAngles) {
       const ph = phantoms(s, obs, this.sense), vmax = phantomSpeed(s, ph);
       this.cap = { phantoms: ph, vmax, raw: u[0], active: u[0] > vmax };
       u[0] = Math.min(u[0], vmax);
@@ -474,17 +484,19 @@ export class Vigie6 extends Base {
     }
     // planificateur libre : comme DRA-MPPI, sans route imposée
     const keep = {};
-    this.free.U = mppiStep(s, this.free.U, this.NFREE, n => this.noise(n), (U, off) => costOne(s, U, off, ctx, this.risk, null, null, null), keep);
-    this.free.g = [...rollout(s, this.free.U).map(p => [p[0], p[1]]), [this.goal[0], this.goal[1]]];
-    const cands = [...this.modes, this.free];
+    if (this.params.improvisation) {
+      this.free.U = mppiStep(s, this.free.U, this.NFREE, n => this.noise(n), (U, off) => costOne(s, U, off, ctx, this.risk, null, null, null), keep);
+      this.free.g = [...rollout(s, this.free.U).map(p => [p[0], p[1]]), [this.goal[0], this.goal[1]]];
+    }
+    const cands = this.params.improvisation ? [...this.modes, this.free] : [...this.modes];
     const i = this.select(s, cands, ctx, obs);
     const u = [cands[i].U[0], cands[i].U[1]];
-    this.brain.refreshed = refreshed; this.brain.samples = sampleFan(s, keep, 36); this.brain.t = t;
+    this.brain.refreshed = refreshed; this.brain.samples = keep.J ? sampleFan(s, keep, 36) : []; this.brain.t = t;
     for (const m of cands) m.U = shiftU(m.U);
     return u;
   }
   refresh(s, obs) {
-    const guides = diverseGuides(s, this.goal, obs, this.K), neu = [];
+    const guides = this.K > 0 ? diverseGuides(s, this.goal, obs, this.K) : [], neu = [];
     for (const g of guides) {
       let best = null, bd = Infinity;
       for (const m of this.modes) {
@@ -494,6 +506,7 @@ export class Vigie6 extends Base {
       neu.push({ g, U: best && bd < 1.0 ? best.U : guideToControls(s, g) });
     }
     this.modes = neu.length ? neu : this.modes.filter(m => !m.st);
+    if (!this.params.attendre) return;
     const u = this.tr.u(obs), ua = u.map(x => 0.02 + 0.30 * x);
     const gt = spacetimePlan(s, this.goal, obs, this.D, ua, this.MARGE_FIXE);
     if (gt && gt.length > 3) this.modes.push({ g: gt, U: timedControls(s, gt), st: true, neuf: true });

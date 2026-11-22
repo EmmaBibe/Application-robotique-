@@ -49,12 +49,13 @@ function robotFrame(ep, brain, idle) {
 }
 
 /** Prépare une course : info (monde), initial (instant 0), step() -> image suivante ou null quand tout est fini. */
-export function createRun(scene, seed, cond) {
-  const eps = { vigie: createEpisode(scene, seed, 'vigie', cond), dra: createEpisode(scene, seed, 'dra', cond) };
+export function createRun(scene, seed, cond, params = {}) {
+  const eps = { vigie: createEpisode(scene, seed, 'vigie', cond, params), dra: createEpisode(scene, seed, 'dra', cond) };
   const w = eps.vigie.world;
   const info = {
     scene, seed, cond, start: w.start, goal: w.goal, static: w.static.map(c => c.map(r3)), door: w.door,
     nPeople: w.dyn.length, kinds: w.dyn.map(o => o.kind), reactif: w.dyn.map(o => o.reactif), sense: eps.vigie.cond.range || null,
+    modified: eps.vigie.planner.modified, params: eps.vigie.planner.params,
   };
   const still = () => ({ s: [...w.start], v: 0, w: 0, out: null, t: 0, clear: r3(w.clearance(w.start)), cmd: [0, 0], ms: 0, seen: [], brain: null, idle: false });
   const initial = { k: 0, t: 0, people: people(w), people2: null, diverged: false, vigie: still(), dra: still() };

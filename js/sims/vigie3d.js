@@ -29,8 +29,9 @@ const SPEEDS = [0.25, 0.5, 1, 2, 4];
 const NFR = 451;                                    // 45 s à 10 images par seconde, plus l'instant 0
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-export default function vigie3d(root) {
+export default function vigie3d(root, opts = {}) {
   root.classList.add('v3d');
+  if (opts.fill) root.classList.add('v3d-fill');
   root.innerHTML = `
   <div class="v3d-bar">
     <div class="v3d-brand"><span class="v3d-mark" aria-hidden="true"></span><div><b>Dans la tête de VIGIE</b><small>VIGIE 6 face à DRA-MPPI, la référence</small></div></div>
@@ -77,7 +78,8 @@ export default function vigie3d(root) {
   </div>`;
   const $ = s => root.querySelector(s);
   const light = document.documentElement.getAttribute('data-theme') === 'light';
-  const lowPower = Math.min(window.screen.width, window.screen.height) < 700;
+  const lowPower = opts.quality === 'eco' ? true : opts.quality === 'high' ? false : Math.min(window.screen.width, window.screen.height) < 700;
+  if (opts.fill) $('.v3d-fullbtn').hidden = true;
   let stage = new Stage($('.v3d-gl'), { theme: light ? 'light' : 'dark', lowPower });
   // si le thème de l'application change pendant que le simulateur est ouvert, la maquette suit
   const themeObs = new MutationObserver(() => {
@@ -93,7 +95,8 @@ export default function vigie3d(root) {
 
   // ---------------------------------------------------------------- état
   const st = {
-    scene: PRESETS[0].id, cond: PRESETS[0].cond, seed: PRESETS[0].seed,
+    scene: (opts.start && opts.start.scene) || PRESETS[0].id, cond: (opts.start && opts.start.cond) || PRESETS[0].cond, seed: (opts.start && opts.start.seed) || PRESETS[0].seed,
+    params: opts.params || {}, hideOut: false, endSent: false,
     F: [], info: null, done: false, tr: 0, playing: false, speed: 1,
     layers: { voit: false, imagine: false, danger: false, options: true, essais: false, dra: true },
     view: 'maquette', hover: null, heatT: 1.0, person: null, tab: 'decision', tour: -1,
@@ -105,8 +108,9 @@ export default function vigie3d(root) {
   function start() {
     stopCalc();
     st.F = []; st.info = null; st.done = false; st.tr = 0; st.shownK = -1; st.trailK = -1; st.marks = []; st.hover = null; st.person = null;
-    $('.v3d-loading').hidden = false; $('.v3d-person').hidden = true; renderMarks(); $('.v3d-seed').textContent = `n° ${st.seed}`;
-    const msg = { type: 'start', scene: st.scene, seed: st.seed, cond: st.cond };
+    $('.v3d-loading').hidden = false; $('.v3d-person').hidden = true; st.endSent = false; renderMarks(); $('.v3d-seed').textContent = `n° ${st.seed}`;
+    const msg = { type: 'start', scene: st.scene, seed: st.seed, cond: st.cond, params: st.params };
+    if (opts.onWorld) opts.onWorld({ scene: st.scene, seed: st.seed, cond: st.cond, params: st.params });
     try {
       worker = new Worker(new URL('./vigie6/worker.js', import.meta.url), { type: 'module' });
       worker.onmessage = e => onMsg(e.data);
@@ -117,7 +121,7 @@ export default function vigie3d(root) {
   async function runHere(msg) {
     const { createRun } = await import('./vigie6/runner.js');
     ensureTable();
-    const run = createRun(msg.scene, msg.seed, msg.cond), my = {};
+    const run = createRun(msg.scene, msg.seed, msg.cond, msg.params || {}), my = {};
     fallback = my;
     onMsg({ type: 'info', info: run.info, initial: run.initial });
     const pump = () => {
@@ -134,6 +138,8 @@ export default function vigie3d(root) {
     if (m.type === 'table') ensureTable(m.tab);
     else if (m.type === 'info') {
       st.info = m.info; st.F = [m.initial];
+      lv.textContent = m.info.modified ? 'VIGIE modifié' : 'VIGIE';
+      root.classList.toggle('v3d-modified', !!m.info.modified);
       stage.setWorld(m.info, false); applyDra(); stage.setView(st.view);
       $('.v3d-loadtxt').textContent = 'Les deux robots réfléchissent…';
       st.dirty = true;
@@ -159,7 +165,7 @@ export default function vigie3d(root) {
     if (f.k % 5 === 0) renderMarks();
   }
   function renderMarks() {
-    $('.v3d-marks').innerHTML = st.marks.map(m => `<button class="v3d-mk ${m.cls}" style="left:${m.k / (NFR - 1) * 100}%" data-k="${m.k}" title="${esc(m.label)} (${fmt(m.k * 0.1)} s)" aria-label="${esc(m.label)}"></button>`).join('');
+    $('.v3d-marks').innerHTML = st.marks.filter(m => !(st.hideOut && m.cls.startsWith('out-'))).map(m => `<button class="v3d-mk ${m.cls}" style="left:${m.k / (NFR - 1) * 100}%" data-k="${m.k}" title="${esc(m.label)} (${fmt(m.k * 0.1)} s)" aria-label="${esc(m.label)}"></button>`).join('');
   }
   $('.v3d-marks').addEventListener('click', e => { const b = e.target.closest('.v3d-mk'); if (b) { st.tr = Math.max(0, +b.dataset.k - 3); st.playing = false; syncPlay(); toast(b.title); } });
 
@@ -404,6 +410,10 @@ export default function vigie3d(root) {
       st.tr += dt * 10 * st.speed;
       if (st.tr >= maxK) { st.tr = maxK; if (st.done) { st.playing = false; syncPlay(); } }
     }
+    if (st.done && st.tr >= maxK && !st.endSent) {
+      st.endSent = true; const L = st.F[maxK];
+      if (opts.onEnd) opts.onEnd({ vigie: L.vigie.out, dra: L.dra.out, tVigie: L.vigie.t, tDra: L.dra.t, scene: st.scene, seed: st.seed, cond: st.cond });
+    }
     const i = Math.floor(st.tr), a = st.tr - i, fa = frameAt(i), fb = frameAt(i + 1);
     const tk = Math.min(maxK, i + 1);                          // décision en cours d'exécution
     const fk = frameAt(tk), split = !!fk.diverged;
@@ -430,5 +440,13 @@ export default function vigie3d(root) {
   // ---------------------------------------------------------------- démarrage
   syncTop(); syncLayers(); setView('maquette'); setTab('decision'); syncPlay();
   start();
-  return () => { cancelAnimationFrame(raf); stopCalc(); themeObs.disconnect(); document.removeEventListener('keydown', onKey); document.body.classList.remove('v3d-noscroll'); stage.dispose(); };
+  const destroy = () => { cancelAnimationFrame(raf); stopCalc(); themeObs.disconnect(); document.removeEventListener('keydown', onKey); document.body.classList.remove('v3d-noscroll'); stage.dispose(); };
+  // commandes pour une application hôte (application VIGIE) ; RoboMaster n'utilise que la fonction de nettoyage
+  destroy.load = (w = {}) => { Object.assign(st, { scene: w.scene || st.scene, seed: w.seed || st.seed, cond: w.cond || st.cond, params: w.params || st.params }); syncTop(); start(); };
+  destroy.play = () => { st.playing = true; syncPlay(); };
+  destroy.pause = () => { st.playing = false; syncPlay(); };
+  destroy.setHideOutcomes = b => { st.hideOut = !!b; renderMarks(); };
+  destroy.world = () => ({ scene: st.scene, seed: st.seed, cond: st.cond, params: st.params });
+  destroy.stage = root.querySelector('.v3d-stage');
+  return destroy;
 }
