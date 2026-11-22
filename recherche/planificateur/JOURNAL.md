@@ -636,3 +636,12 @@ Par scène, face à DRA-MPPI : goulot +22,5 (significatif), angles morts +13,8 (
 - **Prudence sur l'ampleur.** Sur les graines 1420 à 1459 (ancien suivi), la même famille ne faisait que +1,6 (non significatif). La correction du suivi n'explique pas l'écart : en vision complète, où elle ne change rien, VIGIE 6 fait exactement les mêmes 393 succès avec l'ancien et le nouveau suivi, et en perception limitée 370 contre 366. L'écart entre les deux séries de mondes relève donc surtout de la variabilité des mondes tirés. Seule l'évaluation finale (100 mondes jamais vus, trois conditions) dira l'ampleur réelle.
 
 Erreur évitée : une seconde analyse avait écrasé le fichier de la première (comparaison à la version précédente prise pour une comparaison à DRA-MPPI) ; repéré à la lecture des chiffres, les deux fichiers sont désormais séparés.
+
+### Incertitude du suivi dans le risque : rejetée (880 essais, graines 1460 à 1499)
+
+| Méthode | Succès | Vision complète | Perception limitée | Temps (essais communs) |
+|---|---|---|---|---|
+| VIGIE 6 | **86,7 %** | 89,3 % | 84,1 % | 19,2 s |
+| VIGIE 6 + incertitude du suivi | 71,5 % | 73,2 % | 69,8 % | 24,0 s |
+
+−15,2 points, IC [−18,5 ; −11,9], significatif ; effondrement à la traversée (−57,5) et à la porte (−48,8). C'est le risque annoncé avant l'essai : une personne qui vient d'apparaître a une vitesse très incertaine (écart-type initial de 2 m/s), donc une position future floue sur plusieurs mètres ; le robot se croit menacé partout et attend. La règle fixée (au moins 3 essais de mieux, aucune scène en recul significatif) écarte la variante. Bonne idée sur le papier (elle venait d'un avis extérieur), mauvaise telle quelle : il faudrait au minimum borner l'incertitude de vitesse d'une piste neuve, ce qui serait un nouveau réglage à juger sur d'autres mondes. Détail : `dev7_validation_cov_scenes.md`.
