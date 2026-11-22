@@ -541,5 +541,12 @@ _mu = _obk[0, :2] + _obk[0, 2:4] * _tt[:, None]
 _pref = np.array([(1 - (1 - _R.collision_prob(np.hypot(*(_trk[i, :, :2] - _mu).T), 0.35 + sim.R_ROB, np.sqrt(_s2)))).sum() for i in range(2)])
 check('incertitude du suivi : variance propagée exactement (p + 2τ cov + τ² v, décalage de Smith inclus)', np.allclose(_k6.risk(_trk, _obk), _pref), f'{np.round(_k6.risk(_trk, _obk), 3)} contre {np.round(_pref, 3)}')
 
+print('32. Simulateur 3D : le portage JavaScript de VIGIE 6 et de DRA-MPPI est fidèle au banc (parite_js.py)')
+if _sh.which('node'):
+    import parite_js as _PJ
+    for _n, _ok, _d in _PJ.run(): check(_n, _ok, _d)
+else:
+    check('node disponible pour vérifier le portage JavaScript', False)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)
