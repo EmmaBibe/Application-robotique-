@@ -1,0 +1,7 @@
+{
+  "name": "vigie",
+  "productName": "VIGIE",
+  "version": "1.0.1",
+  "description": "Dans la tête d'un robot qui décide : le planificateur VIGIE face à la référence",
+  "main": "main.js"
+}

@@ -25,3 +25,11 @@ vigie-app/android/build-apk.sh       # APK Android : vigie-app/android/VIGIE.apk
 ```
 
 Prérequis de l'APK : Node, JDK 17+, SDK Android (platforms;android-34, build-tools;35.0.0). La clé de signature `vigie-app/android/vigie.keystore` est conservée dans le dépôt pour que les mises à jour s'installent par-dessus la version précédente.
+
+## Version Windows
+
+```
+vigie-app/desktop/build-windows.sh   # dossier portable + zip : vigie-app/desktop/dist/VIGIE-Windows.zip
+```
+
+Même contenu que l'APK, dans une fenêtre Electron (pas d'installation : décompresser, puis lancer `VIGIE.exe`). Vérifiée en lançant la même application dans Electron 33.2.1 pour Linux : simulateur 3D, campagnes dans les fils de calcul, aucune erreur. Si les fils de calcul ne démarraient pas, les campagnes basculeraient automatiquement sur un calcul dans la page.
