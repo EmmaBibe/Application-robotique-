@@ -1,6 +1,6 @@
 # Laboratoire de planification et de suivi de trajectoire
 
-C'est ici qu'a été mis au point **VIGIE**, un planificateur qui mesure en ligne l'imprévisibilité de chaque agent, n'ouvre l'éventail des futurs possibles que pour ceux qui le méritent, cherche ses routes dans l'espace et le temps, et anticipe les personnes qui peuvent surgir d'un angle mort. Version actuelle : classe `Vigie3` dans `planners.py` (VIGIE 3), version JavaScript dans `js/sims/vigie-core.js`. Dernière évaluation, sur robot réaliste (retard, régulateur de roues, accélération limitée) et sur des mondes neufs (5 280 essais) : en vision complète, VIGIE 3 bat significativement la meilleure référence (+5,6 points) ; il gagne nettement aux portes étroites (+10,8) et aux angles morts (+11,7) ; en perception limitée, son avance disparaît, et sur l'ensemble des scènes l'écart (+1,9) n'est pas significatif. Détails, réussites et limites dans `JOURNAL.md` (séance 6).
+C'est ici qu'a été mis au point **VIGIE**, un planificateur qui compare plusieurs idées de chemin (itinéraires distincts, route dans l'espace et le temps qui sait attendre, improvisation libre), note chacune avec une probabilité de collision, garde son itinéraire tant qu'un autre n'est pas nettement meilleur, compense le retard de ses mesures et ralentit près des angles morts. Version actuelle : **VIGIE 6**, classe `Vigie6` dans `vigie_risque.py` ; références de l'état de l'art codées d'après leurs publications dans `references.py` (T-MPC++, DRA-MPPI). Dernière évaluation de développement, sur robot réaliste et 40 mondes jamais utilisés (2 640 essais) : VIGIE 6 réussit 86,7 % des trajets contre 81,4 % pour DRA-MPPI réglé, +5,3 points, écart significatif ; l'évaluation finale sur 100 mondes neufs reste à faire. Les comparaisons des séances 1 à 6 se faisaient contre une référence mal attribuée et trop faible : voir `JOURNAL.md`, séance 7. Version JavaScript fidèle (vérifiée par `parite_js.py`) dans `js/sims/vigie6/`, utilisée par le simulateur 3D de l'application.
 
 Banc d'essai pour inventer et évaluer de nouveaux algorithmes de planification et de suivi, en les comparant honnêtement aux méthodes existantes : mêmes mondes, mêmes perturbations, mêmes graines aléatoires.
 
@@ -15,8 +15,14 @@ Banc d'essai pour inventer et évaluer de nouveaux algorithmes de planification 
 | `figures.py` | trajectoires de plusieurs planificateurs sur un même monde |
 | `CARTOGRAPHIE.md` | revue des domaines d'inspiration (physique, biologie, finance, navigation maritime…) |
 | `robot_reel.py` | chaîne d'actionneurs réaliste (retard, régulateur de roues, masse) et filtre de suivi des personnes (Kalman) |
-| `tests_banc.py` | 149 vérifications de cohérence du banc, à lancer avant toute campagne |
+| `tests_banc.py` | 228 vérifications de cohérence du banc, à lancer avant toute campagne (dont la fidélité du portage JavaScript, test 32) |
 | `faisabilite.py` | borne de faisabilité : le meilleur temps possible en connaissant le futur |
+| `references.py` | références de l'état de l'art codées d'après leurs publications (T-MPC++, DRA-MPPI), adaptations déclarées, variantes de réglage |
+| `vigie_risque.py` | VIGIE 6 et ses briques : probabilité de collision, même marge, cohérence de route, planificateur libre ; variantes testées |
+| `analyse_scenes.py`, `resume_reglage.py`, `analyse_echecs.py` | comparaisons appariées par scène, résumé d'une campagne, essais perdus face à la référence |
+| `parite_js.py`, `parite_js.mjs` | fidélité du portage JavaScript : mêmes entrées, mêmes sorties, jusqu'aux décisions complètes rejouées |
+| `js_validation_simulateur.csv` | campagne bouclée dans le simulateur JavaScript (1 760 essais), même avantage que le banc |
+| `PLAN_SEANCE7.md` | plan de la séance 7, écrit avant chaque essai (hypothèses, mondes, règles de décision) |
 | `JOURNAL.md` | journal de recherche : hypothèses, essais, résultats, conclusions |
 
 ## Scènes

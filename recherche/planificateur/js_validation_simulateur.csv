@@ -1,0 +1,1761 @@
+planner,cond,scene,seed,outcome,temps
+DRA-MPPI (simulateur JS),nominal,carrefour,1460,succes,17.5
+VIGIE 6 (simulateur JS),nominal,carrefour,1460,succes,17.5
+DRA-MPPI (simulateur JS),perception,carrefour,1460,succes,17.4
+VIGIE 6 (simulateur JS),perception,carrefour,1460,succes,17.6
+DRA-MPPI (simulateur JS),nominal,carrefour,1461,succes,20.1
+VIGIE 6 (simulateur JS),nominal,carrefour,1461,succes,19.5
+DRA-MPPI (simulateur JS),perception,carrefour,1461,succes,20.9
+VIGIE 6 (simulateur JS),perception,carrefour,1461,succes,19.8
+DRA-MPPI (simulateur JS),nominal,carrefour,1462,succes,15.3
+VIGIE 6 (simulateur JS),nominal,carrefour,1462,succes,20.2
+DRA-MPPI (simulateur JS),perception,carrefour,1462,succes,17.3
+VIGIE 6 (simulateur JS),perception,carrefour,1462,succes,17.7
+DRA-MPPI (simulateur JS),nominal,carrefour,1463,succes,16.8
+VIGIE 6 (simulateur JS),nominal,carrefour,1463,succes,22.7
+DRA-MPPI (simulateur JS),perception,carrefour,1463,succes,17.0
+VIGIE 6 (simulateur JS),perception,carrefour,1463,succes,22.8
+DRA-MPPI (simulateur JS),nominal,carrefour,1464,succes,18.1
+VIGIE 6 (simulateur JS),nominal,carrefour,1464,succes,24.9
+DRA-MPPI (simulateur JS),perception,carrefour,1464,succes,18.4
+VIGIE 6 (simulateur JS),perception,carrefour,1464,succes,24.6
+DRA-MPPI (simulateur JS),nominal,carrefour,1465,collision,13.1
+VIGIE 6 (simulateur JS),nominal,carrefour,1465,collision,13.0
+DRA-MPPI (simulateur JS),perception,carrefour,1465,collision,12.7
+VIGIE 6 (simulateur JS),perception,carrefour,1465,collision,11.3
+DRA-MPPI (simulateur JS),nominal,carrefour,1466,succes,15.7
+VIGIE 6 (simulateur JS),nominal,carrefour,1466,succes,16.4
+DRA-MPPI (simulateur JS),perception,carrefour,1466,succes,16.1
+VIGIE 6 (simulateur JS),perception,carrefour,1466,succes,16.4
+DRA-MPPI (simulateur JS),nominal,carrefour,1467,collision,11.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1467,collision,10.5
+DRA-MPPI (simulateur JS),perception,carrefour,1467,succes,20.4
+VIGIE 6 (simulateur JS),perception,carrefour,1467,succes,20.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1468,succes,14.9
+VIGIE 6 (simulateur JS),nominal,carrefour,1468,succes,15.2
+DRA-MPPI (simulateur JS),perception,carrefour,1468,succes,15.0
+VIGIE 6 (simulateur JS),perception,carrefour,1468,succes,15.3
+DRA-MPPI (simulateur JS),nominal,carrefour,1469,succes,20.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1469,succes,17.5
+DRA-MPPI (simulateur JS),perception,carrefour,1469,succes,20.2
+VIGIE 6 (simulateur JS),perception,carrefour,1469,succes,16.8
+DRA-MPPI (simulateur JS),nominal,carrefour,1470,succes,24.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1470,succes,43.7
+DRA-MPPI (simulateur JS),perception,carrefour,1470,succes,23.8
+VIGIE 6 (simulateur JS),perception,carrefour,1470,temps,45.0
+DRA-MPPI (simulateur JS),nominal,carrefour,1471,succes,21.7
+VIGIE 6 (simulateur JS),nominal,carrefour,1471,succes,21.6
+DRA-MPPI (simulateur JS),perception,carrefour,1471,succes,17.4
+VIGIE 6 (simulateur JS),perception,carrefour,1471,succes,17.4
+DRA-MPPI (simulateur JS),nominal,carrefour,1472,succes,18.8
+VIGIE 6 (simulateur JS),nominal,carrefour,1472,succes,17.7
+DRA-MPPI (simulateur JS),perception,carrefour,1472,succes,18.7
+VIGIE 6 (simulateur JS),perception,carrefour,1472,succes,18.0
+DRA-MPPI (simulateur JS),nominal,carrefour,1473,succes,22.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1473,succes,22.1
+DRA-MPPI (simulateur JS),perception,carrefour,1473,succes,21.9
+VIGIE 6 (simulateur JS),perception,carrefour,1473,succes,22.3
+DRA-MPPI (simulateur JS),nominal,carrefour,1474,succes,23.5
+VIGIE 6 (simulateur JS),nominal,carrefour,1474,succes,22.0
+DRA-MPPI (simulateur JS),perception,carrefour,1474,collision,20.2
+VIGIE 6 (simulateur JS),perception,carrefour,1474,succes,24.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1475,succes,27.4
+VIGIE 6 (simulateur JS),nominal,carrefour,1475,succes,24.6
+DRA-MPPI (simulateur JS),perception,carrefour,1475,succes,27.1
+VIGIE 6 (simulateur JS),perception,carrefour,1475,succes,25.1
+DRA-MPPI (simulateur JS),nominal,carrefour,1476,succes,17.6
+VIGIE 6 (simulateur JS),nominal,carrefour,1476,succes,17.2
+DRA-MPPI (simulateur JS),perception,carrefour,1476,succes,17.6
+VIGIE 6 (simulateur JS),perception,carrefour,1476,succes,17.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1477,succes,20.6
+VIGIE 6 (simulateur JS),nominal,carrefour,1477,succes,20.6
+DRA-MPPI (simulateur JS),perception,carrefour,1477,succes,20.7
+VIGIE 6 (simulateur JS),perception,carrefour,1477,succes,16.9
+DRA-MPPI (simulateur JS),nominal,carrefour,1478,collision,6.5
+VIGIE 6 (simulateur JS),nominal,carrefour,1478,succes,19.4
+DRA-MPPI (simulateur JS),perception,carrefour,1478,succes,20.3
+VIGIE 6 (simulateur JS),perception,carrefour,1478,succes,20.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1479,collision,19.6
+VIGIE 6 (simulateur JS),nominal,carrefour,1479,succes,18.1
+DRA-MPPI (simulateur JS),perception,carrefour,1479,succes,23.3
+VIGIE 6 (simulateur JS),perception,carrefour,1479,succes,17.3
+DRA-MPPI (simulateur JS),nominal,carrefour,1480,succes,16.2
+VIGIE 6 (simulateur JS),nominal,carrefour,1480,succes,16.4
+DRA-MPPI (simulateur JS),perception,carrefour,1480,succes,16.5
+VIGIE 6 (simulateur JS),perception,carrefour,1480,succes,16.8
+DRA-MPPI (simulateur JS),nominal,carrefour,1481,succes,16.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1481,succes,16.0
+DRA-MPPI (simulateur JS),perception,carrefour,1481,succes,16.0
+VIGIE 6 (simulateur JS),perception,carrefour,1481,succes,16.7
+DRA-MPPI (simulateur JS),nominal,carrefour,1482,succes,15.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1482,succes,15.2
+DRA-MPPI (simulateur JS),perception,carrefour,1482,succes,15.1
+VIGIE 6 (simulateur JS),perception,carrefour,1482,succes,15.4
+DRA-MPPI (simulateur JS),nominal,carrefour,1483,succes,17.8
+VIGIE 6 (simulateur JS),nominal,carrefour,1483,succes,19.6
+DRA-MPPI (simulateur JS),perception,carrefour,1483,succes,42.0
+VIGIE 6 (simulateur JS),perception,carrefour,1483,succes,19.9
+DRA-MPPI (simulateur JS),nominal,carrefour,1484,succes,21.7
+VIGIE 6 (simulateur JS),nominal,carrefour,1484,succes,18.3
+DRA-MPPI (simulateur JS),perception,carrefour,1484,succes,18.8
+VIGIE 6 (simulateur JS),perception,carrefour,1484,succes,18.5
+DRA-MPPI (simulateur JS),nominal,carrefour,1485,succes,27.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1485,succes,21.2
+DRA-MPPI (simulateur JS),perception,carrefour,1485,succes,20.9
+VIGIE 6 (simulateur JS),perception,carrefour,1485,succes,19.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1486,succes,15.8
+VIGIE 6 (simulateur JS),nominal,carrefour,1486,succes,15.9
+DRA-MPPI (simulateur JS),perception,carrefour,1486,succes,15.9
+VIGIE 6 (simulateur JS),perception,carrefour,1486,succes,18.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1487,succes,18.4
+VIGIE 6 (simulateur JS),nominal,carrefour,1487,collision,10.7
+DRA-MPPI (simulateur JS),perception,carrefour,1487,collision,10.7
+VIGIE 6 (simulateur JS),perception,carrefour,1487,succes,18.0
+DRA-MPPI (simulateur JS),nominal,carrefour,1488,succes,18.6
+VIGIE 6 (simulateur JS),nominal,carrefour,1488,succes,23.2
+DRA-MPPI (simulateur JS),perception,carrefour,1488,succes,18.7
+VIGIE 6 (simulateur JS),perception,carrefour,1488,succes,23.6
+DRA-MPPI (simulateur JS),nominal,carrefour,1489,succes,21.5
+VIGIE 6 (simulateur JS),nominal,carrefour,1489,succes,21.6
+DRA-MPPI (simulateur JS),perception,carrefour,1489,succes,24.1
+VIGIE 6 (simulateur JS),perception,carrefour,1489,succes,36.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1490,succes,16.3
+VIGIE 6 (simulateur JS),nominal,carrefour,1490,succes,16.7
+DRA-MPPI (simulateur JS),perception,carrefour,1490,succes,18.3
+VIGIE 6 (simulateur JS),perception,carrefour,1490,succes,16.8
+DRA-MPPI (simulateur JS),nominal,carrefour,1491,succes,20.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1491,succes,19.9
+DRA-MPPI (simulateur JS),perception,carrefour,1491,succes,20.1
+VIGIE 6 (simulateur JS),perception,carrefour,1491,succes,19.8
+DRA-MPPI (simulateur JS),nominal,carrefour,1492,succes,18.1
+VIGIE 6 (simulateur JS),nominal,carrefour,1492,succes,17.2
+DRA-MPPI (simulateur JS),perception,carrefour,1492,succes,17.5
+VIGIE 6 (simulateur JS),perception,carrefour,1492,succes,18.1
+DRA-MPPI (simulateur JS),nominal,carrefour,1493,succes,15.8
+VIGIE 6 (simulateur JS),nominal,carrefour,1493,succes,15.4
+DRA-MPPI (simulateur JS),perception,carrefour,1493,succes,15.7
+VIGIE 6 (simulateur JS),perception,carrefour,1493,succes,15.4
+DRA-MPPI (simulateur JS),nominal,carrefour,1494,succes,20.2
+VIGIE 6 (simulateur JS),nominal,carrefour,1494,succes,16.5
+DRA-MPPI (simulateur JS),perception,carrefour,1494,succes,16.1
+VIGIE 6 (simulateur JS),perception,carrefour,1494,succes,15.8
+DRA-MPPI (simulateur JS),nominal,carrefour,1495,succes,20.1
+VIGIE 6 (simulateur JS),nominal,carrefour,1495,succes,19.8
+DRA-MPPI (simulateur JS),perception,carrefour,1495,succes,20.2
+VIGIE 6 (simulateur JS),perception,carrefour,1495,succes,20.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1496,collision,18.0
+VIGIE 6 (simulateur JS),nominal,carrefour,1496,succes,22.2
+DRA-MPPI (simulateur JS),perception,carrefour,1496,succes,17.2
+VIGIE 6 (simulateur JS),perception,carrefour,1496,succes,17.2
+DRA-MPPI (simulateur JS),nominal,carrefour,1497,succes,18.4
+VIGIE 6 (simulateur JS),nominal,carrefour,1497,succes,25.1
+DRA-MPPI (simulateur JS),perception,carrefour,1497,succes,21.3
+VIGIE 6 (simulateur JS),perception,carrefour,1497,collision,5.9
+DRA-MPPI (simulateur JS),nominal,carrefour,1498,succes,15.1
+VIGIE 6 (simulateur JS),nominal,carrefour,1498,succes,15.3
+DRA-MPPI (simulateur JS),perception,carrefour,1498,succes,15.4
+VIGIE 6 (simulateur JS),perception,carrefour,1498,succes,15.4
+DRA-MPPI (simulateur JS),nominal,carrefour,1499,succes,18.6
+VIGIE 6 (simulateur JS),nominal,carrefour,1499,succes,19.5
+DRA-MPPI (simulateur JS),perception,carrefour,1499,succes,16.5
+VIGIE 6 (simulateur JS),perception,carrefour,1499,succes,17.2
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1460,succes,32.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1460,succes,21.5
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1460,collision,5.2
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1460,succes,19.8
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1461,succes,15.5
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1461,succes,15.5
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1461,succes,15.9
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1461,succes,20.8
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1462,collision,6.6
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1462,succes,19.8
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1462,succes,27.6
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1462,succes,19.4
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1463,collision,5.1
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1463,collision,5.1
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1463,succes,18.0
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1463,collision,5.1
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1464,succes,19.2
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1464,succes,19.2
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1464,collision,16.2
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1464,succes,31.1
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1465,succes,19.9
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1465,succes,17.8
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1465,collision,11.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1465,collision,11.7
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1466,succes,19.0
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1466,succes,19.5
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1466,succes,19.0
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1466,succes,17.9
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1467,succes,20.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1467,collision,6.9
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1467,succes,20.7
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1467,collision,6.6
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1468,collision,4.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1468,succes,21.8
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1468,succes,17.0
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1468,succes,17.3
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1469,succes,18.2
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1469,succes,18.1
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1469,succes,18.2
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1469,succes,18.1
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1470,collision,4.5
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1470,succes,17.7
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1470,collision,4.3
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1470,collision,4.4
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1471,succes,22.7
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1471,succes,22.6
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1471,collision,11.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1471,collision,11.7
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1472,succes,18.2
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1472,succes,20.9
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1472,collision,6.3
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1472,succes,19.8
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1473,succes,15.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1473,succes,15.9
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1473,succes,16.3
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1473,succes,16.3
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1474,succes,22.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1474,succes,20.2
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1474,succes,22.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1474,succes,22.9
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1475,succes,16.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1475,succes,16.4
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1475,succes,16.9
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1475,succes,16.5
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1476,succes,17.1
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1476,collision,7.0
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1476,collision,7.1
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1476,succes,17.3
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1477,succes,16.4
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1477,succes,16.4
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1477,succes,16.4
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1477,succes,16.4
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1478,succes,17.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1478,succes,17.2
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1478,succes,17.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1478,succes,17.8
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1479,succes,25.4
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1479,succes,25.1
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1479,succes,16.4
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1479,collision,15.1
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1480,succes,26.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1480,succes,23.4
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1480,collision,17.4
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1480,succes,26.5
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1481,succes,19.6
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1481,succes,21.1
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1481,succes,20.1
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1481,succes,15.9
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1482,succes,18.3
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1482,succes,18.7
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1482,succes,18.3
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1482,succes,18.0
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1483,succes,21.2
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1483,succes,16.9
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1483,succes,17.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1483,succes,17.4
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1484,succes,23.1
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1484,succes,20.5
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1484,succes,17.9
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1484,succes,20.3
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1485,collision,6.3
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1485,succes,19.7
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1485,succes,37.1
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1485,succes,19.5
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1486,succes,21.9
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1486,succes,20.5
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1486,succes,23.2
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1486,succes,18.0
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1487,succes,16.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1487,succes,16.5
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1487,succes,17.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1487,collision,13.5
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1488,succes,15.3
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1488,succes,15.4
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1488,succes,15.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1488,succes,15.5
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1489,succes,20.0
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1489,succes,20.5
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1489,succes,18.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1489,succes,22.2
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1490,succes,22.1
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1490,collision,20.6
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1490,succes,23.2
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1490,succes,17.7
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1491,collision,4.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1491,collision,4.8
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1491,collision,4.9
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1491,collision,5.1
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1492,collision,20.0
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1492,collision,19.8
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1492,succes,32.0
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1492,collision,19.9
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1493,succes,16.6
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1493,succes,16.6
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1493,succes,17.0
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1493,succes,17.2
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1494,collision,4.6
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1494,succes,18.2
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1494,collision,4.7
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1494,succes,18.3
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1495,succes,16.0
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1495,collision,4.9
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1495,succes,15.5
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1495,succes,15.4
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1496,succes,22.3
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1496,succes,22.4
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1496,succes,22.3
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1496,succes,22.2
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1497,succes,17.5
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1497,succes,17.6
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1497,succes,17.8
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1497,succes,17.9
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1498,succes,16.8
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1498,succes,16.4
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1498,collision,8.1
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1498,succes,17.4
+DRA-MPPI (simulateur JS),nominal,carrefour_rapide,1499,succes,21.9
+VIGIE 6 (simulateur JS),nominal,carrefour_rapide,1499,succes,19.2
+DRA-MPPI (simulateur JS),perception,carrefour_rapide,1499,succes,30.6
+VIGIE 6 (simulateur JS),perception,carrefour_rapide,1499,succes,19.3
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1460,succes,21.4
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1460,succes,22.3
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1460,collision,6.8
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1460,collision,19.4
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1461,collision,7.5
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1461,succes,20.3
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1461,collision,8.0
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1461,succes,21.0
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1462,succes,22.7
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1462,succes,22.8
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1462,collision,16.8
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1462,succes,23.6
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1463,succes,24.1
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1463,succes,23.7
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1463,collision,18.7
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1463,collision,18.5
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1464,succes,22.5
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1464,succes,22.9
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1464,collision,18.2
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1464,collision,18.3
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1465,succes,20.7
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1465,succes,21.7
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1465,succes,23.0
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1465,collision,16.6
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1466,succes,23.1
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1466,succes,19.6
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1466,collision,17.3
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1466,succes,20.4
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1467,succes,27.9
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1467,succes,20.5
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1467,collision,7.9
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1467,succes,20.7
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1468,succes,23.8
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1468,succes,23.2
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1468,collision,6.9
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1468,collision,6.8
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1469,succes,26.0
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1469,succes,25.5
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1469,succes,23.5
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1469,collision,7.1
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1470,succes,22.9
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1470,succes,22.1
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1470,succes,23.1
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1470,succes,22.7
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1471,succes,23.1
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1471,succes,22.8
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1471,collision,13.0
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1471,collision,6.8
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1472,succes,30.6
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1472,succes,22.8
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1472,collision,16.9
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1472,collision,16.7
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1473,succes,19.7
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1473,succes,20.5
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1473,succes,20.1
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1473,succes,20.0
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1474,collision,10.5
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1474,succes,21.2
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1474,collision,7.7
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1474,collision,7.4
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1475,succes,26.9
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1475,succes,26.2
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1475,collision,7.9
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1475,succes,21.4
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1476,succes,21.1
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1476,succes,21.1
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1476,succes,21.2
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1476,succes,21.6
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1477,succes,23.8
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1477,succes,23.1
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1477,collision,6.7
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1477,collision,17.1
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1478,succes,23.4
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1478,succes,23.1
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1478,collision,11.8
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1478,collision,11.7
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1479,succes,21.7
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1479,succes,21.6
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1479,succes,21.8
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1479,succes,22.2
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1480,succes,24.3
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1480,succes,24.4
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1480,collision,7.2
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1480,collision,7.2
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1481,succes,27.0
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1481,succes,26.0
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1481,succes,21.8
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1481,collision,13.2
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1482,succes,24.2
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1482,succes,21.8
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1482,succes,21.4
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1482,succes,22.1
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1483,succes,24.7
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1483,succes,24.4
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1483,collision,11.6
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1483,succes,22.4
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1484,succes,25.1
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1484,collision,10.9
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1484,collision,7.8
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1484,succes,25.3
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1485,succes,23.6
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1485,succes,31.2
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1485,succes,22.3
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1485,succes,23.5
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1486,succes,24.8
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1486,succes,24.9
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1486,succes,24.8
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1486,succes,24.8
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1487,succes,25.2
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1487,succes,25.1
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1487,succes,24.9
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1487,succes,25.7
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1488,succes,21.2
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1488,succes,30.9
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1488,succes,21.0
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1488,succes,22.3
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1489,succes,21.7
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1489,succes,43.8
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1489,succes,21.3
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1489,succes,21.7
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1490,succes,27.0
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1490,succes,19.8
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1490,succes,20.4
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1490,succes,20.4
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1491,succes,27.4
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1491,succes,22.2
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1491,succes,22.3
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1491,succes,20.3
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1492,succes,23.3
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1492,succes,23.6
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1492,succes,24.2
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1492,succes,23.9
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1493,succes,27.6
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1493,succes,27.7
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1493,collision,7.4
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1493,collision,7.7
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1494,succes,24.2
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1494,succes,21.4
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1494,collision,11.3
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1494,succes,22.6
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1495,succes,24.1
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1495,succes,19.4
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1495,collision,11.7
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1495,collision,11.7
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1496,succes,22.7
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1496,succes,22.3
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1496,collision,11.6
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1496,collision,11.8
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1497,succes,23.6
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1497,succes,23.7
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1497,succes,23.6
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1497,succes,24.1
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1498,succes,28.6
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1498,succes,21.0
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1498,collision,7.5
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1498,collision,7.9
+DRA-MPPI (simulateur JS),nominal,coin_aveugle,1499,succes,28.8
+VIGIE 6 (simulateur JS),nominal,coin_aveugle,1499,succes,23.7
+DRA-MPPI (simulateur JS),perception,coin_aveugle,1499,succes,23.5
+VIGIE 6 (simulateur JS),perception,coin_aveugle,1499,succes,24.8
+DRA-MPPI (simulateur JS),nominal,couloir,1460,succes,16.3
+VIGIE 6 (simulateur JS),nominal,couloir,1460,succes,16.2
+DRA-MPPI (simulateur JS),perception,couloir,1460,succes,16.5
+VIGIE 6 (simulateur JS),perception,couloir,1460,succes,16.3
+DRA-MPPI (simulateur JS),nominal,couloir,1461,succes,24.6
+VIGIE 6 (simulateur JS),nominal,couloir,1461,succes,17.0
+DRA-MPPI (simulateur JS),perception,couloir,1461,succes,26.0
+VIGIE 6 (simulateur JS),perception,couloir,1461,succes,17.8
+DRA-MPPI (simulateur JS),nominal,couloir,1462,succes,16.2
+VIGIE 6 (simulateur JS),nominal,couloir,1462,succes,17.4
+DRA-MPPI (simulateur JS),perception,couloir,1462,succes,16.7
+VIGIE 6 (simulateur JS),perception,couloir,1462,collision,6.0
+DRA-MPPI (simulateur JS),nominal,couloir,1463,succes,15.4
+VIGIE 6 (simulateur JS),nominal,couloir,1463,succes,16.2
+DRA-MPPI (simulateur JS),perception,couloir,1463,succes,15.4
+VIGIE 6 (simulateur JS),perception,couloir,1463,succes,15.7
+DRA-MPPI (simulateur JS),nominal,couloir,1464,succes,28.6
+VIGIE 6 (simulateur JS),nominal,couloir,1464,succes,22.5
+DRA-MPPI (simulateur JS),perception,couloir,1464,collision,30.7
+VIGIE 6 (simulateur JS),perception,couloir,1464,succes,23.2
+DRA-MPPI (simulateur JS),nominal,couloir,1465,succes,16.2
+VIGIE 6 (simulateur JS),nominal,couloir,1465,succes,16.1
+DRA-MPPI (simulateur JS),perception,couloir,1465,succes,16.2
+VIGIE 6 (simulateur JS),perception,couloir,1465,succes,15.9
+DRA-MPPI (simulateur JS),nominal,couloir,1466,succes,17.1
+VIGIE 6 (simulateur JS),nominal,couloir,1466,succes,16.9
+DRA-MPPI (simulateur JS),perception,couloir,1466,succes,17.4
+VIGIE 6 (simulateur JS),perception,couloir,1466,succes,16.9
+DRA-MPPI (simulateur JS),nominal,couloir,1467,succes,21.4
+VIGIE 6 (simulateur JS),nominal,couloir,1467,succes,18.2
+DRA-MPPI (simulateur JS),perception,couloir,1467,succes,18.8
+VIGIE 6 (simulateur JS),perception,couloir,1467,succes,21.9
+DRA-MPPI (simulateur JS),nominal,couloir,1468,succes,17.4
+VIGIE 6 (simulateur JS),nominal,couloir,1468,succes,16.8
+DRA-MPPI (simulateur JS),perception,couloir,1468,succes,17.5
+VIGIE 6 (simulateur JS),perception,couloir,1468,succes,20.1
+DRA-MPPI (simulateur JS),nominal,couloir,1469,succes,20.9
+VIGIE 6 (simulateur JS),nominal,couloir,1469,succes,21.4
+DRA-MPPI (simulateur JS),perception,couloir,1469,succes,20.9
+VIGIE 6 (simulateur JS),perception,couloir,1469,succes,21.0
+DRA-MPPI (simulateur JS),nominal,couloir,1470,succes,16.2
+VIGIE 6 (simulateur JS),nominal,couloir,1470,succes,16.3
+DRA-MPPI (simulateur JS),perception,couloir,1470,succes,42.4
+VIGIE 6 (simulateur JS),perception,couloir,1470,succes,16.9
+DRA-MPPI (simulateur JS),nominal,couloir,1471,succes,28.0
+VIGIE 6 (simulateur JS),nominal,couloir,1471,succes,23.8
+DRA-MPPI (simulateur JS),perception,couloir,1471,succes,28.8
+VIGIE 6 (simulateur JS),perception,couloir,1471,succes,29.0
+DRA-MPPI (simulateur JS),nominal,couloir,1472,collision,37.0
+VIGIE 6 (simulateur JS),nominal,couloir,1472,succes,36.9
+DRA-MPPI (simulateur JS),perception,couloir,1472,collision,38.5
+VIGIE 6 (simulateur JS),perception,couloir,1472,succes,20.9
+DRA-MPPI (simulateur JS),nominal,couloir,1473,succes,17.2
+VIGIE 6 (simulateur JS),nominal,couloir,1473,succes,17.8
+DRA-MPPI (simulateur JS),perception,couloir,1473,succes,17.2
+VIGIE 6 (simulateur JS),perception,couloir,1473,succes,17.2
+DRA-MPPI (simulateur JS),nominal,couloir,1474,collision,20.8
+VIGIE 6 (simulateur JS),nominal,couloir,1474,succes,18.1
+DRA-MPPI (simulateur JS),perception,couloir,1474,succes,25.2
+VIGIE 6 (simulateur JS),perception,couloir,1474,succes,27.3
+DRA-MPPI (simulateur JS),nominal,couloir,1475,succes,15.5
+VIGIE 6 (simulateur JS),nominal,couloir,1475,succes,15.2
+DRA-MPPI (simulateur JS),perception,couloir,1475,succes,19.4
+VIGIE 6 (simulateur JS),perception,couloir,1475,succes,15.8
+DRA-MPPI (simulateur JS),nominal,couloir,1476,succes,16.8
+VIGIE 6 (simulateur JS),nominal,couloir,1476,succes,16.7
+DRA-MPPI (simulateur JS),perception,couloir,1476,succes,24.2
+VIGIE 6 (simulateur JS),perception,couloir,1476,succes,17.7
+DRA-MPPI (simulateur JS),nominal,couloir,1477,succes,15.2
+VIGIE 6 (simulateur JS),nominal,couloir,1477,succes,15.4
+DRA-MPPI (simulateur JS),perception,couloir,1477,succes,15.3
+VIGIE 6 (simulateur JS),perception,couloir,1477,succes,15.5
+DRA-MPPI (simulateur JS),nominal,couloir,1478,succes,16.5
+VIGIE 6 (simulateur JS),nominal,couloir,1478,succes,16.5
+DRA-MPPI (simulateur JS),perception,couloir,1478,succes,16.7
+VIGIE 6 (simulateur JS),perception,couloir,1478,succes,16.6
+DRA-MPPI (simulateur JS),nominal,couloir,1479,succes,16.9
+VIGIE 6 (simulateur JS),nominal,couloir,1479,succes,16.8
+DRA-MPPI (simulateur JS),perception,couloir,1479,succes,16.8
+VIGIE 6 (simulateur JS),perception,couloir,1479,succes,17.1
+DRA-MPPI (simulateur JS),nominal,couloir,1480,succes,24.7
+VIGIE 6 (simulateur JS),nominal,couloir,1480,succes,20.0
+DRA-MPPI (simulateur JS),perception,couloir,1480,succes,24.0
+VIGIE 6 (simulateur JS),perception,couloir,1480,succes,29.9
+DRA-MPPI (simulateur JS),nominal,couloir,1481,succes,15.8
+VIGIE 6 (simulateur JS),nominal,couloir,1481,succes,15.8
+DRA-MPPI (simulateur JS),perception,couloir,1481,succes,16.1
+VIGIE 6 (simulateur JS),perception,couloir,1481,succes,16.1
+DRA-MPPI (simulateur JS),nominal,couloir,1482,succes,15.4
+VIGIE 6 (simulateur JS),nominal,couloir,1482,succes,15.9
+DRA-MPPI (simulateur JS),perception,couloir,1482,succes,15.4
+VIGIE 6 (simulateur JS),perception,couloir,1482,succes,15.8
+DRA-MPPI (simulateur JS),nominal,couloir,1483,succes,18.5
+VIGIE 6 (simulateur JS),nominal,couloir,1483,succes,17.0
+DRA-MPPI (simulateur JS),perception,couloir,1483,succes,19.2
+VIGIE 6 (simulateur JS),perception,couloir,1483,succes,16.9
+DRA-MPPI (simulateur JS),nominal,couloir,1484,succes,15.8
+VIGIE 6 (simulateur JS),nominal,couloir,1484,succes,15.8
+DRA-MPPI (simulateur JS),perception,couloir,1484,succes,18.4
+VIGIE 6 (simulateur JS),perception,couloir,1484,succes,15.8
+DRA-MPPI (simulateur JS),nominal,couloir,1485,succes,16.5
+VIGIE 6 (simulateur JS),nominal,couloir,1485,succes,16.7
+DRA-MPPI (simulateur JS),perception,couloir,1485,succes,16.3
+VIGIE 6 (simulateur JS),perception,couloir,1485,succes,16.3
+DRA-MPPI (simulateur JS),nominal,couloir,1486,succes,18.6
+VIGIE 6 (simulateur JS),nominal,couloir,1486,succes,18.1
+DRA-MPPI (simulateur JS),perception,couloir,1486,succes,19.4
+VIGIE 6 (simulateur JS),perception,couloir,1486,succes,17.7
+DRA-MPPI (simulateur JS),nominal,couloir,1487,succes,17.0
+VIGIE 6 (simulateur JS),nominal,couloir,1487,succes,16.7
+DRA-MPPI (simulateur JS),perception,couloir,1487,succes,17.4
+VIGIE 6 (simulateur JS),perception,couloir,1487,succes,17.1
+DRA-MPPI (simulateur JS),nominal,couloir,1488,succes,17.2
+VIGIE 6 (simulateur JS),nominal,couloir,1488,succes,17.1
+DRA-MPPI (simulateur JS),perception,couloir,1488,succes,17.4
+VIGIE 6 (simulateur JS),perception,couloir,1488,succes,17.5
+DRA-MPPI (simulateur JS),nominal,couloir,1489,succes,16.7
+VIGIE 6 (simulateur JS),nominal,couloir,1489,succes,18.5
+DRA-MPPI (simulateur JS),perception,couloir,1489,succes,18.5
+VIGIE 6 (simulateur JS),perception,couloir,1489,succes,18.2
+DRA-MPPI (simulateur JS),nominal,couloir,1490,succes,36.0
+VIGIE 6 (simulateur JS),nominal,couloir,1490,succes,18.5
+DRA-MPPI (simulateur JS),perception,couloir,1490,succes,29.1
+VIGIE 6 (simulateur JS),perception,couloir,1490,succes,18.7
+DRA-MPPI (simulateur JS),nominal,couloir,1491,succes,15.4
+VIGIE 6 (simulateur JS),nominal,couloir,1491,succes,16.1
+DRA-MPPI (simulateur JS),perception,couloir,1491,succes,15.4
+VIGIE 6 (simulateur JS),perception,couloir,1491,succes,16.0
+DRA-MPPI (simulateur JS),nominal,couloir,1492,succes,20.4
+VIGIE 6 (simulateur JS),nominal,couloir,1492,succes,24.7
+DRA-MPPI (simulateur JS),perception,couloir,1492,collision,12.7
+VIGIE 6 (simulateur JS),perception,couloir,1492,succes,21.3
+DRA-MPPI (simulateur JS),nominal,couloir,1493,succes,15.7
+VIGIE 6 (simulateur JS),nominal,couloir,1493,succes,15.8
+DRA-MPPI (simulateur JS),perception,couloir,1493,succes,15.7
+VIGIE 6 (simulateur JS),perception,couloir,1493,succes,15.8
+DRA-MPPI (simulateur JS),nominal,couloir,1494,succes,20.7
+VIGIE 6 (simulateur JS),nominal,couloir,1494,succes,19.5
+DRA-MPPI (simulateur JS),perception,couloir,1494,succes,21.8
+VIGIE 6 (simulateur JS),perception,couloir,1494,succes,19.8
+DRA-MPPI (simulateur JS),nominal,couloir,1495,succes,17.7
+VIGIE 6 (simulateur JS),nominal,couloir,1495,succes,18.4
+DRA-MPPI (simulateur JS),perception,couloir,1495,succes,18.1
+VIGIE 6 (simulateur JS),perception,couloir,1495,succes,18.2
+DRA-MPPI (simulateur JS),nominal,couloir,1496,succes,15.3
+VIGIE 6 (simulateur JS),nominal,couloir,1496,succes,15.3
+DRA-MPPI (simulateur JS),perception,couloir,1496,succes,15.3
+VIGIE 6 (simulateur JS),perception,couloir,1496,succes,15.2
+DRA-MPPI (simulateur JS),nominal,couloir,1497,succes,16.7
+VIGIE 6 (simulateur JS),nominal,couloir,1497,succes,16.7
+DRA-MPPI (simulateur JS),perception,couloir,1497,succes,16.3
+VIGIE 6 (simulateur JS),perception,couloir,1497,succes,16.6
+DRA-MPPI (simulateur JS),nominal,couloir,1498,succes,18.9
+VIGIE 6 (simulateur JS),nominal,couloir,1498,succes,18.4
+DRA-MPPI (simulateur JS),perception,couloir,1498,succes,19.1
+VIGIE 6 (simulateur JS),perception,couloir,1498,succes,19.0
+DRA-MPPI (simulateur JS),nominal,couloir,1499,collision,35.0
+VIGIE 6 (simulateur JS),nominal,couloir,1499,temps,45.0
+DRA-MPPI (simulateur JS),perception,couloir,1499,collision,35.1
+VIGIE 6 (simulateur JS),perception,couloir,1499,temps,45.0
+DRA-MPPI (simulateur JS),nominal,foret,1460,succes,21.6
+VIGIE 6 (simulateur JS),nominal,foret,1460,succes,22.0
+DRA-MPPI (simulateur JS),perception,foret,1460,succes,21.6
+VIGIE 6 (simulateur JS),perception,foret,1460,succes,22.2
+DRA-MPPI (simulateur JS),nominal,foret,1461,succes,15.8
+VIGIE 6 (simulateur JS),nominal,foret,1461,succes,16.2
+DRA-MPPI (simulateur JS),perception,foret,1461,succes,15.8
+VIGIE 6 (simulateur JS),perception,foret,1461,succes,16.3
+DRA-MPPI (simulateur JS),nominal,foret,1462,succes,15.7
+VIGIE 6 (simulateur JS),nominal,foret,1462,succes,15.8
+DRA-MPPI (simulateur JS),perception,foret,1462,succes,15.7
+VIGIE 6 (simulateur JS),perception,foret,1462,succes,16.0
+DRA-MPPI (simulateur JS),nominal,foret,1463,succes,27.6
+VIGIE 6 (simulateur JS),nominal,foret,1463,succes,28.4
+DRA-MPPI (simulateur JS),perception,foret,1463,succes,27.6
+VIGIE 6 (simulateur JS),perception,foret,1463,succes,29.0
+DRA-MPPI (simulateur JS),nominal,foret,1464,succes,24.6
+VIGIE 6 (simulateur JS),nominal,foret,1464,succes,36.2
+DRA-MPPI (simulateur JS),perception,foret,1464,succes,24.6
+VIGIE 6 (simulateur JS),perception,foret,1464,succes,36.5
+DRA-MPPI (simulateur JS),nominal,foret,1465,succes,20.7
+VIGIE 6 (simulateur JS),nominal,foret,1465,succes,20.9
+DRA-MPPI (simulateur JS),perception,foret,1465,succes,20.7
+VIGIE 6 (simulateur JS),perception,foret,1465,succes,21.4
+DRA-MPPI (simulateur JS),nominal,foret,1466,succes,26.0
+VIGIE 6 (simulateur JS),nominal,foret,1466,succes,28.4
+DRA-MPPI (simulateur JS),perception,foret,1466,succes,26.0
+VIGIE 6 (simulateur JS),perception,foret,1466,succes,29.0
+DRA-MPPI (simulateur JS),nominal,foret,1467,succes,15.8
+VIGIE 6 (simulateur JS),nominal,foret,1467,succes,16.5
+DRA-MPPI (simulateur JS),perception,foret,1467,succes,15.8
+VIGIE 6 (simulateur JS),perception,foret,1467,succes,16.3
+DRA-MPPI (simulateur JS),nominal,foret,1468,succes,17.9
+VIGIE 6 (simulateur JS),nominal,foret,1468,succes,17.3
+DRA-MPPI (simulateur JS),perception,foret,1468,succes,17.9
+VIGIE 6 (simulateur JS),perception,foret,1468,succes,17.4
+DRA-MPPI (simulateur JS),nominal,foret,1469,succes,21.9
+VIGIE 6 (simulateur JS),nominal,foret,1469,succes,21.5
+DRA-MPPI (simulateur JS),perception,foret,1469,succes,21.9
+VIGIE 6 (simulateur JS),perception,foret,1469,succes,21.5
+DRA-MPPI (simulateur JS),nominal,foret,1470,succes,19.2
+VIGIE 6 (simulateur JS),nominal,foret,1470,succes,18.0
+DRA-MPPI (simulateur JS),perception,foret,1470,succes,19.2
+VIGIE 6 (simulateur JS),perception,foret,1470,succes,18.3
+DRA-MPPI (simulateur JS),nominal,foret,1471,succes,18.1
+VIGIE 6 (simulateur JS),nominal,foret,1471,succes,17.7
+DRA-MPPI (simulateur JS),perception,foret,1471,succes,18.1
+VIGIE 6 (simulateur JS),perception,foret,1471,succes,17.5
+DRA-MPPI (simulateur JS),nominal,foret,1472,succes,20.6
+VIGIE 6 (simulateur JS),nominal,foret,1472,succes,18.1
+DRA-MPPI (simulateur JS),perception,foret,1472,succes,20.6
+VIGIE 6 (simulateur JS),perception,foret,1472,succes,18.8
+DRA-MPPI (simulateur JS),nominal,foret,1473,succes,22.0
+VIGIE 6 (simulateur JS),nominal,foret,1473,succes,22.0
+DRA-MPPI (simulateur JS),perception,foret,1473,succes,22.0
+VIGIE 6 (simulateur JS),perception,foret,1473,succes,22.3
+DRA-MPPI (simulateur JS),nominal,foret,1474,succes,27.5
+VIGIE 6 (simulateur JS),nominal,foret,1474,succes,27.1
+DRA-MPPI (simulateur JS),perception,foret,1474,succes,27.5
+VIGIE 6 (simulateur JS),perception,foret,1474,succes,27.5
+DRA-MPPI (simulateur JS),nominal,foret,1475,succes,27.5
+VIGIE 6 (simulateur JS),nominal,foret,1475,succes,27.7
+DRA-MPPI (simulateur JS),perception,foret,1475,succes,27.5
+VIGIE 6 (simulateur JS),perception,foret,1475,succes,26.8
+DRA-MPPI (simulateur JS),nominal,foret,1476,succes,20.0
+VIGIE 6 (simulateur JS),nominal,foret,1476,succes,18.6
+DRA-MPPI (simulateur JS),perception,foret,1476,succes,20.0
+VIGIE 6 (simulateur JS),perception,foret,1476,succes,19.3
+DRA-MPPI (simulateur JS),nominal,foret,1477,succes,21.1
+VIGIE 6 (simulateur JS),nominal,foret,1477,succes,19.9
+DRA-MPPI (simulateur JS),perception,foret,1477,succes,21.1
+VIGIE 6 (simulateur JS),perception,foret,1477,succes,20.3
+DRA-MPPI (simulateur JS),nominal,foret,1478,succes,17.1
+VIGIE 6 (simulateur JS),nominal,foret,1478,succes,17.5
+DRA-MPPI (simulateur JS),perception,foret,1478,succes,17.1
+VIGIE 6 (simulateur JS),perception,foret,1478,succes,17.5
+DRA-MPPI (simulateur JS),nominal,foret,1479,succes,22.9
+VIGIE 6 (simulateur JS),nominal,foret,1479,succes,22.8
+DRA-MPPI (simulateur JS),perception,foret,1479,succes,22.9
+VIGIE 6 (simulateur JS),perception,foret,1479,succes,22.9
+DRA-MPPI (simulateur JS),nominal,foret,1480,succes,28.5
+VIGIE 6 (simulateur JS),nominal,foret,1480,succes,28.0
+DRA-MPPI (simulateur JS),perception,foret,1480,succes,28.5
+VIGIE 6 (simulateur JS),perception,foret,1480,succes,22.9
+DRA-MPPI (simulateur JS),nominal,foret,1481,succes,23.2
+VIGIE 6 (simulateur JS),nominal,foret,1481,succes,21.8
+DRA-MPPI (simulateur JS),perception,foret,1481,succes,23.2
+VIGIE 6 (simulateur JS),perception,foret,1481,succes,21.9
+DRA-MPPI (simulateur JS),nominal,foret,1482,succes,21.6
+VIGIE 6 (simulateur JS),nominal,foret,1482,succes,24.8
+DRA-MPPI (simulateur JS),perception,foret,1482,succes,21.6
+VIGIE 6 (simulateur JS),perception,foret,1482,succes,24.8
+DRA-MPPI (simulateur JS),nominal,foret,1483,succes,20.4
+VIGIE 6 (simulateur JS),nominal,foret,1483,succes,21.2
+DRA-MPPI (simulateur JS),perception,foret,1483,succes,20.4
+VIGIE 6 (simulateur JS),perception,foret,1483,succes,21.6
+DRA-MPPI (simulateur JS),nominal,foret,1484,succes,25.7
+VIGIE 6 (simulateur JS),nominal,foret,1484,succes,27.1
+DRA-MPPI (simulateur JS),perception,foret,1484,succes,25.7
+VIGIE 6 (simulateur JS),perception,foret,1484,succes,26.4
+DRA-MPPI (simulateur JS),nominal,foret,1485,succes,16.2
+VIGIE 6 (simulateur JS),nominal,foret,1485,succes,16.2
+DRA-MPPI (simulateur JS),perception,foret,1485,succes,16.2
+VIGIE 6 (simulateur JS),perception,foret,1485,succes,16.2
+DRA-MPPI (simulateur JS),nominal,foret,1486,succes,19.2
+VIGIE 6 (simulateur JS),nominal,foret,1486,succes,19.2
+DRA-MPPI (simulateur JS),perception,foret,1486,succes,19.2
+VIGIE 6 (simulateur JS),perception,foret,1486,succes,19.9
+DRA-MPPI (simulateur JS),nominal,foret,1487,succes,21.9
+VIGIE 6 (simulateur JS),nominal,foret,1487,succes,19.5
+DRA-MPPI (simulateur JS),perception,foret,1487,succes,21.9
+VIGIE 6 (simulateur JS),perception,foret,1487,succes,20.5
+DRA-MPPI (simulateur JS),nominal,foret,1488,succes,17.9
+VIGIE 6 (simulateur JS),nominal,foret,1488,succes,18.3
+DRA-MPPI (simulateur JS),perception,foret,1488,succes,17.9
+VIGIE 6 (simulateur JS),perception,foret,1488,succes,18.4
+DRA-MPPI (simulateur JS),nominal,foret,1489,succes,16.8
+VIGIE 6 (simulateur JS),nominal,foret,1489,succes,17.2
+DRA-MPPI (simulateur JS),perception,foret,1489,succes,16.8
+VIGIE 6 (simulateur JS),perception,foret,1489,succes,17.1
+DRA-MPPI (simulateur JS),nominal,foret,1490,succes,24.2
+VIGIE 6 (simulateur JS),nominal,foret,1490,succes,25.2
+DRA-MPPI (simulateur JS),perception,foret,1490,succes,24.2
+VIGIE 6 (simulateur JS),perception,foret,1490,succes,25.9
+DRA-MPPI (simulateur JS),nominal,foret,1491,succes,22.5
+VIGIE 6 (simulateur JS),nominal,foret,1491,succes,24.4
+DRA-MPPI (simulateur JS),perception,foret,1491,succes,22.5
+VIGIE 6 (simulateur JS),perception,foret,1491,succes,24.5
+DRA-MPPI (simulateur JS),nominal,foret,1492,succes,16.2
+VIGIE 6 (simulateur JS),nominal,foret,1492,succes,16.5
+DRA-MPPI (simulateur JS),perception,foret,1492,succes,16.2
+VIGIE 6 (simulateur JS),perception,foret,1492,succes,16.4
+DRA-MPPI (simulateur JS),nominal,foret,1493,succes,19.9
+VIGIE 6 (simulateur JS),nominal,foret,1493,succes,18.5
+DRA-MPPI (simulateur JS),perception,foret,1493,succes,19.9
+VIGIE 6 (simulateur JS),perception,foret,1493,succes,18.8
+DRA-MPPI (simulateur JS),nominal,foret,1494,succes,17.8
+VIGIE 6 (simulateur JS),nominal,foret,1494,succes,17.3
+DRA-MPPI (simulateur JS),perception,foret,1494,succes,17.8
+VIGIE 6 (simulateur JS),perception,foret,1494,succes,18.1
+DRA-MPPI (simulateur JS),nominal,foret,1495,succes,33.1
+VIGIE 6 (simulateur JS),nominal,foret,1495,succes,34.7
+DRA-MPPI (simulateur JS),perception,foret,1495,succes,33.1
+VIGIE 6 (simulateur JS),perception,foret,1495,succes,34.2
+DRA-MPPI (simulateur JS),nominal,foret,1496,succes,20.6
+VIGIE 6 (simulateur JS),nominal,foret,1496,succes,19.8
+DRA-MPPI (simulateur JS),perception,foret,1496,succes,20.6
+VIGIE 6 (simulateur JS),perception,foret,1496,succes,19.9
+DRA-MPPI (simulateur JS),nominal,foret,1497,succes,22.5
+VIGIE 6 (simulateur JS),nominal,foret,1497,succes,25.5
+DRA-MPPI (simulateur JS),perception,foret,1497,succes,22.5
+VIGIE 6 (simulateur JS),perception,foret,1497,succes,26.2
+DRA-MPPI (simulateur JS),nominal,foret,1498,succes,20.7
+VIGIE 6 (simulateur JS),nominal,foret,1498,succes,20.5
+DRA-MPPI (simulateur JS),perception,foret,1498,succes,20.7
+VIGIE 6 (simulateur JS),perception,foret,1498,succes,20.9
+DRA-MPPI (simulateur JS),nominal,foret,1499,succes,22.7
+VIGIE 6 (simulateur JS),nominal,foret,1499,succes,23.8
+DRA-MPPI (simulateur JS),perception,foret,1499,succes,22.7
+VIGIE 6 (simulateur JS),perception,foret,1499,succes,24.2
+DRA-MPPI (simulateur JS),nominal,foule,1460,succes,15.9
+VIGIE 6 (simulateur JS),nominal,foule,1460,succes,16.0
+DRA-MPPI (simulateur JS),perception,foule,1460,succes,16.0
+VIGIE 6 (simulateur JS),perception,foule,1460,succes,15.8
+DRA-MPPI (simulateur JS),nominal,foule,1461,succes,19.6
+VIGIE 6 (simulateur JS),nominal,foule,1461,succes,16.5
+DRA-MPPI (simulateur JS),perception,foule,1461,succes,19.3
+VIGIE 6 (simulateur JS),perception,foule,1461,succes,16.8
+DRA-MPPI (simulateur JS),nominal,foule,1462,succes,16.2
+VIGIE 6 (simulateur JS),nominal,foule,1462,succes,16.3
+DRA-MPPI (simulateur JS),perception,foule,1462,succes,21.2
+VIGIE 6 (simulateur JS),perception,foule,1462,succes,20.3
+DRA-MPPI (simulateur JS),nominal,foule,1463,succes,15.5
+VIGIE 6 (simulateur JS),nominal,foule,1463,succes,15.7
+DRA-MPPI (simulateur JS),perception,foule,1463,succes,15.4
+VIGIE 6 (simulateur JS),perception,foule,1463,succes,16.0
+DRA-MPPI (simulateur JS),nominal,foule,1464,succes,16.5
+VIGIE 6 (simulateur JS),nominal,foule,1464,succes,16.5
+DRA-MPPI (simulateur JS),perception,foule,1464,succes,15.9
+VIGIE 6 (simulateur JS),perception,foule,1464,succes,16.3
+DRA-MPPI (simulateur JS),nominal,foule,1465,succes,15.5
+VIGIE 6 (simulateur JS),nominal,foule,1465,succes,15.5
+DRA-MPPI (simulateur JS),perception,foule,1465,succes,15.5
+VIGIE 6 (simulateur JS),perception,foule,1465,succes,15.5
+DRA-MPPI (simulateur JS),nominal,foule,1466,collision,5.5
+VIGIE 6 (simulateur JS),nominal,foule,1466,collision,5.6
+DRA-MPPI (simulateur JS),perception,foule,1466,succes,16.0
+VIGIE 6 (simulateur JS),perception,foule,1466,succes,16.1
+DRA-MPPI (simulateur JS),nominal,foule,1467,succes,15.1
+VIGIE 6 (simulateur JS),nominal,foule,1467,succes,15.3
+DRA-MPPI (simulateur JS),perception,foule,1467,succes,15.0
+VIGIE 6 (simulateur JS),perception,foule,1467,succes,15.2
+DRA-MPPI (simulateur JS),nominal,foule,1468,succes,19.3
+VIGIE 6 (simulateur JS),nominal,foule,1468,succes,19.5
+DRA-MPPI (simulateur JS),perception,foule,1468,succes,19.7
+VIGIE 6 (simulateur JS),perception,foule,1468,collision,16.8
+DRA-MPPI (simulateur JS),nominal,foule,1469,succes,15.2
+VIGIE 6 (simulateur JS),nominal,foule,1469,succes,15.1
+DRA-MPPI (simulateur JS),perception,foule,1469,succes,15.2
+VIGIE 6 (simulateur JS),perception,foule,1469,succes,15.2
+DRA-MPPI (simulateur JS),nominal,foule,1470,succes,16.1
+VIGIE 6 (simulateur JS),nominal,foule,1470,succes,16.4
+DRA-MPPI (simulateur JS),perception,foule,1470,succes,16.1
+VIGIE 6 (simulateur JS),perception,foule,1470,succes,16.4
+DRA-MPPI (simulateur JS),nominal,foule,1471,succes,15.8
+VIGIE 6 (simulateur JS),nominal,foule,1471,succes,15.7
+DRA-MPPI (simulateur JS),perception,foule,1471,succes,15.8
+VIGIE 6 (simulateur JS),perception,foule,1471,succes,16.1
+DRA-MPPI (simulateur JS),nominal,foule,1472,succes,17.0
+VIGIE 6 (simulateur JS),nominal,foule,1472,succes,17.2
+DRA-MPPI (simulateur JS),perception,foule,1472,succes,16.2
+VIGIE 6 (simulateur JS),perception,foule,1472,succes,18.9
+DRA-MPPI (simulateur JS),nominal,foule,1473,succes,15.6
+VIGIE 6 (simulateur JS),nominal,foule,1473,succes,16.0
+DRA-MPPI (simulateur JS),perception,foule,1473,succes,15.6
+VIGIE 6 (simulateur JS),perception,foule,1473,succes,15.9
+DRA-MPPI (simulateur JS),nominal,foule,1474,succes,18.4
+VIGIE 6 (simulateur JS),nominal,foule,1474,succes,18.8
+DRA-MPPI (simulateur JS),perception,foule,1474,succes,18.0
+VIGIE 6 (simulateur JS),perception,foule,1474,succes,17.5
+DRA-MPPI (simulateur JS),nominal,foule,1475,succes,17.2
+VIGIE 6 (simulateur JS),nominal,foule,1475,succes,17.2
+DRA-MPPI (simulateur JS),perception,foule,1475,succes,16.8
+VIGIE 6 (simulateur JS),perception,foule,1475,succes,17.0
+DRA-MPPI (simulateur JS),nominal,foule,1476,succes,15.1
+VIGIE 6 (simulateur JS),nominal,foule,1476,succes,15.1
+DRA-MPPI (simulateur JS),perception,foule,1476,succes,15.2
+VIGIE 6 (simulateur JS),perception,foule,1476,succes,15.2
+DRA-MPPI (simulateur JS),nominal,foule,1477,succes,15.3
+VIGIE 6 (simulateur JS),nominal,foule,1477,succes,15.6
+DRA-MPPI (simulateur JS),perception,foule,1477,succes,15.2
+VIGIE 6 (simulateur JS),perception,foule,1477,succes,16.0
+DRA-MPPI (simulateur JS),nominal,foule,1478,succes,25.8
+VIGIE 6 (simulateur JS),nominal,foule,1478,succes,23.3
+DRA-MPPI (simulateur JS),perception,foule,1478,succes,28.7
+VIGIE 6 (simulateur JS),perception,foule,1478,succes,23.9
+DRA-MPPI (simulateur JS),nominal,foule,1479,collision,11.3
+VIGIE 6 (simulateur JS),nominal,foule,1479,collision,11.4
+DRA-MPPI (simulateur JS),perception,foule,1479,collision,11.4
+VIGIE 6 (simulateur JS),perception,foule,1479,collision,11.4
+DRA-MPPI (simulateur JS),nominal,foule,1480,collision,22.6
+VIGIE 6 (simulateur JS),nominal,foule,1480,succes,17.0
+DRA-MPPI (simulateur JS),perception,foule,1480,succes,21.2
+VIGIE 6 (simulateur JS),perception,foule,1480,succes,21.1
+DRA-MPPI (simulateur JS),nominal,foule,1481,succes,15.7
+VIGIE 6 (simulateur JS),nominal,foule,1481,succes,19.1
+DRA-MPPI (simulateur JS),perception,foule,1481,succes,15.6
+VIGIE 6 (simulateur JS),perception,foule,1481,succes,19.1
+DRA-MPPI (simulateur JS),nominal,foule,1482,succes,16.3
+VIGIE 6 (simulateur JS),nominal,foule,1482,succes,15.9
+DRA-MPPI (simulateur JS),perception,foule,1482,succes,15.9
+VIGIE 6 (simulateur JS),perception,foule,1482,succes,16.0
+DRA-MPPI (simulateur JS),nominal,foule,1483,succes,15.6
+VIGIE 6 (simulateur JS),nominal,foule,1483,succes,16.0
+DRA-MPPI (simulateur JS),perception,foule,1483,succes,15.7
+VIGIE 6 (simulateur JS),perception,foule,1483,succes,16.4
+DRA-MPPI (simulateur JS),nominal,foule,1484,succes,16.8
+VIGIE 6 (simulateur JS),nominal,foule,1484,succes,16.4
+DRA-MPPI (simulateur JS),perception,foule,1484,succes,16.6
+VIGIE 6 (simulateur JS),perception,foule,1484,succes,16.2
+DRA-MPPI (simulateur JS),nominal,foule,1485,succes,16.8
+VIGIE 6 (simulateur JS),nominal,foule,1485,succes,17.0
+DRA-MPPI (simulateur JS),perception,foule,1485,succes,17.0
+VIGIE 6 (simulateur JS),perception,foule,1485,succes,17.1
+DRA-MPPI (simulateur JS),nominal,foule,1486,succes,17.1
+VIGIE 6 (simulateur JS),nominal,foule,1486,succes,16.8
+DRA-MPPI (simulateur JS),perception,foule,1486,succes,16.5
+VIGIE 6 (simulateur JS),perception,foule,1486,succes,16.6
+DRA-MPPI (simulateur JS),nominal,foule,1487,succes,18.2
+VIGIE 6 (simulateur JS),nominal,foule,1487,succes,17.3
+DRA-MPPI (simulateur JS),perception,foule,1487,succes,17.2
+VIGIE 6 (simulateur JS),perception,foule,1487,succes,16.6
+DRA-MPPI (simulateur JS),nominal,foule,1488,succes,23.2
+VIGIE 6 (simulateur JS),nominal,foule,1488,succes,22.9
+DRA-MPPI (simulateur JS),perception,foule,1488,succes,23.6
+VIGIE 6 (simulateur JS),perception,foule,1488,succes,23.3
+DRA-MPPI (simulateur JS),nominal,foule,1489,succes,15.4
+VIGIE 6 (simulateur JS),nominal,foule,1489,succes,15.4
+DRA-MPPI (simulateur JS),perception,foule,1489,succes,15.4
+VIGIE 6 (simulateur JS),perception,foule,1489,succes,15.7
+DRA-MPPI (simulateur JS),nominal,foule,1490,succes,25.7
+VIGIE 6 (simulateur JS),nominal,foule,1490,succes,21.0
+DRA-MPPI (simulateur JS),perception,foule,1490,succes,24.6
+VIGIE 6 (simulateur JS),perception,foule,1490,succes,19.3
+DRA-MPPI (simulateur JS),nominal,foule,1491,succes,15.5
+VIGIE 6 (simulateur JS),nominal,foule,1491,succes,15.5
+DRA-MPPI (simulateur JS),perception,foule,1491,succes,15.7
+VIGIE 6 (simulateur JS),perception,foule,1491,succes,15.9
+DRA-MPPI (simulateur JS),nominal,foule,1492,collision,7.0
+VIGIE 6 (simulateur JS),nominal,foule,1492,collision,7.1
+DRA-MPPI (simulateur JS),perception,foule,1492,collision,6.9
+VIGIE 6 (simulateur JS),perception,foule,1492,collision,7.0
+DRA-MPPI (simulateur JS),nominal,foule,1493,succes,16.2
+VIGIE 6 (simulateur JS),nominal,foule,1493,succes,16.5
+DRA-MPPI (simulateur JS),perception,foule,1493,succes,16.2
+VIGIE 6 (simulateur JS),perception,foule,1493,succes,16.9
+DRA-MPPI (simulateur JS),nominal,foule,1494,succes,16.0
+VIGIE 6 (simulateur JS),nominal,foule,1494,succes,16.5
+DRA-MPPI (simulateur JS),perception,foule,1494,succes,20.5
+VIGIE 6 (simulateur JS),perception,foule,1494,succes,19.0
+DRA-MPPI (simulateur JS),nominal,foule,1495,succes,16.0
+VIGIE 6 (simulateur JS),nominal,foule,1495,succes,15.9
+DRA-MPPI (simulateur JS),perception,foule,1495,succes,16.4
+VIGIE 6 (simulateur JS),perception,foule,1495,succes,16.2
+DRA-MPPI (simulateur JS),nominal,foule,1496,succes,26.7
+VIGIE 6 (simulateur JS),nominal,foule,1496,succes,27.5
+DRA-MPPI (simulateur JS),perception,foule,1496,succes,27.6
+VIGIE 6 (simulateur JS),perception,foule,1496,succes,22.8
+DRA-MPPI (simulateur JS),nominal,foule,1497,succes,16.0
+VIGIE 6 (simulateur JS),nominal,foule,1497,succes,15.7
+DRA-MPPI (simulateur JS),perception,foule,1497,succes,15.7
+VIGIE 6 (simulateur JS),perception,foule,1497,succes,15.7
+DRA-MPPI (simulateur JS),nominal,foule,1498,succes,25.0
+VIGIE 6 (simulateur JS),nominal,foule,1498,succes,24.5
+DRA-MPPI (simulateur JS),perception,foule,1498,succes,24.2
+VIGIE 6 (simulateur JS),perception,foule,1498,succes,19.2
+DRA-MPPI (simulateur JS),nominal,foule,1499,collision,2.1
+VIGIE 6 (simulateur JS),nominal,foule,1499,collision,2.1
+DRA-MPPI (simulateur JS),perception,foule,1499,collision,2.0
+VIGIE 6 (simulateur JS),perception,foule,1499,collision,2.1
+DRA-MPPI (simulateur JS),nominal,foule_dense,1460,succes,18.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1460,succes,17.9
+DRA-MPPI (simulateur JS),perception,foule_dense,1460,succes,17.5
+VIGIE 6 (simulateur JS),perception,foule_dense,1460,succes,18.3
+DRA-MPPI (simulateur JS),nominal,foule_dense,1461,succes,20.4
+VIGIE 6 (simulateur JS),nominal,foule_dense,1461,succes,35.9
+DRA-MPPI (simulateur JS),perception,foule_dense,1461,succes,20.4
+VIGIE 6 (simulateur JS),perception,foule_dense,1461,succes,20.6
+DRA-MPPI (simulateur JS),nominal,foule_dense,1462,collision,7.7
+VIGIE 6 (simulateur JS),nominal,foule_dense,1462,succes,17.9
+DRA-MPPI (simulateur JS),perception,foule_dense,1462,succes,25.9
+VIGIE 6 (simulateur JS),perception,foule_dense,1462,succes,16.9
+DRA-MPPI (simulateur JS),nominal,foule_dense,1463,collision,11.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1463,succes,19.4
+DRA-MPPI (simulateur JS),perception,foule_dense,1463,succes,16.8
+VIGIE 6 (simulateur JS),perception,foule_dense,1463,succes,17.3
+DRA-MPPI (simulateur JS),nominal,foule_dense,1464,succes,19.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1464,succes,18.5
+DRA-MPPI (simulateur JS),perception,foule_dense,1464,succes,18.7
+VIGIE 6 (simulateur JS),perception,foule_dense,1464,succes,18.6
+DRA-MPPI (simulateur JS),nominal,foule_dense,1465,succes,16.8
+VIGIE 6 (simulateur JS),nominal,foule_dense,1465,succes,17.2
+DRA-MPPI (simulateur JS),perception,foule_dense,1465,succes,22.9
+VIGIE 6 (simulateur JS),perception,foule_dense,1465,succes,26.2
+DRA-MPPI (simulateur JS),nominal,foule_dense,1466,succes,25.3
+VIGIE 6 (simulateur JS),nominal,foule_dense,1466,succes,23.3
+DRA-MPPI (simulateur JS),perception,foule_dense,1466,succes,32.2
+VIGIE 6 (simulateur JS),perception,foule_dense,1466,collision,12.3
+DRA-MPPI (simulateur JS),nominal,foule_dense,1467,succes,24.1
+VIGIE 6 (simulateur JS),nominal,foule_dense,1467,succes,19.6
+DRA-MPPI (simulateur JS),perception,foule_dense,1467,collision,14.1
+VIGIE 6 (simulateur JS),perception,foule_dense,1467,succes,19.4
+DRA-MPPI (simulateur JS),nominal,foule_dense,1468,succes,17.8
+VIGIE 6 (simulateur JS),nominal,foule_dense,1468,succes,24.1
+DRA-MPPI (simulateur JS),perception,foule_dense,1468,succes,24.2
+VIGIE 6 (simulateur JS),perception,foule_dense,1468,succes,23.3
+DRA-MPPI (simulateur JS),nominal,foule_dense,1469,succes,23.6
+VIGIE 6 (simulateur JS),nominal,foule_dense,1469,succes,17.1
+DRA-MPPI (simulateur JS),perception,foule_dense,1469,succes,18.0
+VIGIE 6 (simulateur JS),perception,foule_dense,1469,collision,13.4
+DRA-MPPI (simulateur JS),nominal,foule_dense,1470,succes,25.9
+VIGIE 6 (simulateur JS),nominal,foule_dense,1470,succes,21.4
+DRA-MPPI (simulateur JS),perception,foule_dense,1470,succes,19.3
+VIGIE 6 (simulateur JS),perception,foule_dense,1470,succes,19.1
+DRA-MPPI (simulateur JS),nominal,foule_dense,1471,succes,16.4
+VIGIE 6 (simulateur JS),nominal,foule_dense,1471,succes,16.4
+DRA-MPPI (simulateur JS),perception,foule_dense,1471,succes,27.4
+VIGIE 6 (simulateur JS),perception,foule_dense,1471,succes,17.2
+DRA-MPPI (simulateur JS),nominal,foule_dense,1472,succes,24.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1472,succes,19.4
+DRA-MPPI (simulateur JS),perception,foule_dense,1472,succes,18.8
+VIGIE 6 (simulateur JS),perception,foule_dense,1472,succes,19.1
+DRA-MPPI (simulateur JS),nominal,foule_dense,1473,succes,17.1
+VIGIE 6 (simulateur JS),nominal,foule_dense,1473,succes,16.8
+DRA-MPPI (simulateur JS),perception,foule_dense,1473,succes,18.2
+VIGIE 6 (simulateur JS),perception,foule_dense,1473,succes,17.9
+DRA-MPPI (simulateur JS),nominal,foule_dense,1474,succes,17.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1474,succes,17.3
+DRA-MPPI (simulateur JS),perception,foule_dense,1474,succes,16.9
+VIGIE 6 (simulateur JS),perception,foule_dense,1474,succes,17.3
+DRA-MPPI (simulateur JS),nominal,foule_dense,1475,succes,25.1
+VIGIE 6 (simulateur JS),nominal,foule_dense,1475,succes,21.1
+DRA-MPPI (simulateur JS),perception,foule_dense,1475,succes,27.1
+VIGIE 6 (simulateur JS),perception,foule_dense,1475,collision,15.1
+DRA-MPPI (simulateur JS),nominal,foule_dense,1476,succes,16.1
+VIGIE 6 (simulateur JS),nominal,foule_dense,1476,succes,16.2
+DRA-MPPI (simulateur JS),perception,foule_dense,1476,succes,15.7
+VIGIE 6 (simulateur JS),perception,foule_dense,1476,succes,15.8
+DRA-MPPI (simulateur JS),nominal,foule_dense,1477,succes,15.1
+VIGIE 6 (simulateur JS),nominal,foule_dense,1477,succes,15.2
+DRA-MPPI (simulateur JS),perception,foule_dense,1477,succes,15.1
+VIGIE 6 (simulateur JS),perception,foule_dense,1477,succes,15.2
+DRA-MPPI (simulateur JS),nominal,foule_dense,1478,succes,22.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1478,succes,20.6
+DRA-MPPI (simulateur JS),perception,foule_dense,1478,succes,22.2
+VIGIE 6 (simulateur JS),perception,foule_dense,1478,succes,27.9
+DRA-MPPI (simulateur JS),nominal,foule_dense,1479,succes,17.6
+VIGIE 6 (simulateur JS),nominal,foule_dense,1479,succes,17.6
+DRA-MPPI (simulateur JS),perception,foule_dense,1479,succes,17.7
+VIGIE 6 (simulateur JS),perception,foule_dense,1479,succes,18.0
+DRA-MPPI (simulateur JS),nominal,foule_dense,1480,succes,20.4
+VIGIE 6 (simulateur JS),nominal,foule_dense,1480,collision,16.7
+DRA-MPPI (simulateur JS),perception,foule_dense,1480,collision,18.6
+VIGIE 6 (simulateur JS),perception,foule_dense,1480,collision,16.7
+DRA-MPPI (simulateur JS),nominal,foule_dense,1481,succes,16.6
+VIGIE 6 (simulateur JS),nominal,foule_dense,1481,collision,7.8
+DRA-MPPI (simulateur JS),perception,foule_dense,1481,collision,7.9
+VIGIE 6 (simulateur JS),perception,foule_dense,1481,succes,16.4
+DRA-MPPI (simulateur JS),nominal,foule_dense,1482,succes,15.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1482,succes,15.2
+DRA-MPPI (simulateur JS),perception,foule_dense,1482,succes,15.0
+VIGIE 6 (simulateur JS),perception,foule_dense,1482,succes,15.2
+DRA-MPPI (simulateur JS),nominal,foule_dense,1483,collision,3.2
+VIGIE 6 (simulateur JS),nominal,foule_dense,1483,collision,18.6
+DRA-MPPI (simulateur JS),perception,foule_dense,1483,succes,18.5
+VIGIE 6 (simulateur JS),perception,foule_dense,1483,collision,18.6
+DRA-MPPI (simulateur JS),nominal,foule_dense,1484,succes,31.7
+VIGIE 6 (simulateur JS),nominal,foule_dense,1484,collision,10.1
+DRA-MPPI (simulateur JS),perception,foule_dense,1484,collision,9.9
+VIGIE 6 (simulateur JS),perception,foule_dense,1484,succes,16.1
+DRA-MPPI (simulateur JS),nominal,foule_dense,1485,succes,17.9
+VIGIE 6 (simulateur JS),nominal,foule_dense,1485,succes,17.6
+DRA-MPPI (simulateur JS),perception,foule_dense,1485,succes,20.8
+VIGIE 6 (simulateur JS),perception,foule_dense,1485,succes,17.9
+DRA-MPPI (simulateur JS),nominal,foule_dense,1486,collision,20.4
+VIGIE 6 (simulateur JS),nominal,foule_dense,1486,succes,18.9
+DRA-MPPI (simulateur JS),perception,foule_dense,1486,succes,24.2
+VIGIE 6 (simulateur JS),perception,foule_dense,1486,succes,18.6
+DRA-MPPI (simulateur JS),nominal,foule_dense,1487,collision,20.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1487,collision,20.0
+DRA-MPPI (simulateur JS),perception,foule_dense,1487,succes,20.1
+VIGIE 6 (simulateur JS),perception,foule_dense,1487,succes,19.5
+DRA-MPPI (simulateur JS),nominal,foule_dense,1488,collision,17.5
+VIGIE 6 (simulateur JS),nominal,foule_dense,1488,collision,17.5
+DRA-MPPI (simulateur JS),perception,foule_dense,1488,collision,18.2
+VIGIE 6 (simulateur JS),perception,foule_dense,1488,succes,19.6
+DRA-MPPI (simulateur JS),nominal,foule_dense,1489,succes,18.2
+VIGIE 6 (simulateur JS),nominal,foule_dense,1489,succes,18.1
+DRA-MPPI (simulateur JS),perception,foule_dense,1489,succes,18.1
+VIGIE 6 (simulateur JS),perception,foule_dense,1489,succes,18.1
+DRA-MPPI (simulateur JS),nominal,foule_dense,1490,succes,22.9
+VIGIE 6 (simulateur JS),nominal,foule_dense,1490,succes,27.9
+DRA-MPPI (simulateur JS),perception,foule_dense,1490,succes,22.9
+VIGIE 6 (simulateur JS),perception,foule_dense,1490,succes,27.8
+DRA-MPPI (simulateur JS),nominal,foule_dense,1491,collision,5.3
+VIGIE 6 (simulateur JS),nominal,foule_dense,1491,collision,5.3
+DRA-MPPI (simulateur JS),perception,foule_dense,1491,collision,5.3
+VIGIE 6 (simulateur JS),perception,foule_dense,1491,collision,5.3
+DRA-MPPI (simulateur JS),nominal,foule_dense,1492,collision,17.7
+VIGIE 6 (simulateur JS),nominal,foule_dense,1492,succes,17.6
+DRA-MPPI (simulateur JS),perception,foule_dense,1492,collision,17.5
+VIGIE 6 (simulateur JS),perception,foule_dense,1492,collision,23.8
+DRA-MPPI (simulateur JS),nominal,foule_dense,1493,succes,18.0
+VIGIE 6 (simulateur JS),nominal,foule_dense,1493,succes,17.9
+DRA-MPPI (simulateur JS),perception,foule_dense,1493,succes,17.8
+VIGIE 6 (simulateur JS),perception,foule_dense,1493,succes,17.8
+DRA-MPPI (simulateur JS),nominal,foule_dense,1494,succes,15.3
+VIGIE 6 (simulateur JS),nominal,foule_dense,1494,succes,15.2
+DRA-MPPI (simulateur JS),perception,foule_dense,1494,succes,15.6
+VIGIE 6 (simulateur JS),perception,foule_dense,1494,succes,15.4
+DRA-MPPI (simulateur JS),nominal,foule_dense,1495,succes,14.8
+VIGIE 6 (simulateur JS),nominal,foule_dense,1495,succes,14.5
+DRA-MPPI (simulateur JS),perception,foule_dense,1495,succes,14.7
+VIGIE 6 (simulateur JS),perception,foule_dense,1495,succes,14.7
+DRA-MPPI (simulateur JS),nominal,foule_dense,1496,succes,30.5
+VIGIE 6 (simulateur JS),nominal,foule_dense,1496,succes,25.1
+DRA-MPPI (simulateur JS),perception,foule_dense,1496,succes,22.3
+VIGIE 6 (simulateur JS),perception,foule_dense,1496,succes,17.1
+DRA-MPPI (simulateur JS),nominal,foule_dense,1497,succes,16.4
+VIGIE 6 (simulateur JS),nominal,foule_dense,1497,succes,16.3
+DRA-MPPI (simulateur JS),perception,foule_dense,1497,collision,3.2
+VIGIE 6 (simulateur JS),perception,foule_dense,1497,collision,3.3
+DRA-MPPI (simulateur JS),nominal,foule_dense,1498,succes,16.9
+VIGIE 6 (simulateur JS),nominal,foule_dense,1498,succes,16.4
+DRA-MPPI (simulateur JS),perception,foule_dense,1498,collision,17.3
+VIGIE 6 (simulateur JS),perception,foule_dense,1498,succes,16.8
+DRA-MPPI (simulateur JS),nominal,foule_dense,1499,succes,20.3
+VIGIE 6 (simulateur JS),nominal,foule_dense,1499,succes,20.0
+DRA-MPPI (simulateur JS),perception,foule_dense,1499,succes,18.6
+VIGIE 6 (simulateur JS),perception,foule_dense,1499,succes,23.0
+DRA-MPPI (simulateur JS),nominal,goulot,1460,succes,18.4
+VIGIE 6 (simulateur JS),nominal,goulot,1460,succes,18.1
+DRA-MPPI (simulateur JS),perception,goulot,1460,succes,18.6
+VIGIE 6 (simulateur JS),perception,goulot,1460,succes,18.2
+DRA-MPPI (simulateur JS),nominal,goulot,1461,temps,45.0
+VIGIE 6 (simulateur JS),nominal,goulot,1461,succes,22.5
+DRA-MPPI (simulateur JS),perception,goulot,1461,succes,23.0
+VIGIE 6 (simulateur JS),perception,goulot,1461,succes,23.0
+DRA-MPPI (simulateur JS),nominal,goulot,1462,succes,21.2
+VIGIE 6 (simulateur JS),nominal,goulot,1462,succes,20.0
+DRA-MPPI (simulateur JS),perception,goulot,1462,succes,22.7
+VIGIE 6 (simulateur JS),perception,goulot,1462,succes,20.3
+DRA-MPPI (simulateur JS),nominal,goulot,1463,collision,17.2
+VIGIE 6 (simulateur JS),nominal,goulot,1463,succes,20.0
+DRA-MPPI (simulateur JS),perception,goulot,1463,succes,19.8
+VIGIE 6 (simulateur JS),perception,goulot,1463,succes,19.8
+DRA-MPPI (simulateur JS),nominal,goulot,1464,succes,23.2
+VIGIE 6 (simulateur JS),nominal,goulot,1464,succes,21.0
+DRA-MPPI (simulateur JS),perception,goulot,1464,succes,22.5
+VIGIE 6 (simulateur JS),perception,goulot,1464,succes,21.8
+DRA-MPPI (simulateur JS),nominal,goulot,1465,succes,21.1
+VIGIE 6 (simulateur JS),nominal,goulot,1465,succes,20.9
+DRA-MPPI (simulateur JS),perception,goulot,1465,succes,21.0
+VIGIE 6 (simulateur JS),perception,goulot,1465,succes,21.0
+DRA-MPPI (simulateur JS),nominal,goulot,1466,succes,21.5
+VIGIE 6 (simulateur JS),nominal,goulot,1466,succes,21.5
+DRA-MPPI (simulateur JS),perception,goulot,1466,succes,21.5
+VIGIE 6 (simulateur JS),perception,goulot,1466,succes,22.8
+DRA-MPPI (simulateur JS),nominal,goulot,1467,succes,19.4
+VIGIE 6 (simulateur JS),nominal,goulot,1467,succes,19.4
+DRA-MPPI (simulateur JS),perception,goulot,1467,temps,45.0
+VIGIE 6 (simulateur JS),perception,goulot,1467,succes,21.8
+DRA-MPPI (simulateur JS),nominal,goulot,1468,succes,19.9
+VIGIE 6 (simulateur JS),nominal,goulot,1468,succes,19.5
+DRA-MPPI (simulateur JS),perception,goulot,1468,succes,20.3
+VIGIE 6 (simulateur JS),perception,goulot,1468,succes,20.1
+DRA-MPPI (simulateur JS),nominal,goulot,1469,succes,18.4
+VIGIE 6 (simulateur JS),nominal,goulot,1469,succes,18.4
+DRA-MPPI (simulateur JS),perception,goulot,1469,collision,36.4
+VIGIE 6 (simulateur JS),perception,goulot,1469,succes,20.2
+DRA-MPPI (simulateur JS),nominal,goulot,1470,succes,30.4
+VIGIE 6 (simulateur JS),nominal,goulot,1470,succes,20.9
+DRA-MPPI (simulateur JS),perception,goulot,1470,collision,33.2
+VIGIE 6 (simulateur JS),perception,goulot,1470,succes,20.9
+DRA-MPPI (simulateur JS),nominal,goulot,1471,succes,21.4
+VIGIE 6 (simulateur JS),nominal,goulot,1471,succes,20.9
+DRA-MPPI (simulateur JS),perception,goulot,1471,succes,21.1
+VIGIE 6 (simulateur JS),perception,goulot,1471,succes,21.3
+DRA-MPPI (simulateur JS),nominal,goulot,1472,collision,33.2
+VIGIE 6 (simulateur JS),nominal,goulot,1472,temps,45.0
+DRA-MPPI (simulateur JS),perception,goulot,1472,collision,13.3
+VIGIE 6 (simulateur JS),perception,goulot,1472,temps,45.0
+DRA-MPPI (simulateur JS),nominal,goulot,1473,succes,18.6
+VIGIE 6 (simulateur JS),nominal,goulot,1473,succes,18.0
+DRA-MPPI (simulateur JS),perception,goulot,1473,succes,19.0
+VIGIE 6 (simulateur JS),perception,goulot,1473,succes,19.3
+DRA-MPPI (simulateur JS),nominal,goulot,1474,collision,41.3
+VIGIE 6 (simulateur JS),nominal,goulot,1474,succes,21.4
+DRA-MPPI (simulateur JS),perception,goulot,1474,collision,34.2
+VIGIE 6 (simulateur JS),perception,goulot,1474,succes,21.0
+DRA-MPPI (simulateur JS),nominal,goulot,1475,succes,20.7
+VIGIE 6 (simulateur JS),nominal,goulot,1475,succes,22.6
+DRA-MPPI (simulateur JS),perception,goulot,1475,succes,24.6
+VIGIE 6 (simulateur JS),perception,goulot,1475,succes,21.0
+DRA-MPPI (simulateur JS),nominal,goulot,1476,succes,21.0
+VIGIE 6 (simulateur JS),nominal,goulot,1476,succes,19.7
+DRA-MPPI (simulateur JS),perception,goulot,1476,succes,21.1
+VIGIE 6 (simulateur JS),perception,goulot,1476,succes,21.6
+DRA-MPPI (simulateur JS),nominal,goulot,1477,collision,32.3
+VIGIE 6 (simulateur JS),nominal,goulot,1477,succes,22.2
+DRA-MPPI (simulateur JS),perception,goulot,1477,succes,22.2
+VIGIE 6 (simulateur JS),perception,goulot,1477,succes,22.2
+DRA-MPPI (simulateur JS),nominal,goulot,1478,succes,18.7
+VIGIE 6 (simulateur JS),nominal,goulot,1478,succes,18.6
+DRA-MPPI (simulateur JS),perception,goulot,1478,succes,20.6
+VIGIE 6 (simulateur JS),perception,goulot,1478,succes,18.9
+DRA-MPPI (simulateur JS),nominal,goulot,1479,succes,20.0
+VIGIE 6 (simulateur JS),nominal,goulot,1479,succes,18.8
+DRA-MPPI (simulateur JS),perception,goulot,1479,succes,18.8
+VIGIE 6 (simulateur JS),perception,goulot,1479,succes,18.8
+DRA-MPPI (simulateur JS),nominal,goulot,1480,succes,21.3
+VIGIE 6 (simulateur JS),nominal,goulot,1480,succes,21.5
+DRA-MPPI (simulateur JS),perception,goulot,1480,succes,20.8
+VIGIE 6 (simulateur JS),perception,goulot,1480,succes,20.8
+DRA-MPPI (simulateur JS),nominal,goulot,1481,collision,33.7
+VIGIE 6 (simulateur JS),nominal,goulot,1481,succes,21.3
+DRA-MPPI (simulateur JS),perception,goulot,1481,collision,14.6
+VIGIE 6 (simulateur JS),perception,goulot,1481,succes,20.9
+DRA-MPPI (simulateur JS),nominal,goulot,1482,succes,19.5
+VIGIE 6 (simulateur JS),nominal,goulot,1482,succes,19.9
+DRA-MPPI (simulateur JS),perception,goulot,1482,succes,19.9
+VIGIE 6 (simulateur JS),perception,goulot,1482,collision,18.8
+DRA-MPPI (simulateur JS),nominal,goulot,1483,succes,21.5
+VIGIE 6 (simulateur JS),nominal,goulot,1483,succes,20.8
+DRA-MPPI (simulateur JS),perception,goulot,1483,collision,15.3
+VIGIE 6 (simulateur JS),perception,goulot,1483,collision,15.6
+DRA-MPPI (simulateur JS),nominal,goulot,1484,succes,17.6
+VIGIE 6 (simulateur JS),nominal,goulot,1484,succes,17.2
+DRA-MPPI (simulateur JS),perception,goulot,1484,succes,18.8
+VIGIE 6 (simulateur JS),perception,goulot,1484,succes,19.5
+DRA-MPPI (simulateur JS),nominal,goulot,1485,succes,20.3
+VIGIE 6 (simulateur JS),nominal,goulot,1485,succes,19.8
+DRA-MPPI (simulateur JS),perception,goulot,1485,temps,45.0
+VIGIE 6 (simulateur JS),perception,goulot,1485,temps,45.0
+DRA-MPPI (simulateur JS),nominal,goulot,1486,succes,19.7
+VIGIE 6 (simulateur JS),nominal,goulot,1486,succes,19.4
+DRA-MPPI (simulateur JS),perception,goulot,1486,collision,12.8
+VIGIE 6 (simulateur JS),perception,goulot,1486,succes,21.6
+DRA-MPPI (simulateur JS),nominal,goulot,1487,succes,19.0
+VIGIE 6 (simulateur JS),nominal,goulot,1487,succes,18.9
+DRA-MPPI (simulateur JS),perception,goulot,1487,succes,28.4
+VIGIE 6 (simulateur JS),perception,goulot,1487,succes,19.3
+DRA-MPPI (simulateur JS),nominal,goulot,1488,temps,45.0
+VIGIE 6 (simulateur JS),nominal,goulot,1488,collision,28.1
+DRA-MPPI (simulateur JS),perception,goulot,1488,collision,18.7
+VIGIE 6 (simulateur JS),perception,goulot,1488,temps,45.0
+DRA-MPPI (simulateur JS),nominal,goulot,1489,succes,19.5
+VIGIE 6 (simulateur JS),nominal,goulot,1489,succes,20.6
+DRA-MPPI (simulateur JS),perception,goulot,1489,succes,20.9
+VIGIE 6 (simulateur JS),perception,goulot,1489,succes,20.4
+DRA-MPPI (simulateur JS),nominal,goulot,1490,succes,19.2
+VIGIE 6 (simulateur JS),nominal,goulot,1490,succes,18.7
+DRA-MPPI (simulateur JS),perception,goulot,1490,succes,21.0
+VIGIE 6 (simulateur JS),perception,goulot,1490,succes,20.1
+DRA-MPPI (simulateur JS),nominal,goulot,1491,temps,45.0
+VIGIE 6 (simulateur JS),nominal,goulot,1491,succes,21.0
+DRA-MPPI (simulateur JS),perception,goulot,1491,succes,22.7
+VIGIE 6 (simulateur JS),perception,goulot,1491,succes,21.9
+DRA-MPPI (simulateur JS),nominal,goulot,1492,succes,20.8
+VIGIE 6 (simulateur JS),nominal,goulot,1492,succes,20.5
+DRA-MPPI (simulateur JS),perception,goulot,1492,succes,21.0
+VIGIE 6 (simulateur JS),perception,goulot,1492,succes,19.6
+DRA-MPPI (simulateur JS),nominal,goulot,1493,succes,18.1
+VIGIE 6 (simulateur JS),nominal,goulot,1493,succes,18.3
+DRA-MPPI (simulateur JS),perception,goulot,1493,succes,18.4
+VIGIE 6 (simulateur JS),perception,goulot,1493,succes,18.6
+DRA-MPPI (simulateur JS),nominal,goulot,1494,succes,20.4
+VIGIE 6 (simulateur JS),nominal,goulot,1494,succes,20.5
+DRA-MPPI (simulateur JS),perception,goulot,1494,succes,20.4
+VIGIE 6 (simulateur JS),perception,goulot,1494,succes,22.4
+DRA-MPPI (simulateur JS),nominal,goulot,1495,succes,21.6
+VIGIE 6 (simulateur JS),nominal,goulot,1495,succes,21.1
+DRA-MPPI (simulateur JS),perception,goulot,1495,succes,20.6
+VIGIE 6 (simulateur JS),perception,goulot,1495,succes,22.1
+DRA-MPPI (simulateur JS),nominal,goulot,1496,succes,19.0
+VIGIE 6 (simulateur JS),nominal,goulot,1496,succes,18.5
+DRA-MPPI (simulateur JS),perception,goulot,1496,succes,19.1
+VIGIE 6 (simulateur JS),perception,goulot,1496,succes,20.5
+DRA-MPPI (simulateur JS),nominal,goulot,1497,succes,20.0
+VIGIE 6 (simulateur JS),nominal,goulot,1497,succes,19.9
+DRA-MPPI (simulateur JS),perception,goulot,1497,succes,20.2
+VIGIE 6 (simulateur JS),perception,goulot,1497,succes,19.8
+DRA-MPPI (simulateur JS),nominal,goulot,1498,succes,20.1
+VIGIE 6 (simulateur JS),nominal,goulot,1498,succes,20.0
+DRA-MPPI (simulateur JS),perception,goulot,1498,succes,30.3
+VIGIE 6 (simulateur JS),perception,goulot,1498,succes,19.9
+DRA-MPPI (simulateur JS),nominal,goulot,1499,succes,20.5
+VIGIE 6 (simulateur JS),nominal,goulot,1499,collision,13.2
+DRA-MPPI (simulateur JS),perception,goulot,1499,succes,20.4
+VIGIE 6 (simulateur JS),perception,goulot,1499,succes,20.7
+DRA-MPPI (simulateur JS),nominal,piege,1460,succes,17.9
+VIGIE 6 (simulateur JS),nominal,piege,1460,succes,17.5
+DRA-MPPI (simulateur JS),perception,piege,1460,succes,18.0
+VIGIE 6 (simulateur JS),perception,piege,1460,succes,17.8
+DRA-MPPI (simulateur JS),nominal,piege,1461,succes,18.0
+VIGIE 6 (simulateur JS),nominal,piege,1461,succes,23.7
+DRA-MPPI (simulateur JS),perception,piege,1461,succes,18.0
+VIGIE 6 (simulateur JS),perception,piege,1461,succes,24.6
+DRA-MPPI (simulateur JS),nominal,piege,1462,succes,17.8
+VIGIE 6 (simulateur JS),nominal,piege,1462,succes,18.7
+DRA-MPPI (simulateur JS),perception,piege,1462,succes,17.8
+VIGIE 6 (simulateur JS),perception,piege,1462,succes,25.4
+DRA-MPPI (simulateur JS),nominal,piege,1463,succes,19.0
+VIGIE 6 (simulateur JS),nominal,piege,1463,succes,19.1
+DRA-MPPI (simulateur JS),perception,piege,1463,succes,18.9
+VIGIE 6 (simulateur JS),perception,piege,1463,succes,19.0
+DRA-MPPI (simulateur JS),nominal,piege,1464,succes,22.0
+VIGIE 6 (simulateur JS),nominal,piege,1464,succes,22.4
+DRA-MPPI (simulateur JS),perception,piege,1464,succes,22.0
+VIGIE 6 (simulateur JS),perception,piege,1464,succes,22.5
+DRA-MPPI (simulateur JS),nominal,piege,1465,succes,17.8
+VIGIE 6 (simulateur JS),nominal,piege,1465,succes,18.5
+DRA-MPPI (simulateur JS),perception,piege,1465,succes,17.8
+VIGIE 6 (simulateur JS),perception,piege,1465,succes,18.0
+DRA-MPPI (simulateur JS),nominal,piege,1466,succes,17.0
+VIGIE 6 (simulateur JS),nominal,piege,1466,succes,17.7
+DRA-MPPI (simulateur JS),perception,piege,1466,succes,17.0
+VIGIE 6 (simulateur JS),perception,piege,1466,succes,17.5
+DRA-MPPI (simulateur JS),nominal,piege,1467,succes,17.4
+VIGIE 6 (simulateur JS),nominal,piege,1467,succes,20.1
+DRA-MPPI (simulateur JS),perception,piege,1467,succes,17.4
+VIGIE 6 (simulateur JS),perception,piege,1467,succes,21.3
+DRA-MPPI (simulateur JS),nominal,piege,1468,succes,17.0
+VIGIE 6 (simulateur JS),nominal,piege,1468,succes,17.1
+DRA-MPPI (simulateur JS),perception,piege,1468,succes,17.0
+VIGIE 6 (simulateur JS),perception,piege,1468,succes,17.1
+DRA-MPPI (simulateur JS),nominal,piege,1469,succes,17.5
+VIGIE 6 (simulateur JS),nominal,piege,1469,succes,17.7
+DRA-MPPI (simulateur JS),perception,piege,1469,succes,17.5
+VIGIE 6 (simulateur JS),perception,piege,1469,succes,17.5
+DRA-MPPI (simulateur JS),nominal,piege,1470,succes,18.1
+VIGIE 6 (simulateur JS),nominal,piege,1470,succes,18.0
+DRA-MPPI (simulateur JS),perception,piege,1470,succes,18.1
+VIGIE 6 (simulateur JS),perception,piege,1470,succes,18.1
+DRA-MPPI (simulateur JS),nominal,piege,1471,succes,18.0
+VIGIE 6 (simulateur JS),nominal,piege,1471,succes,18.0
+DRA-MPPI (simulateur JS),perception,piege,1471,succes,18.1
+VIGIE 6 (simulateur JS),perception,piege,1471,succes,18.3
+DRA-MPPI (simulateur JS),nominal,piege,1472,succes,17.4
+VIGIE 6 (simulateur JS),nominal,piege,1472,succes,17.3
+DRA-MPPI (simulateur JS),perception,piege,1472,succes,17.4
+VIGIE 6 (simulateur JS),perception,piege,1472,succes,17.4
+DRA-MPPI (simulateur JS),nominal,piege,1473,succes,17.4
+VIGIE 6 (simulateur JS),nominal,piege,1473,succes,20.4
+DRA-MPPI (simulateur JS),perception,piege,1473,succes,17.4
+VIGIE 6 (simulateur JS),perception,piege,1473,succes,20.3
+DRA-MPPI (simulateur JS),nominal,piege,1474,succes,21.5
+VIGIE 6 (simulateur JS),nominal,piege,1474,succes,19.8
+DRA-MPPI (simulateur JS),perception,piege,1474,succes,21.5
+VIGIE 6 (simulateur JS),perception,piege,1474,succes,20.0
+DRA-MPPI (simulateur JS),nominal,piege,1475,succes,23.0
+VIGIE 6 (simulateur JS),nominal,piege,1475,succes,18.4
+DRA-MPPI (simulateur JS),perception,piege,1475,succes,23.0
+VIGIE 6 (simulateur JS),perception,piege,1475,succes,18.4
+DRA-MPPI (simulateur JS),nominal,piege,1476,succes,22.4
+VIGIE 6 (simulateur JS),nominal,piege,1476,succes,23.5
+DRA-MPPI (simulateur JS),perception,piege,1476,succes,22.4
+VIGIE 6 (simulateur JS),perception,piege,1476,succes,21.7
+DRA-MPPI (simulateur JS),nominal,piege,1477,succes,21.5
+VIGIE 6 (simulateur JS),nominal,piege,1477,succes,20.4
+DRA-MPPI (simulateur JS),perception,piege,1477,succes,21.5
+VIGIE 6 (simulateur JS),perception,piege,1477,succes,18.5
+DRA-MPPI (simulateur JS),nominal,piege,1478,succes,22.7
+VIGIE 6 (simulateur JS),nominal,piege,1478,succes,18.3
+DRA-MPPI (simulateur JS),perception,piege,1478,succes,23.2
+VIGIE 6 (simulateur JS),perception,piege,1478,succes,18.0
+DRA-MPPI (simulateur JS),nominal,piege,1479,succes,23.5
+VIGIE 6 (simulateur JS),nominal,piege,1479,succes,18.0
+DRA-MPPI (simulateur JS),perception,piege,1479,succes,22.0
+VIGIE 6 (simulateur JS),perception,piege,1479,succes,18.0
+DRA-MPPI (simulateur JS),nominal,piege,1480,succes,21.1
+VIGIE 6 (simulateur JS),nominal,piege,1480,succes,18.0
+DRA-MPPI (simulateur JS),perception,piege,1480,succes,21.1
+VIGIE 6 (simulateur JS),perception,piege,1480,succes,18.1
+DRA-MPPI (simulateur JS),nominal,piege,1481,succes,20.0
+VIGIE 6 (simulateur JS),nominal,piege,1481,succes,19.4
+DRA-MPPI (simulateur JS),perception,piege,1481,succes,20.0
+VIGIE 6 (simulateur JS),perception,piege,1481,succes,19.9
+DRA-MPPI (simulateur JS),nominal,piege,1482,succes,17.5
+VIGIE 6 (simulateur JS),nominal,piege,1482,succes,17.6
+DRA-MPPI (simulateur JS),perception,piege,1482,succes,17.5
+VIGIE 6 (simulateur JS),perception,piege,1482,succes,17.6
+DRA-MPPI (simulateur JS),nominal,piege,1483,succes,21.7
+VIGIE 6 (simulateur JS),nominal,piege,1483,succes,21.6
+DRA-MPPI (simulateur JS),perception,piege,1483,succes,21.7
+VIGIE 6 (simulateur JS),perception,piege,1483,succes,22.6
+DRA-MPPI (simulateur JS),nominal,piege,1484,succes,19.5
+VIGIE 6 (simulateur JS),nominal,piege,1484,succes,18.2
+DRA-MPPI (simulateur JS),perception,piege,1484,succes,19.5
+VIGIE 6 (simulateur JS),perception,piege,1484,succes,18.4
+DRA-MPPI (simulateur JS),nominal,piege,1485,succes,17.7
+VIGIE 6 (simulateur JS),nominal,piege,1485,succes,17.8
+DRA-MPPI (simulateur JS),perception,piege,1485,succes,17.7
+VIGIE 6 (simulateur JS),perception,piege,1485,succes,18.1
+DRA-MPPI (simulateur JS),nominal,piege,1486,succes,17.7
+VIGIE 6 (simulateur JS),nominal,piege,1486,succes,17.7
+DRA-MPPI (simulateur JS),perception,piege,1486,succes,17.7
+VIGIE 6 (simulateur JS),perception,piege,1486,succes,18.2
+DRA-MPPI (simulateur JS),nominal,piege,1487,succes,17.5
+VIGIE 6 (simulateur JS),nominal,piege,1487,succes,17.3
+DRA-MPPI (simulateur JS),perception,piege,1487,succes,17.4
+VIGIE 6 (simulateur JS),perception,piege,1487,succes,17.3
+DRA-MPPI (simulateur JS),nominal,piege,1488,succes,17.5
+VIGIE 6 (simulateur JS),nominal,piege,1488,succes,17.5
+DRA-MPPI (simulateur JS),perception,piege,1488,succes,17.5
+VIGIE 6 (simulateur JS),perception,piege,1488,succes,17.5
+DRA-MPPI (simulateur JS),nominal,piege,1489,succes,19.9
+VIGIE 6 (simulateur JS),nominal,piege,1489,succes,19.3
+DRA-MPPI (simulateur JS),perception,piege,1489,succes,19.9
+VIGIE 6 (simulateur JS),perception,piege,1489,succes,19.3
+DRA-MPPI (simulateur JS),nominal,piege,1490,succes,18.1
+VIGIE 6 (simulateur JS),nominal,piege,1490,succes,17.9
+DRA-MPPI (simulateur JS),perception,piege,1490,succes,18.1
+VIGIE 6 (simulateur JS),perception,piege,1490,succes,18.1
+DRA-MPPI (simulateur JS),nominal,piege,1491,succes,17.7
+VIGIE 6 (simulateur JS),nominal,piege,1491,succes,18.2
+DRA-MPPI (simulateur JS),perception,piege,1491,succes,17.9
+VIGIE 6 (simulateur JS),perception,piege,1491,succes,18.2
+DRA-MPPI (simulateur JS),nominal,piege,1492,succes,17.7
+VIGIE 6 (simulateur JS),nominal,piege,1492,succes,17.8
+DRA-MPPI (simulateur JS),perception,piege,1492,succes,17.7
+VIGIE 6 (simulateur JS),perception,piege,1492,succes,18.4
+DRA-MPPI (simulateur JS),nominal,piege,1493,succes,18.0
+VIGIE 6 (simulateur JS),nominal,piege,1493,succes,26.4
+DRA-MPPI (simulateur JS),perception,piege,1493,succes,18.0
+VIGIE 6 (simulateur JS),perception,piege,1493,succes,26.9
+DRA-MPPI (simulateur JS),nominal,piege,1494,succes,18.4
+VIGIE 6 (simulateur JS),nominal,piege,1494,succes,17.3
+DRA-MPPI (simulateur JS),perception,piege,1494,succes,18.4
+VIGIE 6 (simulateur JS),perception,piege,1494,succes,17.6
+DRA-MPPI (simulateur JS),nominal,piege,1495,succes,18.4
+VIGIE 6 (simulateur JS),nominal,piege,1495,succes,18.5
+DRA-MPPI (simulateur JS),perception,piege,1495,succes,18.4
+VIGIE 6 (simulateur JS),perception,piege,1495,succes,18.2
+DRA-MPPI (simulateur JS),nominal,piege,1496,succes,26.0
+VIGIE 6 (simulateur JS),nominal,piege,1496,succes,27.4
+DRA-MPPI (simulateur JS),perception,piege,1496,succes,26.0
+VIGIE 6 (simulateur JS),perception,piege,1496,succes,26.5
+DRA-MPPI (simulateur JS),nominal,piege,1497,succes,17.4
+VIGIE 6 (simulateur JS),nominal,piege,1497,succes,17.7
+DRA-MPPI (simulateur JS),perception,piege,1497,succes,17.2
+VIGIE 6 (simulateur JS),perception,piege,1497,succes,17.6
+DRA-MPPI (simulateur JS),nominal,piege,1498,succes,20.3
+VIGIE 6 (simulateur JS),nominal,piege,1498,succes,18.0
+DRA-MPPI (simulateur JS),perception,piege,1498,succes,20.1
+VIGIE 6 (simulateur JS),perception,piege,1498,succes,18.1
+DRA-MPPI (simulateur JS),nominal,piege,1499,succes,18.6
+VIGIE 6 (simulateur JS),nominal,piege,1499,succes,18.8
+DRA-MPPI (simulateur JS),perception,piege,1499,succes,18.5
+VIGIE 6 (simulateur JS),perception,piege,1499,succes,18.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1460,succes,28.6
+VIGIE 6 (simulateur JS),nominal,poursuite,1460,succes,29.6
+DRA-MPPI (simulateur JS),perception,poursuite,1460,succes,25.4
+VIGIE 6 (simulateur JS),perception,poursuite,1460,succes,26.1
+DRA-MPPI (simulateur JS),nominal,poursuite,1461,collision,5.3
+VIGIE 6 (simulateur JS),nominal,poursuite,1461,succes,23.1
+DRA-MPPI (simulateur JS),perception,poursuite,1461,collision,5.1
+VIGIE 6 (simulateur JS),perception,poursuite,1461,collision,5.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1462,succes,15.5
+VIGIE 6 (simulateur JS),nominal,poursuite,1462,succes,15.5
+DRA-MPPI (simulateur JS),perception,poursuite,1462,succes,15.6
+VIGIE 6 (simulateur JS),perception,poursuite,1462,succes,15.9
+DRA-MPPI (simulateur JS),nominal,poursuite,1463,succes,17.8
+VIGIE 6 (simulateur JS),nominal,poursuite,1463,succes,17.8
+DRA-MPPI (simulateur JS),perception,poursuite,1463,collision,5.1
+VIGIE 6 (simulateur JS),perception,poursuite,1463,succes,18.5
+DRA-MPPI (simulateur JS),nominal,poursuite,1464,collision,6.6
+VIGIE 6 (simulateur JS),nominal,poursuite,1464,succes,18.4
+DRA-MPPI (simulateur JS),perception,poursuite,1464,succes,18.7
+VIGIE 6 (simulateur JS),perception,poursuite,1464,succes,19.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1465,succes,19.6
+VIGIE 6 (simulateur JS),nominal,poursuite,1465,succes,20.1
+DRA-MPPI (simulateur JS),perception,poursuite,1465,succes,20.1
+VIGIE 6 (simulateur JS),perception,poursuite,1465,collision,5.1
+DRA-MPPI (simulateur JS),nominal,poursuite,1466,succes,16.2
+VIGIE 6 (simulateur JS),nominal,poursuite,1466,collision,5.7
+DRA-MPPI (simulateur JS),perception,poursuite,1466,succes,16.0
+VIGIE 6 (simulateur JS),perception,poursuite,1466,succes,16.0
+DRA-MPPI (simulateur JS),nominal,poursuite,1467,succes,15.2
+VIGIE 6 (simulateur JS),nominal,poursuite,1467,succes,15.3
+DRA-MPPI (simulateur JS),perception,poursuite,1467,succes,15.3
+VIGIE 6 (simulateur JS),perception,poursuite,1467,succes,15.5
+DRA-MPPI (simulateur JS),nominal,poursuite,1468,succes,18.8
+VIGIE 6 (simulateur JS),nominal,poursuite,1468,succes,19.2
+DRA-MPPI (simulateur JS),perception,poursuite,1468,succes,15.4
+VIGIE 6 (simulateur JS),perception,poursuite,1468,succes,19.4
+DRA-MPPI (simulateur JS),nominal,poursuite,1469,succes,21.3
+VIGIE 6 (simulateur JS),nominal,poursuite,1469,succes,16.1
+DRA-MPPI (simulateur JS),perception,poursuite,1469,succes,20.3
+VIGIE 6 (simulateur JS),perception,poursuite,1469,succes,21.1
+DRA-MPPI (simulateur JS),nominal,poursuite,1470,succes,16.7
+VIGIE 6 (simulateur JS),nominal,poursuite,1470,collision,7.3
+DRA-MPPI (simulateur JS),perception,poursuite,1470,collision,7.3
+VIGIE 6 (simulateur JS),perception,poursuite,1470,collision,7.7
+DRA-MPPI (simulateur JS),nominal,poursuite,1471,succes,16.8
+VIGIE 6 (simulateur JS),nominal,poursuite,1471,collision,6.3
+DRA-MPPI (simulateur JS),perception,poursuite,1471,collision,5.6
+VIGIE 6 (simulateur JS),perception,poursuite,1471,succes,20.9
+DRA-MPPI (simulateur JS),nominal,poursuite,1472,succes,16.4
+VIGIE 6 (simulateur JS),nominal,poursuite,1472,succes,20.0
+DRA-MPPI (simulateur JS),perception,poursuite,1472,collision,5.8
+VIGIE 6 (simulateur JS),perception,poursuite,1472,collision,7.6
+DRA-MPPI (simulateur JS),nominal,poursuite,1473,succes,16.1
+VIGIE 6 (simulateur JS),nominal,poursuite,1473,succes,16.4
+DRA-MPPI (simulateur JS),perception,poursuite,1473,succes,16.6
+VIGIE 6 (simulateur JS),perception,poursuite,1473,succes,16.8
+DRA-MPPI (simulateur JS),nominal,poursuite,1474,collision,6.2
+VIGIE 6 (simulateur JS),nominal,poursuite,1474,collision,6.3
+DRA-MPPI (simulateur JS),perception,poursuite,1474,collision,6.4
+VIGIE 6 (simulateur JS),perception,poursuite,1474,collision,6.4
+DRA-MPPI (simulateur JS),nominal,poursuite,1475,succes,16.0
+VIGIE 6 (simulateur JS),nominal,poursuite,1475,succes,16.3
+DRA-MPPI (simulateur JS),perception,poursuite,1475,succes,16.0
+VIGIE 6 (simulateur JS),perception,poursuite,1475,succes,16.3
+DRA-MPPI (simulateur JS),nominal,poursuite,1476,collision,6.6
+VIGIE 6 (simulateur JS),nominal,poursuite,1476,succes,18.5
+DRA-MPPI (simulateur JS),perception,poursuite,1476,succes,15.6
+VIGIE 6 (simulateur JS),perception,poursuite,1476,collision,6.3
+DRA-MPPI (simulateur JS),nominal,poursuite,1477,collision,7.2
+VIGIE 6 (simulateur JS),nominal,poursuite,1477,collision,7.2
+DRA-MPPI (simulateur JS),perception,poursuite,1477,collision,6.7
+VIGIE 6 (simulateur JS),perception,poursuite,1477,collision,7.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1478,succes,17.2
+VIGIE 6 (simulateur JS),nominal,poursuite,1478,succes,17.4
+DRA-MPPI (simulateur JS),perception,poursuite,1478,succes,19.0
+VIGIE 6 (simulateur JS),perception,poursuite,1478,collision,8.0
+DRA-MPPI (simulateur JS),nominal,poursuite,1479,succes,16.8
+VIGIE 6 (simulateur JS),nominal,poursuite,1479,succes,17.0
+DRA-MPPI (simulateur JS),perception,poursuite,1479,collision,4.5
+VIGIE 6 (simulateur JS),perception,poursuite,1479,succes,17.8
+DRA-MPPI (simulateur JS),nominal,poursuite,1480,collision,4.9
+VIGIE 6 (simulateur JS),nominal,poursuite,1480,succes,23.2
+DRA-MPPI (simulateur JS),perception,poursuite,1480,collision,4.6
+VIGIE 6 (simulateur JS),perception,poursuite,1480,collision,5.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1481,succes,20.2
+VIGIE 6 (simulateur JS),nominal,poursuite,1481,succes,20.4
+DRA-MPPI (simulateur JS),perception,poursuite,1481,succes,20.1
+VIGIE 6 (simulateur JS),perception,poursuite,1481,collision,6.1
+DRA-MPPI (simulateur JS),nominal,poursuite,1482,succes,15.5
+VIGIE 6 (simulateur JS),nominal,poursuite,1482,succes,15.6
+DRA-MPPI (simulateur JS),perception,poursuite,1482,succes,15.7
+VIGIE 6 (simulateur JS),perception,poursuite,1482,succes,15.8
+DRA-MPPI (simulateur JS),nominal,poursuite,1483,succes,15.1
+VIGIE 6 (simulateur JS),nominal,poursuite,1483,succes,15.2
+DRA-MPPI (simulateur JS),perception,poursuite,1483,succes,15.1
+VIGIE 6 (simulateur JS),perception,poursuite,1483,succes,15.1
+DRA-MPPI (simulateur JS),nominal,poursuite,1484,succes,16.3
+VIGIE 6 (simulateur JS),nominal,poursuite,1484,succes,16.2
+DRA-MPPI (simulateur JS),perception,poursuite,1484,succes,19.7
+VIGIE 6 (simulateur JS),perception,poursuite,1484,succes,16.1
+DRA-MPPI (simulateur JS),nominal,poursuite,1485,succes,17.5
+VIGIE 6 (simulateur JS),nominal,poursuite,1485,succes,18.2
+DRA-MPPI (simulateur JS),perception,poursuite,1485,succes,17.4
+VIGIE 6 (simulateur JS),perception,poursuite,1485,succes,17.3
+DRA-MPPI (simulateur JS),nominal,poursuite,1486,succes,15.9
+VIGIE 6 (simulateur JS),nominal,poursuite,1486,succes,16.1
+DRA-MPPI (simulateur JS),perception,poursuite,1486,succes,15.9
+VIGIE 6 (simulateur JS),perception,poursuite,1486,succes,16.0
+DRA-MPPI (simulateur JS),nominal,poursuite,1487,succes,18.3
+VIGIE 6 (simulateur JS),nominal,poursuite,1487,succes,18.1
+DRA-MPPI (simulateur JS),perception,poursuite,1487,collision,6.9
+VIGIE 6 (simulateur JS),perception,poursuite,1487,succes,18.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1488,succes,15.9
+VIGIE 6 (simulateur JS),nominal,poursuite,1488,succes,15.8
+DRA-MPPI (simulateur JS),perception,poursuite,1488,succes,15.7
+VIGIE 6 (simulateur JS),perception,poursuite,1488,succes,15.8
+DRA-MPPI (simulateur JS),nominal,poursuite,1489,succes,15.0
+VIGIE 6 (simulateur JS),nominal,poursuite,1489,succes,15.4
+DRA-MPPI (simulateur JS),perception,poursuite,1489,succes,15.0
+VIGIE 6 (simulateur JS),perception,poursuite,1489,succes,15.1
+DRA-MPPI (simulateur JS),nominal,poursuite,1490,collision,8.1
+VIGIE 6 (simulateur JS),nominal,poursuite,1490,collision,7.7
+DRA-MPPI (simulateur JS),perception,poursuite,1490,collision,8.2
+VIGIE 6 (simulateur JS),perception,poursuite,1490,succes,19.3
+DRA-MPPI (simulateur JS),nominal,poursuite,1491,succes,15.0
+VIGIE 6 (simulateur JS),nominal,poursuite,1491,succes,15.2
+DRA-MPPI (simulateur JS),perception,poursuite,1491,succes,15.1
+VIGIE 6 (simulateur JS),perception,poursuite,1491,succes,15.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1492,collision,8.6
+VIGIE 6 (simulateur JS),nominal,poursuite,1492,succes,18.3
+DRA-MPPI (simulateur JS),perception,poursuite,1492,collision,8.6
+VIGIE 6 (simulateur JS),perception,poursuite,1492,collision,7.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1493,succes,16.1
+VIGIE 6 (simulateur JS),nominal,poursuite,1493,succes,15.9
+DRA-MPPI (simulateur JS),perception,poursuite,1493,succes,16.3
+VIGIE 6 (simulateur JS),perception,poursuite,1493,succes,16.5
+DRA-MPPI (simulateur JS),nominal,poursuite,1494,succes,21.6
+VIGIE 6 (simulateur JS),nominal,poursuite,1494,succes,22.1
+DRA-MPPI (simulateur JS),perception,poursuite,1494,collision,3.6
+VIGIE 6 (simulateur JS),perception,poursuite,1494,succes,17.8
+DRA-MPPI (simulateur JS),nominal,poursuite,1495,succes,16.1
+VIGIE 6 (simulateur JS),nominal,poursuite,1495,succes,16.1
+DRA-MPPI (simulateur JS),perception,poursuite,1495,succes,16.2
+VIGIE 6 (simulateur JS),perception,poursuite,1495,succes,16.4
+DRA-MPPI (simulateur JS),nominal,poursuite,1496,succes,21.2
+VIGIE 6 (simulateur JS),nominal,poursuite,1496,succes,16.4
+DRA-MPPI (simulateur JS),perception,poursuite,1496,succes,20.7
+VIGIE 6 (simulateur JS),perception,poursuite,1496,succes,16.6
+DRA-MPPI (simulateur JS),nominal,poursuite,1497,succes,15.4
+VIGIE 6 (simulateur JS),nominal,poursuite,1497,succes,15.5
+DRA-MPPI (simulateur JS),perception,poursuite,1497,succes,15.5
+VIGIE 6 (simulateur JS),perception,poursuite,1497,succes,15.5
+DRA-MPPI (simulateur JS),nominal,poursuite,1498,succes,18.8
+VIGIE 6 (simulateur JS),nominal,poursuite,1498,succes,19.1
+DRA-MPPI (simulateur JS),perception,poursuite,1498,succes,19.2
+VIGIE 6 (simulateur JS),perception,poursuite,1498,succes,19.2
+DRA-MPPI (simulateur JS),nominal,poursuite,1499,succes,15.4
+VIGIE 6 (simulateur JS),nominal,poursuite,1499,succes,15.8
+DRA-MPPI (simulateur JS),perception,poursuite,1499,succes,15.6
+VIGIE 6 (simulateur JS),perception,poursuite,1499,succes,16.1
+DRA-MPPI (simulateur JS),nominal,traversee,1460,succes,40.7
+VIGIE 6 (simulateur JS),nominal,traversee,1460,succes,16.1
+DRA-MPPI (simulateur JS),perception,traversee,1460,collision,17.2
+VIGIE 6 (simulateur JS),perception,traversee,1460,succes,15.7
+DRA-MPPI (simulateur JS),nominal,traversee,1461,collision,14.1
+VIGIE 6 (simulateur JS),nominal,traversee,1461,succes,17.9
+DRA-MPPI (simulateur JS),perception,traversee,1461,succes,18.6
+VIGIE 6 (simulateur JS),perception,traversee,1461,succes,18.4
+DRA-MPPI (simulateur JS),nominal,traversee,1462,succes,17.0
+VIGIE 6 (simulateur JS),nominal,traversee,1462,succes,17.1
+DRA-MPPI (simulateur JS),perception,traversee,1462,succes,30.0
+VIGIE 6 (simulateur JS),perception,traversee,1462,collision,29.5
+DRA-MPPI (simulateur JS),nominal,traversee,1463,succes,27.6
+VIGIE 6 (simulateur JS),nominal,traversee,1463,succes,28.2
+DRA-MPPI (simulateur JS),perception,traversee,1463,collision,36.2
+VIGIE 6 (simulateur JS),perception,traversee,1463,succes,25.1
+DRA-MPPI (simulateur JS),nominal,traversee,1464,succes,20.7
+VIGIE 6 (simulateur JS),nominal,traversee,1464,succes,20.9
+DRA-MPPI (simulateur JS),perception,traversee,1464,succes,21.3
+VIGIE 6 (simulateur JS),perception,traversee,1464,succes,20.8
+DRA-MPPI (simulateur JS),nominal,traversee,1465,collision,19.0
+VIGIE 6 (simulateur JS),nominal,traversee,1465,succes,19.1
+DRA-MPPI (simulateur JS),perception,traversee,1465,collision,11.6
+VIGIE 6 (simulateur JS),perception,traversee,1465,collision,18.9
+DRA-MPPI (simulateur JS),nominal,traversee,1466,succes,21.9
+VIGIE 6 (simulateur JS),nominal,traversee,1466,succes,18.9
+DRA-MPPI (simulateur JS),perception,traversee,1466,succes,30.5
+VIGIE 6 (simulateur JS),perception,traversee,1466,succes,19.1
+DRA-MPPI (simulateur JS),nominal,traversee,1467,succes,26.1
+VIGIE 6 (simulateur JS),nominal,traversee,1467,succes,25.2
+DRA-MPPI (simulateur JS),perception,traversee,1467,collision,17.6
+VIGIE 6 (simulateur JS),perception,traversee,1467,succes,25.0
+DRA-MPPI (simulateur JS),nominal,traversee,1468,succes,19.5
+VIGIE 6 (simulateur JS),nominal,traversee,1468,succes,17.1
+DRA-MPPI (simulateur JS),perception,traversee,1468,succes,16.9
+VIGIE 6 (simulateur JS),perception,traversee,1468,succes,16.4
+DRA-MPPI (simulateur JS),nominal,traversee,1469,succes,15.6
+VIGIE 6 (simulateur JS),nominal,traversee,1469,succes,15.8
+DRA-MPPI (simulateur JS),perception,traversee,1469,succes,16.4
+VIGIE 6 (simulateur JS),perception,traversee,1469,succes,24.1
+DRA-MPPI (simulateur JS),nominal,traversee,1470,succes,18.6
+VIGIE 6 (simulateur JS),nominal,traversee,1470,succes,18.3
+DRA-MPPI (simulateur JS),perception,traversee,1470,succes,26.2
+VIGIE 6 (simulateur JS),perception,traversee,1470,succes,22.3
+DRA-MPPI (simulateur JS),nominal,traversee,1471,succes,16.9
+VIGIE 6 (simulateur JS),nominal,traversee,1471,succes,26.5
+DRA-MPPI (simulateur JS),perception,traversee,1471,succes,17.0
+VIGIE 6 (simulateur JS),perception,traversee,1471,succes,16.8
+DRA-MPPI (simulateur JS),nominal,traversee,1472,succes,15.1
+VIGIE 6 (simulateur JS),nominal,traversee,1472,succes,15.2
+DRA-MPPI (simulateur JS),perception,traversee,1472,succes,15.2
+VIGIE 6 (simulateur JS),perception,traversee,1472,succes,15.3
+DRA-MPPI (simulateur JS),nominal,traversee,1473,succes,16.7
+VIGIE 6 (simulateur JS),nominal,traversee,1473,succes,17.2
+DRA-MPPI (simulateur JS),perception,traversee,1473,succes,23.8
+VIGIE 6 (simulateur JS),perception,traversee,1473,succes,17.0
+DRA-MPPI (simulateur JS),nominal,traversee,1474,temps,45.0
+VIGIE 6 (simulateur JS),nominal,traversee,1474,succes,20.5
+DRA-MPPI (simulateur JS),perception,traversee,1474,succes,27.3
+VIGIE 6 (simulateur JS),perception,traversee,1474,succes,22.0
+DRA-MPPI (simulateur JS),nominal,traversee,1475,succes,15.1
+VIGIE 6 (simulateur JS),nominal,traversee,1475,succes,15.2
+DRA-MPPI (simulateur JS),perception,traversee,1475,succes,15.1
+VIGIE 6 (simulateur JS),perception,traversee,1475,succes,15.1
+DRA-MPPI (simulateur JS),nominal,traversee,1476,succes,19.0
+VIGIE 6 (simulateur JS),nominal,traversee,1476,succes,18.4
+DRA-MPPI (simulateur JS),perception,traversee,1476,succes,22.4
+VIGIE 6 (simulateur JS),perception,traversee,1476,succes,18.1
+DRA-MPPI (simulateur JS),nominal,traversee,1477,succes,18.3
+VIGIE 6 (simulateur JS),nominal,traversee,1477,succes,17.8
+DRA-MPPI (simulateur JS),perception,traversee,1477,succes,19.4
+VIGIE 6 (simulateur JS),perception,traversee,1477,succes,18.3
+DRA-MPPI (simulateur JS),nominal,traversee,1478,succes,25.5
+VIGIE 6 (simulateur JS),nominal,traversee,1478,succes,17.8
+DRA-MPPI (simulateur JS),perception,traversee,1478,succes,25.7
+VIGIE 6 (simulateur JS),perception,traversee,1478,succes,17.8
+DRA-MPPI (simulateur JS),nominal,traversee,1479,succes,17.4
+VIGIE 6 (simulateur JS),nominal,traversee,1479,succes,17.5
+DRA-MPPI (simulateur JS),perception,traversee,1479,succes,17.2
+VIGIE 6 (simulateur JS),perception,traversee,1479,succes,17.5
+DRA-MPPI (simulateur JS),nominal,traversee,1480,succes,17.6
+VIGIE 6 (simulateur JS),nominal,traversee,1480,succes,17.5
+DRA-MPPI (simulateur JS),perception,traversee,1480,succes,23.4
+VIGIE 6 (simulateur JS),perception,traversee,1480,succes,18.6
+DRA-MPPI (simulateur JS),nominal,traversee,1481,succes,16.3
+VIGIE 6 (simulateur JS),nominal,traversee,1481,succes,17.2
+DRA-MPPI (simulateur JS),perception,traversee,1481,succes,16.3
+VIGIE 6 (simulateur JS),perception,traversee,1481,succes,16.3
+DRA-MPPI (simulateur JS),nominal,traversee,1482,succes,21.4
+VIGIE 6 (simulateur JS),nominal,traversee,1482,succes,21.6
+DRA-MPPI (simulateur JS),perception,traversee,1482,succes,19.8
+VIGIE 6 (simulateur JS),perception,traversee,1482,succes,20.2
+DRA-MPPI (simulateur JS),nominal,traversee,1483,succes,31.8
+VIGIE 6 (simulateur JS),nominal,traversee,1483,succes,19.7
+DRA-MPPI (simulateur JS),perception,traversee,1483,collision,15.0
+VIGIE 6 (simulateur JS),perception,traversee,1483,succes,19.7
+DRA-MPPI (simulateur JS),nominal,traversee,1484,succes,17.1
+VIGIE 6 (simulateur JS),nominal,traversee,1484,succes,17.5
+DRA-MPPI (simulateur JS),perception,traversee,1484,succes,17.6
+VIGIE 6 (simulateur JS),perception,traversee,1484,succes,17.8
+DRA-MPPI (simulateur JS),nominal,traversee,1485,succes,42.8
+VIGIE 6 (simulateur JS),nominal,traversee,1485,collision,33.7
+DRA-MPPI (simulateur JS),perception,traversee,1485,collision,13.5
+VIGIE 6 (simulateur JS),perception,traversee,1485,succes,18.6
+DRA-MPPI (simulateur JS),nominal,traversee,1486,succes,21.4
+VIGIE 6 (simulateur JS),nominal,traversee,1486,succes,17.9
+DRA-MPPI (simulateur JS),perception,traversee,1486,succes,18.6
+VIGIE 6 (simulateur JS),perception,traversee,1486,succes,18.2
+DRA-MPPI (simulateur JS),nominal,traversee,1487,succes,26.7
+VIGIE 6 (simulateur JS),nominal,traversee,1487,succes,16.7
+DRA-MPPI (simulateur JS),perception,traversee,1487,succes,27.6
+VIGIE 6 (simulateur JS),perception,traversee,1487,succes,16.9
+DRA-MPPI (simulateur JS),nominal,traversee,1488,succes,23.8
+VIGIE 6 (simulateur JS),nominal,traversee,1488,succes,22.2
+DRA-MPPI (simulateur JS),perception,traversee,1488,succes,23.8
+VIGIE 6 (simulateur JS),perception,traversee,1488,succes,18.2
+DRA-MPPI (simulateur JS),nominal,traversee,1489,succes,16.4
+VIGIE 6 (simulateur JS),nominal,traversee,1489,collision,11.7
+DRA-MPPI (simulateur JS),perception,traversee,1489,succes,31.3
+VIGIE 6 (simulateur JS),perception,traversee,1489,succes,19.3
+DRA-MPPI (simulateur JS),nominal,traversee,1490,temps,45.0
+VIGIE 6 (simulateur JS),nominal,traversee,1490,succes,34.2
+DRA-MPPI (simulateur JS),perception,traversee,1490,succes,24.9
+VIGIE 6 (simulateur JS),perception,traversee,1490,succes,25.9
+DRA-MPPI (simulateur JS),nominal,traversee,1491,succes,25.3
+VIGIE 6 (simulateur JS),nominal,traversee,1491,succes,22.2
+DRA-MPPI (simulateur JS),perception,traversee,1491,collision,12.2
+VIGIE 6 (simulateur JS),perception,traversee,1491,succes,26.7
+DRA-MPPI (simulateur JS),nominal,traversee,1492,succes,36.6
+VIGIE 6 (simulateur JS),nominal,traversee,1492,succes,16.7
+DRA-MPPI (simulateur JS),perception,traversee,1492,succes,17.0
+VIGIE 6 (simulateur JS),perception,traversee,1492,succes,16.5
+DRA-MPPI (simulateur JS),nominal,traversee,1493,collision,32.8
+VIGIE 6 (simulateur JS),nominal,traversee,1493,succes,16.7
+DRA-MPPI (simulateur JS),perception,traversee,1493,succes,17.0
+VIGIE 6 (simulateur JS),perception,traversee,1493,succes,17.9
+DRA-MPPI (simulateur JS),nominal,traversee,1494,succes,20.9
+VIGIE 6 (simulateur JS),nominal,traversee,1494,succes,21.5
+DRA-MPPI (simulateur JS),perception,traversee,1494,succes,27.3
+VIGIE 6 (simulateur JS),perception,traversee,1494,succes,22.2
+DRA-MPPI (simulateur JS),nominal,traversee,1495,succes,14.9
+VIGIE 6 (simulateur JS),nominal,traversee,1495,succes,14.8
+DRA-MPPI (simulateur JS),perception,traversee,1495,succes,14.9
+VIGIE 6 (simulateur JS),perception,traversee,1495,succes,14.9
+DRA-MPPI (simulateur JS),nominal,traversee,1496,succes,15.7
+VIGIE 6 (simulateur JS),nominal,traversee,1496,succes,15.5
+DRA-MPPI (simulateur JS),perception,traversee,1496,succes,15.7
+VIGIE 6 (simulateur JS),perception,traversee,1496,succes,15.7
+DRA-MPPI (simulateur JS),nominal,traversee,1497,succes,22.3
+VIGIE 6 (simulateur JS),nominal,traversee,1497,succes,42.3
+DRA-MPPI (simulateur JS),perception,traversee,1497,collision,20.1
+VIGIE 6 (simulateur JS),perception,traversee,1497,collision,11.8
+DRA-MPPI (simulateur JS),nominal,traversee,1498,succes,25.0
+VIGIE 6 (simulateur JS),nominal,traversee,1498,collision,20.5
+DRA-MPPI (simulateur JS),perception,traversee,1498,succes,33.6
+VIGIE 6 (simulateur JS),perception,traversee,1498,succes,29.5
+DRA-MPPI (simulateur JS),nominal,traversee,1499,succes,15.4
+VIGIE 6 (simulateur JS),nominal,traversee,1499,succes,15.3
+DRA-MPPI (simulateur JS),perception,traversee,1499,succes,15.3
+VIGIE 6 (simulateur JS),perception,traversee,1499,succes,15.5

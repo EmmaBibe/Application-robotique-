@@ -1,5 +1,5 @@
 // Service worker : mise en cache pour l'usage hors ligne. Fichier généré par tools/build-sw.mjs.
-const CACHE = 'robomaster-a0fa0d831c';
+const CACHE = 'robomaster-60945a3e09';
 const ASSETS = [
   "./",
   "index.html",
@@ -57,7 +57,19 @@ const ASSETS = [
   "js/sims/vectors.js",
   "js/sims/vigie-core.js",
   "js/sims/vigie.js",
+  "js/sims/vigie3d/explain.js",
+  "js/sims/vigie3d/scene.js",
+  "js/sims/vigie3d.js",
+  "js/sims/vigie6/episode.js",
+  "js/sims/vigie6/grid.js",
+  "js/sims/vigie6/planners.js",
+  "js/sims/vigie6/risk.js",
+  "js/sims/vigie6/runner.js",
+  "js/sims/vigie6/worker.js",
+  "js/sims/vigie6/world.js",
   "js/sims/vision.js",
+  "js/vendor/three/LICENSE",
+  "js/vendor/three/three.module.min.js",
   "js/views/blocks.js",
   "assets/icons/icon-192.png",
   "assets/icons/icon-512.png",

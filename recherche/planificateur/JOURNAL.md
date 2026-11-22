@@ -645,3 +645,31 @@ Erreur évitée : une seconde analyse avait écrasé le fichier de la première 
 | VIGIE 6 + incertitude du suivi | 71,5 % | 73,2 % | 69,8 % | 24,0 s |
 
 −15,2 points, IC [−18,5 ; −11,9], significatif ; effondrement à la traversée (−57,5) et à la porte (−48,8). C'est le risque annoncé avant l'essai : une personne qui vient d'apparaître a une vitesse très incertaine (écart-type initial de 2 m/s), donc une position future floue sur plusieurs mètres ; le robot se croit menacé partout et attend. La règle fixée (au moins 3 essais de mieux, aucune scène en recul significatif) écarte la variante. Bonne idée sur le papier (elle venait d'un avis extérieur), mauvaise telle quelle : il faudrait au minimum borner l'incertitude de vitesse d'une piste neuve, ce qui serait un nouveau réglage à juger sur d'autres mondes. Détail : `dev7_validation_cov_scenes.md`.
+
+## Simulateur 3D « Dans la tête de VIGIE » (application, version 2.0)
+
+But : montrer, à quelqu'un qui débute, comment VIGIE 6 perçoit, imagine et décide, face à DRA-MPPI. Condition posée : que ce soit **le vrai VIGIE 6**, pas une imitation.
+
+**Portage fidèle** (`js/sims/vigie6/`). L'ancien cœur JavaScript de l'application ne contenait que VIGIE 2 et une ébauche de VIGIE 3, avec 5 scènes simplifiées. VIGIE 6, DRA-MPPI réglé et les 11 scènes du banc ont été portés ligne à ligne depuis le Python. Pièges rencontrés et traités pendant le portage :
+- `round()` de Python arrondit au pair (2,5 → 2) quand `Math.round` arrondit au-dessus : l'ancien portage de la route espace-temps était faux sur ce point ;
+- les files de priorité doivent départager les égalités comme les tuples Python (coût, puis coordonnées), sans quoi A* et Dijkstra prennent d'autres chemins ;
+- le modulo Python garde le signe du diviseur (calcul des nombres d'enroulement de la règle de cohérence) ;
+- la table des probabilités de collision reprend la fonction de Bessel I0 de numpy (Cephes) avec ses coefficients exacts ; table entière identique à 4×10⁻¹⁶ près ;
+- l'ancien portage différait aussi sur le prolongement du champ de distance dans les obstacles, la pénalité autour des routes trouvées et le percentile de MPPI.
+
+**Vérification en deux temps.**
+1. *Mêmes entrées, mêmes sorties* (`parite_js.py`, test 32, 27 vérifications) : grille, Dijkstra, A*, routes, route espace-temps, coûts, probabilité de collision, cohérence, fantômes, robot réaliste, personnes, capteurs, et **décisions complètes rejouées pas à pas** sur 4 épisodes du banc (240 décisions, écart maximal 4×10⁻¹³). Les tirages aléatoires y sont remplacés des deux côtés par un même générateur à arithmétique entière. Chaque mécanisme a été exercé (trois types d'options choisis, changements de route, plafond aux angles morts actif 23 fois). Deux erreurs de test corrigées en route : fantômes comparés dans l'ordre alors que deux fantômes à égale distance peuvent s'échanger au dernier chiffre (sans effet sur la vitesse imposée) ; et une boucle d'imports Python qui n'apparaît que si `references` est importé avant `planners` (le banc fait toujours l'inverse).
+2. *Épisodes bouclés* : une première série de 84 mondes donnait VIGIE légèrement derrière (62 contre 65), ce qui pouvait trahir une différence dans la boucle complète. Campagne JavaScript aux dimensions de la validation (graines 1460 à 1499, 11 scènes, deux conditions, 1 760 essais, `js_validation_simulateur.csv`) :
+
+| | VIGIE 6 | DRA-MPPI | Écart (IC 95 %) |
+|---|---|---|---|
+| Simulateur JavaScript | 89,0 % | 84,7 % | +4,3 [+1,9 ; +6,8] |
+| Banc Python | 86,7 % | 81,4 % | +5,3 [+2,8 ; +8,0] |
+
+Même avantage, significatif dans les deux cas, même répartition par scène (porte, traversée, angles morts en tête ; égalité en forêt et au piège). Les mondes tirés en JavaScript sont un peu plus faciles pour les deux méthodes (générateur aléatoire différent de numpy). La première série était du hasard.
+
+**Ce que montre le simulateur** (`js/sims/vigie3d.js`, `js/sims/vigie3d/`) : une maquette (le monde réel) sur laquelle les pensées sont projetées en lumière, turquoise pour VIGIE, ambre pour la référence ; calques « ce qu'il voit » (vu, mémorisé, inconnu, portée, silhouettes imaginées), « ce qu'il imagine » (futurs et incertitude), carte du danger, options et choix, essais de MPPI ; vue espace-temps (le temps devient la hauteur) ; panneau « Sa décision » avec la note détaillée de chaque option et une phrase « pourquoi » construite uniquement à partir des valeurs calculées ; comparaison en direct ; chronologie avec moments clés et retour image par image ; visite guidée en 11 étapes ; affichage côte à côte quand les personnes réagissent différemment aux deux robots (poursuite, piétons réactifs). Les mondes de départ ne sont pas choisis selon le vainqueur.
+
+Observation faite en construisant l'affichage : la route espace-temps propose parfois de **reculer** (porte étroite, flux venant vers le robot sur 8 s). Vérifié identique en Python : c'est le comportement réel de l'algorithme, montré tel quel.
+
+Tests de cohérence : **228 vérifications réussies, 0 échec.**

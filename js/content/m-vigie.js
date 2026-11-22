@@ -159,6 +159,9 @@ export const labo = {
 <li><b>Le filtre de suivi comptait plus que le planificateur :</b> l'ancien filtre se trompait de plus de 1 m/s sur la vitesse d'une personne dans 28 % des cas aux angles morts, contre 5 % pour le filtre de Kalman. Avant d'accuser l'algorithme, vérifie ce qu'il voit.</li></ul>
 <h3>Vers un prototype</h3>
 <p>Plateforme envisagée : robot à deux roues motrices (vitesse maximale 1,5 m/s), lidar 2D pour détecter et suivre les personnes, ordinateur embarqué de type Raspberry Pi 5 ou Jetson, VIGIE intégré comme module de commande de ROS 2 (Nav2). Les essais iront du plus sûr au plus exigeant : mannequins sur chariots poussés, puis personnes qui marchent selon un scénario connu, puis circulation libre, toujours avec arrêt d'urgence et vitesse limitée.</p>`),
+        H('Dans la tête de VIGIE, en 3D'),
+        P(`<p>Les chiffres disent <em>combien</em> VIGIE réussit ; ce simulateur montre <em>comment</em>. Le vrai VIGIE 6 et la vraie référence DRA-MPPI y tournent, avec le robot réaliste du banc : tu vois ce qu'il perçoit, ce qu'il imagine, les idées de chemin qu'il compare, la note de chacune et la raison de son choix, dix fois par seconde. Commence par la <b>visite guidée</b>, puis rejoue un moment clé image par image. Essaie aussi « Angles morts » : c'est là que VIGIE reste le plus fragile.</p>`),
+        Sim('vigie3d'),
         Dossier('dos-vigie', 'Mon plan d\'essai sur un vrai robot', `Prépare le passage de la simulation au réel. Tes réponses sont gardées dans ton carnet.`, [
           'Quel robot (roues, taille, vitesse maximale) et quels capteurs (lidar 2D, caméra de profondeur) choisirais-tu pour tester VIGIE ? Justifie avec les besoins de l\'algorithme : positions et vitesses des personnes autour.',
           'Quel ordinateur embarqué, et comment vérifies-tu que VIGIE tient ses 10 cycles par seconde dessus ?',
