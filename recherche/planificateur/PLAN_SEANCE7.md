@@ -105,3 +105,11 @@ PEDS (RA-L 2026) montre que changer seulement le modèle de comportement des pi�
 Le filtre de Kalman connaît l'incertitude de chaque piste (grande pour une personne qui vient d'apparaître ou qui est masquée), mais le risque utilisait une variance identique pour tous. Variante : la variance de position à l'horizon τ devient σ²ₚ + 2τ·cov(p, v) + τ²·σ²ᵥ (modèle à vitesse constante, décalage du prédicteur de Smith inclus), plus le bruit de manœuvre publié par DRA-MPPI. Canal séparé, retardé comme les mesures ; vérifié sans effet sur les autres méthodes (trajectoires identiques au bit près).
 
 Essai : `VIGIE 6 + incertitude du suivi`, sur les mêmes mondes que la validation (graines 1460 à 1499), comparé à VIGIE 6. **Adoptée si au moins 3 essais de mieux et aucune scène en recul significatif**, sinon écartée.
+
+## 12. Évaluation finale (fixée avant le lancement, 22 novembre 2026)
+
+- **Mondes** : graines 5000 à 5099, jamais utilisées (test 12) ; 11 scènes ; trois conditions : vision complète, perception limitée, piétons qui réagissent (§10). 3 300 essais par méthode, 13 200 au total.
+- **Méthodes** : VIGIE 6 (version retenue, §8), DRA-MPPI réglé (référence officielle), T-MPC++, VIGIE 3. Toutes avec le même robot réaliste, le même suivi corrigé (pistes prolongées) et le même prédicteur de Smith.
+- **Critère principal** : taux de succès, VIGIE 6 contre DRA-MPPI réglé, comparaison appariée, intervalle de confiance bootstrap à 95 %. Une avance n'est dite établie que si l'intervalle exclut zéro.
+- **Critères secondaires** : collisions en mouvement, temps de trajet ; résultats par condition et par scène, tous publiés, favorables ou non. VIGIE 6 ne sera dit meilleur que s'il ne s'effondre dans aucune des trois conditions.
+- Aucune modification de méthode pendant la campagne. En cas d'interruption du serveur, reprise à l'identique (le banc ne refait pas les essais déjà écrits).
