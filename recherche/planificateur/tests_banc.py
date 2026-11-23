@@ -548,5 +548,21 @@ if _sh.which('node'):
 else:
     check('node disponible pour vérifier le portage JavaScript', False)
 
+print('33. Imprévisibilité : une personne masquée ne devient pas prévisible faute de mesures (relecture du 23 novembre)')
+def _imprev(mesures_seules):
+    # marche rectiligne à 1 m/s, masquée à partir de 1,6 s : on suit l'erreur lissée qui fait l'indice
+    _tk = RR.TrackerKF(); _st = P.SurpriseTracker(mesures_seules=mesures_seules); _hist = []
+    _g = np.random.default_rng(5)
+    for _k in range(1, 24):
+        _t = 0.1 * _k
+        _z = np.array([[3.0 + 1.0 * _t + _g.normal(0, 0.05), 5.0 + _g.normal(0, 0.05), 0, 0, 0.35, 1, 7]]) if _t < 1.55 else np.zeros((0, 7))
+        _st.update(_tk(_z), _t); _hist.append(_st.e.get(7))
+    return _hist
+_h0, _h1 = _imprev(False), _imprev(True)
+check('avant la correction : l\'erreur lissée fond pendant le masquage (défaut reproduit)', _h0[22] < 0.5 * _h0[14], f'{_h0[14]:.3f} -> {_h0[22]:.3f}')
+check('avec la correction : elle reste figée tant que la personne est masquée', all(_x == _h1[14] for _x in _h1[15:23]), f'{_h1[14]:.3f} -> {_h1[22]:.3f}')
+_tk4 = RR.TrackerKF(); _tk4(np.array([[5., 5., 0, 0, .35, 1, 9]])); _o4 = _tk4(np.zeros((0, 7)))
+check('la piste prolongée porte le marqueur 2', len(_o4) == 1 and _o4[0, 5] == 2)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

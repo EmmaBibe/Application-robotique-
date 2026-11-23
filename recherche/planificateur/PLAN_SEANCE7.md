@@ -113,3 +113,20 @@ Essai : `VIGIE 6 + incertitude du suivi`, sur les mêmes mondes que la validatio
 - **Critère principal** : taux de succès, VIGIE 6 contre DRA-MPPI réglé, comparaison appariée, intervalle de confiance bootstrap à 95 %. Une avance n'est dite établie que si l'intervalle exclut zéro.
 - **Critères secondaires** : collisions en mouvement, temps de trajet ; résultats par condition et par scène, tous publiés, favorables ou non. VIGIE 6 ne sera dit meilleur que s'il ne s'effondre dans aucune des trois conditions.
 - Aucune modification de méthode pendant la campagne. En cas d'interruption du serveur, reprise à l'identique (le banc ne refait pas les essais déjà écrits).
+
+## 13. Contrôles demandés par une seconde relecture (fixés avant les essais, 23 novembre 2026)
+
+Relecture extérieure reçue pendant l'évaluation finale. Ce qui a été vérifié dans le code avant d'écrire ce plan :
+
+- **Budget de calcul** : VIGIE 6 tire 912 trajectoires par cycle (4 × 128 guidées, 400 libres) contre 400 pour DRA-MPPI ; temps médian par cycle 48 ms contre 6 ms en validation (×7,7). Le recalcul des routes, un cycle sur dix, dépasse les 100 ms de la période de commande (200 à 280 ms mesurés). Le banc ne pénalise pas le temps de calcul.
+- **Imprévisibilité** : depuis la correction du suivi (§9), les pistes prolongées pendant un masquage entraient dans l'indice d'imprévisibilité comme de vraies mesures ; l'erreur lissée fond alors pendant le masquage (0,79 → 0,34 en 0,8 s, test 33). Défaut reproduit, présent aussi dans l'évaluation finale en cours (qui n'est pas modifiée).
+- **Collisions** : le contact n'est contrôlé qu'aux instants de décision (toutes les 0,1 s). Un frôlement entre deux instants peut passer inaperçu.
+- Points déjà traités : variance propre à chaque piste dans le risque (§11, écartée, −15,2 points) ; escompte 0,97 (comparé sans escompte en réglage : succès égal, moins de collisions) ; modèle dynamique des moteurs dans la prédiction (VIGIE 4, sans gain confirmé) ; diversité des piétons (§10).
+
+**Contrôle A, budget égal** (graines de validation 1460 à 1499, 11 scènes, vision complète et perception limitée, appariés avec les résultats de validation de VIGIE 6 et DRA-MPPI, reproductibles au bit près) : `VIGIE 6 [400 tirages]` (64 par route, 144 libres), `DRA-MPPI [912 tirages]` (même nombre de tirages que VIGIE 6), `DRA-MPPI [2800 tirages]` (même temps de calcul, environ). Lecture fixée d'avance : l'avance de VIGIE 6 sera dite **architecturale** si VIGIE 6 [400] reste significativement devant DRA-MPPI [400] et si VIGIE 6 reste significativement devant DRA-MPPI [912] ; elle sera dite **due en partie au calcul** si l'un de ces deux écarts n'est plus significatif ; DRA-MPPI [2800] est rapporté dans tous les cas.
+
+**Contrôle B, VIGIE 6.1** (imprévisibilité nourrie des seules vraies mesures) : graines neuves 1500 à 1539, 11 scènes, trois conditions, contre VIGIE 6 et DRA-MPPI. Adoptée si au moins 1 point de mieux que VIGIE 6 et aucune condition en recul significatif ; sinon VIGIE 6 reste la version de référence et le défaut est documenté.
+
+**Contrôle C, contacts entre deux instants** : diagnostic `BALAYAGE=1` (robot et personnes interpolés sur 9 sous-pas, sans effet sur l'issue) pendant les contrôles A et B. On rapporte, par méthode, la part des essais réussis avec un contact manqué.
+
+Points notés pour plus tard, non testés ici : temps de calcul compté dans la boucle (commande appliquée avec le retard du calcul), conditions croisées (perception limitée et piétons réactifs), séparation initiale des piétons (ils ne se gênent pas entre eux dans le simulateur : un chevauchement au départ ne fausse pas le robot mais n'est pas réaliste), plancher de 0,15 m/s de la prudence aux angles morts.

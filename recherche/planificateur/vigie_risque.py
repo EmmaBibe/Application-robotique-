@@ -233,3 +233,27 @@ class Vigie6K(Vigie6):
 
 
 P.ALL += [Vigie6K]
+
+
+class Vigie61(Vigie6):
+    """VIGIE 6 dont l'indice d'imprévisibilité n'apprend que des vraies mesures : les positions prolongées par le
+    filtre de suivi pendant un masquage sont ignorées (l'indice reste figé jusqu'à la réapparition).
+    Défaut signalé par une relecture extérieure le 23 novembre 2026 et reproduit sur le banc."""
+    name = 'VIGIE 6.1 (imprévisibilité sur mesures réelles)'
+
+    def reset(self, static, goal):
+        super().reset(static, goal)
+        self.tr = P.SurpriseTracker(mesures_seules=True)
+
+
+class Vigie6Budget400(Vigie6):
+    """Contrôle d'équité : VIGIE 6 limité au budget de tirages de DRA-MPPI (400 par cycle au lieu de 912)."""
+    name = 'VIGIE 6 [400 tirages]'
+    N = 64; N_FREE = 144
+
+
+_DRA = P.ALL[54]
+DRA912 = type('DRA912', (_DRA,), dict(N=912, name=_DRA.name + ' [912 tirages]'))
+DRA2800 = type('DRA2800', (_DRA,), dict(N=2800, name=_DRA.name + ' [2800 tirages]'))
+
+P.ALL += [Vigie61, Vigie6Budget400, DRA912, DRA2800]   # indices 73 à 76

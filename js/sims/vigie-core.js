@@ -668,7 +668,7 @@ export function makeTracker() {
     for (const [id, k] of st) {
       if (vus.has(id)) continue;
       const d = t - k.t;
-      out.push([k.x[0] + d * k.x[2], k.x[1] + d * k.x[3], k.x[2], k.x[3], k.r, 1, id]);
+      out.push([k.x[0] + d * k.x[2], k.x[1] + d * k.x[3], k.x[2], k.x[3], k.r, 2, id]);
     }
     return out;
   };

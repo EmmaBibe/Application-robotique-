@@ -7,6 +7,7 @@ import numpy as np
 
 DT = 0.1
 R_ROB = 0.3
+BALAYAGE = bool(__import__('os').environ.get('BALAYAGE'))   # diagnostic de contact entre deux instants (sans effet sur l'issue)
 VMAX, WMAX = 1.5, 2.0
 AMAX, ALPHA = 2.0, 4.0
 SIZE = 20.0
@@ -276,7 +277,7 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
         gv, gw, bw = rng.uniform(0.75, 1.15), rng.uniform(0.75, 1.2), rng.uniform(-0.12, 0.12)
     queue = deque()
     path = [s[:2].copy()]; vs = []; ws = []; comp = []; minclear = np.inf
-    outcome = 'temps'
+    outcome = 'temps'; marge_bal = np.inf
     while t < T_MAX:
         if robot is not None:
             meas = robot.est.copy()                                   # pose estimée (odométrie + recalage lidar)
@@ -307,10 +308,21 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
             va, wa = va * gv, wa * gw + bw * (abs(va) > 0.05)
             s = s + DT * np.array([va * np.cos(s[2]), va * np.sin(s[2]), wa])
             s[2] = (s[2] + np.pi) % (2 * np.pi) - np.pi
+        if BALAYAGE: ob_avant = world.true_obstacles().copy()
         world.step_obstacles(t, robot=s[:2], react=C.get('react', False)); t += DT
         world.t = t
         path.append(s[:2].copy()); vs.append(v); ws.append(w)
         ob = world.true_obstacles()
+        if BALAYAGE and len(ob) == len(ob_avant) and len(ob):
+            # contrôle entre deux instants (diagnostic, sans effet sur l'issue) : robot et personnes interpolés
+            # linéairement sur 10 sous-pas ; un saut de position (personne replacée) est ignoré
+            lam = np.linspace(0.1, 0.9, 9)[:, None]
+            rp = path[-2][None] + lam * (s[:2] - path[-2])[None]
+            ok = np.hypot(*(ob[:, :2] - ob_avant[:, :2]).T) < 1.0
+            op = ob_avant[None, ok, :2] + lam[:, :, None] * (ob[None, ok, :2] - ob_avant[None, ok, :2])
+            if ok.any():
+                cb = (np.hypot(op[..., 0] - rp[:, None, 0], op[..., 1] - rp[:, None, 1]) - ob[ok, 2][None]).min() - R_ROB
+                marge_bal = min(marge_bal, float(cb))
         clear = np.min(np.hypot(ob[:, 0] - s[0], ob[:, 1] - s[1]) - ob[:, 2]) - R_ROB if len(ob) else np.inf
         clear = min(clear, s[0] - R_ROB, s[1] - R_ROB, SIZE - R_ROB - s[0], SIZE - R_ROB - s[1])
         minclear = min(minclear, clear)
@@ -325,5 +337,6 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
                collision_a_larret=bool(outcome == 'collision' and abs(v_fin) < 0.1), v_fin=v_fin,
                lissage_w=float(np.mean(np.abs(np.diff(ws)))) if len(ws) > 1 else 0.0,
                calcul_ms=1000 * float(np.mean(comp)), calcul_max_ms=1000 * float(np.max(comp)))
+    if BALAYAGE: res['marge_balayee'] = min(marge_bal, float(minclear))
     if record: res['path'] = path
     return res

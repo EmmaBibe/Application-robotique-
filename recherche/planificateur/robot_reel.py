@@ -147,6 +147,6 @@ class TrackerKF:
             for i, (x, P, t0, r) in self.s.items():
                 if i in vus: continue
                 d = self.t - t0
-                extra.append((x[0] + d * x[2], x[1] + d * x[3], x[2], x[3], r, 1, i))
+                extra.append((x[0] + d * x[2], x[1] + d * x[3], x[2], x[3], r, 2, i))   # 2 : piste prolongée, sans mesure à ce cycle
             if extra: out = np.vstack([out, np.array(extra, float)])
         return out

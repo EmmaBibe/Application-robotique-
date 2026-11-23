@@ -631,11 +631,14 @@ class SurpriseTracker:
     et où il est vraiment. Lissée dans le temps, elle donne un indice d'imprévisibilité entre 0 et 1.
     On ne compare que des mesures séparées d'environ une seconde : un agent qui disparaît
     puis réapparaît ne doit pas paraître imprévisible pour autant."""
-    def __init__(self, horizon=1.0, default=0.3):
-        self.h = {}; self.e = {}; self.H = horizon; self.default = default
+    def __init__(self, horizon=1.0, default=0.3, mesures_seules=False):
+        self.h = {}; self.e = {}; self.H = horizon; self.default = default; self.mesures_seules = mesures_seules
 
     def update(self, obs, t):
         for o in obs[obs[:, 5] > 0]:
+            # une piste prolongée par le filtre (colonne « mobile » à 2) n'est pas une mesure : la comparer à sa propre
+            # extrapolation ferait croire que la personne devient prévisible pendant qu'on ne la voit plus
+            if self.mesures_seules and o[5] == 2: continue
             i = int(o[6]); q = self.h.setdefault(i, deque(maxlen=40)); q.append((t, o[:4].copy()))
             while q and t - q[0][0] > self.H + 0.15: q.popleft()
             t0, old = q[0]
