@@ -584,5 +584,20 @@ _e = sim.run_episode(sim.World('carrefour', 6000), P.Memory(P.ALL[54]), cond='to
 check('condition « tout_calcul » : épisode complet, cycles sautés comptés', 'cycles_sautes' in _e and _e['cycles_sautes'] >= 0, f"{_e['outcome']}, {_e['cycles_sautes']} cycles sautés")
 check('« tout » réunit les sept perturbations', sim.COND['tout'] == sim.COND['enfer'] and sim.COND['tout_calcul'] == dict(sim.COND['enfer'], calc=True))
 
+print('35. Portage C++ : mêmes commandes que le JavaScript sur des épisodes enregistrés (parite_cpp.mjs, cpp/rejeu)')
+if _sh.which('node') and _sh.which('g++'):
+    import subprocess as _sp, tempfile as _tf, re as _re
+    with _tf.TemporaryDirectory() as _td:
+        _exe, _rec = os.path.join(_td, 'rejeu'), os.path.join(_td, 'rejeu.txt')
+        _c = _sp.run(['g++', '-O2', '-std=c++17', '-Wall', '-Wextra', '-Werror', '-o', _exe, 'cpp/vigie.cpp', 'cpp/rejeu.cpp'], capture_output=True, text=True)
+        check('le C++ compile sans avertissement', _c.returncode == 0, _c.stderr[-300:])
+        _sp.run(['node', 'parite_cpp.mjs', _rec, '120'], capture_output=True, text=True, check=True)
+        _o = _sp.run([_exe, _rec], capture_output=True, text=True).stdout
+        _m = _re.search(r'SYNTHESE episodes=(\d+) decisions=(\d+) ecart_max=(\S+)', _o)
+        check('10 épisodes rejoués (8 VIGIE 6, 2 DRA-MPPI)', _m is not None and int(_m.group(1)) == 10, _o[-200:])
+        check('écart maximal sur la commande sous 1e-9', _m is not None and float(_m.group(3)) < 1e-9, _m.group(3) if _m else '')
+else:
+    check('node et g++ disponibles pour vérifier le portage C++', False)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

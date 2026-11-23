@@ -249,6 +249,10 @@ COND = {
     # séance 8 : toutes les difficultés à la fois (même contenu qu'« enfer »), puis en comptant aussi le temps de calcul
     'tout': dict(range=5.0, occl=True, drop=0.1, lat=2, slip=True, unknown=True, react=True),
     'tout_calcul': dict(range=5.0, occl=True, drop=0.1, lat=2, slip=True, unknown=True, react=True, calc=True),
+    # temps de calcul fixe, celui que garantit le portage C++ (pire cas mesuré 40 ms sur PC) ou un calculateur embarqué
+    # deux fois et demie plus lent : reproductible au bit près, aucun cycle sauté tant que le délai ne dépasse pas 100 ms
+    'tout_c50': dict(range=5.0, occl=True, drop=0.1, lat=2, slip=True, unknown=True, react=True, calc=True, calc_fixe=0.05),
+    'tout_c100': dict(range=5.0, occl=True, drop=0.1, lat=2, slip=True, unknown=True, react=True, calc=True, calc_fixe=0.10),
 }
 
 
@@ -304,6 +308,7 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
             t0 = time.perf_counter()
             vc, wc = planner.act(t, meas, obs)
             c_dernier = time.perf_counter() - t0; comp.append(c_dernier)
+            if C.get('calc_fixe') is not None: c_dernier = C['calc_fixe']
             if calc: occupe_jusqua = t + c_dernier
             vc = float(np.clip(vc, 0, VMAX)); wc = float(np.clip(wc, -WMAX, WMAX))
         else: sautes += 1

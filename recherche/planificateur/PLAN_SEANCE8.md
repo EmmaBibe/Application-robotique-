@@ -42,3 +42,12 @@ Limite déclarée : les temps de calcul sont ceux de nos programmes Python. Un p
 ## 4. Pistes restantes
 
 Plancher de 0,15 m/s de la prudence aux angles morts ; séparation initiale des piétons ; ce que les chantiers 1 à 3 feront apparaître. Chacune jugée avec la même règle que le chantier 2.
+
+## 5. Ajout après le chantier 3 (écrit avant les essais) : le calcul au rythme du C++
+
+Le chantier 1 a montré qu'avec les temps de calcul Python, VIGIE perd son avance sur DRA-MPPI (+0,3, non significatif). Le portage C++ donne les mêmes commandes (écart maximal 7e-10) avec un pire cas mesuré de 40 ms sur ce PC. On rejoue donc les mêmes mondes avec un délai de calcul fixe, reproductible :
+
+- `tout_c50` : toutes les difficultés, chaque commande prend effet 50 ms après la chaîne (borne du C++ sur PC) ;
+- `tout_c100` : la même chose avec 100 ms (calculateur embarqué environ deux fois et demie plus lent ; c'est la limite au-delà de laquelle des cycles sautent).
+
+Mêmes graines (6000 à 6059), 11 scènes, mêmes 4 méthodes : 5 280 essais. Lecture fixée d'avance : VIGIE 6 contre DRA-MPPI et contre T-MPC++ dans chaque condition, et pour chaque méthode l'écart à `tout`. T-MPC++ reçoit le même délai par hypothèse : il n'est pas porté en C++, on ne sait pas s'il tiendrait ce rythme. La conclusion portera sur VIGIE contre DRA-MPPI, les deux seules méthodes mesurées en C++.
