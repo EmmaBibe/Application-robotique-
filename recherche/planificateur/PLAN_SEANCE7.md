@@ -130,3 +130,5 @@ Relecture extérieure reçue pendant l'évaluation finale. Ce qui a été vérif
 **Contrôle C, contacts entre deux instants** : diagnostic `BALAYAGE=1` (robot et personnes interpolés sur 9 sous-pas, sans effet sur l'issue) pendant les contrôles A et B. On rapporte, par méthode, la part des essais réussis avec un contact manqué.
 
 Points notés pour plus tard, non testés ici : temps de calcul compté dans la boucle (commande appliquée avec le retard du calcul), conditions croisées (perception limitée et piétons réactifs), séparation initiale des piétons (ils ne se gênent pas entre eux dans le simulateur : un chevauchement au départ ne fausse pas le robot mais n'est pas réaliste), plancher de 0,15 m/s de la prudence aux angles morts.
+
+**Résultats (23 novembre 2026)** : A, avance architecturale (VIGIE 6 [400] contre DRA-MPPI [400] +4,7 [+2,0 ; +7,4] ; VIGIE 6 contre DRA-MPPI [912] +5,6 [+3,0 ; +8,3] ; DRA-MPPI [2800] 81,0 %). B, VIGIE 6.1 non adoptée (+0,2 [−0,4 ; +0,8] contre VIGIE 6, aucune régression) ; VIGIE 6 reste la référence. C, aucun contact manqué entre deux instants. Détail dans JOURNAL.md.

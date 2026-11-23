@@ -709,4 +709,37 @@ Relecture de l'application reçue pendant l'évaluation finale ; chaque point v�
 - **Exact mais sans effet sur la comparaison** : chevauchement initial de piétons (ils ne se gênent pas entre eux dans le simulateur) ; tirage des piétons réactifs fixé par leur rang (23 sur 26 en foule dense, pas 70 % par monde), identique pour toutes les méthodes ; plancher de vitesse de 0,15 m/s de la prudence aux angles morts.
 - **Déjà traité** : variance propre à chaque piste (§11, écartée) ; escompte 0,97 (comparé sans escompte) ; modèle moteur dans la prédiction (VIGIE 4) ; comportement des piétons (condition réactive).
 
-Correction préparée : la colonne « mobile » vaut 2 pour une piste prolongée (même comportement pour tout le code, vérifié au bit près sur des épisodes de référence), et l'indice d'imprévisibilité de `VIGIE 6.1` ignore ces pistes. Tests : 238 vérifications réussies ; seul échec pendant la rédaction, le fichier de l'évaluation encore incomplet.
+Correction préparée : la colonne « mobile » vaut 2 pour une piste prolongée (même comportement pour tout le code, vérifié au bit près sur des épisodes de référence), et l'indice d'imprévisibilité de `VIGIE 6.1` ignore ces pistes. Tests : 241 vérifications réussies, aucun échec, une fois le fichier de l’évaluation complet.
+
+## Résultats des contrôles A, B et C (23 novembre 2026)
+
+Lecture fixée d'avance dans PLAN_SEANCE7.md §13, appliquée telle quelle.
+
+**A, budget de calcul égal** (graines 1460 à 1499, vision complète et perception limitée, 880 situations appariées avec la validation) :
+
+| Méthode | Tirages par cycle | Succès | Calcul médian |
+|---|---|---|---|
+| VIGIE 6 | 912 | 86,7 % | 48 ms |
+| VIGIE 6 [400 tirages] | 400 | 86,0 % | 37 ms |
+| DRA-MPPI réglé | 400 | 81,4 % | 6 ms |
+| DRA-MPPI [912 tirages] | 912 | 81,1 % | 14 ms |
+| DRA-MPPI [2800 tirages] | 2800 | 81,0 % | 55 ms |
+
+- VIGIE 6 [400] contre DRA-MPPI [400] : +4,7 points [+2,0 ; +7,4].
+- VIGIE 6 contre DRA-MPPI [912] : +5,6 [+3,0 ; +8,3] ; contre DRA-MPPI [2800], à temps de calcul comparable : +5,7 [+3,1 ; +8,2].
+- Plus de tirages n'aident pas DRA-MPPI (−0,2 et −0,3, non significatif) ; moins de tirages coûtent peu à VIGIE 6 (−0,7, non significatif).
+- **Verdict : l'avance est architecturale.** Conséquence pratique : la version à 400 tirages suffit pour un calculateur embarqué.
+
+**B, VIGIE 6.1** (graines neuves 1500 à 1539, trois conditions, 1 320 situations) :
+
+- Succès : VIGIE 6.1 90,2 %, VIGIE 6 90,0 %, DRA-MPPI 86,4 %.
+- VIGIE 6.1 contre VIGIE 6 : +0,2 [−0,4 ; +0,8]. Résultats identiques au bit près en vision complète et avec piétons réactifs (aucune piste prolongée sans masquage, ce qui confirme que la correction ne touche rien d'autre) ; en perception limitée +0,7 [−1,1 ; +2,7], 11 essais gagnés pour 8 perdus.
+- **Verdict : non adoptée** (seuil fixé à +1 point). La correction est juste sur le principe et ne fait rien régresser, mais son effet est trop faible pour être démontré ; VIGIE 6 reste la référence et le défaut reste documenté (test 33).
+- Réplication au passage sur graines neuves : VIGIE 6 contre DRA-MPPI +3,6 [+1,7 ; +5,5], cohérent avec l'évaluation finale (+3,8).
+
+**C, contacts entre deux instants** (diagnostic `BALAYAGE=1` sur les 6 600 essais de A et B) :
+
+- Aucun essai réussi ne cache un contact, pour aucune méthode. Entre deux instants de décision, la marge ne descend au plus que de 1,2 cm sous celle mesurée aux instants (0,09 cm en moyenne).
+- Vérification de la mesure : toujours au moins aussi sévère que le contrôle aux instants, et négative pour les 774 collisions enregistrées. Le pas de contrôle de 0,1 s ne fausse donc pas les résultats.
+
+**Calcul, mesuré sur un cœur (Xeon 2,1 GHz, Python)** : VIGIE 6 55 ms en moyenne par cycle, pire cas 381 ms ; DRA-MPPI 10 ms, pire cas 22 ms. Les pics viennent du planificateur espace-temps (`spacetime_plan2`), écrit en Python pur et appelé environ un cycle sur dix ; il devra être réécrit en C++ ou tourner en parallèle de la boucle de commande avant tout essai sur robot.

@@ -11,11 +11,12 @@ Banc d'essai pour inventer et évaluer de nouveaux algorithmes de planification 
 | `sim.py` | simulateur : robot unicycle (limites de vitesse et d'accélération, bruit d'actionneur et de mesure), obstacles fixes et mobiles qui changent d'intention sans prévenir, 7 scènes, 7 conditions de perturbation |
 | `planners.py` | les planificateurs : références classiques, références récentes, nos propositions et un oracle |
 | `bench.py` | campagne de tests en parallèle, résultats en CSV |
+| `controles.py` | même campagne avec le contrôle des contacts entre deux instants (`marge_balayee`) |
 | `analyse.py` | tableaux par scène, comparaisons appariées avec intervalles de confiance (bootstrap) |
 | `figures.py` | trajectoires de plusieurs planificateurs sur un même monde |
 | `CARTOGRAPHIE.md` | revue des domaines d'inspiration (physique, biologie, finance, navigation maritime…) |
 | `robot_reel.py` | chaîne d'actionneurs réaliste (retard, régulateur de roues, masse) et filtre de suivi des personnes (Kalman) |
-| `tests_banc.py` | 228 vérifications de cohérence du banc, à lancer avant toute campagne (dont la fidélité du portage JavaScript, test 32) |
+| `tests_banc.py` | 241 vérifications de cohérence du banc, à lancer avant toute campagne (dont la fidélité du portage JavaScript, test 32) |
 | `faisabilite.py` | borne de faisabilité : le meilleur temps possible en connaissant le futur |
 | `references.py` | références de l'état de l'art codées d'après leurs publications (T-MPC++, DRA-MPPI), adaptations déclarées, variantes de réglage |
 | `vigie_risque.py` | VIGIE 6 et ses briques : probabilité de collision, même marge, cohérence de route, planificateur libre ; variantes testées |
