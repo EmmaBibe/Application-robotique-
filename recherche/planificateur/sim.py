@@ -16,11 +16,15 @@ T_MAX = 45.0
 
 
 class World:
-    def __init__(self, name, seed, version=None):
+    def __init__(self, name, seed, version=None, pietons=None):
         self.name, self.seed = name, seed
         # version 2 des mondes (relecture extérieure du 23 novembre) : placement valide des personnes et piétons qui
         # contournent les obstacles fixes au lieu de les traverser. Version 1 par défaut, inchangée au bit près.
         self.version = int(version or os.environ.get('MONDE', 1))
+        # modèle de marche des piétons : « simple » (vitesse imposée, ils ne s'évitent pas entre eux) ou « sfm » (forces
+        # sociales de Helbing et Molnár, 1995 : chacun tend vers sa vitesse voulue et s'écarte des autres et des obstacles)
+        self.pietons = pietons or os.environ.get('PIETONS', 'simple')
+        assert self.pietons in ('simple', 'sfm') and (self.pietons == 'simple' or self.version >= 2)
         self.nrng = np.random.default_rng(10_000 + seed)   # bruit de mesure, séparé de l'évolution du monde
         self.keepout = []
         self.start = np.array([1.5, 10.0, 0.0])
@@ -206,7 +210,38 @@ class World:
                                  sp=self.rng.uniform(0.75, 1.05), reactif=False))   # recalibré pour un robot réaliste
 
     # ------------------------------------------------------------ évolution
+    # forces sociales : paramètres de Helbing et al. (2000) ramenés à l'unité de masse
+    SFM_A, SFM_B, SFM_TAU, SFM_LAMBDA, SFM_AW, SFM_BW = 2.1, 0.3, 0.5, 0.35, 3.0, 0.2
+
+    def _forces_sociales(self):
+        n = len(self.dyn); F = np.zeros((n, 2))
+        if n == 0: return F
+        P = np.array([o['p'] for o in self.dyn]); R = np.array([o['r'] for o in self.dyn])
+        V = np.array([o.get('vs', o['v']) for o in self.dyn])
+        sp = np.hypot(V[:, 0], V[:, 1]); E = V / np.maximum(sp, 1e-9)[:, None]
+        D = P[:, None, :] - P[None, :, :]; dist = np.hypot(D[..., 0], D[..., 1]); np.fill_diagonal(dist, np.inf)
+        N = D / np.maximum(dist, 1e-9)[..., None]
+        mag = self.SFM_A * np.exp((R[:, None] + R[None, :] - dist) / self.SFM_B)
+        cosphi = -(N * E[:, None, :]).sum(-1)                       # l'autre est-il devant moi ?
+        w = self.SFM_LAMBDA + (1 - self.SFM_LAMBDA) * (1 + cosphi) / 2
+        F += (mag * w)[..., None].__mul__(N).sum(1)
+        if len(self.static):
+            Ds = P[:, None, :] - self.static[None, :, :2]; ds = np.hypot(Ds[..., 0], Ds[..., 1])
+            Ns = Ds / np.maximum(ds, 1e-9)[..., None]
+            F += (self.SFM_AW * np.exp((R[:, None] + self.static[None, :, 2] - ds) / self.SFM_BW))[..., None].__mul__(Ns).sum(1)
+        return F
+
+    def _vitesse(self, o, j):
+        """Vitesse réellement suivie pendant ce pas : la vitesse voulue (modèle simple) ou la relaxation vers elle sous
+        l'effet des forces sociales (modèle sfm)."""
+        if self.pietons != 'sfm': return o['v']
+        vs = o.get('vs', o['v'].copy()); vs = vs + DT * ((o['v'] - vs) / self.SFM_TAU + self._F[j])
+        lim = max(1.3 * np.hypot(*o['v']), 0.6); n = np.hypot(*vs)
+        if n > lim: vs = vs / n * lim
+        o['vs'] = vs; return vs
+
     def step_obstacles(self, t, robot=None, react=False):
+        if self.pietons == 'sfm': self._F = self._forces_sociales()
         for j, o in enumerate(self.dyn):
             if self.version >= 2: o['_p0'] = o['p'].copy()
             if react and robot is not None and o['reactif']:
@@ -234,13 +269,13 @@ class World:
                         o['p'] = np.array([-5.0, -5.0]); o['v'] = np.zeros(2)   # attend hors de l'arène
                         continue
             if o['kind'] == 'flux':
-                o['p'] = o['p'] + o['v'] * DT
+                o['p'] = o['p'] + self._vitesse(o, j) * DT
                 if o['p'][1] > SIZE + 0.4: o['p'][1] -= SIZE + 0.8
                 if o['p'][1] < -0.4: o['p'][1] += SIZE + 0.8
                 if self.version >= 2: self._contourner(o, j)
                 continue
             if o['kind'] in ('chasseur', 'porte'):
-                o['p'] = o['p'] + o['v'] * DT
+                o['p'] = o['p'] + self._vitesse(o, j) * DT
                 if self.version >= 2: self._contourner(o, j)
                 continue
             if o['kind'] == 'errant':
@@ -255,10 +290,11 @@ class World:
                 elif o['mode'] == 'droite': o['v'] = np.array([c * o['v'][0] + s * o['v'][1], -s * o['v'][0] + c * o['v'][1]])
                 elif o['mode'] == 'arret': o['v'] = o['v'] * 0.0
                 elif o['mode'] == 'accel': o['v'] = o['v'] * 1.6
-            o['p'] = o['p'] + o['v'] * DT
+            o['p'] = o['p'] + self._vitesse(o, j) * DT
             for k in (0, 1):   # rebond sur les murs de l'arène
                 if o['p'][k] < o['r'] or o['p'][k] > SIZE - o['r']:
                     o['v'][k] *= -1; o['p'][k] = np.clip(o['p'][k], o['r'], SIZE - o['r'])
+                    if 'vs' in o: o['vs'][k] *= -1
             if self.version >= 2: self._contourner(o, j)
 
     def obstacles(self, noise=0.0, robot=None, rng_range=None, occl=False, drop=0.0):

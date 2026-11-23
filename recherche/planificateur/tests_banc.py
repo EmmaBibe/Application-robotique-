@@ -618,5 +618,24 @@ check('pendant le trajet, aucun piéton ne s\'enfonce de plus de 12 cm dans un o
 _w1 = sim.World('couloir', 8001); _w1b = sim.World('couloir', 8001, version=1)
 check('version 1 par défaut et identique', _w1.version == 1 and all(np.array_equal(a['p'], b['p']) for a, b in zip(_w1.dyn, _w1b.dyn)))
 
+print('37. Second modèle de piétons (forces sociales) : moins de contacts entre piétons, reproductible')
+def _contacts(mod):
+    c = 0; n = 0
+    for _sd in range(8000, 8004):
+        _w = sim.World('foule_dense', _sd, version=2, pietons=mod)
+        for _k in range(80):
+            _w.step_obstacles(_k * 0.1)
+            _P = np.array([o['p'] for o in _w.dyn]); _D = np.hypot(*(_P[:, None] - _P[None]).transpose(2, 0, 1)); np.fill_diagonal(_D, 9)
+            c += int(((0.7 - _D) > 0).sum() // 2); n += len(_w.dyn)
+    return c / n
+_cs, _cf = _contacts('simple'), _contacts('sfm')
+check('foule dense : au moins deux fois moins de contacts entre piétons', _cf < _cs / 2, f'{_cs:.4f} -> {_cf:.4f}')
+_a, _b = sim.World('goulot', 8005, version=2, pietons='sfm'), sim.World('goulot', 8005, version=2, pietons='sfm')
+for _k in range(50): _a.step_obstacles(_k * 0.1); _b.step_obstacles(_k * 0.1)
+check('même monde, même évolution au bit près', all(np.array_equal(x['p'], y['p']) for x, y in zip(_a.dyn, _b.dyn)))
+try: sim.World('foule', 8000, version=1, pietons='sfm'); _refus = False
+except AssertionError: _refus = True
+check('le modèle à forces sociales exige les mondes version 2', _refus)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

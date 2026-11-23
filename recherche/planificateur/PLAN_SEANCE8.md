@@ -66,3 +66,13 @@ Contrôle sur les graines 8000 à 8039 : plus aucun chevauchement au départ (au
 **Campagne** : graines neuves 8000 à 8059, 11 scènes, les trois conditions de l'évaluation finale (vision complète, perception limitée, piétons réactifs), robot réaliste, méthodes VIGIE 6 (71), T-MPC++ (49), DRA-MPPI réglé (54) : 5 940 essais.
 
 **Lecture fixée d'avance** : VIGIE 6 contre DRA-MPPI et contre T-MPC++, globalement et par condition, avec le même bootstrap apparié (et sa version par grappes et par scène). L'avance de VIGIE sur DRA-MPPI est dite **robuste à la correction** si elle reste significative sur ces mondes. Les quatre scènes touchées (carrefour, carrefour rapide, couloir, piège) sont aussi lues à part. Aucune méthode n'est modifiée ou réglée sur ces mondes.
+
+## 7. Un second modèle de piétons (écrit avant les essais)
+
+Idée reprise de PEDS (IEEE RA-L 2026) : la réussite d'un même robot peut varier de 14 points, et jusqu'à 30 en foule dense, selon le modèle qui fait marcher les piétons. Nos piétons « simples » suivent leur vitesse voulue sans s'éviter entre eux. On ajoute un second modèle, les forces sociales de Helbing et Molnár (1995), avec les paramètres de Helbing et al. (2000) ramenés à l'unité de masse : chacun tend vers sa vitesse voulue (temps de relaxation 0,5 s), s'écarte des autres (A = 2,1 m/s², B = 0,3 m, champ de vision anisotrope λ = 0,35) et des obstacles fixes (A = 3, B = 0,2 m). Les intentions (changements de direction, arrêts, accélérations, poursuite, passage de la porte) et la réaction au robot (condition « piétons réactifs ») restent celles du modèle simple ; seul le mouvement entre les personnes change. Mondes version 2 seulement (`PIETONS=sfm`).
+
+Contrôle sur les graines 8000 à 8019 : contacts entre piétons divisés par 3 à 50 selon la scène (foule dense 0,057 → 0,017 contact par piéton et par pas ; porte étroite 0,54 → 0,010), vitesse moyenne réduite de 5 à 12 %. Il reste des contacts quand une personne qui sort d'un côté de l'arène réapparaît de l'autre sur quelqu'un (traversée, porte étroite).
+
+**Campagne** : mêmes graines (8000 à 8059), mêmes 11 scènes, mêmes trois conditions et mêmes trois méthodes que la campagne §6 : 5 940 essais.
+
+**Lecture fixée d'avance** : VIGIE 6 contre DRA-MPPI et contre T-MPC++ avec ce modèle de piétons. L'avance de VIGIE est dite **robuste au modèle de piétons** si elle reste significative contre DRA-MPPI. Pour chaque méthode, on donne aussi l'écart de réussite entre les deux modèles de piétons sur les mêmes mondes de départ (ce n'est pas une comparaison de méthodes, c'est la sensibilité de chacune au modèle).
