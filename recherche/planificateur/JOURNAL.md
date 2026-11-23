@@ -748,3 +748,40 @@ Lecture fixée d'avance dans PLAN_SEANCE7.md §13, appliquée telle quelle.
 
 - **Éditeur de monde** (simulateur 3D, commun aux deux applications) : déplacer l'arrivée et le départ, poser ou retirer des obstacles, poser des personnes (marche avec changement d'avis, flâne, suit le robot, immobile) avec leur direction et leur vitesse, partir d'une scène du banc, annuler, code de partage. Le monde dessiné (`scene = 'perso'`) est construit tel quel par `World` à partir d'une description bornée (`normalizeSpec` : positions dans l'arène, rayons, vitesses et nombre d'éléments limités) ; les planificateurs ne changent pas. Vérifié : arrivée derrière le robot, en haut, en bas ; mur complet (indicateur « aucun passage », VIGIE attend, la référence heurte) ; chaque type de personne dans les trois conditions ; codes invalides ; parcours complet à la souris dans les deux applications, téléphone et grand écran, sans erreur.
 - **Relecture** : fidélité JavaScript/Python toujours exacte (33 vérifications). Corrigé : nombre de tests et écart de validation périmés dans le simulateur 3D ; DRA-MPPI présenté comme « la meilleure référence » alors que T-MPC++ fait mieux que lui à l'évaluation finale ; « personnes qui ne le voient pas » sans mentionner la condition réactive ; avance de VIGIE 3 face aux références fidèles « nulle » alors que l'évaluation finale lui trouve +2,5 ; phrase de RoboMaster qui disait que seule la course VIGIE 2 contre MPPI était interactive ; barre du simulateur coupée sur ordinateur (boutons hors de vue) ; éditeur mal placé sous le menu latéral de RoboMaster sur grand écran.
+
+## Séance 8, chantier 1 : toutes les difficultés à la fois
+
+Plan écrit avant les essais : PLAN_SEANCE8.md §1. Graines neuves 6000 à 6059, 11 scènes, 4 méthodes, 2 conditions, 5 280 essais (`seance8_tout.csv`, analyse complète dans `seance8_tout_analyse.txt`).
+
+**Condition `tout`** (les sept perturbations ensemble, reproductible) :
+
+| Méthode | Succès | Collisions en roulant | Temps dépassé |
+|---|---|---|---|
+| T-MPC++ | 85,5 % | 14,1 % | 0,3 % |
+| VIGIE 6 | 84,5 % | 14,1 % | 1,2 % |
+| VIGIE 6 [400] | 83,5 % | 14,4 % | 1,8 % |
+| DRA-MPPI | 81,2 % | 17,0 % | 1,8 % |
+
+- VIGIE 6 contre DRA-MPPI : +3,3 [+0,3 ; +6,5], significatif. L'avance tient quand tout se cumule, un peu réduite (+3,8 à l'évaluation finale).
+- VIGIE 6 contre T-MPC++ : −0,9 [−3,8 ; +2,1], jeu égal. T-MPC++ reste 1,35 s plus rapide par trajet.
+- VIGIE 6 [400] contre VIGIE 6 : −1,1 [−3,8 ; +1,8], non significatif.
+- À noter pour le chantier 2 : en poursuite, VIGIE perd nettement face à T-MPC++ (−16,7 points sur 60 mondes) ; il gagne largement à la porte étroite et au piège face à DRA-MPPI (+18,3 et +15,0).
+
+**Condition `tout_calcul`** (la même chose, le temps de calcul Python compte) :
+
+| Méthode | Succès | Calcul médian | Pire cas médian | Cycles sautés par trajet |
+|---|---|---|---|---|
+| VIGIE 6 | 82,1 % | 51 ms | 453 ms | 33,5 |
+| DRA-MPPI | 81,8 % | 8 ms | 127 ms | 2,6 |
+| VIGIE 6 [400] | 81,4 % | 37 ms | 437 ms | 31,9 |
+| T-MPC++ | 76,5 % | 96 ms | 254 ms | 50,7 |
+
+- VIGIE 6 contre DRA-MPPI : +0,3 [−2,7 ; +3,3]. **L'avance disparaît** quand le calcul Python ralentit les décisions.
+- VIGIE 6 contre T-MPC++ : +5,6 [+2,1 ; +9,1], significatif. Mais T-MPC++ est le plus lent des quatre en Python ; cet écart mesure surtout la lenteur des programmes, pas les méthodes. Il ne permet pas de dire que VIGIE bat T-MPC++.
+- Effet du calcul (`tout_calcul` − `tout`, mêmes mondes) : T-MPC++ −8,9 [−12,1 ; −5,9], significatif ; VIGIE 6 −2,4 [−5,5 ; +0,6] ; VIGIE 6 [400] −2,1 ; DRA-MPPI +0,6.
+
+**Lecture selon le plan :**
+
+- VIGIE 6 [400] ne fait pas mieux que VIGIE 6 dans `tout_calcul` (−0,8, non significatif) : la règle fixée d'avance garde VIGIE 6 comme version de référence. La version à 400 tirages reste un repli valable sur un calculateur faible (aucun écart démontré).
+- Le message principal est pratique : en Python, VIGIE réfléchit trop lentement pour garder son avance sur la méthode la plus simple quand toutes les difficultés s'additionnent. Les pics à 450 ms, qui font sauter des cycles, viennent du planificateur espace-temps. Le portage C++ (chantier 3) n'est donc pas une option mais une condition pour un robot réel, et il faudra rejouer `tout_calcul` avec les temps C++.
+- Limite déclarée : temps mesurés sur nos programmes Python ; T-MPC++ et DRA-MPPI n'ont pas été portés en C++, le classement « en C++ » reste inconnu.

@@ -1,0 +1,63 @@
+5280 essais ; par méthode et condition :
+m            DRA-MPPI  T-MPC++  VIGIE 6  VIGIE 6 [400]
+cond                                                  
+tout              660      660      660            660
+tout_calcul       660      660      660            660 
+
+=== tout (660 mondes appariés)
+               succes  col_mvt  temps_depasse  calcul_moy  calcul_max  cycles_sautes
+m                                                                                   
+DRA-MPPI         81.2     17.0            1.8         7.8       127.6            NaN
+T-MPC++          85.5     14.1            0.3        90.5       235.2            NaN
+VIGIE 6          84.5     14.1            1.2        51.2       466.1            NaN
+VIGIE 6 [400]    83.5     14.4            1.8        38.5       448.1            NaN
+  VIGIE 6 − DRA-MPPI : +3.3 [+0.3 ; +6.5]*   gagnés 68, perdus 46
+  VIGIE 6 − T-MPC++ : -0.9 [-3.8 ; +2.1]   gagnés 47, perdus 53
+  VIGIE 6 [400] − VIGIE 6 : -1.1 [-3.8 ; +1.8]   gagnés 39, perdus 46
+  VIGIE 6 [400] − T-MPC++ : -2.0 [-5.2 ; +1.4]   gagnés 48, perdus 61
+  T-MPC++ − DRA-MPPI : +4.2 [+0.8 ; +7.7]*   gagnés 84, perdus 56
+  temps de trajet VIGIE 6 − T-MPC++ sur 511 succès communs : +1.35 s
+  par scène (VIGIE 6 − DRA-MPPI ; VIGIE 6 − T-MPC++) :
+    carrefour           +3.3 ;   +0.0
+    carrefour_rapide    -3.3 ;   +0.0
+    coin_aveugle        +8.3 ;   -3.3
+    couloir             +1.7 ;   -1.7
+    foret               +1.7 ;   +5.0
+    foule               -5.0 ;   +1.7
+    foule_dense         +0.0 ;   +0.0
+    goulot             +18.3 ;   +0.0
+    piege              +15.0 ;   +3.3
+    poursuite           -8.3 ;  -16.7
+    traversee           +5.0 ;   +1.7
+
+=== tout_calcul (660 mondes appariés)
+               succes  col_mvt  temps_depasse  calcul_moy  calcul_max  cycles_sautes
+m                                                                                   
+DRA-MPPI         81.8     15.8            2.3         7.7       127.2            2.6
+T-MPC++          76.5     23.0            0.2        96.0       254.1           50.7
+VIGIE 6          82.1     17.0            0.5        50.8       453.2           33.5
+VIGIE 6 [400]    81.4     16.2            1.8        37.4       437.2           31.9
+  VIGIE 6 − DRA-MPPI : +0.3 [-2.7 ; +3.3]   gagnés 55, perdus 53
+  VIGIE 6 − T-MPC++ : +5.6 [+2.1 ; +9.1]*   gagnés 89, perdus 52
+  VIGIE 6 [400] − VIGIE 6 : -0.8 [-3.6 ; +2.3]   gagnés 46, perdus 51
+  VIGIE 6 [400] − T-MPC++ : +4.8 [+1.4 ; +8.3]*   gagnés 86, perdus 54
+  T-MPC++ − DRA-MPPI : -5.3 [-8.9 ; -1.5]*   gagnés 60, perdus 95
+  temps de trajet VIGIE 6 − T-MPC++ sur 453 succès communs : +1.38 s
+  par scène (VIGIE 6 − DRA-MPPI ; VIGIE 6 − T-MPC++) :
+    carrefour           +1.7 ;  +13.3
+    carrefour_rapide    -5.0 ;   +5.0
+    coin_aveugle        +3.3 ;  +10.0
+    couloir            +10.0 ;   -1.7
+    foret               -1.7 ;  +10.0
+    foule               -5.0 ;   +3.3
+    foule_dense         -8.3 ;   -6.7
+    goulot             +11.7 ;  +23.3
+    piege               +8.3 ;   -1.7
+    poursuite           -8.3 ;   +1.7
+    traversee           -3.3 ;   +5.0
+
+=== Effet du temps de calcul (tout_calcul − tout, mêmes mondes)
+  VIGIE 6        -2.4 [-5.5 ; +0.6]
+  VIGIE 6 [400]  -2.1 [-4.8 ; +0.8]
+  T-MPC++        -8.9 [-12.1 ; -5.9]*
+  DRA-MPPI       +0.6 [-2.0 ; +3.2]
