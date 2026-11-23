@@ -71,11 +71,7 @@
     }
     if (n === 4) body += `<path transform="translate(9.6 2) scale(.7)" d="M32 9 l2.6 5.3 5.8.8-4.2 4.1 1 5.8L32 22.3 26.8 25l1-5.8-4.2-4.1 5.8-.8z" fill="${metal}"/>`;
     const bars = '';
-    return `<svg class="insignia" width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><defs>
-      <linearGradient id="gCopper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc79a"/><stop offset=".5" stop-color="#e0844a"/><stop offset="1" stop-color="#9c4a1f"/></linearGradient>
-      <linearGradient id="gSilver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#b9c3cf"/><stop offset="1" stop-color="#6b7684"/></linearGradient>
-      <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2b0"/><stop offset=".5" stop-color="#f2b83a"/><stop offset="1" stop-color="#a86b0c"/></linearGradient>
-      </defs><path d="M32 2 L58 12 V34 C58 48 46 58 32 62 C18 58 6 48 6 34 V12 Z" class="ins-shield"/>${body}${bars}
+    return `<svg class="insignia" width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 2 L58 12 V34 C58 48 46 58 32 62 C18 58 6 48 6 34 V12 Z" class="ins-shield"/>${body}${bars}
 </svg>`;
   };
 
