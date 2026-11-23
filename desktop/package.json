@@ -1,7 +1,7 @@
 {
   "name": "robomaster",
   "productName": "RoboMaster",
-  "version": "2.1.0",
+  "version": "2.5.0",
   "description": "De zéro au Master Robotique : parcours interactif",
   "main": "main.js"
 }

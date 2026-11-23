@@ -1,6 +1,6 @@
 # Application VIGIE
 
-Application mobile dédiée au planificateur VIGIE : comprendre de l'intérieur comment il perçoit, imagine et décide, face à la meilleure référence publiée (DRA-MPPI).
+Application mobile dédiée au planificateur VIGIE : comprendre de l'intérieur comment il perçoit, imagine et décide, face à DRA-MPPI, la référence publiée qu'il affronte en direct. Une seconde référence, T-MPC++, figure dans les résultats du banc de recherche.
 
 ## Ce qu'elle contient
 
@@ -10,7 +10,7 @@ Application mobile dédiée au planificateur VIGIE : comprendre de l'intérieur 
 | Simulateur | le simulateur 3D « Dans la tête de VIGIE », plein écran ; mode pronostic (deviner qui atteindra le drapeau avant de regarder) ; code de monde à partager |
 | Atelier « et si… ? » | modifier un réglage de VIGIE (fidélité, poids du danger, itinéraires, chemin qui sait attendre, improvisation, prudence aux angles morts, essais) et le faire courir contre le VIGIE officiel et la référence |
 | Banc de poche | comparer VIGIE 6 et la référence sur une série de mondes, avec écart apparié et intervalle de confiance (bootstrap), comme dans le banc de recherche |
-| Savoir | VIGIE en une page, son histoire de la version 1 à 6, les résultats, les idées abandonnées, les références, le glossaire, les limites |
+| Savoir | VIGIE en une page, son histoire de la version 1 à 6, les résultats (évaluation finale, toutes les difficultés à la fois, portage C++), les idées abandonnées, les références, une fiche technique pour un relecteur, le glossaire, les limites |
 | Réglages | thème, qualité graphique, données locales |
 
 ## Une seule version de VIGIE
