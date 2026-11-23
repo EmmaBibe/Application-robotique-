@@ -834,3 +834,29 @@ Chaque point a été vérifié dans le code du banc avant d'en tirer quoi que ce
 2. Robustesse au modèle de piétons, l'idée centrale de PEDS : faire marcher les piétons selon un second modèle (forces sociales ou ORCA) et voir si l'avance de VIGIE tient.
 3. Application : graine de départ choisie, export CSV des essais du banc de poche.
 4. Plus tard : T-MPC++ depuis son code officiel avec Acados, si l'interface ROS 2 peut être branchée au banc.
+
+## Séance 8 : le calcul au rythme du C++ (plan, section 5)
+
+Mêmes 660 mondes que le chantier 1 (graines 6000 à 6059, 11 scènes), toutes les difficultés, avec un délai de calcul fixe : 50 ms (pire cas du C++ sur ce PC) puis 100 ms (calculateur embarqué plus lent). 5 280 essais, campagne complète. Détail dans `seance8_cpp_analyse.txt`.
+
+| Réussite (%) | tout, sans délai | délai 50 ms | délai 100 ms | délai Python mesuré |
+|---|---|---|---|---|
+| T-MPC++ | 85,5 | 82,4 | 80,2 | 76,5 |
+| VIGIE 6 | 84,5 | 82,7 | 80,3 | 82,1 |
+| VIGIE 6 à 400 trajectoires | 83,5 | 83,6 | 81,7 | 81,4 |
+| DRA-MPPI | 81,2 | 79,8 | 78,8 | 81,8 |
+
+Écarts appariés (bootstrap 4 000 tirages ; le tirage stratifié par scène donne les mêmes bornes à 0,1 point près) :
+
+- **VIGIE 6 − DRA-MPPI** : +2,9 [−0,2 ; +5,9] à 50 ms, +1,5 [−1,5 ; +4,5] à 100 ms. Aucun des deux n'est significatif.
+- VIGIE 6 à 400 trajectoires − DRA-MPPI : +3,8 [+0,6 ; +7,1] à 50 ms (significatif), +2,9 [−0,5 ; +6,1] à 100 ms.
+- VIGIE 6 − T-MPC++ : +0,3 [−3,0 ; +3,5] à 50 ms, +0,2 [−2,9 ; +3,2] à 100 ms. Égalité.
+- Coût du délai pour chaque méthode, à 50 puis 100 ms : VIGIE 6 −1,8 puis −4,2 (significatif) ; 400 trajectoires +0,2 puis −1,8 ; T-MPC++ −3,0 puis −5,3 (tous deux significatifs) ; DRA-MPPI −1,4 puis −2,4.
+
+**Lecture, selon la règle écrite avant les essais (VIGIE contre DRA-MPPI seulement) :**
+
+1. Le C++ rend à VIGIE l'essentiel de l'avance que le Python lui faisait perdre : on passe de +0,3 (délai Python) à +2,9 à 50 ms. Mais l'intervalle touche zéro : on ne peut pas écrire que VIGIE 6 bat DRA-MPPI avec toutes les difficultés et le délai du C++. On peut écrire que l'avance mesurée sans délai (+3,3) n'est que peu entamée à 50 ms et qu'elle fond à 100 ms.
+2. La version à 400 trajectoires est la seule dont l'avance reste significative à 50 ms. Attention : le délai est le même pour toutes les méthodes, donc ce n'est pas sa vitesse qui joue ici. Elle encaisse mieux le retard, sans qu'on sache encore pourquoi ; écart avec VIGIE 6 non significatif (+0,9 [−1,8 ; +3,5]). Ce n'est pas une raison suffisante pour changer de réglage par défaut, mais c'est la piste à garder pour un calculateur embarqué.
+3. T-MPC++ a reçu le même délai par hypothèse (il n'est pas porté). C'est lui qui en souffre le plus ; l'égalité avec VIGIE à 50 et 100 ms dépend donc de cette hypothèse et ne sera pas présentée comme une victoire.
+
+Ce qui reste vrai : sur le banc nominal et les conditions séparées, l'avance de VIGIE sur DRA-MPPI est établie (évaluation finale, +3,8) ; dès qu'on empile toutes les difficultés avec un retard de calcul réaliste, elle n'est plus démontrée à la taille d'échantillon actuelle.
