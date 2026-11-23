@@ -6,9 +6,9 @@ import { DT, VMAX, WMAX, RealRobot, makeTracker, makeRand } from '../vigie-core.
 import { World, COND, T_MAX } from './world.js';
 import { PLANNERS } from './planners.js';
 
-export function createEpisode(scene, seed, which, condName = 'nominal', params = {}) {
+export function createEpisode(scene, seed, which, condName = 'nominal', params = {}, spec = null) {
   const C = { ...COND[condName] };
-  const world = new World(scene, seed);
+  const world = new World(scene, seed, spec);
   const planner = new PLANNERS[which](seed, params);
   const robot = new RealRobot([...world.start], makeRand(777 + seed));
   const tracker = makeTracker();

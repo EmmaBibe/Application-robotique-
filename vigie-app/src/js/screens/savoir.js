@@ -9,7 +9,7 @@ export default function savoir(view) {
     <h1>Ce qu'on sait, et ce qu'on ne sait pas</h1>
     <p class="lead">L'histoire de VIGIE, racontée avec ses réussites et ses erreurs. Tous les chiffres viennent du journal de recherche, essai par essai.</p>
     ${sec('VIGIE en une page', `
-      <p>VIGIE conduit un robot à deux roues (25 kg, 1,5 m/s au plus) jusqu'à un drapeau, parmi des personnes qui ne le voient pas. Dix fois par seconde :</p>
+      <p>VIGIE conduit un robot à deux roues (25 kg, 1,5 m/s au plus) jusqu'à un drapeau, parmi des personnes qui, le plus souvent, ne le voient pas. Dix fois par seconde :</p>
       <ol>
         <li><b>Il regarde.</b> Son capteur mesure où sont les personnes ; un filtre estime leur vitesse et continue de suivre celles qui disparaissent un instant.</li>
         <li><b>Il imagine.</b> Il prolonge la marche de chacun sur 2,5 s, avec une incertitude qui grandit, et mesure qui se montre imprévisible.</li>
@@ -23,7 +23,7 @@ export default function savoir(view) {
       <div class="tl"><b>VIGIE 2</b><span>Séance 3</span><p>Quatre routes, virages francs parmi les essais, compensation du retard des mesures (prédicteur de Smith). Aussi sûr que la référence (95 % contre 95 %) et 0,38 s plus rapide, de façon significative.</p></div>
       <div class="tl"><b>VIGIE 3</b><span>Séances 4 à 6</span><p>Robot réaliste (moteurs, inertie, mesures en retard), scènes plus dures. Une route dans l'espace et le temps qui sait attendre, et la prudence aux angles morts. Sur 60 mondes neufs : nettement meilleur à la porte étroite (+10,8 points) et aux angles morts (+11,7), mais pas d'avance globale significative (+1,9).</p></div>
       <div class="tl ko"><b>VIGIE 4 et 5</b><span>Séances 5 et 6</span><p>VIGIE 4 calcule sa vitesse le long de chaque route avec la dynamique du robot et un modèle interne de ses moteurs ; VIGIE 5 ajoute une règle inspirée du code de la route (ne pas s'engager si l'on risque d'être bloqué). Aucun gain confirmé sur des mondes neufs : ni l'un ni l'autre n'est adopté.</p></div>
-      <div class="tl ko"><b>La grande correction</b><span>Séance 7</span><p>En relisant les publications, on découvre que la « référence » utilisée depuis le début était mal attribuée, et plus faible que la vraie méthode publiée. Une fois les vraies références codées et réglées avec le même soin, l'avance de VIGIE 3 disparaît. On l'a dit, et on est reparti de là.</p></div>
+      <div class="tl ko"><b>La grande correction</b><span>Séance 7</span><p>En relisant les publications, on découvre que la « référence » utilisée depuis le début était mal attribuée, et plus faible que la vraie méthode publiée. Une fois les vraies références codées et réglées avec le même soin, l'avance de VIGIE 3 disparaît sur les mondes de mise au point. On l'a dit, et on est reparti de là.</p></div>
       <div class="tl"><b>VIGIE 6</b><span>Séance 7</span><p>On étudie monde par monde où il perd. Trois corrections : la probabilité de collision de DRA-MPPI, une même carte pour ses deux planificateurs, la règle de cohérence de T-MPC ; puis l'improvisation parmi ses options. Sur 40 mondes neufs : +5,3 points face à la meilleure référence. Puis l'évaluation finale, sur 100 mondes jamais utilisés : 88,9 % de réussite contre 85,1 % pour DRA-MPPI, +3,8 points, écart significatif. T-MPC++ fait jeu égal.</p></div>
     </div>`)}
     ${sec('Les résultats d\'aujourd\'hui', `
@@ -63,6 +63,7 @@ export default function savoir(view) {
       <li>Le chemin qui sait attendre est un guide géométrique : la commande l'adapte ensuite à ce que le robot peut faire.</li></ul>`)}
     ${sec('Comment cette application calcule', `
       <p>Le simulateur, l'Atelier et le Banc font tourner les mêmes programmes que le banc de recherche : VIGIE 6, DRA-MPPI, le robot réaliste, le suivi des personnes et les onze scènes, réécrits en JavaScript. 33 tests vérifient que, pour les mêmes entrées, ils prennent les mêmes décisions qu'en Python, au millionième près, et que les réglages de l'Atelier font exactement ce qu'ils annoncent. Les mondes sont tirés au hasard selon les mêmes règles que le banc.</p>
-      <p>Tout se calcule sur ton téléphone, hors ligne. Rien n'est envoyé ailleurs.</p>`)}
+      <p>Dans le simulateur, « Modifier ce monde » permet de déplacer l'arrivée et le départ, de poser ou retirer des obstacles et des personnes (qui marchent, flânent, suivent le robot ou restent immobiles). Le monde dessiné est construit tel quel, sans nouveau tirage, et les deux robots y roulent avec les mêmes programmes que dans les scènes du banc. Un code permet de le garder ou de le partager.</p>
+      <p>Tout se calcule sur ton appareil, hors ligne. Rien n'est envoyé ailleurs.</p>`)}
   </div>`;
 }

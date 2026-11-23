@@ -6,6 +6,7 @@ import { Stage, COL } from './vigie3d/scene.js';
 import { nameOptions, noteParts, headline, outcomeWord, fmt, pct, TOUR, GLOSSAIRE } from './vigie3d/explain.js';
 import { ensureTable } from './vigie6/risk.js';
 import { SCENES } from './vigie6/world.js';
+import { openEditor, sceneSpec } from './vigie3d/editor.js';
 
 const PRESETS = [
   { id: 'goulot', label: 'Porte étroite', cond: 'nominal', seed: 2 },
@@ -40,6 +41,7 @@ export default function vigie3d(root, opts = {}) {
       <label class="v3d-select"><span>Autre scène</span><select class="v3d-other"></select></label>
       <div class="v3d-seg v3d-cond" role="radiogroup" aria-label="Condition"></div>
       <button class="v3d-btn v3d-new" title="Tirer un autre monde de la même scène"><span class="lg">Nouveau monde</span><span class="sm">Autre monde</span> <span class="v3d-seed"></span></button>
+      <button class="v3d-btn v3d-editbtn" title="Déplacer l'arrivée et le départ, ajouter ou retirer des obstacles et des personnes"><span class="lg">Modifier ce monde</span><span class="sm">Modifier</span></button>
       <button class="v3d-btn v3d-tourbtn"><span class="lg">Visite guidée</span><span class="sm">Visite</span></button>
       <button class="v3d-btn v3d-fullbtn" aria-pressed="false">Plein écran</button>
     </div>
@@ -96,6 +98,7 @@ export default function vigie3d(root, opts = {}) {
   // ---------------------------------------------------------------- état
   const st = {
     scene: (opts.start && opts.start.scene) || PRESETS[0].id, cond: (opts.start && opts.start.cond) || PRESETS[0].cond, seed: (opts.start && opts.start.seed) || PRESETS[0].seed,
+    spec: (opts.start && opts.start.spec) || null,
     params: opts.params || {}, hideOut: false, endSent: false,
     F: [], info: null, done: false, tr: 0, playing: false, speed: 1,
     layers: { voit: false, imagine: false, danger: false, options: true, essais: false, dra: true },
@@ -108,9 +111,10 @@ export default function vigie3d(root, opts = {}) {
   function start() {
     stopCalc();
     st.F = []; st.info = null; st.done = false; st.tr = 0; st.shownK = -1; st.trailK = -1; st.marks = []; st.hover = null; st.person = null;
-    $('.v3d-loading').hidden = false; $('.v3d-person').hidden = true; st.endSent = false; renderMarks(); $('.v3d-seed').textContent = `n° ${st.seed}`;
-    const msg = { type: 'start', scene: st.scene, seed: st.seed, cond: st.cond, params: st.params };
-    if (opts.onWorld) opts.onWorld({ scene: st.scene, seed: st.seed, cond: st.cond, params: st.params });
+    $('.v3d-loading').hidden = false; $('.v3d-person').hidden = true; st.endSent = false; renderMarks(); $('.v3d-seed').textContent = st.scene === 'perso' ? `ton monde, n° ${st.seed}` : `n° ${st.seed}`;
+    if (st.scene !== 'perso') st.spec = null;
+    const msg = { type: 'start', scene: st.scene, seed: st.seed, cond: st.cond, params: st.params, spec: st.spec };
+    if (opts.onWorld) opts.onWorld({ scene: st.scene, seed: st.seed, cond: st.cond, params: st.params, spec: st.spec });
     try {
       worker = new Worker(new URL('./vigie6/worker.js', import.meta.url), { type: 'module' });
       worker.onmessage = e => onMsg(e.data);
@@ -121,7 +125,7 @@ export default function vigie3d(root, opts = {}) {
   async function runHere(msg) {
     const { createRun } = await import('./vigie6/runner.js');
     ensureTable();
-    const run = createRun(msg.scene, msg.seed, msg.cond, msg.params || {}), my = {};
+    const run = createRun(msg.scene, msg.seed, msg.cond, msg.params || {}, msg.spec || null), my = {};
     fallback = my;
     onMsg({ type: 'info', info: run.info, initial: run.initial });
     const pump = () => {
@@ -170,7 +174,7 @@ export default function vigie3d(root, opts = {}) {
   $('.v3d-marks').addEventListener('click', e => { const b = e.target.closest('.v3d-mk'); if (b) { st.tr = Math.max(0, +b.dataset.k - 3); st.playing = false; syncPlay(); toast(b.title); } });
 
   function countResult() {
-    const last = st.F[st.F.length - 1], key = `${st.scene}|${st.cond}|${st.seed}`;
+    const last = st.F[st.F.length - 1], key = `${st.scene}|${st.cond}|${st.seed}|${st.spec ? JSON.stringify(st.spec) : ''}`;
     if (st.counted.has(key)) return; st.counted.add(key);
     for (const r of ['vigie', 'dra']) st.tally[r][last[r].out] = (st.tally[r][last[r].out] || 0) + 1;
     st.tally.n++;
@@ -181,8 +185,19 @@ export default function vigie3d(root, opts = {}) {
   scenes.innerHTML = PRESETS.map(p => `<button role="tab" class="v3d-chip" data-id="${p.id}">${p.label}</button>`).join('');
   scenes.addEventListener('click', e => { const b = e.target.closest('.v3d-chip'); if (!b) return; const p = PRESETS.find(q => q.id === b.dataset.id); Object.assign(st, { scene: p.id, cond: p.cond, seed: p.seed }); syncTop(); start(); });
   const other = $('.v3d-other');
-  other.innerHTML = Object.entries(SCENES).map(([id, l]) => `<option value="${id}">${l}</option>`).join('');
-  other.addEventListener('change', () => { st.scene = other.value; st.seed = 1; syncTop(); start(); });
+  other.innerHTML = Object.entries(SCENES).map(([id, l]) => `<option value="${id}">${l}</option>`).join('') + '<option value="perso" hidden>Mon monde</option>';
+  other.addEventListener('change', () => { if (other.value === 'perso') return; st.scene = other.value; st.seed = 1; syncTop(); start(); });
+  let editor = null;
+  $('.v3d-editbtn').addEventListener('click', () => {
+    if (editor) return;
+    st.playing = false; syncPlay();
+    const spec = st.scene === 'perso' && st.spec ? st.spec : sceneSpec(st.scene, st.seed);
+    editor = openEditor(document.body, {
+      spec, cond: st.cond, seed: st.seed,
+      onRun: (s, c) => { Object.assign(st, { scene: 'perso', spec: s, cond: c, seed: 1 }); syncTop(); start(); toast('Ton monde est lancé : VIGIE et la référence partent du même endroit.'); },
+      onClose: () => { editor = null; },
+    });
+  });
   $('.v3d-cond').innerHTML = CONDS.map(([v, l, sh]) => `<button role="radio" data-v="${v}" aria-label="${l}"><span class="lg">${l}</span><span class="sm">${sh}</span></button>`).join('');
   $('.v3d-cond').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; st.cond = b.dataset.v; syncTop(); start(); });
   $('.v3d-new').addEventListener('click', () => { st.seed++; syncTop(); start(); });
@@ -231,7 +246,7 @@ export default function vigie3d(root, opts = {}) {
   $('.v3d-pane[data-pane="decision"]').addEventListener('click', e => { const c = e.target.closest('.v3d-opt'); if (!c) return; const i = +c.dataset.i; st.hover = st.hover === i ? null : i; st.dirty = true; });
   $('.v3d-pane[data-pane="how"]').innerHTML = `
     <h5>D'où viennent ces calculs ?</h5>
-    <p>Ce simulateur fait tourner <b>exactement les mêmes algorithmes</b> que le banc de recherche : VIGIE 6 et DRA-MPPI, avec le même robot réaliste (moteurs, inertie, mesures en retard) et le même suivi des personnes. Ils ont été réécrits pour ton téléphone puis vérifiés de deux façons : 27 tests qui exigent, pour les mêmes entrées, les mêmes décisions au millionième près ; et une campagne de 1 760 essais dans ce simulateur, qui retrouve le même avantage que le banc (+4,3 points ici, +5,3 dans le banc, deux écarts significatifs). Les mondes sont tirés au hasard selon les règles du banc.</p>
+    <p>Ce simulateur fait tourner <b>exactement les mêmes algorithmes</b> que le banc de recherche : VIGIE 6 et DRA-MPPI, avec le même robot réaliste (moteurs, inertie, mesures en retard) et le même suivi des personnes. Ils ont été réécrits pour ton téléphone puis vérifiés de deux façons : 33 tests qui exigent, pour les mêmes entrées, les mêmes décisions au millionième près ; et une campagne de 1 760 essais dans ce simulateur, qui retrouve le même avantage que le banc sur le même type de mondes (+4,3 points ici, +5,3 dans le banc, deux écarts significatifs). Les mondes sont tirés au hasard selon les règles du banc. Avec « Modifier ce monde », tu peux aussi déplacer l'arrivée et le départ, poser ou retirer des obstacles et des personnes : ton monde est construit tel quel, et les deux robots y roulent avec exactement les mêmes programmes.</p>
     <h5>Les mots à connaître</h5>
     <dl class="v3d-gloss">${GLOSSAIRE.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>
     <h5>Ce que dit la recherche</h5>
@@ -412,7 +427,7 @@ export default function vigie3d(root, opts = {}) {
     }
     if (st.done && st.tr >= maxK && !st.endSent) {
       st.endSent = true; const L = st.F[maxK];
-      if (opts.onEnd) opts.onEnd({ vigie: L.vigie.out, dra: L.dra.out, tVigie: L.vigie.t, tDra: L.dra.t, scene: st.scene, seed: st.seed, cond: st.cond });
+      if (opts.onEnd) opts.onEnd({ vigie: L.vigie.out, dra: L.dra.out, tVigie: L.vigie.t, tDra: L.dra.t, scene: st.scene, seed: st.seed, cond: st.cond, spec: st.spec });
     }
     const i = Math.floor(st.tr), a = st.tr - i, fa = frameAt(i), fb = frameAt(i + 1);
     const tk = Math.min(maxK, i + 1);                          // décision en cours d'exécution
@@ -440,13 +455,14 @@ export default function vigie3d(root, opts = {}) {
   // ---------------------------------------------------------------- démarrage
   syncTop(); syncLayers(); setView('maquette'); setTab('decision'); syncPlay();
   start();
-  const destroy = () => { cancelAnimationFrame(raf); stopCalc(); themeObs.disconnect(); document.removeEventListener('keydown', onKey); document.body.classList.remove('v3d-noscroll'); stage.dispose(); };
+  const destroy = () => { if (editor) editor.close(); cancelAnimationFrame(raf); stopCalc(); themeObs.disconnect(); document.removeEventListener('keydown', onKey); document.body.classList.remove('v3d-noscroll'); stage.dispose(); };
   // commandes pour une application hôte (application VIGIE) ; RoboMaster n'utilise que la fonction de nettoyage
-  destroy.load = (w = {}) => { Object.assign(st, { scene: w.scene || st.scene, seed: w.seed || st.seed, cond: w.cond || st.cond, params: w.params || st.params }); syncTop(); start(); };
+  destroy.load = (w = {}) => { Object.assign(st, { scene: w.scene || st.scene, seed: w.seed || st.seed, cond: w.cond || st.cond, params: w.params || st.params, spec: w.spec || (w.scene === 'perso' ? st.spec : null) }); syncTop(); start(); };
+  destroy.edit = () => $('.v3d-editbtn').click();
   destroy.play = () => { st.playing = true; syncPlay(); };
   destroy.pause = () => { st.playing = false; syncPlay(); };
   destroy.setHideOutcomes = b => { st.hideOut = !!b; renderMarks(); };
-  destroy.world = () => ({ scene: st.scene, seed: st.seed, cond: st.cond, params: st.params });
+  destroy.world = () => ({ scene: st.scene, seed: st.seed, cond: st.cond, params: st.params, spec: st.spec });
   destroy.stage = root.querySelector('.v3d-stage');
   return destroy;
 }

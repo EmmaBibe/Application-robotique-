@@ -1,7 +1,8 @@
 // Petits outils partagés par les écrans.
 import { SCENES } from '../sims/vigie6/world.js';
+import { encodeWorld, decodeWorld } from '../sims/vigie3d/editor.js';
 export { SCENES };
-export const APP_VERSION = '1.1.0';
+export const APP_VERSION = '1.2.0';
 export const CONDS = { nominal: 'Vision complète', perception: 'Perception limitée', reactifs: 'Piétons qui réagissent' };
 export const OUT = { succes: 'arrivé', collision: 'collision', temps: 'temps dépassé' };
 export const OUT_SHORT = { succes: 'OK', collision: 'choc', temps: 'lent' };
@@ -10,8 +11,11 @@ export const fmt = (x, d = 1) => Number(x).toLocaleString('fr-FR', { minimumFrac
 export const pct = (x, d = 1) => `${fmt(x * 100, d)} %`;
 
 /** Code d'un monde, à recopier ou partager : scène-graine-condition (ex. goulot-3-perception). */
-export const worldCode = w => `${w.scene}-${w.seed}-${w.cond}`;
+export const worldCode = w => (w.scene === 'perso' && w.spec ? encodeWorld(w.spec, w.cond) : `${w.scene}-${w.seed}-${w.cond}`);
+export const sceneName = w => (w.scene === 'perso' ? 'Ton monde' : SCENES[w.scene] || w.scene);
 export function parseCode(code) {
+  const mine = decodeWorld(code);
+  if (mine) return { scene: 'perso', seed: 1, cond: mine.cond, spec: mine.spec };
   const m = String(code).trim().toLowerCase().match(/^([a-z_]+)-(\d{1,6})-([a-z]+)$/);
   if (!m || !SCENES[m[1]] || !CONDS[m[3]]) return null;
   return { scene: m[1], seed: +m[2], cond: m[3] };

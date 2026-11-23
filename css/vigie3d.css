@@ -1,9 +1,10 @@
 /* ==========================================================================
    Simulateur 3D « Dans la tête de VIGIE »
    ========================================================================== */
+.v3d-ed { --v-teal: #35d0ba; --v-amber: #ffb547; --v-blue: #2aa7ff; --v-violet: #a78bfa; --v-pink: #f472b6; --v-red: #ff6b6b; }
 .v3d { --v-teal: #35d0ba; --v-amber: #ffb547; --v-blue: #2aa7ff; --v-violet: #a78bfa; --v-pink: #f472b6; --v-red: #ff6b6b;
   display: flex; flex-direction: column; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin: 1.3rem 0; }
-[data-theme="light"] .v3d { --v-teal: #0f9e8a; --v-amber: #c77a00; --v-blue: #1677d8; --v-violet: #7552e0; --v-pink: #c33c84; --v-red: #d63c3c; }
+[data-theme="light"] .v3d, [data-theme="light"] .v3d-ed { --v-teal: #0f9e8a; --v-amber: #c77a00; --v-blue: #1677d8; --v-violet: #7552e0; --v-pink: #c33c84; --v-red: #d63c3c; }
 .v3d.v3d-full { position: fixed; inset: 0; z-index: 2000; margin: 0; border-radius: 0; border: 0; }
 body.v3d-noscroll { overflow: hidden; }
 
@@ -211,3 +212,36 @@ body.v3d-noscroll { overflow: hidden; }
 .v3d-fill .v3d-bar::-webkit-scrollbar { display: none; }
 .v3d-fill .v3d-scenes, .v3d-fill .v3d-row { flex-wrap: nowrap; width: auto; flex: none; }
 .v3d-fill .v3d-chip, .v3d-fill .v3d-btn, .v3d-fill .v3d-seg { flex: none; }
+
+/* ---------------------------------------------------------------- éditeur de monde */
+.v3d-ed { position: fixed; inset: 0; z-index: 2100; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: max(12px, env(safe-area-inset-top)) 12px 24px; background: rgba(4, 10, 20, .62); }
+.v3d-ed-card { width: min(600px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: .8rem; display: flex; flex-direction: column; gap: .55rem; color: var(--text); }
+.v3d-ed-head { display: flex; align-items: center; justify-content: space-between; }
+.v3d-ed-head b { font-size: 1.05rem; }
+.v3d-ed-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; }
+.v3d-ed-tools button { background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius-s); padding: .45rem .3rem; font-size: .86rem; color: var(--muted); cursor: pointer; }
+.v3d-ed-tools button.on { color: var(--text); border-color: var(--v-teal); background: color-mix(in srgb, var(--v-teal) 15%, var(--panel)); font-weight: 600; }
+.v3d-ed-opts:empty { display: none; }
+.v3d-ed-opts input[type="range"] { width: 160px; }
+.v3d-ed-beh { display: flex; flex-wrap: wrap; gap: .35rem; }
+.v3d-ed-beh button { display: inline-flex; align-items: center; gap: .35rem; background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: .28rem .65rem; font-size: .82rem; color: var(--muted); cursor: pointer; }
+.v3d-ed-beh button.on { color: var(--text); border-color: var(--v-blue); }
+.v3d-ed-beh i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.v3d-ed-canvas { display: flex; justify-content: center; }
+.v3d-ed-canvas canvas { touch-action: none; border-radius: var(--radius-s); cursor: crosshair; max-width: 100%; }
+.v3d-ed-hint { margin: 0; font-size: .86rem; color: var(--muted); min-height: 1.2em; }
+.v3d-ed-hint.warn { color: var(--v-amber); font-weight: 600; }
+.v3d-ed-status { margin: 0; font-size: .84rem; display: flex; flex-direction: column; gap: .1rem; }
+.v3d-ed-status .ok { color: var(--v-teal); }
+.v3d-ed-status .ko { color: var(--v-red); font-weight: 600; }
+.v3d-ed-row { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; }
+.v3d-ed-row .primary { margin-left: auto; }
+.v3d-ed-code textarea { width: 100%; font-family: var(--mono); font-size: .75rem; background: var(--panel-2); color: var(--text); border: 1px solid var(--line); border-radius: var(--radius-s); padding: .4rem; resize: vertical; }
+.v3d-ed .v3d-small { font-size: .78rem; color: var(--muted); margin: 0 !important; }
+.v3d-ed-legend { margin: 0; display: flex; flex-wrap: wrap; gap: .2rem .7rem; font-size: .74rem; color: var(--muted); }
+.v3d-ed-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: .3rem; vertical-align: middle; }
+/* sur grand écran, la barre du simulateur plein écran passe à la ligne au lieu de défiler : tout reste visible à la souris */
+@media (min-width: 900px) {
+  .v3d-fill .v3d-bar { flex-wrap: wrap; overflow-x: visible; }
+  .v3d-fill .v3d-scenes, .v3d-fill .v3d-row { flex-wrap: wrap; }
+}

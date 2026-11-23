@@ -1,7 +1,7 @@
 // Simulateur plein écran, avec mode pronostic et code de monde à partager.
 import vigie3d from '../sims/vigie3d.js';
 import { store } from '../lib/store.js';
-import { OUT, fmt, worldCode, parseCode, copy, toast, esc, CONDS, SCENES } from '../lib/ui.js';
+import { OUT, fmt, worldCode, parseCode, copy, toast, esc, CONDS, sceneName } from '../lib/ui.js';
 
 const GUESSES = [['deux', 'Les deux'], ['vigie', 'Seulement VIGIE'], ['dra', 'Seulement la référence'], ['aucun', 'Aucun des deux']];
 const actual = r => (r.vigie === 'succes' && r.dra === 'succes' ? 'deux' : r.vigie === 'succes' ? 'vigie' : r.dra === 'succes' ? 'dra' : 'aucun');
@@ -16,6 +16,7 @@ export default function simulateur(view, params) {
   view.innerHTML = `
     <div class="sim-tools">
       <button class="btn ${prono ? 'on' : ''}" data-a="prono" aria-pressed="${prono}">Pronostic : ${prono ? 'oui' : 'non'}</button>
+      <button class="btn" data-a="edit">Modifier le monde</button>
       <button class="btn" data-a="code">Code du monde</button>
       ${atelier ? '<button class="btn on" data-a="official" title="Revenir au VIGIE officiel">Réglages de l\'Atelier · revenir à VIGIE 6</button>' : ''}
     </div>
@@ -43,7 +44,7 @@ export default function simulateur(view, params) {
   const closeOverlay = () => { const el = ctrl.stage.querySelector('.prono'); if (el) el.hidden = true; };
   function ask(w) {
     guess = null; ctrl.pause(); ctrl.setHideOutcomes(true);
-    const el = overlay(`<h3>Ton pronostic</h3><p>${esc(SCENES[w.scene])}, ${esc(CONDS[w.cond].toLowerCase())}, monde n° ${w.seed}. Avant de regarder : qui atteindra le drapeau sans rien toucher ?</p>
+    const el = overlay(`<h3>Ton pronostic</h3><p>${esc(sceneName(w))}, ${esc(CONDS[w.cond].toLowerCase())}${w.scene === 'perso' ? '' : `, monde n° ${w.seed}`}. Avant de regarder : qui atteindra le drapeau sans rien toucher ?</p>
       <div class="prono-opts">${GUESSES.map(([v, l]) => `<button class="btn" data-g="${v}">${l}</button>`).join('')}</div>`);
     el.onclick = e => {
       const b = e.target.closest('[data-g]'); if (!b) return;
@@ -76,11 +77,13 @@ export default function simulateur(view, params) {
     if (a === 'prono') {
       prono = !prono; e.target.closest('button').classList.toggle('on', prono); e.target.closest('button').textContent = `Pronostic : ${prono ? 'oui' : 'non'}`;
       if (prono) ask(ctrl.world()); else { guess = null; closeOverlay(); ctrl.setHideOutcomes(false); }
+    } else if (a === 'edit') {
+      ctrl.edit();
     } else if (a === 'official') {
       location.hash = `#/simulateur?code=${worldCode(ctrl.world())}`;
     } else if (a === 'code') {
       const code = worldCode(ctrl.world());
-      const el = overlay(`<h3>Code du monde</h3><p>Chaque monde est défini par sa scène, son numéro et sa condition. Partage ce code : n'importe qui retrouvera exactement le même monde dans l'application.</p>
+      const el = overlay(`<h3>Code du monde</h3><p>${ctrl.world().scene === 'perso' ? 'Ce code contient tout ton monde (départ, arrivée, obstacles, personnes) et sa condition.' : 'Chaque monde est défini par sa scène, son numéro et sa condition.'} Partage ce code : n'importe qui retrouvera exactement le même monde dans l'application.</p>
         <div class="code-box"><input value="${code}" aria-label="Code du monde" spellcheck="false" autocapitalize="off"><button class="btn" data-a="copy">Copier</button></div>
         <div class="row" style="margin-top:.7rem;justify-content:flex-end"><button class="btn ghost" data-a="close">Fermer</button><button class="btn primary" data-a="open">Ouvrir ce code</button></div>`);
       el.onclick = async ev => {
@@ -88,7 +91,7 @@ export default function simulateur(view, params) {
         const val = el.querySelector('input').value;
         if (b === 'copy') toast(await copy(val) ? 'Code copié.' : 'Copie impossible : recopie le code à la main.');
         else if (b === 'close') closeOverlay();
-        else if (b === 'open') { const w = parseCode(val); if (!w) { toast('Code invalide. Exemple : goulot-3-perception'); return; } closeOverlay(); ctrl.load(w); }
+        else if (b === 'open') { const w = parseCode(val); if (!w) { toast('Code invalide. Exemple : goulot-3-perception, ou un code qui commence par « monde. ».'); return; } closeOverlay(); ctrl.load(w); }
       };
     }
   });

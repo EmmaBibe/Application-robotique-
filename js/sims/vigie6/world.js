@@ -26,11 +26,54 @@ const REACTIF = [1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
 
 const MODES = ['tout_droit', 'gauche', 'droite', 'arret', 'accel'], MODE_P = [0.3, 0.2, 0.2, 0.15, 0.15];
 
+// ---------------------------------------------------------------- mondes dessinés dans l'éditeur
+export const KINDS = ['intent', 'errant', 'flux', 'chasseur', 'porte', 'immobile'];
+export const PERSO_LIMITS = { static: 200, people: 40, rMin: 0.2, rMax: 2.0, vMax: 2.0 };
+const clamp = (x, a, b) => Math.min(b, Math.max(a, Number.isFinite(+x) ? +x : a));
+
+/** Nettoie une description de monde venue de l'éditeur ou d'un code partagé : bornes, types, nombre d'éléments. */
+export function pathExists(spec) {
+  const S = normalizeSpec(spec);
+  return astar(occupancy(S.static, 0.35), S.start, S.goal) !== null;
+}
+
+export function normalizeSpec(spec) {
+  const S = spec && typeof spec === 'object' ? spec : {};
+  const L = PERSO_LIMITS, pt = (q, d) => (Array.isArray(q) && q.length >= 2 ? [clamp(q[0], 0.5, SIZE - 0.5), clamp(q[1], 0.5, SIZE - 0.5)] : d);
+  const out = { start: pt(S.start, [1.5, 10]), goal: pt(S.goal, [18.5, 10]), door: Array.isArray(S.door) ? pt(S.door, null) : null, static: [], people: [] };
+  for (const c of (Array.isArray(S.static) ? S.static : []).slice(0, L.static)) {
+    if (!Array.isArray(c) || c.length < 3) continue;
+    out.static.push([clamp(c[0], 0, SIZE), clamp(c[1], 0, SIZE), clamp(c[2], L.rMin, L.rMax)]);
+  }
+  for (const q of (Array.isArray(S.people) ? S.people : []).slice(0, L.people)) {
+    if (!q || typeof q !== 'object') continue;
+    const k = KINDS.includes(q.k) ? q.k : 'immobile';
+    if (k === 'porte' && !out.door) continue;
+    const p = pt(q.p, null); if (!p) continue;
+    let v = Array.isArray(q.v) ? [clamp(q.v[0], -L.vMax, L.vMax), clamp(q.v[1], -L.vMax, L.vMax)] : [0, 0];
+    const n = Math.hypot(v[0], v[1]); if (n > L.vMax) v = [v[0] / n * L.vMax, v[1] / n * L.vMax];
+    const e = { k, p, v, r: clamp(q.r || 0.35, 0.25, 0.5) };
+    if (q.sp != null) e.sp = clamp(q.sp, 0.1, L.vMax);
+    if (k === 'intent' && MODES.includes(q.mode)) { e.mode = q.mode; e.tSwitch = clamp(q.tSwitch, 0, 1e9); }
+    out.people.push(e);
+  }
+  return out;
+}
+
 export class World {
-  constructor(name, seed) {
+  constructor(name, seed, spec = null) {
     this.name = name; this.seed = seed;
     this.nrng = makeRand(10000 + seed);
     this.start = [1.5, 10.0, 0.0]; this.goal = [18.5, 10.0];
+    if (name === 'perso') {
+      // monde dessiné dans l'éditeur : construit tel quel, une seule fois (pas de nouveau tirage s'il est bloqué)
+      const S = normalizeSpec(spec);
+      this.rng = makeRand(seed); this.static = S.static.map(c => [...c]); this.dyn = []; this.keepout = []; this.door = S.door ? [...S.door] : null;
+      this.start = [S.start[0], S.start[1], Math.atan2(S.goal[1] - S.start[1], S.goal[0] - S.start[0])]; this.goal = [...S.goal];
+      for (const q of S.people) this._fromSpec(q);
+      this.t = 0;
+      return;
+    }
     for (let k = 0; k < 50; k++) {
       this.rng = makeRand(seed + 100000 * k);
       this.static = []; this.dyn = []; this.keepout = []; this.door = null;
@@ -66,6 +109,28 @@ export class World {
   _add_dyn(p, v, r = 0.35, kind = 'intent') {
     const tSwitch = this.u(1.0, 12.0), mode = this.choiceMode();
     this._person(p, v, r, kind, { tSwitch, mode, done: false });
+  }
+
+  /** Une personne décrite dans l'éditeur. Les comportements sont ceux du banc ; « immobile » est une personne arrêtée. */
+  _fromSpec(q) {
+    const p = q.p, v = q.v || [0, 0], r = q.r || 0.35;
+    if (q.k === 'intent') {
+      if (q.mode) this._person(p, v, r, 'intent', { tSwitch: q.tSwitch, mode: q.mode, done: false });
+      else this._add_dyn(p, v, r, 'intent');
+    } else if (q.k === 'errant' || q.k === 'flux') this._person(p, v, r, q.k);
+    else if (q.k === 'chasseur') this._person(p, [0, 0], r, 'chasseur', { sp: q.sp || 0.9, reactif: false });
+    else if (q.k === 'porte' && this.door) this._person(p, v, r, 'porte', { sp: q.sp || 1.2 });
+    else this._person(p, [0, 0], r, 'intent');                     // immobile
+  }
+
+  /** Description complète du monde à l'instant 0, reprise par l'éditeur (« partir d'une scène »). */
+  toSpec() {
+    const r3 = x => Math.round(x * 1000) / 1000;
+    return normalizeSpec({
+      start: [this.start[0], this.start[1]], goal: [...this.goal], door: this.door,
+      static: this.static.map(c => c.map(r3)),
+      people: this.dyn.map(o => ({ k: o.kind, p: o.p.map(r3), v: o.v.map(r3), r: o.r, ...(o.sp ? { sp: r3(o.sp) } : {}), ...(o.kind === 'intent' && !o.done ? { tSwitch: r3(o.tSwitch), mode: o.mode } : {}) })),
+    });
   }
 
   build_foret() { this._rand_static(30); }

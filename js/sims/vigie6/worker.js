@@ -10,7 +10,7 @@ self.onmessage = e => {
     const my = ++token;
     const tab = ensureTable();
     self.postMessage({ type: 'table', tab: tab.slice() });
-    run = createRun(m.scene, m.seed, m.cond, m.params || {});
+    run = createRun(m.scene, m.seed, m.cond, m.params || {}, m.spec || null);
     self.postMessage({ type: 'info', info: run.info, initial: run.initial });
     const pump = () => {
       if (my !== token) return;
