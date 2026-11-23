@@ -235,7 +235,7 @@ export default function vigie3d(root, opts = {}) {
     <h5>Les mots à connaître</h5>
     <dl class="v3d-gloss">${GLOSSAIRE.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>
     <h5>Ce que dit la recherche</h5>
-    <p>Sur 40 mondes neufs (2 640 essais), VIGIE 6 a réussi <b>86,7 %</b> des trajets contre <b>81,4 %</b> pour DRA-MPPI, avec un tiers de collisions en moins. C'est un écart significatif, mais il faut encore le confirmer sur 100 mondes jamais vus. VIGIE reste plus fragile aux angles morts quand la vue est limitée : tu peux le voir ici.</p>`;
+    <p>Sur 100 mondes jamais vus (13 200 essais), VIGIE 6 a réussi <b>88,9 %</b> des trajets contre <b>85,1 %</b> pour DRA-MPPI, avec un quart de collisions en moins. C'est un écart significatif. T-MPC++, l'autre référence, fait jeu égal avec VIGIE. Son avance fond quand la vue est limitée : tu peux le voir ici, aux angles morts.</p>`;
 
   function decisionPane(f) {
     const vb = f.vigie.brain, el = $('.v3d-pane[data-pane="decision"]');
@@ -279,10 +279,10 @@ export default function vigie3d(root, opts = {}) {
     const T = st.tally, line = k => ['succes', 'collision', 'temps'].map(o => `${T[k][o] || 0} ${outcomeWord(o)}`).join(' · ');
     el.innerHTML = `<div class="v3d-cmps">${col('vigie', 'VIGIE 6')}${col('dra', 'DRA-MPPI')}</div>
       ${f.diverged ? '<p class="v3d-note">Les personnes réagissent différemment aux deux robots : chacun a désormais son propre monde, côte à côte.</p>' : '<p class="v3d-small">Même monde, mêmes personnes : les deux robots ne se voient pas l\'un l\'autre.</p>'}
-      <div class="v3d-stat"><b>Sur 40 mondes neufs du banc de recherche</b>
-        <div class="v3d-sbar"><span style="width:86.7%" class="vigie">VIGIE 6 · 86,7 %</span></div>
-        <div class="v3d-sbar"><span style="width:81.4%" class="dra">DRA-MPPI · 81,4 %</span></div>
-        <p class="v3d-small">Trajets réussis, 2 640 essais. Écart de +5,3 points (intervalle de confiance à 95 % : +2,8 à +8,0). VIGIE gagne 95 de ces mondes et en perd 48 : une victoire globale, pas dans chaque monde.</p></div>
+      <div class="v3d-stat"><b>Sur 100 mondes jamais vus du banc de recherche</b>
+        <div class="v3d-sbar"><span style="width:88.9%" class="vigie">VIGIE 6 · 88,9 %</span></div>
+        <div class="v3d-sbar"><span style="width:85.1%" class="dra">DRA-MPPI · 85,1 %</span></div>
+        <p class="v3d-small">Trajets réussis, 13 200 essais. Écart de +3,8 points (intervalle de confiance à 95 % : +2,6 à +5,1). VIGIE gagne 271 situations et en perd 145 : une victoire globale, pas dans chaque monde.</p></div>
       <div class="v3d-stat"><b>Dans ce simulateur (${T.n} monde${T.n > 1 ? 's' : ''} joué${T.n > 1 ? 's' : ''} jusqu'au bout)</b>
         <p class="v3d-small">VIGIE : ${line('vigie')}<br>DRA-MPPI : ${line('dra')}</p></div>`;
   }

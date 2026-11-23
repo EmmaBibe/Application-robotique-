@@ -24,23 +24,28 @@ export default function savoir(view) {
       <div class="tl"><b>VIGIE 3</b><span>Séances 4 à 6</span><p>Robot réaliste (moteurs, inertie, mesures en retard), scènes plus dures. Une route dans l'espace et le temps qui sait attendre, et la prudence aux angles morts. Sur 60 mondes neufs : nettement meilleur à la porte étroite (+10,8 points) et aux angles morts (+11,7), mais pas d'avance globale significative (+1,9).</p></div>
       <div class="tl ko"><b>VIGIE 4 et 5</b><span>Séances 5 et 6</span><p>VIGIE 4 calcule sa vitesse le long de chaque route avec la dynamique du robot et un modèle interne de ses moteurs ; VIGIE 5 ajoute une règle inspirée du code de la route (ne pas s'engager si l'on risque d'être bloqué). Aucun gain confirmé sur des mondes neufs : ni l'un ni l'autre n'est adopté.</p></div>
       <div class="tl ko"><b>La grande correction</b><span>Séance 7</span><p>En relisant les publications, on découvre que la « référence » utilisée depuis le début était mal attribuée, et plus faible que la vraie méthode publiée. Une fois les vraies références codées et réglées avec le même soin, l'avance de VIGIE 3 disparaît. On l'a dit, et on est reparti de là.</p></div>
-      <div class="tl"><b>VIGIE 6</b><span>Séance 7</span><p>On étudie monde par monde où il perd. Trois corrections : la probabilité de collision de DRA-MPPI, une même carte pour ses deux planificateurs, la règle de cohérence de T-MPC ; puis l'improvisation parmi ses options. Sur 40 mondes neufs : 86,7 % contre 81,4 % pour la meilleure référence, +5,3 points, écart significatif.</p></div>
+      <div class="tl"><b>VIGIE 6</b><span>Séance 7</span><p>On étudie monde par monde où il perd. Trois corrections : la probabilité de collision de DRA-MPPI, une même carte pour ses deux planificateurs, la règle de cohérence de T-MPC ; puis l'improvisation parmi ses options. Sur 40 mondes neufs : +5,3 points face à la meilleure référence. Puis l'évaluation finale, sur 100 mondes jamais utilisés : 88,9 % de réussite contre 85,1 % pour DRA-MPPI, +3,8 points, écart significatif. T-MPC++ fait jeu égal.</p></div>
     </div>`)}
     ${sec('Les résultats d\'aujourd\'hui', `
-      <table><thead><tr><th>Sur 40 mondes neufs (2 640 essais)</th><th>Réussite</th><th>Collisions en roulant</th></tr></thead><tbody>
-        <tr><td><b>VIGIE 6</b></td><td><b>86,7 %</b></td><td><b>10,7 %</b></td></tr>
-        <tr><td>DRA-MPPI (2025), la référence</td><td>81,4 %</td><td>15,9 %</td></tr></tbody></table>
-      <p>Écart : <b>+5,3 points</b>, intervalle de confiance à 95 % de +2,8 à +8,0 ; 95 mondes gagnés, 48 perdus. Plus forts gains : porte étroite (+22,5), angles morts (+13,8), traversée (+11,2).</p>
+      <table><thead><tr><th>Évaluation finale : 100 mondes jamais utilisés (13 200 essais)</th><th>Réussite</th><th>Collisions en roulant</th></tr></thead><tbody>
+        <tr><td><b>VIGIE 6</b></td><td><b>88,9 %</b></td><td><b>9,2 %</b></td></tr>
+        <tr><td>T-MPC++ (2024)</td><td>88,5 %</td><td>10,9 %</td></tr>
+        <tr><td>VIGIE 3</td><td>87,6 %</td><td>10,6 %</td></tr>
+        <tr><td>DRA-MPPI (2025), la référence</td><td>85,1 %</td><td>12,6 %</td></tr></tbody></table>
+      <p>Face à DRA-MPPI : <b>+3,8 points</b>, intervalle de confiance à 95 % de +2,6 à +5,1 ; 271 situations gagnées, 145 perdues. L'écart est net en vision complète (+4,1) et avec des piétons qui voient le robot (+5,3), mais pas quand la vue est limitée (+2,1, de −0,5 à +4,5). Plus forts gains : couloir (+13,3), porte étroite (+10,0), angles morts (+9,3), traversée (+6,3).</p>
+      <p>Face à T-MPC++ : <b>égalité</b>, +0,5 point (de −0,8 à +1,7). VIGIE gagne aux carrefours (+6), T-MPC++ à la porte étroite (+8), et il va 1,9 s plus vite par trajet.</p>
+      <p>Deux contrôles demandés par une relecture extérieure. À budget de calcul égal (400 trajectoires essayées par décision chacun), VIGIE garde +4,7 points sur DRA-MPPI : son avance vient de sa conception, pas d'un calcul plus long. Et en vérifiant le trajet entre deux décisions, aucun contact ne passe inaperçu.</p>
       <p>La version de cette application, réécrite pour ton téléphone, retrouve le même avantage : +4,3 points sur 1 760 essais (intervalle de +1,9 à +6,8).</p>
-      <p class="small muted">T-MPC++, l'autre référence, n'a pas couru dans cette validation : sur la série de mondes précédente, il faisait jeu égal avec DRA-MPPI (81,7 % contre 81,5 %).</p>
-      <p class="small muted">Prochaine étape : l'évaluation finale sur 100 mondes jamais utilisés, avec des piétons qui voient le robot et d'autres qui ne le voient pas.</p>`)}
+      <p class="small muted">Ce que coûte VIGIE : 51 ms de calcul par décision en médiane, contre 7 ms pour DRA-MPPI et 87 ms pour T-MPC++, sur un ordinateur de bureau. Avec 400 trajectoires au lieu de 912, elle descend à 37 ms sans perte mesurable.</p>
+      <p class="small muted">Prochaine étape : réécrire VIGIE en C++ pour qu'elle tienne ses dix décisions par seconde même dans le pire cas, puis la monter sur un prototype.</p>`)}
     ${sec('Les idées essayées, puis abandonnées', `
       <table><thead><tr><th>Idée</th><th>Ce qui s'est passé</th></tr></thead><tbody>
         <tr><td>Une incertitude qui s'adapte à chaque personne</td><td>Le robot se figeait : −17,5 points.</td></tr>
         <tr><td>Des personnes imaginées derrière les angles morts, dans le calcul du risque</td><td>Prometteur sur 20 essais, sans effet sur 880 : le hasard des petits échantillons.</td></tr>
         <tr><td>L'incertitude du filtre de suivi dans le risque</td><td>Une personne qui vient d'apparaître paraît menaçante partout : −15,2 points.</td></tr>
         <tr><td>Une règle du code de la route aux carrefours</td><td>+2 points pendant la mise au point, rien sur des mondes neufs.</td></tr>
-        <tr><td>Un modèle interne des roues</td><td>Pas de gain significatif.</td></tr></tbody></table>
+        <tr><td>Un modèle interne des roues</td><td>Pas de gain significatif.</td></tr>
+        <tr><td>N'apprendre l'imprévisibilité d'une personne que de vraies mesures, pas de ses positions prolongées quand elle est cachée</td><td>Juste sur le principe, mais +0,2 point seulement : sous le seuil fixé d'avance, pas adopté.</td></tr></tbody></table>
       <p>Abandonner une idée, c'est aussi un résultat : chacune a été jugée sur des mondes qu'elle n'avait pas vus, avec une règle de décision écrite avant l'essai.</p>`)}
     ${sec('Les méthodes de référence', `
       <p><b>DRA-MPPI</b> — Trevisan et al., IROS 2025. Un MPPI qui calcule la probabilité de collision avec plusieurs personnes à la fois. La référence officielle de nos comparaisons.</p>
@@ -50,7 +55,9 @@ export default function savoir(view) {
     ${sec('Les mots à connaître', `<dl class="gl">${GLOSSAIRE.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`)}
     ${sec('Les limites, sans détour', `<ul>
       <li><b>Tout est en simulation.</b> Le robot simulé a des moteurs, une inertie et des mesures en retard, mais aucun essai n'a encore été fait sur un vrai robot.</li>
-      <li><b>Les personnes ne voient pas le robot</b> dans la plupart des essais : c'est plus dur que la réalité. L'évaluation finale ajoutera des personnes qui l'évitent.</li>
+      <li><b>Des piétons simulés, pas de vraies personnes.</b> Dans un tiers des essais de l'évaluation finale, la plupart des piétons voient le robot et s'écartent ; aucun modèle ne remplace pour autant de vrais gens.</li>
+      <li><b>VIGIE ne bat pas T-MPC++</b> : égalité sur l'évaluation finale. Elle bat nettement DRA-MPPI.</li>
+      <li><b>VIGIE calcule plus</b> que DRA-MPPI, environ sept fois plus longtemps, et ses recalculs de route, un cycle sur dix, dépassent encore le dixième de seconde dans le programme de recherche.</li>
       <li><b>Aux angles morts, quand la vue est limitée</b>, VIGIE reste fragile : tu peux le voir dans le simulateur.</li>
       <li><b>Ses briques ne sont pas inventées de zéro</b> : routes multiples (T-MPC), probabilité de collision (DRA-MPPI), zones cachées (OA-MPC). Ce qui est propre à VIGIE, c'est leur combinaison et la façon dont elle a été mesurée.</li>
       <li>Le chemin qui sait attendre est un guide géométrique : la commande l'adapte ensuite à ce que le robot peut faire.</li></ul>`)}

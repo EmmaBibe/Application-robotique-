@@ -26,7 +26,7 @@ export default function banc(view) {
     <div class="card"><p><b>Écart</b> : différence de taux de réussite, en points, sur les mêmes mondes.</p>
       <p><b>Intervalle de confiance à 95 %</b> : la plage où se trouve probablement le vrai écart, compte tenu du hasard des mondes tirés. On le calcule en rejouant 2 000 fois l'expérience sur un tirage au sort des mondes (bootstrap).</p>
       <p><b>Significatif</b> : quand l'intervalle ne contient pas zéro. Sinon, il faut plus de mondes avant de conclure. Avec quelques dizaines de mondes, c'est souvent le cas : c'est normal, et c'est honnête.</p></div>
-    <div class="note">Pour comparer : le banc de recherche, sur 2 640 essais, trouve +5,3 points pour VIGIE 6 (intervalle de +2,8 à +8,0). Les mondes de l'application sont tirés au hasard selon les mêmes règles, mais pas les mêmes : attends-toi à des chiffres voisins, pas identiques.</div>
+    <div class="note">Pour comparer : l'évaluation finale du banc de recherche, sur 13 200 essais et 100 mondes jamais utilisés, trouve +3,8 points pour VIGIE 6 face à DRA-MPPI (intervalle de +2,6 à +5,1). Les mondes de l'application sont tirés au hasard selon les mêmes règles, mais pas les mêmes : attends-toi à des chiffres voisins, pas identiques.</div>
     <h2>Tes comparaisons précédentes</h2><div data-k="hist"></div>
   </div>`;
   const $ = k => view.querySelector(`[data-k="${k}"]`);

@@ -19,17 +19,17 @@ const ILL = {
     <g fill="#f472b6">${[0, 1, 2, 3, 4, 5].map(k => `<circle cx="${70 + k * 9}" cy="${118 + k * 2}" r="3"/>`).join('')}</g>
     ${person(170, 126, PC[0], 3.4)}${person(150, 66, PC[3], 1.2)}${robot(46, 104)}`),
   juge: `<svg viewBox="0 0 320 200" role="img" aria-hidden="true"><rect x="6" y="6" width="308" height="188" rx="18" fill="var(--panel)" stroke="var(--line)"/>
-    <rect x="34" y="40" width="214" height="30" rx="8" fill="var(--accent)" opacity=".8"/><text x="44" y="60" font-size="14" font-weight="700" fill="#04121a">VIGIE 6 · 86,7 %</text>
-    <rect x="34" y="82" width="201" height="30" rx="8" fill="#ffb547" opacity=".85"/><text x="44" y="102" font-size="14" font-weight="700" fill="#04121a">Référence · 81,4 %</text>
+    <rect x="34" y="40" width="214" height="30" rx="8" fill="var(--accent)" opacity=".8"/><text x="44" y="60" font-size="14" font-weight="700" fill="#04121a">VIGIE 6 · 88,9 %</text>
+    <rect x="34" y="82" width="205" height="30" rx="8" fill="#ffb547" opacity=".85"/><text x="44" y="102" font-size="14" font-weight="700" fill="#04121a">DRA-MPPI · 85,1 %</text>
     <path d="M34 150 H286" stroke="var(--line)" stroke-width="2"/><path d="M120 140 V160" stroke="var(--faint)" stroke-width="2"/>
-    <rect x="148" y="144" width="70" height="12" rx="6" fill="#2aa7ff" opacity=".45"/><circle cx="182" cy="150" r="9" fill="#2aa7ff" stroke="var(--panel)" stroke-width="3"/>
-    <text x="120" y="178" font-size="11" fill="var(--faint)" text-anchor="middle">0</text><text x="182" y="178" font-size="11" fill="var(--faint)" text-anchor="middle">+5,3 points</text></svg>`,
+    <rect x="150" y="144" width="30" height="12" rx="6" fill="#2aa7ff" opacity=".45"/><circle cx="165" cy="150" r="9" fill="#2aa7ff" stroke="var(--panel)" stroke-width="3"/>
+    <text x="120" y="178" font-size="11" fill="var(--faint)" text-anchor="middle">0</text><text x="165" y="178" font-size="11" fill="var(--faint)" text-anchor="middle">+3,8 points</text></svg>`,
 };
 
 const SLIDES = [
   ['foule', 'Un robot au milieu des gens', 'VIGIE est un programme qui conduit un petit robot jusqu\'à un drapeau, au milieu de personnes qui marchent sans le regarder. Dix fois par seconde, il doit décider : vitesse, virage.'],
   ['idees', 'Il compare plusieurs idées', 'Au lieu de suivre un seul plan, il en garde plusieurs en tête : des itinéraires différents, un chemin qui sait attendre, une improvisation. Il note chacun, et choisit le moins risqué.'],
-  ['juge', 'Et on le juge honnêtement', 'Il est comparé à la meilleure méthode publiée que nous ayons pu reproduire, sur des mondes qu\'il n\'a jamais vus. Ici, tu verras ses réussites, ses échecs, et pourquoi.'],
+  ['juge', 'Et on le juge honnêtement', 'Il est comparé aux meilleures méthodes publiées que nous ayons pu reproduire, sur des mondes qu\'il n\'a jamais vus. Il bat nettement DRA-MPPI et fait jeu égal avec T-MPC++. Ici, tu verras ses réussites, ses échecs, et pourquoi.'],
 ];
 
 export default function accueil(view) {
