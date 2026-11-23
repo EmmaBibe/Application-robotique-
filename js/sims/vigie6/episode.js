@@ -6,7 +6,7 @@ import { DT, VMAX, WMAX, RealRobot, makeTracker, makeRand } from '../vigie-core.
 import { World, COND, T_MAX } from './world.js';
 import { PLANNERS } from './planners.js';
 
-export function createEpisode(scene, seed, which, condName = 'nominal', params = {}, spec = null) {
+export function createEpisode(scene, seed, which, condName = 'nominal', params = {}, spec = null, tmax = T_MAX) {
   const C = { ...COND[condName] };
   const world = new World(scene, seed, spec);
   const planner = new PLANNERS[which](seed, params);
@@ -41,7 +41,7 @@ export function createEpisode(scene, seed, which, condName = 'nominal', params =
       const clear = world.clearance(s); minClear = Math.min(minClear, clear);
       if (clear < 0) outcome = 'collision';
       else if (Math.hypot(s[0] - world.goal[0], s[1] - world.goal[1]) < 0.5) outcome = 'succes';
-      else if (t >= T_MAX - 1e-9) outcome = 'temps';
+      else if (t >= tmax - 1e-9) outcome = 'temps';
       this.last = { cmd: [vc, wc], ms, seen: seenUsed, obsUsed: obs, meas };
       return outcome;
     },

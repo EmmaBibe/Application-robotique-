@@ -49,8 +49,8 @@ function robotFrame(ep, brain, idle) {
 }
 
 /** Prépare une course : info (monde), initial (instant 0), step() -> image suivante ou null quand tout est fini. */
-export function createRun(scene, seed, cond, params = {}, spec = null) {
-  const eps = { vigie: createEpisode(scene, seed, 'vigie', cond, params, spec), dra: createEpisode(scene, seed, 'dra', cond, {}, spec) };
+export function createRun(scene, seed, cond, params = {}, spec = null, tmax = undefined) {
+  const eps = { vigie: createEpisode(scene, seed, 'vigie', cond, params, spec, tmax), dra: createEpisode(scene, seed, 'dra', cond, {}, spec, tmax) };
   const w = eps.vigie.world;
   const info = {
     scene, seed, cond, start: w.start, goal: w.goal, static: w.static.map(c => c.map(r3)), door: w.door,

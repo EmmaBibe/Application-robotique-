@@ -27,7 +27,10 @@ const LAYERS = [
 ];
 const VIEWS = [['maquette', 'Maquette'], ['suivre', 'Suivre'], ['plan', 'Vue du dessus'], ['espace', 'Espace-temps']];
 const SPEEDS = [0.25, 0.5, 1, 2, 4];
-const NFR = 451;                                    // 45 s à 10 images par seconde, plus l'instant 0
+// durée maximale d'une course : 45 s comme dans le banc de recherche, ou plus pour ses propres mondes
+const DUREES = [[45, '45 s'], [90, '90 s'], [180, '3 min']];
+const DUREE_KEY = 'vigie.duree.v1';
+let NFR = 451;                                      // images de la chronologie : 10 par seconde, plus l'instant 0
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 export default function vigie3d(root, opts = {}) {
@@ -41,6 +44,7 @@ export default function vigie3d(root, opts = {}) {
       <label class="v3d-select"><span>Autre scène</span><select class="v3d-other"></select></label>
       <div class="v3d-seg v3d-cond" role="radiogroup" aria-label="Condition"></div>
       <button class="v3d-btn v3d-new" title="Tirer un autre monde de la même scène"><span class="lg">Nouveau monde</span><span class="sm">Autre monde</span> <span class="v3d-seed"></span></button>
+      <label class="v3d-select" title="Au-delà, la course s'arrête et compte « temps dépassé ». 45 s : la règle du banc de recherche."><span>Durée max</span><select class="v3d-duree">${DUREES.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></label>
       <button class="v3d-btn v3d-editbtn" title="Déplacer l'arrivée et le départ, ajouter ou retirer des obstacles et des personnes"><span class="lg">Modifier ce monde</span><span class="sm">Modifier</span></button>
       <button class="v3d-btn v3d-tourbtn"><span class="lg">Visite guidée</span><span class="sm">Visite</span></button>
       <button class="v3d-btn v3d-fullbtn" aria-pressed="false">Plein écran</button>
@@ -99,6 +103,7 @@ export default function vigie3d(root, opts = {}) {
   const st = {
     scene: (opts.start && opts.start.scene) || PRESETS[0].id, cond: (opts.start && opts.start.cond) || PRESETS[0].cond, seed: (opts.start && opts.start.seed) || PRESETS[0].seed,
     spec: (opts.start && opts.start.spec) || null,
+    tmax: (() => { try { const v = +localStorage.getItem(DUREE_KEY); return DUREES.some(d => d[0] === v) ? v : 45; } catch { return 45; } })(),
     params: opts.params || {}, hideOut: false, endSent: false,
     F: [], info: null, done: false, tr: 0, playing: false, speed: 1,
     layers: { voit: false, imagine: false, danger: false, options: true, essais: false, dra: true },
@@ -113,7 +118,8 @@ export default function vigie3d(root, opts = {}) {
     st.F = []; st.info = null; st.done = false; st.tr = 0; st.shownK = -1; st.trailK = -1; st.marks = []; st.hover = null; st.person = null;
     $('.v3d-loading').hidden = false; $('.v3d-person').hidden = true; st.endSent = false; renderMarks(); $('.v3d-seed').textContent = st.scene === 'perso' ? `ton monde, n° ${st.seed}` : `n° ${st.seed}`;
     if (st.scene !== 'perso') st.spec = null;
-    const msg = { type: 'start', scene: st.scene, seed: st.seed, cond: st.cond, params: st.params, spec: st.spec };
+    NFR = st.tmax * 10 + 1; $('.v3d-scrub').max = String(NFR - 1);
+    const msg = { type: 'start', scene: st.scene, seed: st.seed, cond: st.cond, params: st.params, spec: st.spec, tmax: st.tmax };
     if (opts.onWorld) opts.onWorld({ scene: st.scene, seed: st.seed, cond: st.cond, params: st.params, spec: st.spec });
     try {
       worker = new Worker(new URL('./vigie6/worker.js', import.meta.url), { type: 'module' });
@@ -125,7 +131,7 @@ export default function vigie3d(root, opts = {}) {
   async function runHere(msg) {
     const { createRun } = await import('./vigie6/runner.js');
     ensureTable();
-    const run = createRun(msg.scene, msg.seed, msg.cond, msg.params || {}, msg.spec || null), my = {};
+    const run = createRun(msg.scene, msg.seed, msg.cond, msg.params || {}, msg.spec || null, msg.tmax), my = {};
     fallback = my;
     onMsg({ type: 'info', info: run.info, initial: run.initial });
     const pump = () => {
@@ -174,7 +180,7 @@ export default function vigie3d(root, opts = {}) {
   $('.v3d-marks').addEventListener('click', e => { const b = e.target.closest('.v3d-mk'); if (b) { st.tr = Math.max(0, +b.dataset.k - 3); st.playing = false; syncPlay(); toast(b.title); } });
 
   function countResult() {
-    const last = st.F[st.F.length - 1], key = `${st.scene}|${st.cond}|${st.seed}|${st.spec ? JSON.stringify(st.spec) : ''}`;
+    const last = st.F[st.F.length - 1], key = `${st.scene}|${st.cond}|${st.seed}|${st.tmax}|${st.spec ? JSON.stringify(st.spec) : ''}`;
     if (st.counted.has(key)) return; st.counted.add(key);
     for (const r of ['vigie', 'dra']) st.tally[r][last[r].out] = (st.tally[r][last[r].out] || 0) + 1;
     st.tally.n++;
@@ -187,6 +193,8 @@ export default function vigie3d(root, opts = {}) {
   const other = $('.v3d-other');
   other.innerHTML = Object.entries(SCENES).map(([id, l]) => `<option value="${id}">${l}</option>`).join('') + '<option value="perso" hidden>Mon monde</option>';
   other.addEventListener('change', () => { if (other.value === 'perso') return; st.scene = other.value; st.seed = 1; syncTop(); start(); });
+  const duree = $('.v3d-duree'); duree.value = String(st.tmax);
+  duree.addEventListener('change', () => { st.tmax = +duree.value; try { localStorage.setItem(DUREE_KEY, String(st.tmax)); } catch { /* stockage indisponible */ } start(); toast(st.tmax === 45 ? 'Durée maximale : 45 s, comme dans le banc de recherche.' : `Durée maximale : ${duree.selectedOptions[0].textContent}. Les résultats du banc de recherche, eux, sont comptés sur 45 s.`); });
   let editor = null;
   $('.v3d-editbtn').addEventListener('click', () => {
     if (editor) return;
