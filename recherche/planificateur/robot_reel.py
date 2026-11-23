@@ -11,6 +11,7 @@ Ce que le planificateur ne voit pas, mais que le robot subit :
   - la vitesse des personnes n'est pas donnée : elle est estimée à partir des positions mesurées.
 """
 import numpy as np
+from collections import deque
 
 R_W, B, M, I_Z = 0.08, 0.45, 25.0, 1.4           # rayon de roue, entraxe, masse, inertie en lacet
 TAU_MAX, W_NOLOAD = 2.3, 1.9 / 0.08              # couple max à la roue (N·m), vitesse à vide (rad/s)
@@ -21,8 +22,11 @@ TICKS = 1024
 
 
 class RealRobot:
-    def __init__(self, pose, rng, delay=0.05):
+    def __init__(self, pose, rng, delay=0.05, file_commandes=False):
         self.p = np.array(pose, float)            # x, y, θ vrais
+        # file_commandes : chaque commande porte son propre retard (temps de calcul compté dans la boucle) ;
+        # sans elle, comportement d'origine (retard fixe de la chaîne), inchangé au bit près
+        self.file = deque() if file_commandes else None; self.tick = 0; self.cur = (0.0, 0.0)
         self.v = 0.0; self.w = 0.0
         self.rng = rng; self.delay = delay
         self.cmd = (0.0, 0.0); self.prev = (0.0, 0.0)
@@ -38,12 +42,23 @@ class RealRobot:
         k = max(1.0, abs(wl) / lim, abs(wr) / lim)  # on garde la courbure, on réduit la vitesse
         return np.array([wl, wr]) / k
 
-    def step(self, v_cmd, w_cmd, dt=0.1):
-        """Avance de dt secondes. La nouvelle commande ne prend effet qu'après le retard de la chaîne."""
-        self.prev, self.cmd = self.cmd, (float(np.clip(v_cmd, 0, VMAX)), float(np.clip(w_cmd, -WMAX, WMAX)))
+    def step(self, v_cmd, w_cmd, dt=0.1, retard_calcul=0.0):
+        """Avance de dt secondes. La nouvelle commande ne prend effet qu'après le retard de la chaîne.
+        Avec la file de commandes : v_cmd = None si aucune commande nouvelle (planificateur encore occupé),
+        et la commande prend effet après le retard de la chaîne plus retard_calcul."""
         n = int(round(dt / DT_IN))
+        if self.file is not None:
+            if v_cmd is not None:
+                cmd = (float(np.clip(v_cmd, 0, VMAX)), float(np.clip(w_cmd, -WMAX, WMAX)))
+                self.file.append((self.tick + int(np.ceil((self.delay + retard_calcul) / DT_IN - 1e-9)), cmd))
+        else:
+            self.prev, self.cmd = self.cmd, (float(np.clip(v_cmd, 0, VMAX)), float(np.clip(w_cmd, -WMAX, WMAX)))
         for k in range(n):
-            vc, wc = self.prev if k * DT_IN < self.delay else self.cmd
+            if self.file is not None:
+                while self.file and self.file[0][0] <= self.tick: self.cur = self.file.popleft()[1]
+                vc, wc = self.cur; self.tick += 1
+            else:
+                vc, wc = self.prev if k * DT_IN < self.delay else self.cmd
             ref = self.wheel_targets(vc, wc)
             om = np.array([(self.v - self.w * B / 2) / R_W, (self.v + self.w * B / 2) / R_W])
             # codeur : on ne mesure que des points entiers

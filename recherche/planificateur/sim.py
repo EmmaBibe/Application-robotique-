@@ -246,6 +246,9 @@ COND = {
     'carte_inconnue': dict(unknown=True, range=6.0),
     'reactifs': dict(react=True),
     'enfer': dict(range=5.0, occl=True, drop=0.1, lat=2, slip=True, unknown=True, react=True),
+    # séance 8 : toutes les difficultés à la fois (même contenu qu'« enfer »), puis en comptant aussi le temps de calcul
+    'tout': dict(range=5.0, occl=True, drop=0.1, lat=2, slip=True, unknown=True, react=True),
+    'tout_calcul': dict(range=5.0, occl=True, drop=0.1, lat=2, slip=True, unknown=True, react=True, calc=True),
 }
 
 
@@ -259,7 +262,7 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
     robot = tracker = None
     if C.get('reel'):
         import robot_reel
-        robot = robot_reel.RealRobot(s, np.random.default_rng(777 + world.seed))
+        robot = robot_reel.RealRobot(s, np.random.default_rng(777 + world.seed), file_commandes=bool(C.get('calc')))
         tk = os.environ.get('TRACKER')   # naif : ancien filtre alpha-bêta ; sans_prolongation : Kalman d'avant l'audit (pistes non vues effacées de la sortie)
         tracker = robot_reel.Tracker() if tk == 'naif' else robot_reel.TrackerKF(prolonger=(tk != 'sans_prolongation'))
         C['lat'] = C.get('lat', 0) + 1          # chaîne lidar + traitement : une période de retard de plus
@@ -278,6 +281,9 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
     queue = deque()
     path = [s[:2].copy()]; vs = []; ws = []; comp = []; minclear = np.inf
     outcome = 'temps'; marge_bal = np.inf
+    # temps de calcul compté dans la boucle (C['calc']) : le planificateur, s'il est encore occupé, ne reçoit pas
+    # de nouvelle mesure ; sa commande prend effet après la chaîne (50 ms) plus son propre temps de calcul mesuré
+    calc = bool(C.get('calc')) and robot is not None; occupe_jusqua = 0.0; sautes = 0; c_dernier = 0.0
     while t < T_MAX:
         if robot is not None:
             meas = robot.est.copy()                                   # pose estimée (odométrie + recalage lidar)
@@ -292,15 +298,23 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
             queue.append((meas, obs, cov))
             meas, obs, cov = queue[0]
             if len(queue) > C['lat']: queue.popleft()
-        if hasattr(planner, 'set_track_cov'): planner.set_track_cov(cov)   # incertitude du suivi, retardée comme les mesures
-        t0 = time.perf_counter()
-        vc, wc = planner.act(t, meas, obs)
-        comp.append(time.perf_counter() - t0)
-        vc = float(np.clip(vc, 0, VMAX)); wc = float(np.clip(wc, -WMAX, WMAX))
+        planifie = not calc or t >= occupe_jusqua - 1e-9
+        if planifie:
+            if hasattr(planner, 'set_track_cov'): planner.set_track_cov(cov)   # incertitude du suivi, retardée comme les mesures
+            t0 = time.perf_counter()
+            vc, wc = planner.act(t, meas, obs)
+            c_dernier = time.perf_counter() - t0; comp.append(c_dernier)
+            if calc: occupe_jusqua = t + c_dernier
+            vc = float(np.clip(vc, 0, VMAX)); wc = float(np.clip(wc, -WMAX, WMAX))
+        else: sautes += 1
         if robot is not None:
-            if C.get('slip'):   # le glissement s'applique en plus, comme une erreur de gain sur les roues
-                vc, wc = vc * gv, wc * gw + bw * (abs(vc) > 0.05)
-            s = robot.step(vc, wc).copy(); v, w = robot.speeds()
+            if calc:
+                if planifie and C.get('slip'): vc, wc = vc * gv, wc * gw + bw * (abs(vc) > 0.05)
+                s = robot.step(vc if planifie else None, wc, retard_calcul=c_dernier).copy(); v, w = robot.speeds()
+            else:
+                if C.get('slip'):   # le glissement s'applique en plus, comme une erreur de gain sur les roues
+                    vc, wc = vc * gv, wc * gw + bw * (abs(vc) > 0.05)
+                s = robot.step(vc, wc).copy(); v, w = robot.speeds()
         else:
             v = v + np.clip(vc - v, -AMAX * DT, AMAX * DT); w = w + np.clip(wc - w, -ALPHA * DT, ALPHA * DT)
             va, wa = v, w
@@ -338,5 +352,6 @@ def run_episode(world, planner, perturb=True, record=False, cond='nominal'):
                lissage_w=float(np.mean(np.abs(np.diff(ws)))) if len(ws) > 1 else 0.0,
                calcul_ms=1000 * float(np.mean(comp)), calcul_max_ms=1000 * float(np.max(comp)))
     if BALAYAGE: res['marge_balayee'] = min(marge_bal, float(minclear))
+    if calc: res['cycles_sautes'] = sautes
     if record: res['path'] = path
     return res

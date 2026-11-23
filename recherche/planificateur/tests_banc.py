@@ -564,5 +564,25 @@ check('avec la correction : elle reste figée tant que la personne est masquée'
 _tk4 = RR.TrackerKF(); _tk4(np.array([[5., 5., 0, 0, .35, 1, 9]])); _o4 = _tk4(np.zeros((0, 7)))
 check('la piste prolongée porte le marqueur 2', len(_o4) == 1 and _o4[0, 5] == 2)
 
+print('34. Temps de calcul compté dans la boucle (séance 8)')
+_seq = [(0.4 + 0.05 * _k, 0.3 * np.sin(_k)) for _k in range(30)]
+_ra = RR.RealRobot(np.array([2., 3., 0.2]), np.random.default_rng(3)); _rb = RR.RealRobot(np.array([2., 3., 0.2]), np.random.default_rng(3), file_commandes=True)
+for _u in _seq: _pa = _ra.step(*_u).copy(); _pb = _rb.step(*_u, retard_calcul=0.0).copy()
+check('file de commandes sans retard de calcul : même trajectoire qu\'à l\'origine, au bit près', np.array_equal(_pa, _pb) and np.array_equal(_ra.est, _rb.est))
+# une commande calculée en 120 ms prend effet 50 + 120 = 170 ms après son envoi : 17 pas internes de 10 ms
+_rc = RR.RealRobot(np.array([2., 3., 0.]), np.random.default_rng(3), file_commandes=True)
+_rc.step(1.0, 0.0, retard_calcul=0.12); _v1 = _rc.v; _rc.step(None, None); _cur1 = _rc.cur
+check('commande calculée en 120 ms : rien ne bouge pendant les 100 premières ms', _v1 == 0.0)
+check('elle est appliquée au 17e pas interne (170 ms)', _cur1 == (1.0, 0.0) and len(_rc.file) == 0)
+
+
+_rd2 = RR.RealRobot(np.array([2., 3., 0.]), np.random.default_rng(3), file_commandes=True)
+_rd2.step(1.0, 0.0, retard_calcul=0.0); _rd2.step(None, None)
+check('sans retard de calcul, la même commande agit plus tôt (vitesse plus haute après 200 ms)', _rd2.v > (_rc.v - 1e-12))
+os.environ['REEL'] = '1'
+_e = sim.run_episode(sim.World('carrefour', 6000), P.Memory(P.ALL[54]), cond='tout_calcul')
+check('condition « tout_calcul » : épisode complet, cycles sautés comptés', 'cycles_sautes' in _e and _e['cycles_sautes'] >= 0, f"{_e['outcome']}, {_e['cycles_sautes']} cycles sautés")
+check('« tout » réunit les sept perturbations', sim.COND['tout'] == sim.COND['enfer'] and sim.COND['tout_calcul'] == dict(sim.COND['enfer'], calc=True))
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)
