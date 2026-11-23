@@ -599,5 +599,24 @@ if _sh.which('node') and _sh.which('g++'):
 else:
     check('node et g++ disponibles pour vérifier le portage C++', False)
 
+print('36. Mondes version 2 : placement valide, piétons qui contournent les obstacles, version 1 inchangée')
+_ok_place = True; _pen = 0.0
+for _sc in ['carrefour', 'couloir', 'piege', 'carrefour_rapide', 'traversee', 'goulot', 'foule_dense']:
+    for _sd in range(8000, 8010):
+        _w = sim.World(_sc, _sd, version=2)
+        _P = [(o['p'], o['r']) for o in _w.dyn]
+        for _i, (_p, _r) in enumerate(_P):
+            if len(_w.static) and np.any(np.hypot(_w.static[:, 0] - _p[0], _w.static[:, 1] - _p[1]) < _w.static[:, 2] + _r + 0.1 - 1e-9): _ok_place = False
+            if any(np.hypot(*(_p - _q)) < _r + _rq + 0.05 - 1e-9 for _q, _rq in _P[:_i]): _ok_place = False
+            if np.hypot(*(_p - _w.goal)) < 0.5 + _r - 1e-9: _ok_place = False
+        for _k in range(60):
+            _w.step_obstacles(_k * 0.1)
+            if len(_w.static):
+                for o in _w.dyn: _pen = max(_pen, float(np.max(_w.static[:, 2] + o['r'] - np.hypot(_w.static[:, 0] - o['p'][0], _w.static[:, 1] - o['p'][1]))))
+check('placement initial valide (obstacles, personnes, arrivée) sur 70 mondes', _ok_place)
+check('pendant le trajet, aucun piéton ne s\'enfonce de plus de 12 cm dans un obstacle', _pen < 0.12, f'{100 * _pen:.1f} cm')
+_w1 = sim.World('couloir', 8001); _w1b = sim.World('couloir', 8001, version=1)
+check('version 1 par défaut et identique', _w1.version == 1 and all(np.array_equal(a['p'], b['p']) for a, b in zip(_w1.dyn, _w1b.dyn)))
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

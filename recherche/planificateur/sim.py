@@ -3,6 +3,7 @@
 Les obstacles mobiles peuvent changer d'intention (tourner, s'arrêter, accélérer)
 sans prévenir : c'est ce qui rend la prédiction difficile.
 """
+import os
 import numpy as np
 
 DT = 0.1
@@ -15,8 +16,11 @@ T_MAX = 45.0
 
 
 class World:
-    def __init__(self, name, seed):
+    def __init__(self, name, seed, version=None):
         self.name, self.seed = name, seed
+        # version 2 des mondes (relecture extérieure du 23 novembre) : placement valide des personnes et piétons qui
+        # contournent les obstacles fixes au lieu de les traverser. Version 1 par défaut, inchangée au bit près.
+        self.version = int(version or os.environ.get('MONDE', 1))
         self.nrng = np.random.default_rng(10_000 + seed)   # bruit de mesure, séparé de l'évolution du monde
         self.keepout = []
         self.start = np.array([1.5, 10.0, 0.0])
@@ -30,6 +34,51 @@ class World:
             getattr(self, 'build_' + name)()
             self.static = np.array(self.static, float).reshape(-1, 3)
             if self.feasible(): break
+        if self.version >= 2: self.placement_rejets, self.placement_echecs = self._valider_placement()
+
+    # ------------------------------------------------------------ mondes version 2
+    def _place_ok(self, p, r, j):
+        if not (r <= p[0] <= SIZE - r and r <= p[1] <= SIZE - r): return False
+        if len(self.static) and np.any(np.hypot(self.static[:, 0] - p[0], self.static[:, 1] - p[1]) < self.static[:, 2] + r + 0.1): return False
+        if any(np.hypot(*(p - q['p'])) < r + q['r'] + 0.05 for q in self.dyn[:j]): return False
+        if np.hypot(p[0] - self.start[0], p[1] - self.start[1]) < 1.6 + r: return False
+        return np.hypot(p[0] - self.goal[0], p[1] - self.goal[1]) >= 0.5 + r
+
+    def _valider_placement(self):
+        """Déplace le moins possible chaque personne mal placée (dans un obstacle, sur une autre personne, sur le départ
+        ou l'arrivée) : recherche autour de sa position d'origine, rayon croissant, générateur séparé. La densité et la
+        disposition voulue par la scène sont conservées. Renvoie le nombre de personnes déplacées et d'échecs."""
+        g = np.random.default_rng(7_777_777 + self.seed); rejets = echecs = 0
+        for j, o in enumerate(self.dyn):
+            if self._place_ok(o['p'], o['r'], j): continue
+            rejets += 1; p0 = o['p'].copy()
+            for k in range(600):
+                q = p0 + g.normal(0, 0.2 + 0.02 * k, 2)
+                if self._place_ok(q, o['r'], j): o['p'] = q; break
+            else: echecs += 1
+        return rejets, echecs
+
+    def _contourner(self, o, j):
+        """Un piéton qui heurte un obstacle fixe glisse le long de lui à sa vitesse, puis reprend sa direction."""
+        if not len(self.static): return
+        C, Rs = self.static[:, :2], self.static[:, 2] + o['r']
+        d = o['p'] - C; dist = np.hypot(d[:, 0], d[:, 1]); k = int(np.argmin(dist - Rs))
+        if dist[k] >= Rs[k]: return
+        n = d[k] / max(dist[k], 1e-9); o['p'] = C[k] + n * Rs[k]
+        sp = np.hypot(*o['v'])
+        if sp > 1e-9:
+            tg = np.array([-n[1], n[0]]); vt = o['v'] @ tg
+            sgn = np.sign(vt) if abs(vt) > 1e-9 else (1.0 if j % 2 == 0 else -1.0)   # face à l'obstacle : un côté fixé par personne
+            o['p'] = o['p'] + sgn * tg * (sp - abs(vt)) * DT   # la part de vitesse perdue contre l'obstacle, rendue le long de lui
+        for _ in range(8):   # puis on ressort de tout obstacle touché (murs faits de disques jointifs)
+            d = o['p'] - C; dist = np.hypot(d[:, 0], d[:, 1]); pen = Rs - dist
+            if pen.max() <= 1e-9: break
+            for m in np.nonzero(pen > 1e-9)[0]:
+                dd = o['p'] - C[m]; L = max(np.hypot(*dd), 1e-9)
+                if L < Rs[m]: o['p'] = C[m] + dd / L * Rs[m]
+        # coincé (passage trop étroit) : il change de direction d'un quart de tour au lieu de pousser indéfiniment
+        if sp > 0.05 and '_p0' in o and np.hypot(*(o['p'] - o['_p0'])) < 0.3 * sp * DT:
+            c = 1.0 if j % 2 == 0 else -1.0; o['v'] = np.array([-c * o['v'][1], c * o['v'][0]])
 
     def feasible(self):
         from planners import astar, occupancy
@@ -158,7 +207,8 @@ class World:
 
     # ------------------------------------------------------------ évolution
     def step_obstacles(self, t, robot=None, react=False):
-        for o in self.dyn:
+        for j, o in enumerate(self.dyn):
+            if self.version >= 2: o['_p0'] = o['p'].copy()
             if react and robot is not None and o['reactif']:
                 # les agents réactifs s'écartent du robot quand il est proche (force sociale simplifiée)
                 d = o['p'] - robot; n = np.hypot(*d)
@@ -187,9 +237,11 @@ class World:
                 o['p'] = o['p'] + o['v'] * DT
                 if o['p'][1] > SIZE + 0.4: o['p'][1] -= SIZE + 0.8
                 if o['p'][1] < -0.4: o['p'][1] += SIZE + 0.8
+                if self.version >= 2: self._contourner(o, j)
                 continue
             if o['kind'] in ('chasseur', 'porte'):
                 o['p'] = o['p'] + o['v'] * DT
+                if self.version >= 2: self._contourner(o, j)
                 continue
             if o['kind'] == 'errant':
                 if self.rng.random() < 0.03:   # change de direction de temps en temps
@@ -207,6 +259,7 @@ class World:
             for k in (0, 1):   # rebond sur les murs de l'arène
                 if o['p'][k] < o['r'] or o['p'][k] > SIZE - o['r']:
                     o['v'][k] *= -1; o['p'][k] = np.clip(o['p'][k], o['r'], SIZE - o['r'])
+            if self.version >= 2: self._contourner(o, j)
 
     def obstacles(self, noise=0.0, robot=None, rng_range=None, occl=False, drop=0.0):
         """Tableau N x 7 : x, y, vx, vy, r, mobile, identifiant. Les mesures des mobiles sont bruitées.

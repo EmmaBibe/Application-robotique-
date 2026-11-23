@@ -51,3 +51,18 @@ Le chantier 1 a montré qu'avec les temps de calcul Python, VIGIE perd son avanc
 - `tout_c100` : la même chose avec 100 ms (calculateur embarqué environ deux fois et demie plus lent ; c'est la limite au-delà de laquelle des cycles sautent).
 
 Mêmes graines (6000 à 6059), 11 scènes, mêmes 4 méthodes : 5 280 essais. Lecture fixée d'avance : VIGIE 6 contre DRA-MPPI et contre T-MPC++ dans chaque condition, et pour chaque méthode l'écart à `tout`. T-MPC++ reçoit le même délai par hypothèse : il n'est pas porté en C++, on ne sait pas s'il tiendrait ce rythme. La conclusion portera sur VIGIE contre DRA-MPPI, les deux seules méthodes mesurées en C++.
+
+## 6. Mondes corrigés (version 2), après la troisième relecture extérieure (écrit avant les essais)
+
+La relecture de l'application 1.3.0 a mis au jour un défaut du simulateur, confirmé dans le banc : les piétons ignorent les obstacles fixes (ils traversent les murs du carrefour, du couloir et du piège) et leur placement initial n'est pas vérifié.
+
+**Correction** (`sim.World(..., version=2)` ou `MONDE=2`, la version 1 reste celle par défaut, inchangée au bit près) :
+
+- placement : toute personne qui empiète sur un obstacle (marge 10 cm), sur une personne déjà placée (marge 5 cm), sur le départ (1,6 m) ou sur la zone d'arrivée est déplacée le moins possible, par une recherche autour de sa position d'origine avec un générateur séparé ; la densité et la disposition de la scène sont conservées ;
+- mouvement : un piéton qui heurte un obstacle fixe glisse le long de lui à sa vitesse puis reprend sa direction ; coincé dans un passage trop étroit, il tourne d'un quart de tour.
+
+Contrôle sur les graines 8000 à 8039 : plus aucun chevauchement au départ (aucun échec de placement) ; pendant le trajet, il reste des contacts rares (moins de 0,2 % des pas) et peu profonds (10 cm au plus, contre des murs entièrement traversés avant). Les piétons ne s'évitent toujours pas entre eux (déclaré ; ce sera l'objet du test d'un second modèle de piétons).
+
+**Campagne** : graines neuves 8000 à 8059, 11 scènes, les trois conditions de l'évaluation finale (vision complète, perception limitée, piétons réactifs), robot réaliste, méthodes VIGIE 6 (71), T-MPC++ (49), DRA-MPPI réglé (54) : 5 940 essais.
+
+**Lecture fixée d'avance** : VIGIE 6 contre DRA-MPPI et contre T-MPC++, globalement et par condition, avec le même bootstrap apparié (et sa version par grappes et par scène). L'avance de VIGIE sur DRA-MPPI est dite **robuste à la correction** si elle reste significative sur ces mondes. Les quatre scènes touchées (carrefour, carrefour rapide, couloir, piège) sont aussi lues à part. Aucune méthode n'est modifiée ou réglée sur ces mondes.
