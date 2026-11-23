@@ -1,0 +1,6 @@
+ampere-academie/dist/
+ampere-academie/android/build/
+ampere-academie/android/assets/
+ampere-academie/android/signing/
+ampere-academie/windows/obj/
+*.idsig
