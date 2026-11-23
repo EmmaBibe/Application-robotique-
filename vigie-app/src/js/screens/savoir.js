@@ -39,10 +39,11 @@ export default function savoir(view) {
       <p>La version de cette application, réécrite pour ton téléphone, retrouve le même avantage : +4,3 points sur 1 760 essais (intervalle de +1,9 à +6,8).</p>
       <p class="small muted">Ce que coûte VIGIE : 51 ms de calcul par décision en médiane, contre 7 ms pour DRA-MPPI et 87 ms pour T-MPC++, sur un ordinateur de bureau. Avec 400 trajectoires au lieu de 912, il descend à 37 ms sans perte mesurable.</p>
       <h3>Toutes les difficultés à la fois</h3>
-      <p>Sur un vrai robot, les ennuis se cumulent. On les a donc tous réunis sur 60 nouveaux mondes par scène (5 280 essais) : vue limitée à 5 m et masquée par les obstacles, une détection sur dix perdue, mesures en retard, roues qui patinent, carte inconnue au départ, piétons qui réagissent au robot. Puis on a rejoué les mêmes mondes en comptant le temps de calcul : tant que le programme réfléchit, le robot garde sa dernière commande.</p>
+      <p>Sur un vrai robot, les ennuis se cumulent. On les a donc tous réunis sur 60 nouveaux mondes par scène, soit 660 mondes : vue limitée à 5 m et masquée par les obstacles, une détection sur dix perdue, mesures en retard, roues qui patinent, carte inconnue au départ, piétons qui réagissent au robot. Puis on a rejoué les mêmes mondes en comptant le temps de calcul : tant que le programme réfléchit, le robot garde sa dernière commande. Quatre méthodes, deux façons de compter : 660 × 4 × 2 = 5 280 essais.</p>
       <table><thead><tr><th>Toutes les difficultés</th><th>Sans compter le calcul</th><th>En comptant le calcul (Python)</th></tr></thead><tbody>
         <tr><td>T-MPC++</td><td>85,5 %</td><td>76,5 %</td></tr>
         <tr><td><b>VIGIE 6</b></td><td><b>84,5 %</b></td><td><b>82,1 %</b></td></tr>
+        <tr><td>VIGIE 6 à 400 trajectoires</td><td>83,5 %</td><td>81,4 %</td></tr>
         <tr><td>DRA-MPPI</td><td>81,2 %</td><td>81,8 %</td></tr></tbody></table>
       <p>Sans compter le calcul, VIGIE garde <b>+3,3 points</b> sur DRA-MPPI (de +0,3 à +6,5, significatif) et fait jeu égal avec T-MPC++ (−0,9, de −3,8 à +2,1). En comptant le calcul, son avance sur DRA-MPPI disparaît (+0,3, de −2,7 à +3,3) : en Python, certaines de ses décisions prennent près d'une demi-seconde et le robot roule pendant ce temps sur une commande périmée. T-MPC++, le plus lent des trois en Python, perd 8,9 points ; VIGIE le devance alors de 5,6 points, mais cet écart mesure la lenteur des programmes plus que les méthodes : on ne le présente pas comme une victoire.</p>
       <h3>VIGIE en C++</h3>
@@ -91,7 +92,9 @@ export default function savoir(view) {
       </ul>
       <h3>Ce qu'un relecteur doit savoir</h3>
       <ul>
-        <li>Les scènes et le modèle de piétons ont été conçus par nous. Les piétons ne se gênent pas entre eux ; dans la condition réactive, ceux qui réagissent sont fixés par leur rang dans la scène, les mêmes pour toutes les méthodes.</li>
+        <li>Les scènes et le modèle de piétons ont été conçus par nous. Les piétons ne se gênent pas entre eux et ne contournent pas les obstacles fixes : dans le carrefour, le carrefour rapide, le couloir et le piège en U, ils traversent les murs, et la moitié environ des mondes de ces scènes démarrent avec une personne qui empiète sur un obstacle (signalé par une relecture extérieure, correction en préparation). Dans la condition réactive, ceux qui réagissent sont fixés par leur rang dans la scène, les mêmes pour toutes les méthodes.</li>
+        <li>Le suivi reçoit des positions bruitées et estime lui-même les vitesses, mais l'identité de chaque personne lui est donnée : il ne se trompe jamais de personne. La position du robot est recalée sur sa vraie position, avec du bruit : ce n'est pas une vraie localisation par lidar.</li>
+        <li>Les trajectoires essayées par les planificateurs suivent un modèle simple (le robot obéit tout de suite à la vitesse demandée), alors que le robot simulé a de l'inertie. C'est le même modèle pour toutes les méthodes ; un modèle interne des moteurs (VIGIE 4) n'avait rien apporté.</li>
         <li>Les écarts par scène portent sur 60 à 300 situations : utiles pour repérer des tendances, fragiles un par un, puisque onze scènes sont comparées à la fois.</li>
         <li>Les temps de calcul viennent de programmes Python ; seuls VIGIE et DRA-MPPI ont été réécrits en C++. Le classement « en C++ » face à T-MPC++ n'est pas connu.</li>
         <li>La prudence aux angles morts garde une vitesse plancher de 0,15 m/s, un choix de réglage non optimisé.</li>

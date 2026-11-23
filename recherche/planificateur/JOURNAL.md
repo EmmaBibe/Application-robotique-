@@ -809,3 +809,28 @@ Code : `cpp/vigie.hpp`, `cpp/vigie.cpp` (VIGIE 6 et DRA-MPPI, calcul de la comma
 - Les pics restent les cycles où VIGIE recalcule ses itinéraires (un sur dix environ) : planificateur espace-temps et A*.
 - Sur un calculateur embarqué de type Raspberry Pi 5 ou Jetson Orin (environ deux à trois fois plus lent par cœur que ce Xeon, estimation non mesurée), le pire cas resterait autour de 80 à 120 ms : à la limite de la cadence de 10 décisions par seconde. Il faudra alors soit la version à 400 tirages, soit sortir le recalcul des itinéraires dans un second fil d'exécution.
 - La version à 400 tirages a été chronométrée sur les mêmes entrées (la commande diffère alors, c'est normal : ce n'est pas le même réglage).
+
+## Troisième relecture extérieure : audit de l'application 1.3.0 (23 novembre 2026)
+
+Chaque point a été vérifié dans le code du banc avant d'en tirer quoi que ce soit.
+
+**Confirmé, nouveau, à corriger :**
+
+- **Les piétons ignorent les obstacles fixes.** `step_obstacles` ne teste aucun obstacle fixe : dans le carrefour, le carrefour rapide, le couloir et le piège en U, les personnes traversent les murs pendant tout le trajet. Le placement initial ne vérifie ni les autres personnes ni les obstacles. Mesuré sur les graines 5000 à 5099 du banc Python : au moins une personne empiète sur un obstacle dans 56 % des mondes du carrefour, 49 % du carrefour rapide, 63 % du couloir et 64 % du piège ; son centre est dans l'obstacle dans 24 à 36 % des mondes. L'audit trouve des chiffres voisins sur le générateur JavaScript. Défaut identique pour toutes les méthodes, mais il fausse le réalisme de ces quatre scènes : une personne qui sort d'un mur ressemble à un angle mort.
+- **Erreur de documentation :** la page Savoir annonçait 5 280 essais sous un tableau de trois méthodes. La campagne en compte quatre (VIGIE 6 à 400 trajectoires) ; tableau et texte corrigés.
+- **Limites à écrire :** identités des personnes données au suivi (aucune erreur d'association) ; position du robot recalée sur la vraie pose bruitée (pas de vraie localisation) ; trajectoires essayées selon un modèle sans inertie, le même pour toutes les méthodes. Ajoutées à la fiche technique.
+
+**Inexact :** « le monde transmet au suivi la vitesse vraie des personnes ». Le monde la met bien dans le tableau, mais `TrackerKF` n'utilise que les positions mesurées et remplace la vitesse par sa propre estimation (`robot_reel.py`) ; même chose en JavaScript (`makeTracker`).
+
+**Déjà traité :** collisions entre deux instants (contrôle C : aucun contact manqué, 1,2 cm au pire) ; indice d'imprévisibilité nourri par les pistes prolongées (VIGIE 6.1, +0,2, non adopté) ; budget de calcul égal en tirages et en temps (contrôle A : +5,6 contre DRA-MPPI à 912 tirages, +5,7 à 2 800) ; temps de calcul compté dans la boucle (séance 8) ; escompte 0,97 (comparé sans escompte) ; plancher de 0,15 m/s (piste du plan de la séance 8) ; personnes qui se chevauchent entre elles (déclaré).
+
+**Statistiques, vérifiées :** l'audit demande un bootstrap par grappes et stratifié. Recalculé sur l'évaluation finale en tirant les mondes par scène et en gardant ensemble les trois conditions d'un même monde : VIGIE 6 − DRA-MPPI +3,8 [+2,4 ; +5,2] (contre [+2,6 ; +5,0] en tirage simple) ; VIGIE 6 − T-MPC++ +0,5 [−1,0 ; +2,0]. Les conclusions ne changent pas.
+
+**Références vérifiées :** PEDS (IEEE RA-L 2026 : six modèles de piétons, SFM, HSFM, ORCA, Straight, NSP, SocialGAIL ; la réussite d'une même politique varie jusqu'à 14 points selon le modèle de piétons, 30 en scène dense) ; CrowdBot v2 (Zenodo, novembre 2025, foules réelles à Lausanne, lidar et caméra, CC BY 4.0) ; codes officiels de DRA-MPPI (ROS 1) et de T-MPC++ (ROS 2, solveur Forces Pro sous licence ou Acados).
+
+**Ce qu'on en retient pour la suite :**
+
+1. Mondes corrigés : placement valide (personnes, obstacles, départ, arrivée) et piétons qui contournent les obstacles fixes ; puis rejouer la comparaison principale sur des graines neuves avec ces mondes, l'ancienne évaluation restant au journal telle quelle.
+2. Robustesse au modèle de piétons, l'idée centrale de PEDS : faire marcher les piétons selon un second modèle (forces sociales ou ORCA) et voir si l'avance de VIGIE tient.
+3. Application : graine de départ choisie, export CSV des essais du banc de poche.
+4. Plus tard : T-MPC++ depuis son code officiel avec Acados, si l'interface ROS 2 peut être branchée au banc.
