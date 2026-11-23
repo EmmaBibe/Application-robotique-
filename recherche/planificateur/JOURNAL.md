@@ -679,3 +679,34 @@ Tests de cohérence : **228 vérifications réussies, 0 échec.**
 Une application séparée (`vigie-app/`, identifiant Android `fr.robomaster.vigie`) reprend le simulateur 3D et y ajoute : un mode pronostic, un Atelier « et si… ? » qui modifie les réglages de VIGIE et le fait courir contre le VIGIE officiel et la référence, un banc de poche (comparaison appariée avec intervalle de confiance bootstrap, comme `analyse_scenes.py`), et un écran « Savoir » (histoire, résultats, idées abandonnées, références, limites), dont chaque chiffre a été relu contre ce journal. Une affirmation erronée a été retirée avant livraison : T-MPC++ n'a pas couru dans la validation de VIGIE 6, on ne peut donc pas dire que VIGIE 6 le bat sur ces mondes.
 
 Pas de copie du planificateur : le script d'assemblage reprend le cœur partagé avec RoboMaster, celui que vérifie le test 32. Les réglages de l'Atelier ont des valeurs par défaut identiques au VIGIE officiel ; six vérifications ajoutées (même trajet au bit près avec les valeurs par défaut, et chaque interrupteur qui agit réellement : sans chemin qui sait attendre, plus d'option espace-temps ; sans improvisation, plus d'option libre ; sans itinéraires, plus de route ; fidélité à 1, plus de bonus ; sans prudence, plafond de vitesse jamais actif). Statistiques de l'application recoupées avec numpy sur les 880 paires de la campagne JavaScript : +4,3 points, intervalle [+2,0 ; +6,7] contre [+1,9 ; +6,8] (différence due au seul tirage du bootstrap).
+
+## Évaluation finale (graines 5000 à 5099, 23 novembre 2026)
+
+Protocole fixé avant le lancement (PLAN_SEANCE7.md §12) : 100 mondes jamais utilisés, 11 scènes, trois conditions (vision complète, perception limitée, piétons qui réagissent au robot), quatre méthodes, 13 200 essais (`final_seance7.csv`, détail par scène dans `final_seance7_scenes.md`). Le serveur s'est mis en veille une fois, 5 minutes après le départ ; reprise sans perte (221 essais déjà écrits, ligne finale complète), puis calcul par tranches de 2 heures. Aucun doublon, 3 300 essais par méthode.
+
+| Méthode | Succès | Collisions en mouvement | Écart / DRA-MPPI réglé (IC 95 %) | Mondes gagnés / perdus |
+|---|---|---|---|---|
+| **VIGIE 6** | **88,9 %** | **9,2 %** | **+3,8 [+2,6 ; +5,1]** | 271 / 145 |
+| T-MPC++ | 88,5 % | 10,9 % | +3,4 [+2,0 ; +4,8] | 330 / 219 |
+| VIGIE 3 | 87,6 % | 10,6 % | +2,5 [+1,2 ; +3,9] | 307 / 223 |
+| DRA-MPPI réglé | 85,1 % | 12,6 % | – | – |
+
+Par condition, VIGIE 6 contre DRA-MPPI réglé : vision complète +4,1 [+2,1 ; +6,1], perception limitée +2,1 [−0,5 ; +4,5] (non significatif), piétons réactifs +5,3 [+3,5 ; +7,0]. Aucune condition en recul.
+
+**Critère principal (§12) : atteint.** VIGIE 6 fait significativement mieux que la référence officielle, sans s'effondrer dans aucune condition, avec moins de collisions en mouvement.
+
+**Ce que la campagne ne permet pas de dire** : que VIGIE 6 dépasse l'état de l'art dans son ensemble. Face à T-MPC++, l'écart est de +0,5 [−0,8 ; +1,7], non significatif, dans chacune des trois conditions ; T-MPC++ arrive en moyenne 1,9 s plus tôt. Sur la série de mondes précédente, T-MPC++ faisait jeu égal avec DRA-MPPI ; ici il le dépasse : le classement entre les deux références dépend des mondes tirés. VIGIE 6 fait aussi mieux que VIGIE 3 (+1,3 [+0,1 ; +2,4]).
+
+Par scène, face à DRA-MPPI réglé : couloir +13,3, porte étroite +10,0, angles morts +9,3, traversée +6,3 (significatifs) ; forêt −1,7 (significatif, 98 % contre 100 %). Face à T-MPC++ : carrefour +6,0 et carrefour rapide +6,3 (significatifs), porte étroite −8,0 (significatif), foule dense −5,3 (limite). Les deux méthodes ont des forces différentes.
+
+Temps de calcul médian par décision : DRA-MPPI 6,8 ms, VIGIE 6 51 ms, T-MPC++ 87 ms. L'avance sur DRA-MPPI s'obtient avec bien plus de calcul : c'est l'objet du contrôle A ci-dessous.
+
+## Seconde relecture extérieure (23 novembre 2026)
+
+Relecture de l'application reçue pendant l'évaluation finale ; chaque point vérifié dans le code du banc (détail et plan des contrôles : PLAN_SEANCE7.md §13).
+
+- **Confirmé** : budget de calcul inégal (912 tirages par cycle contre 400 ; recalcul des routes à 200–280 ms, au-delà de la période de 100 ms) ; indice d'imprévisibilité nourri par les pistes prolongées pendant un masquage (erreur lissée 0,79 → 0,34 en 0,8 s, test 33) ; contacts contrôlés seulement toutes les 0,1 s.
+- **Exact mais sans effet sur la comparaison** : chevauchement initial de piétons (ils ne se gênent pas entre eux dans le simulateur) ; tirage des piétons réactifs fixé par leur rang (23 sur 26 en foule dense, pas 70 % par monde), identique pour toutes les méthodes ; plancher de vitesse de 0,15 m/s de la prudence aux angles morts.
+- **Déjà traité** : variance propre à chaque piste (§11, écartée) ; escompte 0,97 (comparé sans escompte) ; modèle moteur dans la prédiction (VIGIE 4) ; comportement des piétons (condition réactive).
+
+Correction préparée : la colonne « mobile » vaut 2 pour une piste prolongée (même comportement pour tout le code, vérifié au bit près sur des épisodes de référence), et l'indice d'imprévisibilité de `VIGIE 6.1` ignore ces pistes. Tests : 238 vérifications réussies ; seul échec pendant la rédaction, le fichier de l'évaluation encore incomplet.
