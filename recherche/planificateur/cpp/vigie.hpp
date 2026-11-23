@@ -1,6 +1,6 @@
 // VIGIE 6 et DRA-MPPI en C++, portés ligne à ligne depuis js/sims/vigie6 (lui-même vérifié contre le banc Python
 // par parite_js.py). Seul le calcul de la commande est porté : pas d'explication des décisions, pas de monde simulé.
-// Fidélité vérifiée par parite_cpp.py : mêmes entrées, mêmes commandes que le JavaScript.
+// Fidélité vérifiée par parite_cpp.mjs et cpp/rejeu (test 35 de tests_banc.py) : mêmes entrées, mêmes commandes que le JavaScript.
 #pragma once
 #include <array>
 #include <cmath>

@@ -785,3 +785,27 @@ Plan écrit avant les essais : PLAN_SEANCE8.md §1. Graines neuves 6000 à 6059,
 - VIGIE 6 [400] ne fait pas mieux que VIGIE 6 dans `tout_calcul` (−0,8, non significatif) : la règle fixée d'avance garde VIGIE 6 comme version de référence. La version à 400 tirages reste un repli valable sur un calculateur faible (aucun écart démontré).
 - Le message principal est pratique : en Python, VIGIE réfléchit trop lentement pour garder son avance sur la méthode la plus simple quand toutes les difficultés s'additionnent. Les pics à 450 ms, qui font sauter des cycles, viennent du planificateur espace-temps. Le portage C++ (chantier 3) n'est donc pas une option mais une condition pour un robot réel, et il faudra rejouer `tout_calcul` avec les temps C++.
 - Limite déclarée : temps mesurés sur nos programmes Python ; T-MPC++ et DRA-MPPI n'ont pas été portés en C++, le classement « en C++ » reste inconnu.
+
+## Séance 8, chantier 3 : VIGIE 6 en C++
+
+Code : `cpp/vigie.hpp`, `cpp/vigie.cpp` (VIGIE 6 et DRA-MPPI, calcul de la commande seul, C++17 sans dépendance), `cpp/rejeu.cpp` (rejoue des épisodes enregistrés), `parite_cpp.mjs` (enregistre les entrées et la commande de chaque décision du portage JavaScript). Compilation : `g++ -O2 -std=c++17 -o rejeu cpp/vigie.cpp cpp/rejeu.cpp`, sans avertissement avec `-Wall -Wextra`.
+
+**Fidélité.** Mêmes entrées, mêmes décisions que le JavaScript (lui-même fidèle au banc Python, test 32) :
+
+- 10 épisodes de référence (8 VIGIE 6, 2 DRA-MPPI ; plusieurs scènes, les trois conditions de l'évaluation finale), 1 850 décisions : écart maximal sur la commande 7,2e-10.
+- 33 épisodes VIGIE 6 (les 11 scènes × 3 conditions, graines 1700 à 1732), 6 372 décisions : écart maximal 2,0e-10.
+- Le critère du plan (1e-9) est tenu. Les écarts restants viennent des fonctions mathématiques (exponentielle, arc tangente), qui ne sont pas calculées au dernier bit près de la même façon par Node et par la bibliothèque C.
+- Vérification permanente : test 35 de `tests_banc.py` (compilation avec `-Werror`, enregistrement, rejeu, écart sous 1e-9). Suite complète : 251 vérifications, 0 échec.
+
+**Vitesse** (un cœur, Xeon 2,1 GHz, 5 répétitions de chaque épisode, 33 épisodes VIGIE) :
+
+| Version | Moyenne | Médiane | 95e centile | 99e centile | Pire cas |
+|---|---|---|---|---|---|
+| VIGIE 6 (912 tirages) | 6,2 ms | 5,6 ms | 13,3 ms | 18,4 ms | 40,2 ms |
+| VIGIE 6 [400 tirages] | 3,3 ms | 2,7 ms | 10,2 ms | 14,8 ms | 31,8 ms |
+| DRA-MPPI (400 tirages) | 1,5 ms | 1,5 ms | 1,9 ms | | 5,5 ms |
+
+- Critère du plan (pire cas sous 100 ms) tenu avec une marge de 2,5. En Python, sur la même machine : 51 ms en médiane et environ 450 ms de pire cas typique par trajet. Le C++ va donc environ 9 fois plus vite en moyenne et plus de 10 fois plus vite sur les pics.
+- Les pics restent les cycles où VIGIE recalcule ses itinéraires (un sur dix environ) : planificateur espace-temps et A*.
+- Sur un calculateur embarqué de type Raspberry Pi 5 ou Jetson Orin (environ deux à trois fois plus lent par cœur que ce Xeon, estimation non mesurée), le pire cas resterait autour de 80 à 120 ms : à la limite de la cadence de 10 décisions par seconde. Il faudra alors soit la version à 400 tirages, soit sortir le recalcul des itinéraires dans un second fil d'exécution.
+- La version à 400 tirages a été chronométrée sur les mêmes entrées (la commande diffère alors, c'est normal : ce n'est pas le même réglage).
