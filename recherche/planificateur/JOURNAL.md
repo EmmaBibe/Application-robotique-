@@ -903,3 +903,24 @@ Mêmes mondes de départ que la section 6 (graines 8000 à 8059, 11 scènes, tro
 - Collisions en roulant : VIGIE 15,0 %, DRA-MPPI 19,0 %, T-MPC++ 19,4 %. Temps dépassés : VIGIE 6,1 %, DRA-MPPI 4,3 %, T-MPC++ 0,6 %.
 
 **Ce qu'on en retient.** L'avance sur DRA-MPPI survit aux deux corrections (mondes et modèle de piétons). Face à T-MPC++, c'est toujours l'égalité, et elle penche du côté de T-MPC++ quand les piétons s'évitent entre eux. Le défaut précis à travailler dans le chantier T-MPC++ : **VIGIE est trop patient devant un flux continu** (porte étroite). Les essais de développement (graines 7000 à 7039) sont lancés ; la porte étroite avec les forces sociales servira de contrôle supplémentaire, sans qu'on règle quoi que ce soit sur les graines 8000 à 8059.
+
+## Séance 8 : mondes réalistes (version 3) et premier tour de mise au point de VIGIE 7
+
+**Audit de réalisme** (`audit_realisme.py`, 11 scènes, 10 graines, 30 s, robot immobile). Version 2, piétons simples : personnes l'une dans l'autre 16,6 % du temps, personnes qui marchent sur le robot arrêté 3,7 %, 738 demi-tours sur des murs invisibles, 2 202 instants au-dessus de 2,5 m/s. Version 3 (forces sociales pour tous, robot compris, pas réduit plutôt que d'entrer dans quelqu'un, entrées et sorties par les bords, 2,2 m/s au plus, poursuivant à distance, robot arrêté jamais percuté) : 0,0 %, 0,00 %, 9 demi-tours près d'un bord, 0. Versions 1 et 2 inchangées au bit près (un écart de 7e-7 venu de l'ordre d'une multiplication a été trouvé et corrigé). Test 39.
+
+**Premier tour de mise au point** (graines 7000 à 7019, 11 scènes, trois conditions, 660 situations par méthode ; `dev_vigie7_analyse_tour1.txt`) :
+
+| Méthode | Réussite | Collisions | Temps dépassé |
+|---|---|---|---|
+| T-MPC++ | 90,8 % | 8,0 % | 1,2 % |
+| VIGIE 7 (A+B+C+D) | 88,3 % | 11,2 % | 0,5 % |
+| VIGIE 7-A, budget d'échec | 88,2 % | 11,8 % | 0,0 % |
+| VIGIE 7-B, créneaux | 88,2 % | 4,5 % | 7,3 % |
+| VIGIE 7-C, multi-modèles | 88,2 % | 3,8 % | 8,0 % |
+| VIGIE 6 | 87,9 % | 5,8 % | 6,4 % |
+| VIGIE 7-D, engagement réversible | 86,5 % | 6,4 % | 7,1 % |
+| DRA-MPPI | 82,4 % | 13,3 % | 4,2 % |
+
+- Sur les mondes réalistes, **T-MPC++ passe devant VIGIE 6** : +2,9 [+0,3 ; +5,3]. L'écart vient surtout de la porte étroite (65 % contre 33 %). VIGIE 6 garde +5,5 [+3,2 ; +7,9] sur DRA-MPPI.
+- Aucune des quatre idées ne gagne nettement sur VIGIE 6 (de −1,4 à +0,5, intervalles autour de zéro). A et C déplacent les échecs sans les supprimer : A fait disparaître les temps dépassés mais double les collisions ; C divise les collisions par 1,5 mais allonge les attentes. A fait passer la porte étroite de 33 % à 57 %. D est un peu en dessous de VIGIE 6.
+- **Lecture du défaut.** Dans les mondes réalistes, les gens s'écartent devant un robot qui avance. T-MPC++ en profite sans le savoir ; VIGIE, qui prédit chacun comme s'il ignorait le robot, croit le passage fermé et attend. La bonne réponse n'est pas d'accepter plus de risque (A) mais de prévoir que les gens réagissent au robot.
