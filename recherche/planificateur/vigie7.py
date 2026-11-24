@@ -73,9 +73,10 @@ SFM_A, SFM_B, SFM_TAU = 2.1, 0.3, 0.5          # mêmes ordres de grandeur que H
 TAU_RALENTI = 1.0
 
 
-def sfm_predire(p, v, r, st, T):
+def sfm_predire(p, v, r, st, T, robot=None):
     """Futur des personnes p (M, 2), v (M, 2) qui s'évitent entre elles et évitent les obstacles fixes st (K, 3) ;
-    chacune garde sa vitesse actuelle comme vitesse voulue. Renvoie (T, M, 2)."""
+    chacune garde sa vitesse actuelle comme vitesse voulue. Avec robot (T, 2), elles s'écartent aussi du robot qui
+    suit cette trajectoire (rayon R_ROB). Renvoie (T, M, 2)."""
     M = len(p); out = np.empty((T, M, 2))
     if M == 0: return out
     x = p.copy(); u = v.copy(); v0 = v.copy()
@@ -85,6 +86,9 @@ def sfm_predire(p, v, r, st, T):
             d = x[:, None] - x[None]; n = np.hypot(d[..., 0], d[..., 1]); np.fill_diagonal(n, np.inf)
             f = SFM_A * np.exp((r[:, None] + r[None] - n) / SFM_B)
             F += (f[..., None] * d / np.maximum(n, 1e-6)[..., None]).sum(1)
+        if robot is not None:
+            d = x - robot[k]; n = np.hypot(d[:, 0], d[:, 1])
+            F += (SFM_A * np.exp((r + R_ROB - n) / SFM_B))[:, None] * d / np.maximum(n, 1e-6)[:, None]
         if len(st):
             d = x[:, None] - st[None, :, :2]; n = np.hypot(d[..., 0], d[..., 1])
             f = 3.0 * np.exp((r[:, None] + st[None, :, 2] - n) / 0.2)
@@ -180,6 +184,76 @@ class EngagementMixin:
         c = super().eval_cost(s, U, obs, scen, guide)
         sc = getattr(self, '_secours_cost', None)
         if sc is not None and np.shape(sc) == np.shape(c): c = c + sc
+        return c
+
+
+# ---------------------------------------------------------------- E. prédiction interactive
+class InteractifMixin:
+    """Au moment de choisir entre les options, chacune est rejugée avec des personnes qui réagissent au robot : on les
+    simule avec les forces sociales, le robot suivant la trajectoire de cette option. Le risque des personnes devient
+    70 % ce risque interactif et 30 % le risque sans réaction (part inconnue de distraits). Les tirages à l'intérieur de
+    chaque option restent notés comme dans VIGIE 6."""
+    P_REAGIT = 0.7
+
+    def risque_personnes(self, tr, o, mus):
+        """Coût de risque (même formule que RiskCostMixin) pour chaque trajectoire tr (K, T, 3) avec ses futurs mus (K, T, M, 2)."""
+        t = np.arange(1, self.T + 1) * DT
+        sig = np.sqrt(self.var_rates(o)[None, :] * t[:, None])
+        d = np.sqrt(((tr[:, :, None, :2] - mus) ** 2).sum(-1))
+        pj = 1 - np.prod(1 - REF.collision_prob(d, o[:, 4] + R_ROB, sig), axis=-1)
+        tw = self.DISC ** np.arange(self.T)
+        return ((self.W_SOFT * pj + self.W_HARD * (pj > self.SIGMA)) * tw).sum(-1)
+
+    def reset(self, static, goal):
+        super().reset(static, goal)
+        U = np.zeros((self.T, 2)); U[:, 0] = 0.6
+        self._inter = dict(U=U, g=None, interactif=True); self._mu_override = None
+
+    def risk(self, tr, obs, s=None):
+        mu = getattr(self, '_mu_override', None)
+        if mu is None: return super().risk(tr, obs, s)
+        o = obs[obs[:, 5] > 0]
+        t = np.arange(1, self.T + 1) * DT
+        sig = np.sqrt(self.var_rates(o)[None, :] * t[:, None])
+        d = np.sqrt(((tr[..., :, None, :2] - mu) ** 2).sum(-1))
+        pj = 1 - np.prod(1 - REF.collision_prob(d, o[:, 4] + R_ROB, sig), axis=-1)
+        tw = self.DISC ** np.arange(self.T)
+        return ((self.W_SOFT * pj + self.W_HARD * (pj > self.SIGMA)) * tw).sum(-1)
+
+    def extra_candidates(self, s, obs):
+        """Option supplémentaire optimisée avec des personnes qui réagissent : à chaque cycle, on simule leur réaction
+        à la trajectoire actuelle de cette option, puis on l'améliore (400 tirages) contre ces futurs-là. D'un cycle à
+        l'autre, plan et réactions s'ajustent l'un à l'autre."""
+        out = super().extra_candidates(s, obs)
+        mob = obs[obs[:, 5] > 0]
+        if not len(mob): return out
+        tr0 = self._roll(s, self._inter['U'][None])[0]
+        st = obs[obs[:, 5] == 0][:, [0, 1, 4]]
+        mu = sfm_predire(mob[:, :2], mob[:, 2:4], mob[:, 4], st, self.T, robot=tr0[:, :2])
+        mu = self.P_REAGIT * mu + (1 - self.P_REAGIT) * (mob[None, :, :2] + mob[None, :, 2:4] * (np.arange(1, self.T + 1) * DT)[:, None, None])
+        n0 = self.N; self.N = getattr(self, 'N_FREE', 400); self._mu_override = mu
+        try: self._inter['U'] = self.mppi_step(s, self._inter['U'], obs)
+        finally: self.N = n0; self._mu_override = None
+        tr = self._roll(s, self._inter['U'][None])[0, :, :2]
+        self._inter['g'] = np.vstack([tr, self.goal[None]])
+        return out + [self._inter]
+
+    def select(self, s, Us, obs):
+        mob = obs[obs[:, 5] > 0]
+        if len(mob) and len(Us) > 1:
+            tr = self._roll(s, Us); t = np.arange(1, self.T + 1) * DT
+            st = obs[obs[:, 5] == 0][:, [0, 1, 4]]
+            mu_cv = np.broadcast_to(mob[None, None, :, :2] + mob[None, None, :, 2:4] * t[None, :, None, None], (len(Us), self.T, len(mob), 2))
+            mu_int = np.stack([sfm_predire(mob[:, :2], mob[:, 2:4], mob[:, 4], st, self.T, robot=tr[k, :, :2]) for k in range(len(Us))])
+            r_cv = self.risque_personnes(tr, mob, mu_cv); r_int = self.risque_personnes(tr, mob, mu_int)
+            self._adj_inter = self.P_REAGIT * (r_int - r_cv)
+        try: return super().select(s, Us, obs)
+        finally: self._adj_inter = None
+
+    def eval_cost(self, s, U, obs, scen=None, guide=None):
+        c = super().eval_cost(s, U, obs, scen, guide)
+        a = getattr(self, '_adj_inter', None)
+        if a is not None and np.shape(a) == np.shape(c): c = c + a
         return c
 
 
@@ -295,3 +369,57 @@ class Vigie7AC10(MultiModeleMixin, BudgetEchecMixin, VR.Vigie6):
 
 
 P.ALL += [Vigie7AC30, Vigie7AC10]   # indices 82 et 83
+
+
+# Idée E (section 11 du plan) : prédiction interactive au moment du choix
+class Vigie7E(InteractifMixin, VR.Vigie6):
+    name = 'VIGIE 7-E (prédiction interactive)'
+
+
+class Vigie7EA(InteractifMixin, BudgetEchecMixin, VR.Vigie6):
+    name = 'VIGIE 7-EA (interactive + retard × 0,3)'
+    F_RETARD = 0.3
+
+
+P.ALL += [Vigie7E, Vigie7EA]   # indices 84 et 85
+
+
+# ---------------------------------------------------------------- F. continuité du geste
+class ContinuiteMixin:
+    """Diagnostic (porte étroite, graine 7001, mondes réalistes) : devant la porte, toutes les options de VIGIE 6 ont
+    un coût voisin (à 5 % près) ; il en change 24 fois et tourne en rond une vingtaine de secondes, alors que T-MPC++
+    (5 changements) s'engage par le bord de l'ouverture. La cohérence de T-MPC++ reprise dans VIGIE 6 juge la classe
+    de la route jusqu'au but : toutes les options qui passent la porte sont de la même classe, elle ne départage rien.
+    Ici on juge le geste lui-même : l'option dont les 1,5 premières secondes prolongent le mieux la trajectoire
+    choisie au cycle précédent garde la main, sauf si une autre fait mieux de plus de MARGE (relatif) + 5."""
+    MARGE = 0.10
+    N_CMP = 15
+
+    def reset(self, static, goal):
+        super().reset(static, goal)
+        self._prev_tr = None; self.changes_geste = 0
+
+    def select(self, s, Us, obs):
+        i = super().select(s, Us, obs)
+        tr = self._roll(s, Us)[:, :self.N_CMP, :2]
+        if self._prev_tr is not None:
+            ref = self._prev_tr[1:self.N_CMP + 1]; n = len(ref)
+            d = np.sqrt(((tr[:, :n] - ref[None]) ** 2).sum(-1)).mean(-1)
+            k = int(np.argmin(d))
+            if k != i and d[k] < 0.25:
+                J = self.eval_cost(s, Us, obs)
+                if J[k] <= J[i] * (1 + self.MARGE) + 5.0: i = k
+                else: self.changes_geste += 1
+        self._prev_tr = self._roll(s, Us[i:i + 1])[0, :, :2]
+        return i
+
+
+class Vigie7F(ContinuiteMixin, VR.Vigie6):
+    name = 'VIGIE 7-F (continuité du geste)'
+
+
+class Vigie7FE(ContinuiteMixin, InteractifMixin, VR.Vigie6):
+    name = 'VIGIE 7-FE (continuité + interactive)'
+
+
+P.ALL += [Vigie7F, Vigie7FE]   # indices 86 et 87
