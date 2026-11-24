@@ -119,7 +119,7 @@ label.case input { accent-color: var(--accent); }
     <canvas id="rendu"></canvas>
     <canvas id="calque"></canvas>
     <div class="titre-vue" id="titreVue"></div>
-    <div class="legende-vue">Glisser : rotation · Maj ou clic droit : déplacement · Molette / pincement : zoom · Double-clic : recadrer</div>
+    <div class="legende-vue">Glisser : rotation · Clic droit ou Maj : déplacement · Molette / pincement : zoom · Double-clic : recadrer</div>
     <div id="infobulle"></div>
   </section>
   <aside class="droite" id="panneauDroit">
@@ -130,9 +130,10 @@ label.case input { accent-color: var(--accent); }
     </div>
     <label class="case" style="margin-top:6px"><input type="checkbox" id="perspective" checked> Perspective</label>
     <label class="case"><input type="checkbox" id="cotes" checked> Cotes principales</label>
+    <label class="case" id="ligneQualite">Rendu <select id="qualite" style="margin-left:auto"><option value="haute">Réaliste</option><option value="standard">Rapide</option></select></label>
     <h2>Couches</h2>
     <div id="couches"></div>
-    <label class="case" id="ligneRideaux"><input type="checkbox" id="rideauxOuverts"> Rideaux ouverts</label>
+    <label class="case" id="ligneRideaux"><input type="checkbox" id="rideauxOuverts" checked> Rideaux ouverts</label>
     <h2>Écartement des modules</h2>
     <input type="range" id="eclate" min="0" max="100" value="0">
     <div class="petit">Montre la séparation des modules pour le démontage et le transport.</div>
@@ -144,6 +145,7 @@ label.case input { accent-color: var(--accent); }
 <script src="calculs.js"></script>
 <script src="moteur3d.js"></script>
 <script src="scenes.js"></script>
+<script src="rendu3d.js"></script>
 <script src="simulation.js"></script>
 </body>
 </html>

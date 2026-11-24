@@ -1,0 +1,14 @@
+{
+  "name": "mobilier-etudiant",
+  "version": "1.1.0",
+  "private": true,
+  "description": "Dressing, étagère murale de cuisine et station de cuisson : modèle, simulation 3D, plans et notices",
+  "scripts": {
+    "construire": "node outils/construire.js",
+    "construire:rapide": "node outils/construire.js --sans-pdf"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "three": "0.187.0"
+  }
+}

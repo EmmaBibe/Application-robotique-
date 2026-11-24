@@ -29,8 +29,12 @@
   /* ---------- Rendus 3D ---------- */
   const scenes = {};
   const rendu = new E.Rendu(document.createElement('canvas'));
+  let capture = null;      // rendu réaliste WebGL quand il est disponible
   function image(code, opts) {
     opts = opts || {};
+    if (capture) {
+      try { return capture.image(code, opts); } catch (e) { capture = null; }
+    }
     if (!scenes[code]) scenes[code] = S.construireScene(M, code);
     const sc = scenes[code];
     const m = ME[code];
@@ -355,7 +359,7 @@
       const iso = image(m.code, { W: 1500, H: 1100, rideauxOuverts: true, lacet: -0.6, tangage: 0.38 });
       h += '<div class="feuille"><h2>' + m.code + ' · ' + m.nom + ' — vue de dessus et perspective</h2>' +
         '<div class="vues" style="align-items:flex-start"><figure>' + dessus + '<figcaption>Vue de dessus, mur en haut</figcaption></figure>' +
-        '<figure style="flex:1"><img src="' + iso + '" style="width:100%;max-height:150mm;object-fit:contain;border:0.5pt solid #ccc"><figcaption>Perspective, ' + (m.code === 'A' ? 'rideaux ouverts' : 'équipée') + '</figcaption></figure></div>' +
+        '<figure style="flex:1;min-width:125mm"><img src="' + iso + '" style="width:100%;max-height:158mm;object-fit:contain;border:0.5pt solid #ccc"><figcaption>Perspective, ' + (m.code === 'A' ? 'rideaux ouverts' : 'équipée') + '</figcaption></figure></div>' +
         cartouche(m.code + ' · ' + m.nom, 'Vue de dessus et perspective', c.echT, folio++) + '</div>';
       // Feuille 3 : cadres soudés
       h += '<div class="feuille"><h2>' + m.code + ' · Cadres soudés (vue de la face latérale)</h2><div class="vues" style="gap:8mm">';
@@ -572,7 +576,15 @@
   }
 
   /* ---------- Assemblage ---------- */
-  function lancer() {
+  async function lancer() {
+    if (window.RENDU3D && window.RENDU3D.disponible()) {
+      try {
+        capture = window.RENDU3D.capture(M);
+        ['A', 'B', 'C', 'K'].forEach(c => capture.v.charger(c));
+        capture.code = 'K';
+        await window.RENDU3D.pret();
+      } catch (e) { capture = null; }
+    }
     let html = '';
     if (TYPE === 'dossier') html = dossier();
     else if (TYPE === 'debit') html = debit();

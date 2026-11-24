@@ -16,16 +16,49 @@
   const ACCENT = [217, 104, 43];
 
   const etat = {
-    code: 'A', etape: 0, lecture: null, couches: {}, rideauxOuverts: false, eclate: 0,
+    code: 'A', etape: 0, lecture: null, couches: {}, rideauxOuverts: true, eclate: 0,
     selection: -1, survol: -1, anim: null, cotes: true
   };
   S.COUCHES.forEach(c => { etat.couches[c.id] = true; });
 
   const canvas = $('rendu'), calque = $('calque'), vue = $('vue');
-  const rendu = new E.Rendu(canvas);
-  const cam = new E.Camera();
   let scene = null, meuble = null, etapes = [];
-  let sale = true, interaction = false, timerQualite = null;
+  let sale = true, interaction = false, timerQualite = null, derniereVue = 'iso';
+
+  /* Moteur : rendu réaliste WebGL si disponible, sinon moteur logiciel */
+  const webgl = !!(window.RENDU3D && window.RENDU3D.disponible());
+  const tactile = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  let V, cam, rendu;
+  if (webgl) {
+    canvas.style.display = 'none';
+    V = window.RENDU3D.creer(vue, { modele: M, qualite: tactile ? 'standard' : 'haute', pixelRatioMax: tactile ? 1.5 : 2 });
+    $('qualite').value = tactile ? 'standard' : 'haute';
+    $('qualite').onchange = (ev) => V.definirQualite(ev.target.value);
+  } else {
+    rendu = new E.Rendu(canvas);
+    cam = new E.Camera();
+    $('ligneQualite').style.display = 'none';
+    V = {
+      objets: [],
+      charger(code) { const sc = S.construireScene(M, code); this.objets = sc.objets; this._sc = sc; return this.objets; },
+      synchroniser() { sale = true; },
+      demander() { sale = true; },
+      vue(l, t, p, marge) { cam.lacet = l; cam.tangage = t; cam.perspective = p; const r = vue.getBoundingClientRect(); S.cadrer(this._sc, cam, r.width, r.height, marge); sale = true; },
+      choisir(x, y) { const k = rendu.W / vue.clientWidth; return rendu.objetA(x * k, y * k); },
+      projeteur(k) { const pr = new E.Rendu(document.createElement('canvas')); pr.W = vue.clientWidth * k; pr.H = vue.clientHeight * k; return pr.projeteur(cam); },
+      fondCouleur() {},
+      tic() {
+        if (!sale) return false;
+        const r = vue.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        const q = interaction || etat.anim ? Math.min(dpr, 0.85) : dpr;
+        rendu.dimension(Math.max(50, Math.round(r.width * q)), Math.max(50, Math.round(r.height * q)));
+        rendu.fond = sombre() ? [27, 30, 34] : [246, 245, 241];
+        rendu.dessiner(this._sc, cam);
+        return true;
+      }
+    };
+  }
 
   /* ---------- Thème ---------- */
   let theme = null;
@@ -62,14 +95,15 @@
   });
   $('rideauxOuverts').onchange = (ev) => { etat.rideauxOuverts = ev.target.checked; majVisibilite(); };
   $('eclate').oninput = (ev) => { etat.eclate = ev.target.value / 100; majVisibilite(); };
-  $('perspective').onchange = (ev) => { cam.perspective = ev.target.checked; sale = true; };
-  $('cotes').onchange = (ev) => { etat.cotes = ev.target.checked; sale = true; };
+  $('perspective').onchange = () => vueStandard(derniereVue, true);
+  $('cotes').onchange = (ev) => { etat.cotes = ev.target.checked; sale = true; V.demander(); };
 
   /* ---------- Chargement d'un meuble ---------- */
   function charger(code) {
     arreterLecture();
     etat.code = code;
-    scene = S.construireScene(M, code);
+    V.charger(code);
+    scene = V;
     if (code === 'K') {
       meuble = null;
       etapes = [{ t: 'Implantation de la cuisine', d: 'L\'étagère murale B est posée à droite de la station C, jamais au-dessus du brûleur gaz : 750 mm minimum entre la flamme et tout élément combustible situé au-dessus. Le dessous de l\'étagère est à 1250 mm du sol.', ctrl: ['Brûleur gaz dégagé vers le haut', 'Prises électriques à plus de 1 m de la bouteille', 'Couverture anti-feu à portée de main'] }];
@@ -151,6 +185,7 @@
       }
       o.visible = v;
     });
+    V.synchroniser();
     sale = true;
   }
 
@@ -194,12 +229,12 @@
     iso: [-0.65, 0.42, true], face: [0, 0, false], dessus: [0, Math.PI / 2 - 0.0001, false],
     gauche: [-Math.PI / 2, 0, false], droite: [Math.PI / 2, 0, false], arriere: [Math.PI, 0.12, false]
   };
-  function vueStandard(nom) {
+  function vueStandard(nom, garderProjection) {
     const v = VUES[nom];
-    cam.lacet = v[0]; cam.tangage = v[1]; cam.perspective = v[2];
-    $('perspective').checked = v[2];
-    const r = vue.getBoundingClientRect();
-    S.cadrer(scene, cam, r.width, r.height, nom === 'iso' ? 1.0 : 1.12);
+    derniereVue = nom;
+    const persp = garderProjection ? $('perspective').checked : v[2];
+    $('perspective').checked = persp;
+    V.vue(v[0], v[1], persp, nom === 'iso' ? 1.0 : 1.12);
     document.querySelectorAll('[data-vue]').forEach(b => b.classList.toggle('actif', b.dataset.vue === nom));
     sale = true;
   }
@@ -210,13 +245,20 @@
   const pointeurs = new Map();
   vue.addEventListener('contextmenu', ev => ev.preventDefault());
   vue.addEventListener('pointerdown', ev => {
-    vue.setPointerCapture(ev.pointerId);
+    if (!webgl) vue.setPointerCapture(ev.pointerId);
     pointeurs.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
     glisse = { x: ev.clientX, y: ev.clientY, bouton: ev.button, maj: ev.shiftKey, bouge: 0 };
   });
   vue.addEventListener('pointermove', ev => {
     const r = vue.getBoundingClientRect();
-    if (pointeurs.has(ev.pointerId) && pointeurs.size === 2) {
+    if (webgl && glisse) {
+      glisse.bouge += Math.abs(ev.clientX - glisse.x) + Math.abs(ev.clientY - glisse.y);
+      glisse.x = ev.clientX; glisse.y = ev.clientY;
+      $('infobulle').style.display = 'none';
+      if (glisse.bouge > 4) document.querySelectorAll('[data-vue]').forEach(b => b.classList.remove('actif'));
+      return;
+    }
+    if (!webgl && pointeurs.has(ev.pointerId) && pointeurs.size === 2) {
       const ancien = Array.from(pointeurs.values());
       const d0 = Math.hypot(ancien[0].x - ancien[1].x, ancien[0].y - ancien[1].y);
       const m0 = [(ancien[0].x + ancien[1].x) / 2, (ancien[0].y + ancien[1].y) / 2];
@@ -229,7 +271,7 @@
       marquerInteraction();
       return;
     }
-    if (glisse && pointeurs.has(ev.pointerId)) {
+    if (!webgl && glisse && pointeurs.has(ev.pointerId)) {
       const dx = ev.clientX - glisse.x, dy = ev.clientY - glisse.y;
       glisse.x = ev.clientX; glisse.y = ev.clientY; glisse.bouge += Math.abs(dx) + Math.abs(dy);
       pointeurs.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
@@ -257,15 +299,13 @@
   vue.addEventListener('pointercancel', fin);
   vue.addEventListener('pointerleave', () => { $('infobulle').style.display = 'none'; if (etat.survol >= 0) { etat.survol = -1; } });
   vue.addEventListener('wheel', ev => {
+    if (webgl) return;
     ev.preventDefault();
     cam.distance *= Math.exp(ev.deltaY * 0.0012);
     cam.distance = Math.max(300, Math.min(30000, cam.distance));
     marquerInteraction();
   }, { passive: false });
-  vue.addEventListener('dblclick', () => {
-    const r = vue.getBoundingClientRect();
-    S.cadrer(scene, cam, r.width, r.height, 1.05); sale = true;
-  });
+  vue.addEventListener('dblclick', () => vueStandard(derniereVue, true));
   function deplacer(dx, dy, r) {
     const R = cam.repere();
     const k = cam.distance * cam.focale * 2 / r.height;
@@ -277,11 +317,12 @@
     timerQualite = setTimeout(() => { interaction = false; sale = true; }, 180);
   }
 
-  function pixel(x, y) {
-    const k = rendu.W / vue.clientWidth;
-    return rendu.objetA(x * k, y * k);
-  }
+  function pixel(x, y) { return V.choisir(x, y); }
+  let dernierSurvol = 0;
   function survol(x, y) {
+    const t = performance.now();
+    if (webgl && t - dernierSurvol < 60) return;
+    dernierSurvol = t;
     const id = pixel(x, y);
     const ib = $('infobulle');
     if (id >= 0 && scene.objets[id] && scene.objets[id].part) {
@@ -406,19 +447,16 @@
       if (u >= 1) { etat.anim = null; scene.objets.forEach(o => { if (o.actuel) o.decal[2] = 0; }); }
       anime = true; sale = true;
     }
-    if (sale && scene) {
-      const r = vue.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      const q = interaction || anime ? Math.min(dpr, 0.85) : dpr;
-      const W = Math.max(50, Math.round(r.width * q)), H = Math.max(50, Math.round(r.height * q));
-      rendu.dimension(W, H);
-      rendu.fond = sombre() ? [27, 30, 34] : [246, 245, 241];
-      const pr = rendu.dessiner(scene, cam);
-      const kd = Math.min(window.devicePixelRatio || 1, 2);
-      calque.width = Math.round(r.width * kd); calque.height = Math.round(r.height * kd);
-      const prC = new E.Rendu(document.createElement('canvas'));
-      prC.W = calque.width; prC.H = calque.height;
-      dessinerCotes(prC.projeteur(cam), kd);
+    if (anime) V.synchroniser();
+    if (scene) {
+      if (webgl) V.fond.set(sombre() ? '#1b1e22' : '#f3f1ec');
+      if (sale) V.demander();
+      if (V.tic()) {
+        const r = vue.getBoundingClientRect();
+        const kd = Math.min(window.devicePixelRatio || 1, 2);
+        calque.width = Math.round(r.width * kd); calque.height = Math.round(r.height * kd);
+        dessinerCotes(V.projeteur(kd), kd);
+      }
       sale = false;
     }
     requestAnimationFrame(boucle);

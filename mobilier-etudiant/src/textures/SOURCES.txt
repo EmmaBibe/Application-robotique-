@@ -1,0 +1,9 @@
+Textures photographiques issues de Poly Haven (polyhaven.com), publiées sous licence CC0
+(domaine public, usage libre sans attribution obligatoire). Réduites en 512 ou 256 px.
+
+bois_*      : plywood
+carrelage_* : interior_tiles
+enduit_*    : white_plaster_02 (désaturé, éclairci)
+lin_*       : rough_linen (niveaux de gris, teinté dans le rendu)
+jersey_*    : cotton_jersey (niveaux de gris, teinté dans le rendu)
+denim_*     : denim_fabric
