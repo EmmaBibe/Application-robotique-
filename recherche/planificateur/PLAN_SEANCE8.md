@@ -91,3 +91,17 @@ Jusqu'ici, VIGIE assemble surtout des briques publiées : la probabilité de col
 - Développement : graines 7000 à 7039, mondes corrigés, trois conditions (essais de référence de la section 2 réutilisés), plus les mêmes graines avec les piétons à forces sociales pour la porte étroite. On ne règle rien sur les graines 8000 à 8059.
 - Validation : graines neuves 7100 à 7159, 11 scènes, trois conditions, mondes corrigés, piétons simples, puis les mêmes avec les forces sociales ; VIGIE 6, la variante retenue, T-MPC++ et DRA-MPPI.
 - Adoption : au moins 1 point de mieux que VIGIE 6 en validation (piétons simples), sans recul significatif dans aucune condition ni avec les forces sociales. Une idée qui échoue est publiée comme abandonnée, avec ses chiffres.
+
+## 9. Deux idées de plus, et un critère de robustesse (écrit le 24 novembre, avant la campagne de mise au point)
+
+Demande : un algorithme qui ne gagne pas ici pour perdre là, avec des pertes réduites au maximum. Diagnostic sur deux graines de développement (porte étroite, forces sociales, 7001 et 7003) : VIGIE 6 s'arrête à 1,4 m du mur et attend 35 s ; T-MPC++ passe en 10 à 20 s en longeant le bord de l'ouverture.
+
+**Idée C : prédiction multi-modèles.** Chaque personne est prédite par trois modèles, vitesse constante, ralentissement et forces sociales entre personnes, pondérés en ligne par leur justesse sur elle durant la dernière seconde (plancher de 10 % par modèle). Vise la sensibilité au modèle de piétons (VIGIE 6 perd 10 points quand les piétons s'évitent). Les filtres à modèles multiples (IMM) existent pour le suivi ; les appliquer ainsi dans le coût de risque d'un planificateur par tirages est notre choix.
+
+**Idée D : engagement réversible.** Chaque option est prolongée par sa première seconde puis un freinage franc jusqu'à l'arrêt ; le risque de cette manœuvre de secours s'ajoute à son coût. On préfère les options après lesquelles on peut encore renoncer sans heurter personne. Parent connu : les commandes prédictives « à secours » (contingency MPC) ; l'appliquer comme critère de choix entre les options de VIGIE est notre choix.
+
+**Précision sur l'idée A**, après les deux graines de diagnostic : sous forme de poids du risque réduit, elle ne changeait rien (le seuil dur dominait). Version retenue pour la mise au point : chaque trajectoire essayée reçoit le P(retard) où elle laisserait le robot au bout de l'horizon, pondéré comme un choc certain sur tout l'horizon. Choc et retard sont comptés dans la même unité.
+
+**Mise au point** : graines 7000 à 7019, 11 scènes, trois conditions, mondes corrigés ; variantes A, B, C, D et les quatre ensemble (indices 77 à 81) ; et avec les forces sociales pour la porte étroite, la foule, la foule dense et les angles morts (VIGIE 6 et T-MPC++ compris). On retient au plus deux variantes pour la validation.
+
+**Critère de robustesse ajouté à la règle d'adoption** (en plus de la section 8) : en validation, aucune scène où la variante est significativement en dessous de VIGIE 6, et on publie pour chaque scène l'écart à la meilleure des deux références. On dira que l'algorithme « ne perd nulle part » seulement si aucune scène n'est significativement en dessous de la meilleure référence, avec les deux modèles de piétons.

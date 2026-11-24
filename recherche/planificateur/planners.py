@@ -1759,3 +1759,4 @@ ALL += [MMSmithCarrefour, Vigie3Carrefour, Vigie3CarrefourSansDegager, Vigie5]
 
 import references  # références de l'état de l'art (ajoutées à ALL)
 import vigie_risque  # VIGIE 3 + risque calibré (séance 7)
+import vigie7  # idées propres (séance 8, sections 8 et 9)
