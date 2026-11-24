@@ -213,6 +213,33 @@
     return res;
   };
 
+  /* Vérification d'un exercice de leçon.
+   * test = { table: [[entrées, sorties attendues], ...] }  (logique combinatoire, état stabilisé)
+   *      | { seq: [[t, entrées], ...], at: [[t, sorties attendues], ...], dur }  (chronogramme) */
+  LAD.check = (prog, test) => {
+    const fmt = o => Object.entries(o).map(([a, v]) => `${a}=${v ? 1 : 0}`).join(', ');
+    if (test.table) {
+      for (const [I, O] of test.table) {
+        const m = LAD.newMem(); Object.assign(m.b, I);
+        for (let k = 0; k < 5; k++) LAD.scan(prog, m, 0.02);
+        for (const a in O) if (!!m.b[a] !== !!O[a]) return { ok: false, msg: `Avec ${fmt(I)}, ${a} devrait valoir ${O[a] ? 1 : 0}.` };
+      }
+      return { ok: true };
+    }
+    const m = LAD.newMem(), dt = 0.02, evs = test.seq.slice(), at = test.at.slice();
+    const n = Math.round((test.dur || 10) / dt);
+    for (let k = 0; k <= n; k++) {
+      const t = k * dt;
+      while (evs.length && evs[0][0] <= t + 1e-9) Object.assign(m.b, evs.shift()[1]);
+      LAD.scan(prog, m, dt);
+      while (at.length && at[0][0] <= t + 1e-9) {
+        const [tt, O] = at.shift();
+        for (const a in O) if (LAD.bit(m, a) !== !!O[a]) return { ok: false, msg: `À t = ${AA.fmt(tt, 1)} s, ${a} devrait valoir ${O[a] ? 1 : 0}.` };
+      }
+    }
+    return { ok: true };
+  };
+
   /* Solution de référence en Ladder (montrée après la correction ; vérifiée par l'autotest) */
   LAD.refProgram = p => {
     const h = f => p.feats.includes(f), io = p.io, nets = [];
@@ -344,7 +371,7 @@
     inBox.querySelectorAll('.io').forEach(el => {
       const x = inputs.find(i => i.a === el.dataset.a);
       if (x.kind === 'sw') el.onclick = () => { logic[x.a] = !logic[x.a]; };
-      else { el.addEventListener('pointerdown', e => { logic[x.a] = true; el.setPointerCapture(e.pointerId); }); el.addEventListener('pointerup', () => { logic[x.a] = false; }); el.addEventListener('pointercancel', () => { logic[x.a] = false; }); }
+      else { el.addEventListener('pointerdown', e => { logic[x.a] = true; try { el.setPointerCapture(e.pointerId); } catch (err) { /* ignorer */ } }); el.addEventListener('pointerup', () => { logic[x.a] = false; }); el.addEventListener('pointercancel', () => { logic[x.a] = false; }); }
     });
     const outs = o.outputs || ADDR.filter(a => a[0] === 'Q').map(a => ({ a, n: names[a] || a }));
     host.querySelector('.js-out').innerHTML = outs.map(x => `<div class="io out" data-a="${x.a}"><i class="led"></i>${x.a}<small>${esc(x.n)}</small></div>`).join('');

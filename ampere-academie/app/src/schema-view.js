@@ -54,7 +54,7 @@
       `<path d="M-9 6 L-3 -5 L3 6 L9 -5" class="thin"/>`,
     coil_ton: (p, a) => leads(12) + `<rect x="-15" y="-12" width="30" height="24" rx="1" class="body coilbox${a.on ? ' on' : ''}"/>` +
       `<rect x="-15" y="-12" width="11" height="24" class="thin"/>` + L(-15, -12, -4, 12, 'thin') + L(-4, -12, -15, 12, 'thin') +
-      (a.on ? `<rect x="-3" y="8" width="${Math.min(1, a.prog) * 17}" height="3" class="progress"/>` : ''),
+      (a.on ? `<rect x="-3" y="8" width="${Math.min(1, a.prog || 0) * 17}" height="3" class="progress"/>` : ''),
     lamp: (p, a) => leads(13) + `<circle r="13" class="body lampbulb ${a.on ? 'on lamp-' + (p.color || 'warm') : ''}"/>` +
       L(-9.2, -9.2, 9.2, 9.2) + L(9.2, -9.2, -9.2, 9.2),
     km3: (p, a) => [0, 40, 80].map(dx => `<g transform="translate(${dx},0)">${contactNO(a.closed)}<path class="arc" d="M-3 -12 a3 3 0 0 1 6 0"/></g>`).join('') +
@@ -293,7 +293,7 @@
           if (this.o.onPick) this.o.onPick(id);
           if (TYPES[p.type].manual === 'push') {
             if (e.shiftKey || e.button === 2) { this.sim.latch(id); }
-            else { pressedId = id; this.sim.press(id, true); svg.setPointerCapture(e.pointerId); }
+            else { pressedId = id; this.sim.press(id, true); try { svg.setPointerCapture(e.pointerId); } catch (err) { /* ignorer */ } }
             e.preventDefault(); return;
           }
           if (['sw1', 'sw2', 'cb', 'breaker3', 'fuse', 'thermal3'].includes(p.type)) { this.sim.toggle(id); e.preventDefault(); return; }
@@ -301,7 +301,7 @@
         }
         if (hit && this.mode !== 'operate' && this.o.onPick) this.o.onPick(hit.dataset.id);
         drag = { x: e.clientX, y: e.clientY, vb: Object.assign({}, this.vb), moved: false };
-        svg.setPointerCapture(e.pointerId);
+        try { svg.setPointerCapture(e.pointerId); } catch (err) { /* ignorer */ }
       });
       svg.addEventListener('pointermove', e => {
         if (pointers.has(e.pointerId)) pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });

@@ -195,6 +195,34 @@
       gen();
       return d;
     }
+    if (b.symbols) {
+      // Galerie de symboles IEC dessinés par le moteur des folios (état repos / actionné)
+      const SYM = window.AASchema.SYM;
+      d.innerHTML = `<div class="symgal">${b.symbols.map(([type, name, desc, extra]) => {
+        const p = Object.assign({ type, id: 'X', n: {}, st: {} }, extra || {});
+        const rest = SYM[type](p, { closed: window.AASim.TYPES[type] && window.AASim.TYPES[type].nc ? true : false, on: false, pos: 1, state: 'stop' });
+        const act = SYM[type](p, { closed: window.AASim.TYPES[type] && window.AASim.TYPES[type].nc ? false : true, on: true, pos: 2, state: 'run', blown: true, tripped: true });
+        return `<figure class="sym-card"><svg class="schema mini" viewBox="${type.startsWith('motor') ? '-70 -70 140 140' : type.endsWith('3') ? '-50 -50 190 100' : '-50 -50 100 100'}"><g class="sym">${rest}</g></svg>
+          <svg class="schema mini act" viewBox="${type.startsWith('motor') ? '-70 -70 140 140' : type.endsWith('3') ? '-50 -50 190 100' : '-50 -50 100 100'}"><g class="sym">${act}</g></svg>
+          <figcaption><b>${name}</b><span>${desc}</span></figcaption></figure>`;
+      }).join('')}</div><p class="muted" style="font-size:12.5px">Survole un symbole : à gauche au repos, à droite actionné.</p>`;
+      return d;
+    }
+    if (b.plc) {
+      // Automate intégré : éditeur + vérification automatique (table de vérité ou chronogramme)
+      const item = { kind: 'plc', ok: null };
+      ctx.items.push(item);
+      d.innerHTML = `<div class="card plc-task"><p class="eyebrow">Programme l'automate</p><p>${b.plc.task}</p><button class="btn primary sm js-chk">${ic.check}Vérifier mon programme</button><div class="js-fb"></div></div><div class="js-ed" style="margin-top:12px"></div>`;
+      const ed = AA.Ladder.editor(d.querySelector('.js-ed'), { prog: b.plc.prog ? JSON.parse(JSON.stringify(b.plc.prog)) : undefined, names: b.plc.names || {}, inputs: b.plc.inputs, outputs: b.plc.outputs });
+      ctx.cleanups.push(() => ed.stop());
+      d.querySelector('.js-chk').onclick = () => {
+        const r = AA.Ladder.check(ed.prog, b.plc.test);
+        d.querySelector('.js-fb').innerHTML = r.ok ? `<p class="ok-t">${ic.check} Programme correct. ${b.plc.sol || ''}</p>` : `<p class="bad-t">${AA.esc(r.msg)}</p>`;
+        if (item.ok === null || r.ok) item.ok = item.ok === null ? r.ok : item.ok;
+        if (r.ok) AA.click(1800, 0.07);
+      };
+      return d;
+    }
     if (b.circuit) {
       const item = { kind: 'tasks', ok: null };
       if (b.tasks) ctx.items.push(item);

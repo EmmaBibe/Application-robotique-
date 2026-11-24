@@ -210,7 +210,7 @@
       let drag = null, pinch = null;
       c.addEventListener('contextmenu', e => e.preventDefault());
       c.addEventListener('pointerdown', e => {
-        c.setPointerCapture(e.pointerId);
+        try { c.setPointerCapture(e.pointerId); } catch (err) { /* pointeur synthétique */ }
         ptrs.set(e.pointerId, { x: e.offsetX, y: e.offsetY });
         if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), dist: this.cam.dist, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2, t: this.cam.target.slice() }; drag = null; return; }
         const hit = this.pick(e.offsetX, e.offsetY);

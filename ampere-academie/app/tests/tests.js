@@ -112,6 +112,28 @@
   s = new Sim(C.etoile); s.setFault('KA1.55', 'stuck'); s.setFault('KM2.21', 'stuck'); s.press('S2', true); s.press('S2', false); run(s, 6);
   eq(s.byId.Q1.st.tripped, true, 'Étoile-triangle : sans verrouillage, étoile + triangle ensemble → court-circuit, Q1 déclenche');
 
+  // Leçons d'automate : les solutions annoncées passent bien les tests de la leçon
+  if (window.AA && AA.Ladder && AA.L && AA.L.n6m3l1) {
+    const H = { t: 'H' }, c = (t, a, p) => (p != null ? { t, a, p } : { t, a }), E = null;
+    const net = (rows, v) => ({ rows: rows.length, cells: rows, v: v || [] });
+    const SOL = {
+      n6m1l3: [net([[c('NO', 'I0.0'), H, H, H, H, H, c('C', 'Q0.0')]])],
+      n6m3l1: [net([[c('NO', 'I0.0'), c('NO', 'I0.1'), H, H, H, H, c('C', 'Q0.0')]]), net([[c('NO', 'I0.0'), H, H, H, H, H, c('C', 'Q0.1')], [c('NO', 'I0.1'), E, E, E, E, E, E]], ['0,1'])],
+      n6m3l2: [net([[c('NO', 'I0.1'), c('NO', 'I0.0'), H, H, H, H, c('C', 'Q0.0')], [c('NO', 'Q0.0'), E, E, E, E, E, E]], ['0,1'])],
+      n6m3l3: [net([[c('NO', 'I0.2'), H, H, H, H, H, c('S', 'Q0.1')]]), net([[c('NO', 'I0.3'), c('NC', 'I0.2'), H, H, H, H, c('R', 'Q0.1')]])],
+      n6m3l4: [net([[c('P', 'I0.0'), H, H, H, H, H, c('C', 'M0.0')]]), net([[c('NO', 'M0.0'), c('NC', 'Q0.0'), H, H, H, H, c('C', 'Q0.0')], [c('NC', 'M0.0'), c('NO', 'Q0.0'), E, E, E, E, E]], ['0,2'])],
+      n6m3l5: [net([[c('NO', 'I0.0'), H, H, H, H, H, c('TON', 'T0', 2)]]), net([[c('NO', 'T0'), H, H, H, H, H, c('C', 'Q0.0')]])],
+      n6m3l6: [net([[c('NO', 'I0.0'), H, H, H, H, H, c('CTU', 'C0', 4)]]), net([[c('NO', 'I0.1'), H, H, H, H, H, c('R', 'C0')]]), net([[c('NO', 'C0'), H, H, H, H, H, c('C', 'Q0.0')]])]
+    };
+    Object.keys(SOL).forEach(id => {
+      const blk = AA.L[id].screens.flat().find(b => b.plc);
+      const r = AA.Ladder.check(SOL[id], blk.plc.test);
+      log(r.ok, `Leçon ${id} : la solution annoncée réussit le test ${r.ok ? '' : '— ' + r.msg}`);
+      const empty = [net([[E, E, E, E, E, E, E]])];
+      log(!AA.Ladder.check(empty, blk.plc.test).ok, `Leçon ${id} : un programme vide est refusé`);
+    });
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis
