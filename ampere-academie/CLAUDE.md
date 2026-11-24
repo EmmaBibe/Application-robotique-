@@ -6,7 +6,8 @@ Application d'apprentissage des schémas électriques, du câblage, des coffrets
 - Qualité avant quantité : chaque notion juste, vérifiée 2 à 3 fois (valeurs normatives NF C 15-100, NF C 18-510, IEC 60617, IEC 60204-1, IEC 61131-3…).
 - On apprend en voyant, en manipulant et en étant mis à l'épreuve : simulations, interactivité, 3D, défis.
 - Défis **aléatoires** (jamais deux jours identiques), à **chaque étape**, de plus en plus durs ; niveau expert = forcer la réflexion, l'inventivité, la recherche. Défis sur cahier des charges textuel avec plusieurs solutions valides + une solution de référence « la meilleure ». Très grands projets industriels interconnectés.
-- Interface : pas d'interface « générique d'IA ». Identité « atelier de nuit » (encre bleu-noir, cuivre, lueur ambre), Bahnschrift, thème clair « papier calque ».
+- Interface : jamais d'interface « générique d'IA ». Langage visuel du métier : rail DIN (navigation), boutons-poussoirs à collerette, synoptique électrique (accueil), lignes de commande à voyants (parcours), compteur d'énergie (XP), effets fx.js. Six thèmes (base.css). La palette encre + cuivre initiale a été rejetée par la propriétaire.
+- Chaque leçon doit avoir une visualisation ou simulation (AA.VISMAP dans visuals-map.js ou dans le fichier de leçons) ; le parcours automatique des leçons vérifie qu'aucune n'en est dépourvue.
 - Langue : français. Aucune donnée envoyée : progression en localStorage (export/import JSON).
 - JavaScript pur, sans dépendance ni CDN (l'APK et l'exe fonctionnent hors ligne). La 3D est un mini-moteur WebGL maison (src/gl.js).
 
@@ -28,6 +29,11 @@ Application d'apprentissage des schémas électriques, du câblage, des coffrets
 | `app/src/labo.js` | Labo : triphasé, cos φ, transformateur, moteur + variateur, PV, régulation, chute de tension |
 | `app/src/gl.js`, `coffret.js` | Moteur WebGL maison et coffret de démarrage direct 3D (même simulation que le folio) |
 | `app/src/ladder.js` | Automate : moteur Ladder, éditeur, procédé animé, cahiers des charges notés |
+| `app/src/base.css` | Thèmes, rail DIN, poussoirs, synoptique, parcours, effets |
+| `app/src/fx.js` | Halo du pointeur, étincelles, aimantation, changement de thème |
+| `app/src/visuals-a.js`, `visuals-b.js`, `visuals-map.js`, `visuals.css` | Visualisations des leçons et association leçon → visualisation |
+| `app/src/solar.js` | Site isolé, chaînes, MPPT, ombrage, orientation, batteries, ASI, inverseur de sources, défis associés |
+| `app/src/photos.js`, `app/img/` | Photos d'appareils (Wikimedia Commons, licences libres, crédits affichés dans le profil) |
 | `app/src/app.js` | Vues (accueil, parcours, leçon, atelier, profil) et blocs de leçon |
 | `app/tests/tests.html` | Tests automatiques (ouvrir dans un navigateur ; titre « OK n » si tout passe) |
 
@@ -35,7 +41,7 @@ Blocs de leçon : `h p list analogy tip warn real formula table quiz num think r
 `circuit` accepte `tasks` (missions vérifiées sur la simulation), `meter`, `overload`, `fault`, `guide`. `plc` accepte `test` (`table` ou `seq`/`at`) : ajouter la solution dans tests.js (bloc « Leçons d'automate »).
 
 ## Lancer / tester
-`python -m http.server 8779 --directory app` puis http://localhost:8779/ et http://localhost:8779/tests/tests.html
+`python outils/serve.py 8779` (serveur sans cache) puis http://localhost:8779/ et http://localhost:8779/tests/tests.html
 
 ## Construire (sur le PC Windows de la propriétaire)
 ```powershell
@@ -43,17 +49,15 @@ powershell -ExecutionPolicy Bypass -File outils\build.ps1     # dist\index.html
 powershell -ExecutionPolicy Bypass -File android\build.ps1    # dist\Ampere-Academie.apk
 powershell -ExecutionPolicy Bypass -File windows\build.ps1    # dist\Ampere-Academie-Windows.zip
 ```
-Les outils (JDK, SDK Android, WebView2) sont dans `C:\Users\SUZANE\AndroidBuild`. Garder `android\signing\` hors du dépôt (clé de signature, ignorée par git).
+Les outils (JDK, SDK Android, WebView2) sont dans `C:\Users\SUZANE\AndroidBuild`. La clé de signature Android est dans `C:\Users\SUZANE\AndroidBuild\cles\ampere-academie` (hors dépôt) : à sauvegarder aussi sur un support externe.
 
-## État au 24/11/2026
-- 76 leçons rédigées (niveaux 0, 1, 2, 3 et 6 en partie) sur ~240 au programme.
-- 6 folios vivants : simple allumage, va-et-vient, télérupteur, démarrage direct, inversion, étoile-triangle.
-- 6 types de défis aléatoires + défi du jour ; 7 labos ; coffret 3D ; automate Ladder.
-- 88 tests automatiques au vert (`app/tests/tests.html`).
-- Fabrications vérifiées : `dist/index.html`, `dist/Ampere-Academie-Windows.zip`, `dist/Ampere-Academie.apk`.
+## État au 24/11/2026 (soir)
+- 13 niveaux, dont « Les instruments de mesure » (28 leçons) et « Solaire, stockage et ASI » (24 leçons) ; 129 leçons rédigées, toutes avec une visualisation.
+- 8 folios vivants (dont double allumage, minuterie, étoile-triangle) ; 9 types de défis aléatoires (panne, logique, calcul, cahier des charges, grand projet, automatisme, site isolé photovoltaïque, chaînes de modules, ASI) ; 7 labos ; coffret 3D.
+- 112 tests automatiques au vert, dont un contrôle de syntaxe de tous les scripts.
 
 ## Suite prévue (par ordre de priorité)
-1. Rédiger les leçons restantes, module par module (n4 électrotechnique, n5 conception, n6m4 Grafcet, n7, n8, n9, n10), avec un défi par module.
+1. Rédiger les leçons restantes, module par module (n4 électrotechnique, n5 conception, n6m4 Grafcet, n7, n8, n9, n10), chacune avec sa visualisation, et un défi par module.
 2. Nouveaux folios : marche par à-coups, commande multi-postes, Dahlander, freinage, démarrage statorique, va-et-vient automatique par fins de course, schémas TT/TN/IT.
 3. Défis : éditeur de schéma (câbler soi-même un folio à partir d'un cahier des charges), Grafcet, diagnostic sur coffret 3D, projets multi-sites et extensions d'usine.
 4. Coffret 3D : autres armoires (inversion, étoile-triangle), mode « câblage » où l'apprenant tire les fils.
