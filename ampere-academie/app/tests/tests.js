@@ -96,9 +96,11 @@
   eq(s.byId.F1.st.blown, false, 'Inversion : le fusible de commande F1 reste intact (sélectivité de la bonne protection)');
 
   // Automate
-  if (window.AALadder) window.AALadder.selfTest(log, eq);
+  if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis
-  if (window.AADefis) window.AADefis.selfTest(log, eq);
+  if (window.AA && AA.Defis) AA.Defis.selfTest(log, eq);
+  if (window.AA && AA.Projets) AA.Projets.selfTest(log, eq);
+  if (window.AA && AA.Labo) AA.Labo.selfTest(log, eq);
 
   const h = document.createElement('h2');
   h.textContent = `${pass} réussis, ${fail} échoués`;
