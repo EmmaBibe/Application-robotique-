@@ -884,3 +884,22 @@ Graines neuves 8000 à 8059, 11 scènes, trois conditions de l'évaluation final
 - Les quatre scènes touchées par la correction, lues à part : VIGIE − DRA-MPPI +2,5 [+0,1 ; +4,9], mais par grappes [−0,1 ; +5,3], donc limite. Le carrefour et le carrefour rapide, où VIGIE gagnait nettement sur les anciens mondes (+6), donnent maintenant −0,6 chacun face à DRA-MPPI. Une partie de cet avantage venait donc de personnes qui sortaient des murs : VIGIE, qui imagine des personnes cachées, y était mieux préparé. Le couloir reste très favorable (+11,7). Sur les sept autres scènes : +4,0 [+1,9 ; +6,0].
 - Face à T-MPC++, par scène (60 mondes × 3 conditions chacune, donc à lire avec prudence) : VIGIE gagne à la poursuite (+11,1, alors qu'il y perdait −16,7 avec toutes les difficultés réunies), au carrefour rapide et à la traversée (+6,1) ; il perd en foule (−4,4), au couloir (−3,9) et à la porte étroite (−2,8).
 - Collisions en roulant : VIGIE 9,3 %, T-MPC++ 11,9 %, DRA-MPPI 12,5 %. Temps moyen d'un trajet réussi : T-MPC++ 18,1 s, VIGIE 20,0 s, DRA-MPPI 20,3 s.
+
+## Séance 8 : second modèle de piétons, forces sociales (plan, section 7)
+
+Mêmes mondes de départ que la section 6 (graines 8000 à 8059, 11 scènes, trois conditions, robot réaliste, mondes version 2), mais les piétons marchent selon le modèle des forces sociales (Helbing et Molnár) : ils s'évitent entre eux et évitent les obstacles. 5 940 essais, campagne complète, aucune méthode retouchée. Détail dans `seance8_sfm_analyse.txt`.
+
+| Réussite (%) | Global | Vision complète | Perception limitée | Piétons réactifs |
+|---|---|---|---|---|
+| T-MPC++ | 79,9 | 78,2 | 76,5 | 85,2 |
+| VIGIE 6 | 78,9 | 77,3 | 75,6 | 83,8 |
+| DRA-MPPI | 76,6 | 74,8 | 74,8 | 80,2 |
+
+- **VIGIE 6 − DRA-MPPI : +2,3 [+0,5 ; +4,1]**, par grappes [+0,2 ; +4,4]. Selon la règle fixée d'avance, l'avance est **robuste au modèle de piétons**, de justesse. Par condition, elle n'est significative qu'avec les piétons réactifs (+3,6) ; +2,4 en vision complète et +0,8 en perception limitée ne le sont pas.
+- VIGIE 6 − T-MPC++ : −1,1 [−3,1 ; +1,0], par grappes [−3,5 ; +1,4]. Égalité, mais cette fois légèrement en faveur de T-MPC++.
+- **Sensibilité au modèle** (forces sociales − simple, mêmes mondes) : VIGIE −10,1 [−12,0 ; −8,1], DRA-MPPI −8,9, T-MPC++ −7,6. VIGIE est la plus sensible ; l'écart de sensibilité avec T-MPC++ (−2,4 [−4,9 ; +0,0]) est à la limite. C'est l'ordre de grandeur annoncé par PEDS (jusqu'à 14 points selon le modèle de piétons).
+- **La porte étroite fait l'essentiel de la différence.** VIGIE y tombe de 88,3 % à 32,8 %, DRA-MPPI de 80,6 % à 21,1 %, T-MPC++ de 91,1 % à 67,2 %. Les échecs de VIGIE sont surtout des **temps dépassés** (103 sur 180) : il attend une ouverture. Vérifié sur 12 mondes : ce n'est pas un bouchon figé du modèle, les personnes passent la porte à environ 1 m/s, mais elle est occupée 86 % du temps contre 74 % avec le modèle simple. T-MPC++ se faufile, au prix de plus de contacts (50 collisions contre 18). Les angles morts baissent aussi pour tout le monde (VIGIE −35, T-MPC++ −29, DRA-MPPI −23).
+- Ailleurs, VIGIE tient bien : couloir +17,8 sur DRA-MPPI, carrefours et traversée devant T-MPC++.
+- Collisions en roulant : VIGIE 15,0 %, DRA-MPPI 19,0 %, T-MPC++ 19,4 %. Temps dépassés : VIGIE 6,1 %, DRA-MPPI 4,3 %, T-MPC++ 0,6 %.
+
+**Ce qu'on en retient.** L'avance sur DRA-MPPI survit aux deux corrections (mondes et modèle de piétons). Face à T-MPC++, c'est toujours l'égalité, et elle penche du côté de T-MPC++ quand les piétons s'évitent entre eux. Le défaut précis à travailler dans le chantier T-MPC++ : **VIGIE est trop patient devant un flux continu** (porte étroite). Les essais de développement (graines 7000 à 7039) sont lancés ; la porte étroite avec les forces sociales servira de contrôle supplémentaire, sans qu'on règle quoi que ce soit sur les graines 8000 à 8059.
