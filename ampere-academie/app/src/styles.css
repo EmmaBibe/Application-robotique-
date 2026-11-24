@@ -727,3 +727,6 @@ table.mini th, table.mini td { padding: 4px 6px; text-align: center; }
 .ladder-wrap { overflow: auto; }
 .proc canvas { border-radius: 10px; background: var(--bg-2); }
 .iot td { padding: 6px 10px; font-size: 13px; }
+.stage3d .tags { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.stage3d .tag3d { position: absolute; left: 0; top: 0; margin: -11px 0 0 -16px; padding: 2px 7px; border-radius: 6px; font: 700 11px var(--f-display); letter-spacing: .04em; color: #1b0d03; background: linear-gradient(180deg, #ffc79a, #e8894a); box-shadow: 0 2px 8px rgba(0, 0, 0, .45); transition: opacity .2s; }
+.stage3d .ctrl3d .btn { background: color-mix(in srgb, var(--surface-2) 88%, transparent); backdrop-filter: blur(6px); }
