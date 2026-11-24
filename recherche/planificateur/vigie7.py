@@ -34,6 +34,7 @@ class BudgetEchecMixin:
     certain sur tout l'horizon : choc et retard sont ainsi comptés dans la même unité, une probabilité d'échec."""
     V_CROISIERE = 0.8
     PROGRES = 0.3            # progression (m) qui remet l'attente à zéro
+    F_RETARD = 1.0           # part du poids d'un choc certain donnée au retard (1 : même unité exacte)
 
     def reset(self, static, goal):
         super().reset(static, goal)
@@ -63,7 +64,7 @@ class BudgetEchecMixin:
     def eval_cost(self, s, U, obs, scen=None, guide=None):
         c = super().eval_cost(s, U, obs, scen, guide)
         if self._d0 is None: return c
-        poids = self.T * (self.W_SOFT + self.W_HARD) * self.DISC ** (self.T / 2)   # choc certain sur tout l'horizon
+        poids = self.F_RETARD * self.T * (self.W_SOFT + self.W_HARD) * self.DISC ** (self.T / 2)   # choc certain sur tout l'horizon
         return c + poids * self.p_retard_fin(s, U)
 
 
@@ -279,3 +280,18 @@ class Vigie7(EngagementMixin, CreneauMixin, MultiModeleMixin, BudgetEchecMixin, 
 
 
 P.ALL += [Vigie7A, Vigie7B, Vigie7C, Vigie7D, Vigie7]   # indices 77 à 81
+
+
+# Deuxième tour de mise au point (graines 7000 à 7019) : A supprime les temps dépassés mais double les collisions,
+# C fait l'inverse. On les associe avec un poids du retard réduit, pour viser les deux à la fois.
+class Vigie7AC30(MultiModeleMixin, BudgetEchecMixin, VR.Vigie6):
+    name = 'VIGIE 7-AC (retard × 0,3)'
+    F_RETARD = 0.3
+
+
+class Vigie7AC10(MultiModeleMixin, BudgetEchecMixin, VR.Vigie6):
+    name = 'VIGIE 7-AC (retard × 0,1)'
+    F_RETARD = 0.1
+
+
+P.ALL += [Vigie7AC30, Vigie7AC10]   # indices 82 et 83
