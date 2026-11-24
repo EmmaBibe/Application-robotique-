@@ -637,5 +637,17 @@ try: sim.World('foule', 8000, version=1, pietons='sfm'); _refus = False
 except AssertionError: _refus = True
 check('le modèle à forces sociales exige les mondes version 2', _refus)
 
+print('38. Mondes version 2 en JavaScript : même mouvement des piétons que le Python (parite_monde2.py, .mjs)')
+if _sh.which('node'):
+    import subprocess as _sp, tempfile as _tf, re as _re
+    with _tf.TemporaryDirectory() as _td:
+        _js = os.path.join(_td, 'cas.json')
+        _sp.run([sys.executable, 'parite_monde2.py', _js], capture_output=True, text=True, check=True)
+        _r = _sp.run(['node', 'parite_monde2.mjs', _js], capture_output=True, text=True)
+        _m = _re.search(r'pas à pas : écart maximal (\S+)', _r.stdout)
+        check('48 cas rejoués, écart pas à pas sous 1e-12', _r.returncode == 0 and _m is not None and '48 cas' in _r.stdout, _r.stdout[-200:])
+else:
+    check('node disponible pour vérifier les mondes version 2 en JavaScript', False)
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)

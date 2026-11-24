@@ -860,3 +860,11 @@ Mêmes 660 mondes que le chantier 1 (graines 6000 à 6059, 11 scènes), toutes l
 3. T-MPC++ a reçu le même délai par hypothèse (il n'est pas porté). C'est lui qui en souffre le plus ; l'égalité avec VIGIE à 50 et 100 ms dépend donc de cette hypothèse et ne sera pas présentée comme une victoire.
 
 Ce qui reste vrai : sur le banc nominal et les conditions séparées, l'avance de VIGIE sur DRA-MPPI est établie (évaluation finale, +3,8) ; dès qu'on empile toutes les difficultés avec un retard de calcul réaliste, elle n'est plus démontrée à la taille d'échantillon actuelle.
+
+## Mondes corrigés dans les applications (JavaScript)
+
+Le placement valide et le contournement des obstacles par les piétons sont portés dans `js/sims/vigie6/world.js`, utilisé par VIGIE et par RoboMaster. Les applications passent aux mondes version 2 ; la version 1 reste disponible (`{ version: 1 }`) pour rejouer les anciens résultats.
+
+- **Fidélité au Python** (`parite_monde2.py` puis `parite_monde2.mjs`, test 38) : 48 cas (8 scènes, 6 graines, 250 pas, poursuivants compris). En repartant à chaque pas de l'état Python, l'écart maximal est de 3,6e-15 : même logique, à l'arrondi près. Sur des trajectoires entières, la poursuite fait grossir des écarts d'arrondi de 1e-12 (le poursuivant vise le robot, la moindre différence se propage), jusqu'à 6e-6 au pas 248 ; les autres scènes restent sous 1e-11. Le test passe par 3 003 contacts avec un obstacle et 51 quarts de tour.
+- **Effet sur les mondes de l'application** (11 scènes, 40 graines, 30 s de marche) : avec la version 1, des personnes entrent dans les obstacles dans presque tous les mondes du carrefour, du couloir, du piège, des foules et de la poursuite, jusqu'à 1,3 m ; avec la version 2, aucune n'est mal placée au départ, et en marche l'enfoncement ne dépasse jamais 5 cm (13 % des mondes du piège en U touchent plus de 2 cm, 5 % au plus ailleurs). Aucun échec de placement.
+- Les générateurs aléatoires restent différents (numpy contre JavaScript) : mêmes règles, pas les mêmes tirages. Un code de monde partagé avec la version 1.3.0 de l'application ouvre désormais le monde corrigé.

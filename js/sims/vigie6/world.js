@@ -7,6 +7,9 @@ import { DT, R_ROB, SIZE, makeRand } from '../vigie-core.js';
 import { occupancy, astar } from './grid.js';
 
 export const T_MAX = 45;
+// Version des mondes : 2 = placement valide des personnes et piétons qui contournent les obstacles fixes
+// (sim.py, MONDE=2, après la troisième relecture). La version 1 reste disponible pour rejouer les anciens résultats.
+export const MONDE_VERSION = 2;
 
 export const SCENES = {
   foret: 'Forêt d\'obstacles', carrefour: 'Carrefour', couloir: 'Couloir', piege: 'Piège en U', foule: 'Foule',
@@ -61,8 +64,8 @@ export function normalizeSpec(spec) {
 }
 
 export class World {
-  constructor(name, seed, spec = null) {
-    this.name = name; this.seed = seed;
+  constructor(name, seed, spec = null, { version = MONDE_VERSION } = {}) {
+    this.name = name; this.seed = seed; this.version = version;
     this.nrng = makeRand(10000 + seed);
     this.start = [1.5, 10.0, 0.0]; this.goal = [18.5, 10.0];
     if (name === 'perso') {
@@ -71,7 +74,7 @@ export class World {
       this.rng = makeRand(seed); this.static = S.static.map(c => [...c]); this.dyn = []; this.keepout = []; this.door = S.door ? [...S.door] : null;
       this.start = [S.start[0], S.start[1], Math.atan2(S.goal[1] - S.start[1], S.goal[0] - S.start[0])]; this.goal = [...S.goal];
       for (const q of S.people) this._fromSpec(q);
-      this.t = 0;
+      this.t = 0; this.placementRejets = this.placementEchecs = 0;   // les personnes dessinées restent où on les a mises
       return;
     }
     for (let k = 0; k < 50; k++) {
@@ -80,7 +83,60 @@ export class World {
       this['build_' + name]();
       if (this.feasible()) break;
     }
+    if (this.version >= 2) [this.placementRejets, this.placementEchecs] = this._validerPlacement();
     this.t = 0;
+  }
+
+  // ---------------------------------------------------------------- mondes version 2 (sim.World._place_ok, etc.)
+  _placeOk(p, r, j) {
+    if (!(r <= p[0] && p[0] <= SIZE - r && r <= p[1] && p[1] <= SIZE - r)) return false;
+    if (this.static.some(([x, y, c]) => Math.hypot(x - p[0], y - p[1]) < c + r + 0.1)) return false;
+    for (let i = 0; i < j; i++) { const q = this.dyn[i]; if (Math.hypot(p[0] - q.p[0], p[1] - q.p[1]) < r + q.r + 0.05) return false; }
+    if (Math.hypot(p[0] - this.start[0], p[1] - this.start[1]) < 1.6 + r) return false;
+    return Math.hypot(p[0] - this.goal[0], p[1] - this.goal[1]) >= 0.5 + r;
+  }
+  /** Déplace le moins possible chaque personne mal placée : recherche autour de sa position, rayon croissant. */
+  _validerPlacement() {
+    const g = makeRand(7777777 + this.seed); let rejets = 0, echecs = 0;
+    this.dyn.forEach((o, j) => {
+      if (this._placeOk(o.p, o.r, j)) return;
+      rejets++; const p0 = [...o.p]; let ok = false;
+      for (let k = 0; k < 600 && !ok; k++) {
+        const s = 0.2 + 0.02 * k, q = [p0[0] + s * g.n(), p0[1] + s * g.n()];
+        if (this._placeOk(q, o.r, j)) { o.p = q; ok = true; }
+      }
+      if (!ok) echecs++;
+    });
+    return [rejets, echecs];
+  }
+  /** Un piéton qui heurte un obstacle fixe glisse le long de lui à sa vitesse, puis reprend sa direction. */
+  _contourner(o, j) {
+    const S = this.static; if (!S.length) return;
+    let k = -1, best = Infinity;
+    for (let m = 0; m < S.length; m++) { const e = Math.hypot(o.p[0] - S[m][0], o.p[1] - S[m][1]) - (S[m][2] + o.r); if (e < best) { best = e; k = m; } }
+    if (best >= 0) return;
+    const Rk = S[k][2] + o.r, dx = o.p[0] - S[k][0], dy = o.p[1] - S[k][1], dk = Math.max(Math.hypot(dx, dy), 1e-9);
+    const n = [dx / dk, dy / dk]; o.p = [S[k][0] + n[0] * Rk, S[k][1] + n[1] * Rk];
+    const sp = Math.hypot(o.v[0], o.v[1]);
+    if (sp > 1e-9) {
+      const tg = [-n[1], n[0]], vt = o.v[0] * tg[0] + o.v[1] * tg[1];
+      const sgn = Math.abs(vt) > 1e-9 ? Math.sign(vt) : (j % 2 === 0 ? 1 : -1);
+      const a = sgn * (sp - Math.abs(vt)) * DT; o.p = [o.p[0] + a * tg[0], o.p[1] + a * tg[1]];
+    }
+    for (let pass = 0; pass < 8; pass++) {
+      let pire = -Infinity;
+      for (const [x, y, c] of S) pire = Math.max(pire, c + o.r - Math.hypot(o.p[0] - x, o.p[1] - y));
+      if (pire <= 1e-9) break;
+      const pen = S.map(([x, y, c]) => c + o.r - Math.hypot(o.p[0] - x, o.p[1] - y));   // pénétrations du début de passe, comme numpy
+      for (let m = 0; m < S.length; m++) {
+        if (!(pen[m] > 1e-9)) continue;
+        const ex = o.p[0] - S[m][0], ey = o.p[1] - S[m][1], L = Math.max(Math.hypot(ex, ey), 1e-9), Rm = S[m][2] + o.r;
+        if (L < Rm) o.p = [S[m][0] + ex / L * Rm, S[m][1] + ey / L * Rm];
+      }
+    }
+    if (sp > 0.05 && o._p0 && Math.hypot(o.p[0] - o._p0[0], o.p[1] - o._p0[1]) < 0.3 * sp * DT) {
+      const c = j % 2 === 0 ? 1 : -1; o.v = [-c * o.v[1], c * o.v[0]];
+    }
   }
   feasible() { return astar(occupancy(this.static, 0.35), this.start, this.goal) !== null; }
 
@@ -211,7 +267,10 @@ export class World {
   /** Un pas de 0,1 s pour toutes les personnes (sim.World.step_obstacles). */
   step(t, robot = null, react = false) {
     const c90 = Math.cos(Math.PI / 2), s90 = Math.sin(Math.PI / 2);
-    for (const o of this.dyn) {
+    const v2 = this.version >= 2;
+    for (let j = 0; j < this.dyn.length; j++) {
+      const o = this.dyn[j];
+      if (v2) o._p0 = [o.p[0], o.p[1]];
       if (react && robot && o.reactif) {
         const dx = o.p[0] - robot[0], dy = o.p[1] - robot[1], n = Math.hypot(dx, dy);
         if (n > 1e-6 && n < 2.0) {
@@ -236,9 +295,10 @@ export class World {
         o.p = [o.p[0] + o.v[0] * DT, o.p[1] + o.v[1] * DT];
         if (o.p[1] > SIZE + 0.4) o.p[1] -= SIZE + 0.8;
         if (o.p[1] < -0.4) o.p[1] += SIZE + 0.8;
+        if (v2) this._contourner(o, j);
         continue;
       }
-      if (o.kind === 'chasseur' || o.kind === 'porte') { o.p = [o.p[0] + o.v[0] * DT, o.p[1] + o.v[1] * DT]; continue; }
+      if (o.kind === 'chasseur' || o.kind === 'porte') { o.p = [o.p[0] + o.v[0] * DT, o.p[1] + o.v[1] * DT]; if (v2) this._contourner(o, j); continue; }
       if (o.kind === 'errant') {
         if (this.rng() < 0.03) {
           const ang = Math.atan2(o.v[1], o.v[0]) + 1.2 * this.rng.n();
@@ -254,6 +314,7 @@ export class World {
       }
       o.p = [o.p[0] + o.v[0] * DT, o.p[1] + o.v[1] * DT];
       for (const k of [0, 1]) if (o.p[k] < o.r || o.p[k] > SIZE - o.r) { o.v[k] *= -1; o.p[k] = Math.min(SIZE - o.r, Math.max(o.r, o.p[k])); }
+      if (v2) this._contourner(o, j);
     }
   }
 
