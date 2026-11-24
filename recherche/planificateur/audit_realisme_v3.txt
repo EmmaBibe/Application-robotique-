@@ -1,0 +1,15 @@
+Mondes version 3, piétons sfm, 10 graines par scène, 30 s.
+Pourcentage du temps-personne : chevauche une personne | dans un obstacle (>5 cm) | sur le robot immobile ;
+nombre d'événements : sauts (>0,6 m en 0,1 s), dont à moins de 6 m du robot | demi-tours sur un mur invisible | vitesse > 2,5 m/s
+  foret               0.0 % |  0.00 % |  0.00 %   sauts    0 (vus   0)  rebonds    0  trop vite    0
+  carrefour           0.0 % |  0.00 % |  0.00 %   sauts   85 (vus   0)  rebonds    2  trop vite    0
+  couloir             0.0 % |  0.00 % |  0.00 %   sauts   26 (vus   0)  rebonds    0  trop vite    0
+  piege               0.0 % |  0.00 % |  0.00 %   sauts   11 (vus   0)  rebonds    0  trop vite    0
+  foule               0.0 % |  0.00 % |  0.00 %   sauts  151 (vus   0)  rebonds    1  trop vite    0
+  foule_dense         0.0 % |  0.00 % |  0.00 %   sauts  282 (vus   0)  rebonds    4  trop vite    0
+  carrefour_rapide    0.0 % |  0.00 % |  0.01 %   sauts  140 (vus   0)  rebonds    2  trop vite    0
+  traversee           0.0 % |  0.00 % |  0.00 %   sauts  343 (vus   0)  rebonds    0  trop vite    0
+  goulot              0.0 % |  0.00 % |  0.00 %   sauts  205 (vus   0)  rebonds    0  trop vite    0
+  coin_aveugle        0.0 % |  0.00 % |  0.01 %   sauts  109 (vus   0)  rebonds    0  trop vite    0
+  poursuite           0.0 % |  0.00 % |  0.00 %   sauts    0 (vus   0)  rebonds    0  trop vite    0
+  TOUT                0.0 % |  0.00 % |  0.00 %   sauts 1352 (vus   0)  rebonds    9  trop vite    0

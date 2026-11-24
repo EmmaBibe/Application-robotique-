@@ -24,6 +24,10 @@ class World:
         # modèle de marche des piétons : « simple » (vitesse imposée, ils ne s'évitent pas entre eux) ou « sfm » (forces
         # sociales de Helbing et Molnár, 1995 : chacun tend vers sa vitesse voulue et s'écarte des autres et des obstacles)
         self.pietons = pietons or os.environ.get('PIETONS', 'simple')
+        # version 3 (mondes réalistes, 24 novembre) : piétons à forces sociales qui voient aussi le robot, jamais deux
+        # personnes l'une dans l'autre, plus de murs invisibles au bord de l'arène (on sort, d'autres entrent), vitesses
+        # humaines (au plus 2,2 m/s), poursuivant qui garde ses distances
+        if self.version >= 3: self.pietons = 'sfm'
         assert self.pietons in ('simple', 'sfm') and (self.pietons == 'simple' or self.version >= 2)
         self.nrng = np.random.default_rng(10_000 + seed)   # bruit de mesure, séparé de l'évolution du monde
         self.keepout = []
@@ -39,6 +43,7 @@ class World:
             self.static = np.array(self.static, float).reshape(-1, 3)
             if self.feasible(): break
         if self.version >= 2: self.placement_rejets, self.placement_echecs = self._valider_placement()
+        if self.version >= 3: self._preparer_v3()
 
     # ------------------------------------------------------------ mondes version 2
     def _place_ok(self, p, r, j):
@@ -83,6 +88,78 @@ class World:
         # coincé (passage trop étroit) : il change de direction d'un quart de tour au lieu de pousser indéfiniment
         if sp > 0.05 and '_p0' in o and np.hypot(*(o['p'] - o['_p0'])) < 0.3 * sp * DT:
             c = 1.0 if j % 2 == 0 else -1.0; o['v'] = np.array([-c * o['v'][1], c * o['v'][0]])
+
+    # ------------------------------------------------------------ mondes version 3 (réalistes)
+    V_HUMAINE = 2.2          # vitesse maximale d'une personne pressée (m/s)
+    P_DISTRAIT = 0.1         # part des personnes distraites (téléphone) : elles ne voient le robot qu'à moins de 1 m
+    D_POURSUITE = 0.9        # distance que garde un poursuivant
+
+    def _preparer_v3(self):
+        g = np.random.default_rng(5_555_555 + self.seed); self.rng3 = g
+        for o in self.dyn:
+            o['distrait'] = bool(g.random() < self.P_DISTRAIT)
+            sp = np.hypot(*o['v'])
+            if sp > self.V_HUMAINE: o['v'] = o['v'] / sp * self.V_HUMAINE
+            if 'sp' in o: o['sp'] = min(o['sp'], self.V_HUMAINE)
+            o['vs'] = o['v'].copy()
+
+    def _separer(self, robot):
+        """Personne ne peut être dans une autre ni dans un obstacle, et un robot arrêté (moins de 0,2 m/s) n'est jamais
+        percuté : la personne s'arrête ou l'évite au dernier moment. Si c'est le robot qui roule vers quelqu'un, le
+        contact reste compté comme une collision du robot. Les trois contraintes sont appliquées tour à tour,
+        jusqu'à six fois, car en corriger une peut en déranger une autre."""
+        actifs = [j for j, o in enumerate(self.dyn) if o['p'][0] > -1 and o['p'][1] > -1]
+        arret = False
+        if robot is not None:
+            prev = getattr(self, '_robot_prev', None); self._robot_prev = np.array(robot, float)
+            arret = prev is not None and np.hypot(*(robot - prev)) / DT < 0.2
+        if not actifs: return
+        R = np.array([self.dyn[j]['r'] for j in actifs])
+        for _ in range(6):
+            P = np.array([self.dyn[j]['p'] for j in actifs]); bouge = False
+            if len(actifs) > 1:
+                D = P[:, None] - P[None]; d = np.hypot(D[..., 0], D[..., 1]); np.fill_diagonal(d, np.inf)
+                ov = R[:, None] + R[None] - d
+                if ov.max() > 1e-6:
+                    P = P + (np.where(ov > 0, ov / 2, 0.0)[..., None] * D / np.maximum(d, 1e-9)[..., None]).sum(1); bouge = True
+            if arret:
+                d = P - robot; n = np.hypot(d[:, 0], d[:, 1]); m = R + R_ROB + 0.02
+                k = n < m
+                if k.any(): P[k] = robot + d[k] / np.maximum(n[k], 1e-9)[:, None] * m[k][:, None]; bouge = True
+            for k, j in enumerate(actifs):
+                self.dyn[j]['p'] = P[k]; q0 = P[k].copy(); self._contourner(self.dyn[j], j)
+                bouge = bouge or not np.array_equal(q0, self.dyn[j]['p'])
+            if not bouge: break
+
+    def _pas_libre(self, o, j, q):
+        """Pas d'une personne vers q en version 3 : si le pas entier la mettrait dans quelqu'un, elle n'en fait que
+        la moitié, ou s'arrête, comme on ralentit derrière quelqu'un au lieu de lui rentrer dedans."""
+        p0 = o['p']
+        for a in (1.0, 0.5, 0.0):
+            c = p0 + a * (q - p0)
+            if a == 0.0 or not any(np.hypot(*(c - x['p'])) < o['r'] + x['r'] - 0.01 for k, x in enumerate(self.dyn)
+                                   if k != j and x['p'][0] > -1 and np.hypot(*(c - x['p'])) < np.hypot(*(p0 - x['p'])) + 1e-9):
+                return c
+        return p0
+
+    def _rentrer(self, o, robot):
+        """Une personne qui quitte l'arène est remplacée par une autre qui entre par un bord, loin du robot (6 m au
+        moins), en marchant vers l'intérieur. S'il n'y a pas de place, elle attend hors de l'arène."""
+        g = self.rng3; sp = max(np.hypot(*o['v']), 0.5)
+        for _ in range(20):
+            cote = g.integers(4); u = g.uniform(1.0, SIZE - 1.0)
+            p = [np.array([0.2, u]), np.array([SIZE - 0.2, u]), np.array([u, 0.2]), np.array([u, SIZE - 0.2])][cote]
+            if robot is not None and np.hypot(*(p - robot)) < 6.0: continue
+            if len(self.static) and np.any(np.hypot(*(self.static[:, :2] - p).T) < self.static[:, 2] + o['r'] + 0.1): continue
+            if any(np.hypot(*(p - q['p'])) < o['r'] + q['r'] + 0.1 for q in self.dyn if q is not o): continue
+            if o['kind'] == 'flux':          # un flux garde sa direction : il rentre par le bord opposé, à la même abscisse
+                p = np.array([o['p'][0], 0.2 if o['v'][1] > 0 else SIZE - 0.2])
+                if robot is not None and np.hypot(*(p - robot)) < 6.0: o['p'] = np.array([-5.0, -5.0]); o['_attente'] = p; return
+                o['p'] = p; o['vs'] = o['v'].copy(); return
+            cible = g.uniform(4, SIZE - 4, 2); d = cible - p
+            o['p'] = p; o['v'] = sp * d / np.hypot(*d); o['vs'] = o['v'].copy(); o['done'] = True
+            return
+        o['p'] = np.array([-5.0, -5.0])
 
     def feasible(self):
         from planners import astar, occupancy
@@ -213,9 +290,18 @@ class World:
     # forces sociales : paramètres de Helbing et al. (2000) ramenés à l'unité de masse
     SFM_A, SFM_B, SFM_TAU, SFM_LAMBDA, SFM_AW, SFM_BW = 2.1, 0.3, 0.5, 0.35, 3.0, 0.2
 
-    def _forces_sociales(self):
+    def _forces_sociales(self, robot=None):
         n = len(self.dyn); F = np.zeros((n, 2))
         if n == 0: return F
+        if self.version >= 3 and robot is not None:
+            # le robot est vu comme une personne de plus (rayon R_ROB) ; les distraits ne le voient qu'à moins de 1 m
+            P = np.array([o['p'] for o in self.dyn]); R = np.array([o['r'] for o in self.dyn])
+            V = np.array([o.get('vs', o['v']) for o in self.dyn]); sp = np.hypot(V[:, 0], V[:, 1]); E = V / np.maximum(sp, 1e-9)[:, None]
+            D = P - robot; dist = np.hypot(D[:, 0], D[:, 1]); N = D / np.maximum(dist, 1e-9)[:, None]
+            mag = self.SFM_A * np.exp((R + R_ROB - dist) / self.SFM_B)
+            cosphi = -(N * E).sum(-1); w = self.SFM_LAMBDA + (1 - self.SFM_LAMBDA) * (1 + cosphi) / 2
+            vu = np.array([not o.get('distrait') for o in self.dyn]) | (dist < 1.0 + R + R_ROB)
+            F += (mag * w * vu)[:, None] * N
         P = np.array([o['p'] for o in self.dyn]); R = np.array([o['r'] for o in self.dyn])
         V = np.array([o.get('vs', o['v']) for o in self.dyn])
         sp = np.hypot(V[:, 0], V[:, 1]); E = V / np.maximum(sp, 1e-9)[:, None]
@@ -241,8 +327,12 @@ class World:
         o['vs'] = vs; return vs
 
     def step_obstacles(self, t, robot=None, react=False):
-        if self.pietons == 'sfm': self._F = self._forces_sociales()
+        if self.pietons == 'sfm': self._F = self._forces_sociales(robot if self.version >= 3 else None)
+        v3 = self.version >= 3
         for j, o in enumerate(self.dyn):
+            if v3 and '_attente' in o:            # flux en attente hors de l'arène : rentre quand le robot est loin
+                if robot is None or np.hypot(*(o['_attente'] - robot)) >= 6.0: o['p'] = o.pop('_attente'); o['vs'] = o['v'].copy()
+                else: continue
             if self.version >= 2: o['_p0'] = o['p'].copy()
             if react and robot is not None and o['reactif']:
                 # les agents réactifs s'écartent du robot quand il est proche (force sociale simplifiée)
@@ -253,7 +343,9 @@ class World:
                     if sp > 1.8: o['v'] = o['v'] / sp * 1.8
             if o['kind'] == 'chasseur' and robot is not None:
                 d = robot - o['p']; n = np.hypot(*d)
-                if n > 1e-6: o['v'] = 0.85 * o['v'] + 0.15 * o['sp'] * d / n   # vise le robot, avec un temps de réaction
+                if n > 1e-6:
+                    if v3: o['v'] = 0.85 * o['v'] + 0.15 * o['sp'] * np.clip((n - self.D_POURSUITE) / 1.0, 0.0, 1.0) * d / n   # il suit, sans percuter
+                    else: o['v'] = 0.85 * o['v'] + 0.15 * o['sp'] * d / n   # vise le robot, avec un temps de réaction
             elif o['kind'] == 'porte':
                 door = self.door
                 if o['p'][0] > door[0] + 0.3:
@@ -269,13 +361,16 @@ class World:
                         o['p'] = np.array([-5.0, -5.0]); o['v'] = np.zeros(2)   # attend hors de l'arène
                         continue
             if o['kind'] == 'flux':
-                o['p'] = o['p'] + self._vitesse(o, j) * DT
-                if o['p'][1] > SIZE + 0.4: o['p'][1] -= SIZE + 0.8
-                if o['p'][1] < -0.4: o['p'][1] += SIZE + 0.8
-                if self.version >= 2: self._contourner(o, j)
+                q = o['p'] + self._vitesse(o, j) * DT; o['p'] = self._pas_libre(o, j, q) if v3 else q
+                if v3:
+                    if not (-0.4 <= o['p'][1] <= SIZE + 0.4): self._rentrer(o, robot)
+                else:
+                    if o['p'][1] > SIZE + 0.4: o['p'][1] -= SIZE + 0.8
+                    if o['p'][1] < -0.4: o['p'][1] += SIZE + 0.8
+                if self.version >= 2 and o['p'][0] > -1: self._contourner(o, j)
                 continue
             if o['kind'] in ('chasseur', 'porte'):
-                o['p'] = o['p'] + self._vitesse(o, j) * DT
+                q = o['p'] + self._vitesse(o, j) * DT; o['p'] = self._pas_libre(o, j, q) if v3 else q
                 if self.version >= 2: self._contourner(o, j)
                 continue
             if o['kind'] == 'errant':
@@ -290,12 +385,18 @@ class World:
                 elif o['mode'] == 'droite': o['v'] = np.array([c * o['v'][0] + s * o['v'][1], -s * o['v'][0] + c * o['v'][1]])
                 elif o['mode'] == 'arret': o['v'] = o['v'] * 0.0
                 elif o['mode'] == 'accel': o['v'] = o['v'] * 1.6
-            o['p'] = o['p'] + self._vitesse(o, j) * DT
-            for k in (0, 1):   # rebond sur les murs de l'arène
-                if o['p'][k] < o['r'] or o['p'][k] > SIZE - o['r']:
-                    o['v'][k] *= -1; o['p'][k] = np.clip(o['p'][k], o['r'], SIZE - o['r'])
-                    if 'vs' in o: o['vs'][k] *= -1
+                if v3 and np.hypot(*o['v']) > self.V_HUMAINE: o['v'] = o['v'] / np.hypot(*o['v']) * self.V_HUMAINE
+            if v3 and o['p'][0] < -1: continue
+            q = o['p'] + self._vitesse(o, j) * DT; o['p'] = self._pas_libre(o, j, q) if v3 else q
+            if v3:                 # pas de mur invisible : qui sort de l'arène est remplacé par quelqu'un qui entre
+                if np.any(o['p'] < -0.3) or np.any(o['p'] > SIZE + 0.3): self._rentrer(o, robot); continue
+            else:
+                for k in (0, 1):   # rebond sur les murs de l'arène
+                    if o['p'][k] < o['r'] or o['p'][k] > SIZE - o['r']:
+                        o['v'][k] *= -1; o['p'][k] = np.clip(o['p'][k], o['r'], SIZE - o['r'])
+                        if 'vs' in o: o['vs'][k] *= -1
             if self.version >= 2: self._contourner(o, j)
+        if v3: self._separer(robot)
 
     def obstacles(self, noise=0.0, robot=None, rng_range=None, occl=False, drop=0.0):
         """Tableau N x 7 : x, y, vx, vy, r, mobile, identifiant. Les mesures des mobiles sont bruitées.

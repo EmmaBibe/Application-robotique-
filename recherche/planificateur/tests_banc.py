@@ -649,5 +649,22 @@ if _sh.which('node'):
 else:
     check('node disponible pour vérifier les mondes version 2 en JavaScript', False)
 
+print('39. Mondes version 3 (réalistes) : aucune incohérence mesurée, versions 1 et 2 inchangées')
+import audit_realisme as _au
+_tot = None
+for _sc in _au.SCENES:
+    for _sd in (9600, 9601):
+        _c = _au.audit(_sc, _sd, 3, 'sfm', pas=150)
+        _tot = _c if _tot is None else {k: _tot[k] + _c[k] for k in _tot}
+check('aucune personne dans une autre de plus de 5 cm', _tot['pp'] == 0, _tot['pp'])
+check('aucune personne dans un obstacle de plus de 5 cm', _tot['pw'] == 0, _tot['pw'])
+check('robot immobile presque jamais touché (moins de 0,05 % du temps)', _tot['robot'] <= 0.0005 * _tot['total'], f"{_tot['robot']} / {_tot['total']}")
+check('aucune vitesse au-dessus de 2,5 m/s', _tot['vite'] == 0, _tot['vite'])
+check('aucune apparition à moins de 6 m du robot', _tot['tele_vu'] == 0, _tot['tele_vu'])
+_a, _b = sim.World('traversee', 9602, version=3), sim.World('traversee', 9602, version=3)
+for _k in range(60): _a.step_obstacles(_k * 0.1, robot=np.array([5.0, 10.0])); _b.step_obstacles(_k * 0.1, robot=np.array([5.0, 10.0]))
+check('version 3 reproductible au bit près', all(np.array_equal(x['p'], y['p']) for x, y in zip(_a.dyn, _b.dyn)))
+check('version 3 impose les forces sociales', _a.pietons == 'sfm')
+
 print(f'\n{len(OK)} vérifications réussies, {len(KO)} échecs')
 if KO: print('ÉCHECS :', KO); sys.exit(1)
