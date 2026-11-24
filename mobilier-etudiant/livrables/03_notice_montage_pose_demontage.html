@@ -1,0 +1,2242 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notice de montage, pose et démontage</title>
+<style>
+@page { size: A4 portrait; margin: 14mm 14mm 16mm 14mm; }
+@page paysage { size: A4 landscape; margin: 9mm 10mm 12mm 10mm; }
+:root { --texte: #1d2126; --doux: #5b636c; --ligne: #c9ccd0; --fond: #f3f1ec; --accent: #c4581f; --bleu: #1b4f7a; }
+* { box-sizing: border-box; }
+html { background: #e9e7e2; }
+body { margin: 0 auto; max-width: 210mm; background: #fff; color: var(--texte); font: 9.6pt/1.42 "Segoe UI", Arial, Helvetica, sans-serif; padding: 14mm; }
+@media print { html { background: #fff; } body { max-width: none; padding: 0; } }
+h1 { font-size: 20pt; margin: 0 0 4mm; line-height: 1.15; }
+h2 { font-size: 13.5pt; margin: 7mm 0 2.5mm; padding-bottom: 1.2mm; border-bottom: 1.4pt solid var(--texte); break-after: avoid; }
+h3 { font-size: 11pt; margin: 5mm 0 1.8mm; break-after: avoid; color: var(--bleu); }
+h4 { font-size: 9.8pt; margin: 3.5mm 0 1.2mm; break-after: avoid; }
+p { margin: 1.4mm 0; }
+ul, ol { margin: 1.2mm 0 1.6mm; padding-left: 5.5mm; }
+li { margin: 0.6mm 0; }
+table { border-collapse: collapse; width: 100%; margin: 2mm 0 3mm; font-size: 8.4pt; break-inside: auto; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th, td { border: 0.5pt solid var(--ligne); padding: 1.1mm 1.6mm; text-align: left; vertical-align: top; }
+th { background: var(--fond); font-weight: 600; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+td.c, th.c { text-align: center; }
+.ok { color: #1e7a3c; font-weight: 600; }
+.ko { color: #b3261e; font-weight: 600; }
+.note { background: var(--fond); border-left: 2.5pt solid var(--accent); padding: 2mm 3mm; margin: 2.5mm 0; break-inside: avoid; }
+.note.bleu { border-left-color: var(--bleu); }
+.petit { font-size: 8pt; color: var(--doux); }
+.saut { break-before: page; }
+.couverture { height: 262mm; display: flex; flex-direction: column; break-after: page; }
+.couverture .bandeau { border-top: 5pt solid var(--texte); padding-top: 6mm; }
+.couverture .sur { text-transform: uppercase; letter-spacing: 1.5pt; font-size: 9pt; color: var(--doux); }
+.couverture h1 { font-size: 26pt; margin-top: 3mm; }
+.couverture .sous { font-size: 13pt; color: var(--doux); margin-bottom: 6mm; }
+.couverture img { width: 100%; border: 0.5pt solid var(--ligne); margin: 4mm 0; }
+.couverture .pied { margin-top: auto; }
+.couverture table td { font-size: 9pt; }
+.sommaire ol { columns: 2; column-gap: 8mm; }
+.paysage { page: paysage; break-before: page; }
+.feuille { position: relative; width: 277mm; height: 186mm; break-after: page; overflow: hidden; }
+.feuille:last-child { break-after: auto; }
+.feuille h2 { margin-top: 0; font-size: 12pt; }
+.feuille .vues { display: flex; gap: 6mm; align-items: flex-end; flex-wrap: nowrap; }
+.feuille figure { margin: 0; }
+.feuille figcaption, figure.detail figcaption { font-size: 8pt; color: var(--doux); margin-top: 1mm; }
+.cartouche { position: absolute; right: 0; bottom: 0; border: 0.8pt solid var(--texte); font-size: 7.4pt; width: 98mm; background: #fff; }
+.cartouche table { margin: 0; font-size: 7.4pt; }
+.cartouche td { border: 0.4pt solid var(--texte); padding: 0.6mm 1.4mm; }
+.cartouche .t { font-weight: 700; font-size: 9pt; }
+.legende { font-size: 7.6pt; color: var(--doux); }
+.legende span { display: inline-block; width: 3mm; height: 3mm; vertical-align: -0.5mm; margin: 0 1mm 0 3mm; border: 0.4pt solid #444; }
+.details { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 6mm; }
+figure.detail { margin: 0; break-inside: avoid; }
+.etape { display: grid; grid-template-columns: 92mm 1fr; gap: 4mm; padding: 2.5mm 0; border-top: 0.5pt solid var(--ligne); break-inside: avoid; }
+.etape img { width: 92mm; border: 0.5pt solid var(--ligne); display: block; }
+.etape h4 { margin-top: 0; }
+.etape .num { display: inline-block; background: var(--accent); color: #fff; border-radius: 2mm; padding: 0 1.6mm; margin-right: 1.5mm; font-size: 8.6pt; }
+.etape ul.ctrl { list-style: none; padding-left: 0; }
+.etape ul.ctrl li::before { content: "☐ "; color: var(--accent); }
+.barres svg, .calepin svg { display: block; margin: 1mm 0 2.5mm; }
+.deux { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+.img-pleine { width: 100%; border: 0.5pt solid var(--ligne); }
+.cle { font-weight: 600; }
+td.vide { background: repeating-linear-gradient(90deg, #fff 0 4mm, #fafafa 4mm 8mm); }
+</style>
+</head>
+<body>
+<div id="contenu">Préparation du document…</div>
+<script>window.TYPE_DOC = 'notice';</script>
+<script>
+/*
+ * Modèle paramétrique des trois meubles.
+ * Toutes les cotes sont en millimètres.
+ * Repère : x = largeur (gauche -> droite vu de face), y = profondeur (0 = face avant, vers le mur),
+ *          z = hauteur (0 = sol, ou dessous du meuble pour l'étagère murale).
+ *
+ * Ce fichier est la seule source des dimensions : la simulation 3D, les plans, la liste de débit
+ * et la notice sont tous recalculés à partir de lui. Pour modifier une cote, on la modifie ici
+ * puis on relance  node outils/construire.js
+ */
+(function (root) {
+  'use strict';
+
+  /* ------------------------------------------------------------------ */
+  /*  Sections et matières                                               */
+  /* ------------------------------------------------------------------ */
+  const SECTIONS = {
+    T20: { nom: 'Tube carré 20×20×1,5', type: 'carre', a: 20, t: 1.5, barre: 6000 },
+    T25: { nom: 'Tube carré 25×25×1,5', type: 'carre', a: 25, t: 1.5, barre: 6000 },
+    R25: { nom: 'Tube rond Ø25×1,5 (inox ou chromé)', type: 'rond', d: 25, t: 1.5, barre: 3000 },
+    R20: { nom: 'Tube rond Ø20×1,2 (tringle à rideau)', type: 'rond', d: 20, t: 1.2, barre: 3000 },
+    RP6: { nom: 'Rond plein Ø6', type: 'plein', d: 6, barre: 3000 },
+    P20x3: { nom: 'Plat 20×3', type: 'plat', b: 20, e: 3, barre: 6000 },
+    P25x3: { nom: 'Plat 25×3', type: 'plat', b: 25, e: 3, barre: 6000 },
+    P25x4: { nom: 'Plat 25×4', type: 'plat', b: 25, e: 4, barre: 6000 },
+    P30x3: { nom: 'Plat 30×3', type: 'plat', b: 30, e: 3, barre: 6000 },
+    P30x4: { nom: 'Plat 30×4', type: 'plat', b: 30, e: 4, barre: 6000 },
+    P40x4: { nom: 'Cornière 40×40×4', type: 'corniere', b: 40, e: 4, barre: 6000 }
+  };
+
+  const COUL = {
+    acierA: '#3c434b', acierB: '#2b2e33', acierC: '#3c434b',
+    platine: '#8d959e', cp15: '#dcbc8c', cp18: '#d2a873', cp5: '#e3c9a0',
+    inox: '#c3cad0', galva: '#aeb6bd', alu: '#d5d9dd',
+    rideau: '#7d9a8c', mur: '#ece8e1', sol1: '#d9d4cb', sol2: '#cfc9be',
+    verin: '#222222', noir: '#1d1f22'
+  };
+
+  /* Hypothèses sur les appareils et objets rangés (à vérifier sur les modèles réels) */
+  const HYP = {
+    bouteille: { d: 250, hCorps: 310, hCol: 60, masse: 12, txt: 'Bouteille de gaz 5 kg : Ø 250 mm, hauteur 370 mm col compris, environ 12 kg pleine' },
+    bruleur: { h: 85, dSupport: 330, txt: 'Brûleur sur bouteille + support de casserole aluminium : +85 mm au-dessus du col, support Ø 330 mm' },
+    induction: { L: 290, P: 360, H: 65, w: 2000, txt: 'Plaque induction BOMA monoplace : 290 × 360 × 65 mm, 2000 W' },
+    rechaud: { L: 270, P: 260, H: 85, foyer: 185, w: 1500, txt: 'Réchaud électrique monoplace : 270 × 260 × 85 mm, foyer fonte Ø 185, 1000 à 1500 W' },
+    casserole: { d: 280, txt: 'Casserole / marmite maximale : Ø 280 × 180 mm' },
+    assiette: { d: 265, txt: 'Assiettes plates : Ø 265 mm maximum' },
+    bouteilles: { d: 90, h: 330, txt: 'Bouteilles 1,5 L : Ø 90 × 330 mm ; huile 1 L : Ø 80 × 300 mm' },
+    verres: { txt: 'Verre à eau Ø 75 × 120 ; verre à bière Ø 80 × 200 ; verre à whisky Ø 82 × 95 ; tasse Ø 85 × 95 ; gobelet Ø 75 × 110 (mm)' }
+  };
+
+  /* ------------------------------------------------------------------ */
+  /*  Outils de construction                                             */
+  /* ------------------------------------------------------------------ */
+  function box(x, y, z, dx, dy, dz) { return { t: 'box', x, y, z, dx, dy, dz }; }
+  function cyl(ax, x, y, z, r, h, n) { return { t: 'cyl', ax, x, y, z, r, h, n: n || 20 }; }
+
+  function Constructeur(code, opts) {
+    this.code = code;
+    this.parts = [];
+    this.cur = { etape: 0, module: 0 };
+    this.typesCadre = [];
+    this.quinc = {};
+    this.coulAcier = opts.coulAcier;
+    this.notesUsinage = [];
+  }
+  Constructeur.prototype.set = function (o) { Object.assign(this.cur, o); return this; };
+  Constructeur.prototype.add = function (p) {
+    if (p.etape === undefined) p.etape = this.cur.etape;
+    if (p.module === undefined) p.module = this.cur.module;
+    if (!p.formes) p.formes = [p.forme];
+    delete p.forme;
+    this.parts.push(p);
+    return p;
+  };
+  Constructeur.prototype.q = function (cle, n, designation, usage) {
+    if (!this.quinc[cle]) this.quinc[cle] = { cle, designation, qte: 0, usages: [] };
+    this.quinc[cle].qte += n;
+    if (usage && this.quinc[cle].usages.indexOf(usage) < 0) this.quinc[cle].usages.push(usage);
+  };
+
+  /* Type de cadre soudé (échelle) : deux montants + traverses de profondeur.
+     Les cadres sont percés et sertis sur leurs DEUX faces latérales : un même cadre se monte
+     indifféremment à gauche ou à droite d'un module. */
+  Constructeur.prototype.typeCadre = function (code, d) {
+    const ft = Object.assign({ code, inst: 0, trous: { av: {}, ar: {} }, traversants: {}, faceAvant: {} }, d);
+    this.typesCadre.push(ft);
+    return ft;
+  };
+  function ajTrou(ft, cote, z, filet, usage) {
+    const k = String(Math.round(z * 10) / 10);
+    ft.trous[cote][k] = { z, filet, usage };
+  }
+
+  Constructeur.prototype.cadre = function (ft, x, z0, mod) {
+    const S = SECTIONS[ft.sec], a = S.a, D = ft.D;
+    ft.inst++;
+    const sousEns = ft.nom;
+    const inst = { ft, x, z0, a, D, mod };
+    // montants
+    inst.mAv = this.add({
+      nom: 'Montant avant', cat: 'tube', sousEns, couleur: this.coulAcier,
+      debit: { sec: ft.sec, L: ft.Hf, coupe: '90° / 90°', _ft: ft, _cote: 'av' },
+      forme: box(x, 0, z0, a, a, ft.Hf), module: mod
+    });
+    inst.mAr = this.add({
+      nom: ft.Hb > ft.Hf ? 'Montant arrière (rehaussé)' : 'Montant arrière', cat: 'tube', sousEns, couleur: this.coulAcier,
+      debit: { sec: ft.sec, L: ft.Hb, coupe: '90° / 90°', _ft: ft, _cote: 'ar' },
+      forme: box(x, D - a, z0, a, a, ft.Hb), module: mod
+    });
+    // traverses de profondeur (soudées entre montants)
+    ft.traverses.forEach(tr => {
+      let us = '';
+      if (tr.us === 'tab') us = '2 × (Ø4,5 dessus / Ø8 dessous) pour vis de tablette';
+      if (tr.us === 'tringle') us = '2 × écrou à sertir M5 sur chaque face latérale (support de tringle)';
+      this.add({
+        nom: tr.nom || 'Traverse de profondeur', cat: 'tube', sousEns, couleur: this.coulAcier,
+        debit: { sec: ft.sec, L: D - 2 * a, coupe: '90° / 90° (à souder entre montants)', usin: us },
+        forme: box(x, a, z0 + tr.z - a, a, D - 2 * a, a), module: mod
+      });
+    });
+    // vérins ou bouchons
+    if (ft.verins) {
+      [inst.mAv, inst.mAr].forEach((m, i) => {
+        this.add({ nom: 'Vérin de nivellement M8', cat: 'quinc', couleur: COUL.verin, info: 'Embout taraudé M8 enfoncé dans le tube, patin Ø30 réglable de 15 à 30 mm',
+          forme: cyl('z', x + a / 2, (i === 0 ? a / 2 : D - a / 2), 0, 15, z0, 14), module: mod });
+      });
+      this.q('verin', 2, 'Vérin de nivellement M8, patin Ø30 + embout taraudé carré ' + a + '×' + a, 'pieds');
+    }
+    this.q('bouchon' + a, ft.verins ? 2 : 4, 'Bouchon plastique à ailettes ' + a + '×' + a, 'extrémités des montants');
+    return inst;
+  };
+
+  /* Lisse (traverse de largeur) boulonnée entre deux cadres d'un même module, platines soudées aux extrémités */
+  Constructeur.prototype.lisse = function (cG, cD, cote, zc, nb, nom, extraUsin) {
+    const ft = cG.ft, a = cG.a, D = cG.D;
+    const S = SECTIONS[ft.sec];
+    const e = 3;                                 // épaisseur platine
+    const filet = a === 25 ? 'M6' : 'M5';
+    const xa = cG.x + a + e, xb = cD.x - e;
+    const y = cote === 'av' ? 0 : D - a;
+    const z0 = cG.z0;
+    // nb = 2 : deux boulons de part et d'autre du tube ; 1 : un boulon au-dessus ; 'b' : un boulon au-dessous
+    // (lisse affleurant le haut du cadre)
+    let hp, trous, zp0;
+    if (nb === 2) { hp = a === 25 ? 60 : 50; const ec = a === 25 ? 21 : 18; trous = [zc - ec, zc + ec]; zp0 = zc - hp / 2; }
+    else if (nb === 1) { hp = 40; trous = [zc + 20]; zp0 = zc - a / 2; }
+    else { hp = a === 25 ? 50 : 40; trous = [zc + a / 2 - hp + 11]; zp0 = zc + a / 2 - hp; }
+    const nbB = nb === 2 ? 2 : 1;
+    const L = Math.round(xb - xa);
+    const sousEns = 'Lisse ' + L + ' (' + nbB + ' boulon' + (nbB > 1 ? 's' : '') + ' par extrémité)';
+    const p = this.add({
+      nom: nom, cat: 'tube', sousEns, couleur: this.coulAcier,
+      debit: { sec: ft.sec, L, coupe: '90° / 90°', usin: extraUsin || '' },
+      forme: box(xa, y, z0 + zc - a / 2, L, a, a)
+    });
+    const secP = a === 25 ? 'P25x3' : 'P20x3';
+    [cG.x + a, xb].forEach(xp => {
+      this.add({
+        nom: 'Platine d\'about', cat: 'plat', sousEns, couleur: COUL.platine,
+        debit: { sec: secP, L: hp, coupe: '90° / 90°', usin: nbB + ' trou' + (nbB > 1 ? 's' : '') + ' Ø' + (a === 25 ? '6,5' : '5,5') + (nb === 2 ? ' entraxe ' + (trous[1] - trous[0]) : (nb === 1 ? ' à 20 mm au-dessus de l\'axe du tube' : ' à 11 mm du bas de la platine')) },
+        forme: box(xp, y, z0 + zp0, e, a, hp)
+      });
+    });
+    trous.forEach(z => { ajTrou(ft, cote, z, filet, nom); ajTrou(cD.ft, cote, z, filet, nom); });
+    this.q('vis' + filet, 2 * nbB, 'Vis CHC ' + filet + '×16 zinguée + rondelle plate ' + filet, 'lisses boulonnées');
+    return p;
+  };
+
+  /* Équerre d'ancrage mural 40×40×4 vissée sur la face intérieure d'un montant arrière */
+  Constructeur.prototype.equerre = function (c, faceX, z, murY) {
+    const a = c.a, D = c.D;
+    const filet = a === 25 ? 'M6' : 'M5';
+    const xf = faceX === 'g' ? c.x + a : c.x;          // face intérieure côté module
+    const sens = faceX === 'g' ? 1 : -1;
+    const ep = 4, larg = 30;
+    const y1 = murY - 40;
+    const f1 = box(sens > 0 ? xf : xf - ep, y1, c.z0 + z - larg / 2, ep, murY - ep - y1, larg);
+    const f2 = box(sens > 0 ? xf : xf - 40, murY - ep, c.z0 + z - larg / 2, 40, ep, larg);
+    this.add({
+      nom: 'Équerre d\'ancrage mural', cat: 'plat', couleur: COUL.platine, sousEns: null,
+      debit: { sec: 'P40x4', L: larg, coupe: '90° / 90°', usin: 'aile meuble : 1 trou Ø' + (a === 25 ? '6,5' : '5,5') + ' ; aile mur : 1 trou oblong 8,5 × 20' },
+      info: 'Fixation au mur par cheville Ø8 (voir tableau des chevilles selon le support)',
+      formes: [f1, f2]
+    });
+    ajTrou(c.ft, 'ar', z, filet, 'équerre murale');
+    this.q('vis' + filet, 1, 'Vis CHC ' + filet + '×16 zinguée + rondelle plate ' + filet, 'équerres murales');
+    this.q('cheville', 1, 'Cheville Ø8 adaptée au mur + vis Ø5×50 tête hexagonale + rondelle', 'ancrage mural');
+  };
+
+  /* Liaison entre deux modules voisins : boulons traversants */
+  Constructeur.prototype.liaison = function (cD, cG2, zs) {
+    const a = cD.a;
+    const filet = a === 25 ? 'M6' : 'M5';
+    [['av', 0], ['ar', cD.D - a]].forEach(([cote, y]) => {
+      zs.forEach(z => {
+        if ((cote === 'av' ? cD.ft.Hf : cD.ft.Hb) < z || (cote === 'av' ? cG2.ft.Hf : cG2.ft.Hb) < z) return;
+        cD.ft.traversants[cote + z] = { cote, z };
+        cG2.ft.traversants[cote + z] = { cote, z };
+        this.add({ nom: 'Boulon de liaison inter-modules', cat: 'quinc', couleur: COUL.platine,
+          info: 'Boulon ' + filet + ' traversant les deux montants accolés, serrage modéré (5 N·m) pour ne pas écraser les tubes',
+          formes: [cyl('x', cD.x - 4, y + a / 2, cD.z0 + z, 5, 4, 8), cyl('x', cG2.x + a, y + a / 2, cG2.z0 + z, 5, 5, 6)] });
+        this.q('liaison' + filet, 1, 'Boulon TH ' + filet + '×' + (2 * a + 10) + ' + 2 rondelles larges + écrou frein (Nylstop)', 'liaison entre modules');
+      });
+    });
+  };
+
+  /* Calcul final des usinages des montants à partir des trous enregistrés */
+  Constructeur.prototype.finaliser = function () {
+    this.parts.forEach(p => {
+      if (p.debit && p.debit._ft) {
+        const ft = p.debit._ft, cote = p.debit._cote;
+        const tr = Object.values(ft.trous[cote]).sort((u, v) => u.z - v.z);
+        const tv = Object.values(ft.traversants).filter(t => t.cote === cote).sort((u, v) => u.z - v.z);
+        const fa = cote === 'av' ? Object.values(ft.faceAvant).sort((u, v) => u.z - v.z) : [];
+        const morceaux = [];
+        if (tr.length) {
+          const filet = tr[0].filet;
+          morceaux.push(tr.length * 2 + ' écrous à sertir ' + filet + ' (Ø' + (filet === 'M6' ? 9 : 7) + ', ' + tr.length + ' par face latérale) à z = ' + tr.map(t => Math.round(t.z)).join(' / '));
+        }
+        if (tv.length) morceaux.push(tv.length + ' trou' + (tv.length > 1 ? 's' : '') + ' traversant' + (tv.length > 1 ? 's' : '') + ' Ø' + (p.debit.sec === 'T25' ? '6,5' : '5,5') + ' à z = ' + tv.map(t => t.z).join(' / '));
+        if (fa.length) morceaux.push(fa.length + ' écrou' + (fa.length > 1 ? 's' : '') + ' à sertir M6 face avant à z = ' + fa.map(t => t.z).join(' / ') + ' (' + fa[0].usage + ')');
+        p.debit.usin = morceaux.join(' ; ');
+        delete p.debit._ft; delete p.debit._cote;
+      }
+    });
+    // écrous à sertir des cadres
+    this.typesCadre.forEach(ft => {
+      ['av', 'ar'].forEach(cote => {
+        const tr = Object.values(ft.trous[cote]);
+        if (!tr.length) return;
+        const filet = tr[0].filet;
+        this.q('sertir' + filet, tr.length * 2 * ft.inst, 'Écrou à sertir ' + filet + ' acier zingué tête plate (perçage Ø' + (filet === 'M6' ? 9 : 7) + ')', 'cadres percés sur les deux faces');
+      });
+      const fa = Object.values(ft.faceAvant);
+      if (fa.length) this.q('sertirM6', fa.length * ft.inst, 'Écrou à sertir M6 acier zingué tête plate (perçage Ø9)', 'pattes de tringle à rideau');
+    });
+  };
+
+  /* ------------------------------------------------------------------ */
+  /*  A. DRESSING MODULAIRE                                              */
+  /* ------------------------------------------------------------------ */
+  function dressing() {
+    const b = new Constructeur('A', { coulAcier: COUL.acierA });
+    const a = 25, D = 550, H = 1900, zb = 20, murY = 565;
+    const tab = (z) => ({ z, us: 'tab', nom: 'Traverse porte-tablette' });
+    const Fp = b.typeCadre('Fp', { nom: 'Cadre soudé Fp (penderie)', sec: 'T25', D, Hf: H, Hb: H, verins: true,
+      traverses: [tab(80), tab(330), { z: 1100, nom: 'Traverse de raidissage' }, { z: 1760, us: 'tringle', nom: 'Traverse porte-tringle' }, tab(1900)] });
+    const Fe = b.typeCadre('Fe', { nom: 'Cadre soudé Fe (étagères)', sec: 'T25', D, Hf: H, Hb: H, verins: true,
+      traverses: [tab(80), tab(330), tab(650), tab(950), tab(1250), tab(1550), tab(1900)] });
+
+    const mods = [
+      { code: 'P1', nom: 'Module penderie 1', x: 0, w: 700, ft: Fp },
+      { code: 'E', nom: 'Module étagères', x: 700, w: 450, ft: Fe },
+      { code: 'P2', nom: 'Module penderie 2', x: 1150, w: 700, ft: Fp }
+    ];
+    const etapeMod = [[0, 1], [2, 2], [3, 3]];
+    mods.forEach((m, i) => {
+      b.set({ module: i, etape: etapeMod[i][0] });
+      m.cG = b.cadre(m.ft, m.x, zb, i);
+      m.cD = b.cadre(m.ft, m.x + m.w - a, zb, i);
+      b.set({ etape: etapeMod[i][1] });
+      b.lisse(m.cG, m.cD, 'ar', 1852.5, 2, 'Lisse arrière haute');
+      b.lisse(m.cG, m.cD, 'av', 1852.5, 2, 'Lisse avant haute');
+      b.lisse(m.cG, m.cD, 'ar', 162.5, 2, 'Lisse arrière basse');
+    });
+    // liaison inter-modules
+    b.set({ etape: 4, module: 0 });
+    b.liaison(mods[0].cD, mods[1].cG, [300, 1600]);
+    b.set({ module: 1 });
+    b.liaison(mods[1].cD, mods[2].cG, [300, 1600]);
+    // ancrage mural
+    b.set({ etape: 5 });
+    mods.forEach((m, i) => { b.set({ module: i }); b.equerre(m.cG, 'g', 1780, murY); b.equerre(m.cD, 'd', 1780, murY); });
+    // tablettes et dessus
+    b.set({ etape: 6 });
+    mods.forEach((m, i) => {
+      b.set({ module: i });
+      const niveaux = m.ft === Fp ? [80, 330] : [80, 330, 650, 950, 1250, 1550];
+      niveaux.forEach(z => {
+        b.add({ nom: 'Tablette', cat: 'panneau', couleur: COUL.cp15, mat: 'Contreplaqué 15 mm',
+          debit: { ep: 15, L: m.w - 2, l: D - 2 * a - 2, usin: 'chants poncés + vernis ; 4 avant-trous Ø3' },
+          forme: box(m.x + 1, a + 1, zb + z, m.w - 2, D - 2 * a - 2, 15) });
+        b.q('visbois', 4, 'Vis à bois tête fraisée 4×30', 'fixation des tablettes');
+      });
+      b.add({ nom: 'Dessus (couvercle anti-poussière)', cat: 'panneau', couleur: COUL.cp15, mat: 'Contreplaqué 15 mm',
+        debit: { ep: 15, L: m.w, l: D, usin: 'chants arrondis R2 + vernis ; 4 avant-trous Ø3' },
+        forme: box(m.x, 0, zb + H, m.w, D, 15) });
+      b.q('visbois', 4, 'Vis à bois tête fraisée 4×30', 'fixation des dessus');
+    });
+    // tringles de penderie
+    b.set({ etape: 7 });
+    [0, 2].forEach(i => {
+      const m = mods[i];
+      b.set({ module: i });
+      const L = m.w - 2 * a - 8;
+      b.add({ nom: 'Tringle de penderie Ø25', cat: 'rond', couleur: COUL.inox,
+        debit: { sec: 'R25', L, coupe: '90° / 90° ébavurée', usin: '' },
+        info: 'Charge admissible environ 35 kg répartis (flèche < 1 mm)',
+        forme: cyl('x', m.x + a + 4, D / 2, zb + 1760 - a / 2, 12.5, L, 18) });
+      [m.x + a, m.x + m.w - a - 4].forEach(xs => b.add({ nom: 'Support de tringle (cuvette)', cat: 'quinc', couleur: COUL.inox,
+        forme: box(xs, D / 2 - 15, zb + 1760 - a - 8, 4, 30, 33) }));
+      b.q('supporttringle', 2, 'Support de tringle Ø25 (cuvette fermée) + 2 vis M5×10', 'tringles de penderie');
+    });
+    // joues latérales anti-poussière
+    b.set({ etape: 8 });
+    [[0, -5, 0], [2, 1850, 2]].forEach(([i, x]) => {
+      b.set({ module: i });
+      b.add({ nom: 'Joue latérale anti-poussière', cat: 'panneau', couleur: COUL.cp5, mat: 'Contreplaqué 5 mm',
+        debit: { ep: 5, L: H, l: D, usin: '8 avant-trous Ø4 fraisés' },
+        forme: box(x, 0, zb, 5, D, H) });
+      b.q('visauto', 8, 'Vis autoperceuse tête bombée 4,2×19', 'joues latérales');
+    });
+    // tringle à rideau
+    b.set({ etape: 9 });
+    const zr = zb + H + 10;
+    const xsP = [{ x: 0, m: 0 }, { x: 700 - a, m: 0 }, { x: 1150, m: 2 }, { x: 1850 - a, m: 2 }];
+    xsP.forEach(o => {
+      b.set({ module: o.m });
+      b.add({ nom: 'Patte de tringle à rideau', cat: 'plat', couleur: COUL.platine,
+        debit: { sec: 'P30x4', L: 215, coupe: '90° / 90°, pliée à 90° à 145 mm', usin: '2 trous Ø6,5 entraxe 25 côté meuble ; encoche Ø21 côté tringle' },
+        formes: [box(o.x - 2.5, -4, zb + 1775, 30, 4, zr - 11 - zb - 1775), box(o.x - 2.5, -70, zr - 15, 30, 70, 4)] });
+      Fp.faceAvant['1790'] = { z: 1790, usage: 'patte de tringle à rideau' };
+      Fp.faceAvant['1815'] = { z: 1815, usage: 'patte de tringle à rideau' };
+      b.q('visM6', 2, 'Vis CHC M6×16 zinguée + rondelle plate M6', 'pattes de tringle');
+    });
+    b.set({ module: 0 });
+    b.add({ nom: 'Tringle à rideau Ø20', cat: 'rond', couleur: COUL.inox,
+      debit: { sec: 'R20', L: 1930, coupe: '90° / 90°', usin: '2 embouts décoratifs' },
+      forme: cyl('x', -40, -55, zr, 10, 1930, 14) });
+    b.q('embout', 2, 'Embout de tringle Ø20', 'tringle à rideau');
+    b.q('anneaux', 24, 'Anneau de rideau Ø32 avec pince', 'rideaux');
+    // rideaux (fermés / ouverts)
+    const plis = (x0, larg, nPlis, variante, nom) => {
+      const pas = larg / nPlis;
+      const formes = [];
+      for (let k = 0; k < nPlis; k++) formes.push(box(x0 + k * pas, -66 + (k % 2) * 16, 15, pas + 0.5, 6, zr - 22));
+      b.add({ nom, cat: 'rideau', couleur: COUL.rideau, variante, mat: 'Tissu coton/polyester serré, lavable 40 °C',
+        info: 'Largeur finie ' + Math.round(larg) + ' mm (tissu coupé ×1,5 pour l\'ampleur), hauteur 1915 mm, ourlet bas à 15 mm du sol', formes });
+    };
+    plis(-25, 975, 16, 'ferme', 'Rideau gauche');
+    plis(900, 975, 16, 'ferme', 'Rideau droit');
+    plis(-25, 260, 10, 'ouvert', 'Rideau gauche (ouvert)');
+    plis(1615, 260, 10, 'ouvert', 'Rideau droit (ouvert)');
+    // rangement (illustration)
+    b.set({ etape: 10 });
+    const couleursHabits = ['#5b6f8f', '#c9c3b6', '#8c3b3b', '#2f3e4e', '#a7b59a', '#e2ddd3', '#6b5745', '#40566b', '#b48a5a', '#1f2a36'];
+    [0, 2].forEach(i => {
+      const m = mods[i];
+      b.set({ module: i });
+      for (let k = 0; k < 10; k++) {
+        const hh = [950, 1000, 720, 1050, 900, 760, 980, 1100, 820, 940][k];
+        b.add({ nom: 'Vêtement sur cintre', cat: 'equip', couleur: couleursHabits[(k + i) % 10],
+          forme: box(m.x + 60 + k * 58, D / 2 - 210, zb + 1740 - hh, 22, 420, hh) });
+      }
+      [80, 330].forEach(z => {
+        for (let k = 0; k < 3; k++) b.add({ nom: 'Paire de chaussures', cat: 'equip', couleur: ['#3a2c22', '#e9e6df', '#6d4b35'][(k + i) % 3],
+          forme: box(m.x + 50 + k * 210, 110, zb + z + 15, 190, 290, z === 80 ? 110 : 140) });
+      });
+    });
+    b.set({ module: 1 });
+    [650, 950, 1250, 1550].forEach((z, j) => {
+      [0, 1].forEach(k => b.add({ nom: 'Pile de vêtements pliés', cat: 'equip', couleur: couleursHabits[(j * 2 + k + 3) % 10],
+        forme: box(700 + 45 + k * 185, 90, zb + z + 15, 170, 330, 140 + 40 * ((j + k) % 2)) }));
+    });
+    [80, 330].forEach(z => b.add({ nom: 'Paire de chaussures', cat: 'equip', couleur: '#4a4f57', forme: box(700 + 120, 110, zb + z + 15, 190, 290, 110) }));
+
+    b.finaliser();
+    return {
+      code: 'A', nom: 'Dressing modulaire avec rideaux', court: 'Dressing',
+      dims: { L: 1850, P: 550, H: zb + H + 15 }, encombrement: '1850 × 620 × 1945 mm (tringle et rideaux compris)',
+      tube: 'T25', murY, sol: { x0: -400, x1: 2250, y0: -500, y1: murY }, murH: 2400,
+      modules: mods.map(m => ({ code: m.code, nom: m.nom, x: m.x, w: m.w })),
+      typesCadre: b.typesCadre, parts: b.parts, quinc: b.quinc,
+      niveaux: { face: [0, zb, zb + 80, zb + 330, zb + 1100, zb + 1760, zb + H, zb + H + 15], faceE: [zb + 650, zb + 950, zb + 1250, zb + 1550] },
+      cotesH: [0, 700, 1150, 1850],
+      etapes: [
+        { t: 'Module penderie 1 : cadres et vérins', d: 'Visser les 4 vérins M8 sous les deux cadres Fp. Poser les cadres debout, face avant vers soi, à environ 650 mm l\'un de l\'autre. Les écrous à sertir sont présents sur les deux faces : le sens gauche/droite est indifférent.', ctrl: ['Embouts taraudés bien enfoncés', 'Vérins vissés à mi-course (≈ 20 mm)'] },
+        { t: 'Module penderie 1 : lisses boulonnées', d: 'Présenter la lisse arrière basse puis la lisse arrière haute, enfin la lisse avant haute. Engager les vis CHC M6×16 à la main, sans serrer. Mesurer les diagonales de la face arrière (écart toléré 3 mm) puis serrer à 8 N·m.', ctrl: ['Diagonales égales à ±3 mm', 'Platines bien à plat contre les montants'] },
+        { t: 'Module étagères : cadres Fe et lisses', d: 'Même procédure avec les deux cadres Fe (traverses tous les 300 mm) et trois lisses de 394 mm.', ctrl: ['Équerrage vérifié', 'Serrage 8 N·m'] },
+        { t: 'Module penderie 2', d: 'Monter le second module penderie exactement comme le premier.', ctrl: ['Identique au module 1'] },
+        { t: 'Liaison des trois modules', d: 'Accoler les modules face avant alignée. Passer les 8 boulons M6×60 dans les trous traversants (2 hauteurs, avant et arrière). Serrer modérément (5 N·m) pour ne pas écraser les tubes. Régler les vérins : niveau à bulle sur les traverses porte-tablette, de gauche à droite puis d\'avant en arrière.', ctrl: ['Faces avant alignées', 'Niveau dans les deux sens', 'Le meuble ne bascule pas lorsqu\'on appuie sur un coin'] },
+        { t: 'Ancrage mural anti-basculement', d: 'Visser une équerre 40×40×4 sur la face intérieure de chaque montant arrière à z = 1800. Pousser le meuble contre le mur (jeu de 15 mm prévu pour la plinthe). Marquer les trous oblongs, écarter le meuble, percer Ø8, cheviller, remettre le meuble et visser les 6 vis Ø5×50.', ctrl: ['Chevilles adaptées au mur (voir tableau)', 'Aucun jeu en tirant le haut du meuble vers soi'] },
+        { t: 'Tablettes et dessus', d: 'Poser les tablettes 15 mm sur leurs traverses, puis les trois dessus. Fixer chaque panneau par 4 vis à bois 4×30 passées par dessous à travers les traverses (trous Ø8 dessous / Ø4,5 dessus).', ctrl: ['Appui d\'au moins 22 mm sur chaque traverse', 'Vis non débouchantes'] },
+        { t: 'Tringles de penderie', d: 'Visser les cuvettes de tringle sur les traverses porte-tringle (écrous à sertir M5), puis engager les tringles Ø25.', ctrl: ['Tringle bloquée en translation', 'Charge maxi conseillée : 35 kg par tringle'] },
+        { t: 'Joues latérales anti-poussière', d: 'Visser les joues en contreplaqué 5 mm sur les faces extérieures des deux cadres d\'extrémité (8 vis autoperceuses 4,2×19 chacune).', ctrl: ['Joues affleurantes devant et dessus'] },
+        { t: 'Tringle à rideau et rideaux', d: 'Boulonner les 4 pattes en L sur la face avant des montants (écrous à sertir M6 à z = 1790 et 1815 au-dessus du dessous des cadres). Enfiler les anneaux et les deux rideaux sur la tringle Ø20, poser la tringle dans les encoches et mettre les embouts.', ctrl: ['Rideau à 15 mm du sol', 'Recouvrement central de 50 mm', 'Les rideaux glissent sans accrocher les tablettes'] },
+        { t: 'Mise en service', d: 'Ranger vêtements et chaussures. Répartir les charges : objets lourds en bas, 30 kg maximum par tablette, 35 kg par tringle.', ctrl: ['Charges réparties', 'Rideaux fermés pour la protection contre la poussière'] }
+      ]
+    };
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  B. ÉTAGÈRE MURALE DE CUISINE                                       */
+  /* ------------------------------------------------------------------ */
+  function etagere() {
+    const b = new Constructeur('B', { coulAcier: COUL.acierB });
+    const a = 20, D = 280, H = 900, zb = 0, murY = 284;
+    const tab = (z) => ({ z, us: 'tab', nom: 'Traverse porte-tablette' });
+    const Fb = b.typeCadre('Fb', { nom: 'Cadre soudé Fb (étagère murale)', sec: 'T20', D, Hf: H, Hb: H, verins: false,
+      traverses: [tab(20), tab(400), tab(630), tab(900)] });
+    const mods = [
+      { code: 'M1', nom: 'Module assiettes / verres', x: 0, w: 450 },
+      { code: 'M2', nom: 'Module bouteilles / verres', x: 450, w: 450 }
+    ];
+    mods.forEach((m, i) => {
+      b.set({ module: i, etape: i });
+      m.cG = b.cadre(Fb, m.x, zb, i);
+      m.cD = b.cadre(Fb, m.x + m.w - a, zb, i);
+      b.lisse(m.cG, m.cD, 'ar', 50, 2, 'Lisse arrière basse');
+      b.lisse(m.cG, m.cD, 'ar', 860, 2, 'Lisse arrière haute');
+      b.lisse(m.cG, m.cD, 'av', 860, 2, 'Lisse avant haute');
+      b.lisse(m.cG, m.cD, 'av', 40, 2, 'Lisse avant basse (barre à tasses)');
+      b.lisse(m.cG, m.cD, 'av', 435, 1, 'Rebord anti-chute niveau 1');
+      b.lisse(m.cG, m.cD, 'av', 665, 1, 'Rebord anti-chute niveau 2');
+      if (i === 1) b.lisse(m.cG, m.cD, 'av', 110, 1, 'Barre de retenue des bouteilles');
+    });
+    // la barre de retenue est prévue sur les deux modules (trous présents partout) : seul M2 la reçoit
+    b.set({ etape: 2, module: 0 });
+    b.liaison(mods[0].cD, mods[1].cG, [250, 750]);
+    b.set({ etape: 3 });
+    mods.forEach((m, i) => {
+      b.set({ module: i });
+      b.equerre(m.cG, 'g', 100, murY); b.equerre(m.cG, 'g', 800, murY);
+      b.equerre(m.cD, 'd', 100, murY); b.equerre(m.cD, 'd', 800, murY);
+    });
+    // étape 4 : pose murale (pas de nouvelle pièce, mur mis en évidence)
+    b.set({ etape: 5 });
+    mods.forEach((m, i) => {
+      b.set({ module: i });
+      const niveaux = i === 0 ? [400, 630] : [20, 400, 630];
+      niveaux.forEach(z => {
+        b.add({ nom: 'Tablette', cat: 'panneau', couleur: COUL.cp15, mat: 'Contreplaqué 15 mm',
+          debit: { ep: 15, L: m.w - 2, l: D - 2 * a - 2, usin: 'vernis alimentaire 2 couches ; 4 avant-trous Ø3' },
+          forme: box(m.x + 1, a + 1, zb + z, m.w - 2, D - 2 * a - 2, 15) });
+        b.q('visbois', 4, 'Vis à bois tête fraisée 4×30', 'fixation des tablettes');
+      });
+      b.add({ nom: 'Dessus', cat: 'panneau', couleur: COUL.cp15, mat: 'Contreplaqué 15 mm',
+        debit: { ep: 15, L: m.w, l: D, usin: 'vernis alimentaire 2 couches ; 4 avant-trous Ø3' },
+        forme: box(m.x, 0, zb + H, m.w, D, 15) });
+      b.q('visbois', 4, 'Vis à bois tête fraisée 4×30', 'fixation des dessus');
+    });
+    b.set({ module: 0 });
+    b.add({ nom: 'Bac égouttoir', cat: 'tole', couleur: COUL.inox, mat: 'Tôle inox 304 0,8 mm',
+      debit: { ep: 0.8, L: 446 + 50, l: 238 + 50, usin: 'développé ; 4 bords relevés de 25 mm, angles pliés-soudés ou rivetés étanches' },
+      info: 'Amovible pour le vidage et le lavage', formes: [box(2, 21, 20, 446, 238, 1), box(2, 21, 20, 446, 1, 25), box(2, 258, 20, 446, 1, 25), box(2, 21, 20, 1, 238, 25), box(447, 21, 20, 1, 238, 25)] });
+    // râtelier à assiettes
+    b.set({ etape: 6 });
+    const pins = [];
+    for (let k = 0; k < 11; k++) {
+      const x = 45 + k * 36;
+      pins.push(cyl('z', x, 70, 24, 3, 110, 6));
+      pins.push(cyl('z', x, 200, 24, 3, 70, 6));
+    }
+    b.add({ nom: 'Râtelier à assiettes (soudé)', cat: 'rond', couleur: COUL.inox, sousEns: 'Râtelier à assiettes',
+      debit: { sec: 'RP6', L: 110, n: 11, coupe: 'droite, bout arrondi', usin: 'picots avant (11 par râtelier)' },
+      info: 'Sous-ensemble soudé : 2 plats 400×20×3 + 22 picots Ø6 (11 de 110 mm à l\'avant, 11 de 70 mm à l\'arrière), pas 36 mm : 10 assiettes',
+      formes: pins.filter((_, k) => k % 2 === 0).concat([box(30, 60, 21, 400, 20, 3)]) });
+    b.add({ nom: 'Râtelier à assiettes (soudé)', cat: 'rond', couleur: COUL.inox, sousEns: 'Râtelier à assiettes',
+      debit: { sec: 'RP6', L: 70, n: 11, coupe: 'droite, bout arrondi', usin: 'picots arrière (11 par râtelier)' },
+      formes: pins.filter((_, k) => k % 2 === 1).concat([box(30, 190, 21, 400, 20, 3)]) });
+    b.add({ nom: 'Plat support de râtelier', cat: 'plat', couleur: COUL.inox, sousEns: 'Râtelier à assiettes',
+      debit: { sec: 'P20x3', L: 400, coupe: '90° / 90°', usin: '11 trous Ø6 au pas de 36' }, formes: [] });
+    b.add({ nom: 'Plat support de râtelier', cat: 'plat', couleur: COUL.inox, sousEns: 'Râtelier à assiettes',
+      debit: { sec: 'P20x3', L: 400, coupe: '90° / 90°', usin: '11 trous Ø6 au pas de 36' }, formes: [] });
+    // crochets à tasses
+    mods.forEach((m, i) => {
+      b.set({ module: i });
+      for (let k = 0; k < 4; k++) {
+        const x = m.x + 75 + k * 95;
+        b.add({ nom: 'Crochet S + tasse suspendue', cat: 'equip', couleur: ['#c46b4e', '#e8e3d6', '#3f6e8c', '#d9a441'][(k + i) % 4],
+          formes: [box(x - 1, -8, -30, 2, 4, 80), cyl('z', x, -50, -140, 42, 95, 14)] });
+      }
+      b.q('crochetS', 4, 'Crochet en S inox 60 mm', 'barre à tasses');
+    });
+    // contenu
+    b.set({ etape: 7, module: 0 });
+    for (let k = 0; k < 10; k++) b.add({ nom: 'Assiette Ø265', cat: 'equip', couleur: '#f2efe8', forme: cyl('x', 50 + k * 36 + 4, 135, 27 + 132, 132, 8, 22) });
+    b.set({ module: 1 });
+    for (let r = 0; r < 2; r++) for (let k = 0; k < 4; k++) {
+      const x = 450 + 75 + k * 98, y = 75 + r * 115;
+      b.add({ nom: 'Bouteille 1,5 L', cat: 'equip', couleur: r === 0 ? '#9cc6d9' : '#d9c46a',
+        formes: [cyl('z', x, y, 35, 45, 240, 14), cyl('z', x, y, 275, 18, 60, 10), cyl('z', x, y, 335, 14, 15, 10)] });
+    }
+    // verres niveau 1 (usage quotidien) et niveau 2
+    const verre = (x, y, z, r, h, coul, nom) => b.add({ nom, cat: 'equip', couleur: coul, forme: cyl('z', x, y, z, r, h, 14) });
+    for (let k = 0; k < 10; k++) {
+      const x = 50 + k * 85, mod = x < 450 ? 0 : 1;
+      b.set({ module: mod });
+      if (k < 5) { verre(x, 80, 415, 37, 120, '#bfe0ea', 'Verre à eau'); verre(x, 185, 415, 37, 120, '#bfe0ea', 'Verre à eau'); }
+      else { verre(x, 80, 415, 42, 95, '#e9e4d8', 'Tasse à thé'); verre(x, 185, 415, 37, 110, '#d36b4b', 'Gobelet'); }
+    }
+    for (let k = 0; k < 9; k++) {
+      const x = 55 + k * 95, mod = x < 450 ? 0 : 1;
+      b.set({ module: mod });
+      if (k < 6) verre(x, 120, 645, 40, 200, '#e6c66a', 'Verre à bière');
+      else { verre(x, 80, 645, 41, 95, '#c6b9a0', 'Verre à whisky'); verre(x, 190, 645, 41, 95, '#c6b9a0', 'Verre à whisky'); }
+    }
+    b.set({ module: 0 });
+    [[60, '#b33a2e'], [180, '#2e6b4f'], [300, '#d9a441']].forEach(([x, c]) => b.add({ nom: 'Boîte à thé / sucre', cat: 'equip', couleur: c, forme: box(x, 70, 915, 100, 120, 140) }));
+
+    b.finaliser();
+    return {
+      code: 'B', nom: 'Étagère murale de cuisine', court: 'Étagère cuisine',
+      dims: { L: 900, P: 280, H: 915 }, encombrement: '900 × 290 × 915 mm (tasses suspendues : 160 mm sous le meuble)',
+      tube: 'T20', murY, poseZ: 1250, sol: null, murH: 1200, murZ0: -350,
+      modules: mods.map(m => ({ code: m.code, nom: m.nom, x: m.x, w: m.w })),
+      typesCadre: b.typesCadre, parts: b.parts, quinc: b.quinc,
+      niveaux: { face: [0, 20, 400, 630, 900, 915] },
+      cotesH: [0, 450, 900],
+      etapes: [
+        { t: 'Module M1 : cadres et lisses', d: 'Assembler les deux cadres Fb avec les six lisses (vis CHC M5×16). Serrer à 5 N·m après contrôle des diagonales de la face arrière.', ctrl: ['Diagonales égales à ±2 mm'] },
+        { t: 'Module M2 : cadres et lisses', d: 'Même montage, avec en plus la barre de retenue des bouteilles à 110 mm.', ctrl: ['Barre de retenue côté avant'] },
+        { t: 'Liaison M1 + M2', d: 'Accoler les deux modules et passer les 4 boulons M5×50 traversants (z = 250 et 750, avant et arrière).', ctrl: ['Dessus alignés', 'Serrage modéré 4 N·m'] },
+        { t: 'Équerres murales', d: 'Visser les 8 équerres 40×40×4 sur les faces intérieures des montants arrière, à z = 100 et z = 800 (vis M5×16).', ctrl: ['Ailes murales bien dans le plan arrière'] },
+        { t: 'Traçage, perçage et pose au mur', d: 'Tracer au niveau le trait du dessous du meuble à 1250 mm du sol. Présenter le meuble (à deux), marquer les 8 trous, percer Ø8, cheviller. Visser d\'abord les 4 chevilles hautes, contrôler le niveau, puis les 4 basses.', ctrl: ['Jamais au-dessus du poste gaz', 'Niveau à ±1 mm', 'Charge totale admise 60 kg'] },
+        { t: 'Tablettes, dessus et bac égouttoir', d: 'Poser et visser les tablettes et les deux dessus (vis 4×30 par dessous). Glisser le bac égouttoir inox sur les traverses basses du module M1.', ctrl: ['Bac amovible sans forcer'] },
+        { t: 'Râtelier et crochets', d: 'Poser le râtelier à assiettes dans le bac, accrocher les crochets en S sur les lisses avant basses.', ctrl: ['Râtelier stable dans le bac'] },
+        { t: 'Rangement', d: 'Bouteilles derrière la barre de retenue, verres du quotidien au niveau 1, verres à bière et à whisky au niveau 2, tasses suspendues sous le meuble.', ctrl: ['Objets lourds en bas'] }
+      ]
+    };
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  C. STATION DE CUISSON                                              */
+  /* ------------------------------------------------------------------ */
+  function station() {
+    const b = new Constructeur('C', { coulAcier: COUL.acierC });
+    const a = 25, D = 550, zb = 20, murY = 565;
+    const tab = (z) => ({ z, us: 'tab', nom: 'Traverse porte-tablette' });
+    const FgG = b.typeCadre('FgG', { nom: 'Cadre soudé FgG (gaz, gauche)', sec: 'T25', D, Hf: 770, Hb: 770, verins: true,
+      traverses: [tab(80), { z: 770, nom: 'Traverse haute' }] });
+    const FgD = b.typeCadre('FgD', { nom: 'Cadre soudé FgD (gaz, droit, porte-écran)', sec: 'T25', D, Hf: 770, Hb: 1130, verins: true,
+      traverses: [tab(80), { z: 770, nom: 'Traverse haute' }] });
+    const Fc = b.typeCadre('Fc', { nom: 'Cadre soudé Fc (cuisson électrique)', sec: 'T25', D, Hf: 770, Hb: 1400, verins: true,
+      traverses: [tab(80), tab(420), tab(770)] });
+
+    // Module G
+    b.set({ module: 0, etape: 0 });
+    const gG = b.cadre(FgG, 0, zb, 0), gD = b.cadre(FgD, 475, zb, 0);
+    b.lisse(gG, gD, 'ar', 162.5, 2, 'Lisse arrière basse');
+    b.lisse(gG, gD, 'ar', 720, 2, 'Lisse arrière haute');
+    b.set({ etape: 1 });
+    b.lisse(gG, gD, 'av', 367.5, 2, 'Traverse porte-plateau avant (réglable)');
+    b.lisse(gG, gD, 'ar', 367.5, 2, 'Traverse porte-plateau arrière (réglable)');
+    [307.5, 427.5].forEach(zc => [-21, 21].forEach(e => { ajTrou(FgG, 'av', zc + e, 'M6', 'réglage plateau'); ajTrou(FgG, 'ar', zc + e, 'M6', 'réglage plateau'); ajTrou(FgD, 'av', zc + e, 'M6', 'réglage plateau'); ajTrou(FgD, 'ar', zc + e, 'M6', 'réglage plateau'); }));
+    b.add({ nom: 'Plateau porte-bouteille', cat: 'tole', couleur: COUL.galva, mat: 'Tôle acier 2 mm peinte',
+      debit: { ep: 2, L: 446 + 40, l: 546, usin: 'développé ; 2 bords tombés de 20 mm sur les grands côtés' },
+      info: 'Hauteur réglable sur 3 crans : 340 / 400 / 460 mm du sol (dessus de plateau)',
+      formes: [box(27, 2, zb + 380, 446, 546, 2), box(27, 2, zb + 360, 2, 546, 20), box(471, 2, zb + 360, 2, 546, 20)] });
+    b.lisse(gG, gD, 'ar', 580, 2, 'Lisse porte-collier');
+    // collier de maintien bouteille
+    const cx = 250, cy = 275, R = 138;
+    b.add({ nom: 'Collier de maintien de bouteille', cat: 'plat', couleur: '#c4532f', sousEns: 'Collier de bouteille',
+      debit: { sec: 'P30x3', L: 900, coupe: 'roulé Ø 276 int.', usin: 'ouvert à l\'avant, fermeture par sangle à boucle ; garniture caoutchouc 3 mm' },
+      info: 'Empêche le basculement de la bouteille ; s\'ouvre à l\'avant pour l\'échange',
+      forme: { t: 'anneau', x: cx, y: cy, z: zb + 575, r1: R - 3, r2: R, h: 30, n: 28 } });
+    b.add({ nom: 'Bras de collier', cat: 'plat', couleur: COUL.platine, sousEns: 'Collier de bouteille',
+      debit: { sec: 'P30x4', L: 150, coupe: '90° / 90°, pliée à 90° à 30 mm', usin: '2 trous Ø6,5 côté lisse' },
+      formes: [box(235, cy + R, zb + 575, 30, 521 - cy - R, 4), box(235, 521, zb + 565, 30, 4, 40)] });
+    b.q('visM6', 2, 'Vis CHC M6×16 zinguée + rondelle plate M6', 'bras de collier');
+    b.q('sangle', 1, 'Sangle à boucle à came 25 mm, longueur 400 mm', 'fermeture du collier');
+
+    // Module E
+    b.set({ module: 1, etape: 2 });
+    const eG = b.cadre(Fc, 500, zb, 1), eD = b.cadre(Fc, 1525, zb, 1);
+    const usinPlan = '6 écrous à sertir M6 face intérieure à 452 / 494, 642 / 684 et 832 / 874 mm de l\'extrémité gauche (traverses sous plan)';
+    b.lisse(eG, eD, 'av', 757.5, 'b', 'Lisse avant haute (porte-plan)', usinPlan);
+    b.lisse(eG, eD, 'ar', 757.5, 'b', 'Lisse arrière haute (porte-plan)', usinPlan);
+    b.lisse(eG, eD, 'ar', 162.5, 2, 'Lisse arrière basse');
+    b.q('sertirM6', 12, 'Écrou à sertir M6 acier zingué tête plate (perçage Ø9)', 'lisses porte-plan (traverses sous plan)');
+    // traverse médiane (jonction bois / inox) + deux traverses sous le bac inox (portée de la tôle ≤ 190 mm)
+    [[980, 'Traverse médiane sous plan'], [1170, 'Traverse sous bac inox'], [1360, 'Traverse sous bac inox']].forEach(([xm, nom]) => {
+      b.add({ nom, cat: 'tube', couleur: COUL.acierC, sousEns: 'Traverse sous plan',
+        debit: { sec: 'T25', L: 494, coupe: '90° / 90°', usin: 'platines soudées aux 2 extrémités' },
+        forme: box(xm - 12.5, a + 3, zb + 745, 25, 494, 25) });
+      [a, D - a - 3].forEach(y => b.add({ nom: 'Platine de traverse sous plan', cat: 'plat', couleur: COUL.platine, sousEns: 'Traverse sous plan',
+        debit: { sec: 'P25x3', L: 60, coupe: '90° / 90°', usin: '2 trous Ø6,5 entraxe 42 (horizontal)' },
+        forme: box(xm - 30, y, zb + 745, 60, 3, 25) }));
+      b.q('visM6', 4, 'Vis CHC M6×16 zinguée + rondelle plate M6', 'traverses sous plan');
+    });
+    b.set({ etape: 3 });
+    b.lisse(eG, eD, 'ar', 1150, 2, 'Barre à ustensiles');
+    b.lisse(eG, eD, 'ar', 1360, 2, 'Lisse haute arrière');
+
+    // liaison + ancrage + crédence
+    b.set({ etape: 4, module: 0 });
+    b.liaison(gD, eG, [200, 650]);
+    b.equerre(gG, 'g', 640, murY); b.equerre(gD, 'd', 640, murY);
+    b.set({ module: 1 });
+    b.equerre(eG, 'g', 1000, murY); b.equerre(eD, 'd', 1000, murY);
+    b.add({ nom: 'Crédence de protection murale', cat: 'tole', couleur: COUL.alu, mat: 'Tôle aluminium 1 mm (ou inox 0,6 mm)',
+      debit: { ep: 1, L: 1550, l: 650, usin: '6 trous Ø5 fraisés ; collée ou chevillée au mur' },
+      info: 'Protège le mur derrière le brûleur et le réchaud',
+      forme: box(0, murY - 1, zb + 788, 1550, 1, 650) });
+    b.q('chevillecred', 6, 'Cheville Ø6 + vis tête fraisée Ø4×40', 'crédence');
+
+    // plans de travail et tablettes
+    b.set({ etape: 5, module: 0 });
+    b.add({ nom: 'Tablette basse (marmites)', cat: 'panneau', couleur: COUL.cp18, mat: 'Contreplaqué 18 mm',
+      debit: { ep: 18, L: 498, l: 498, usin: 'vernis PU 2 couches ; 4 avant-trous Ø3' },
+      forme: box(1, a + 1, zb + 80, 498, 498, 18) });
+    b.q('visbois', 4, 'Vis à bois tête fraisée 4×30', 'fixation des tablettes');
+    b.set({ module: 1 });
+    [80, 420].forEach(z => {
+      b.add({ nom: 'Tablette (casseroles)', cat: 'panneau', couleur: COUL.cp18, mat: 'Contreplaqué 18 mm',
+        debit: { ep: 18, L: 1048, l: 498, usin: 'vernis PU 2 couches ; 4 avant-trous Ø3' },
+        forme: box(501, a + 1, zb + z, 1048, 498, 18) });
+      b.q('visbois', 4, 'Vis à bois tête fraisée 4×30', 'fixation des tablettes');
+    });
+    b.add({ nom: 'Plan de travail bois (zone induction)', cat: 'panneau', couleur: COUL.cp18, mat: 'Contreplaqué 18 mm',
+      debit: { ep: 18, L: 480, l: 570, usin: 'encoche 26 × 26 angle arrière gauche ; débord avant 20 ; chants arrondis R3 ; vernis PU 3 couches' },
+      info: 'Supporte la plaque induction BOMA ; 50 mm libres autour de la plaque',
+      forme: box(500, -20, zb + 770, 480, 570, 18) });
+    b.q('visbois', 6, 'Vis à bois tête fraisée 4×30', 'plan de travail');
+    b.add({ nom: 'Bac zone chaude (réchaud + dépose)', cat: 'tole', couleur: COUL.inox, mat: 'Tôle inox 304 1,5 mm',
+      debit: { ep: 1.5, L: 568 + 30, l: 570 + 30, usin: 'développé ; 4 bords relevés de 15 mm ; encoche 26 × 26 angle arrière droit' },
+      info: 'Zone entièrement métallique, sans bois dessous : supporte le réchaud et la casserole chaude',
+      formes: [box(981, -20, zb + 770, 568, 570, 1.5), box(981, -20, zb + 770, 568, 1.5, 16), box(981, 548.5, zb + 770, 543, 1.5, 16), box(981, -20, zb + 770, 1.5, 570, 16), box(1547.5, -20, zb + 770, 1.5, 544, 16)] });
+
+    // écran thermique, étagère, barre, prises
+    b.set({ etape: 6, module: 0 });
+    b.add({ nom: 'Écran thermique gaz / électrique', cat: 'tole', couleur: COUL.galva, mat: 'Tôle acier galvanisé 1 mm',
+      debit: { ep: 1, L: 550 + 15, l: 390, usin: 'ourlet avant 15 mm ; 4 trous Ø6,5' },
+      info: 'Sépare la flamme de la plaque induction ; laisser 60 mm minimum entre le bord de casserole et l\'écran',
+      forme: box(474, 0, zb + 740, 1, 550, 390) });
+    [800, 950, 1100].forEach(z => ajTrou(FgD, 'ar', z, 'M6', 'écran thermique'));
+    ajTrou(FgD, 'av', 755, 'M6', 'écran thermique');
+    b.q('visM6', 4, 'Vis CHC M6×16 zinguée + rondelle plate M6', 'écran thermique');
+    b.set({ module: 1 });
+    [[525, 1], [1525 - 4, -1]].forEach(([x]) => {
+      b.add({ nom: 'Console d\'étagère', cat: 'plat', couleur: COUL.platine, sousEns: 'Console d\'étagère',
+        debit: { sec: 'P25x4', L: 260, coupe: '90° / 90°, soudée en L (100 + 150)', usin: '2 trous Ø6,5 entraxe 30' },
+        formes: [box(x, D - a, zb + 1240, 4, 25, 60), box(x, 375, zb + 1275, 4, 150, 25)] });
+      ajTrou(Fc, 'ar', 1255, 'M6', 'console'); ajTrou(Fc, 'ar', 1285, 'M6', 'console');
+      b.q('visM6', 2, 'Vis CHC M6×16 zinguée + rondelle plate M6', 'consoles');
+    });
+    b.add({ nom: 'Étagère à épices et huiles', cat: 'panneau', couleur: COUL.cp15, mat: 'Contreplaqué 15 mm',
+      debit: { ep: 15, L: 992, l: 150, usin: 'baguette de rebord 20 mm collée devant ; vernis PU' },
+      info: 'Huiles à gauche, au-dessus de la zone induction, pas au-dessus du réchaud',
+      forme: box(529, 375, zb + 1300, 992, 150, 15) });
+    b.add({ nom: 'Barre aimantée à couteaux', cat: 'equip', couleur: '#555b62', forme: box(1180, 512, zb + 1170, 300, 13, 40) });
+    b.add({ nom: 'Bloc 2 prises 16 A avec interrupteur', cat: 'equip', couleur: '#f1f1ee', info: 'À plus de 1 m de la bouteille ; ne jamais brancher induction et réchaud sur une multiprise',
+      forme: box(1480, 505, zb + 860, 45, 40, 140) });
+
+    // équipements
+    b.set({ etape: 7, module: 0 });
+    const zp = zb + 382, B_ = HYP.bouteille;
+    b.add({ nom: 'Bouteille de gaz 5 kg', cat: 'equip', couleur: '#1f5aa6', info: HYP.bouteille.txt,
+      formes: [cyl('z', cx, cy, zp, B_.d / 2, B_.hCorps, 24), cyl('z', cx, cy, zp + B_.hCorps, 95, 20, 20), cyl('z', cx, cy, zp + B_.hCorps + 20, 80, 40, 18)] });
+    b.add({ nom: 'Brûleur + support casserole alu (type Pro Gaz)', cat: 'equip', couleur: '#b8bec5', info: HYP.bruleur.txt,
+      formes: [cyl('z', cx, cy, zp + 370, 14, 20, 10), cyl('z', cx, cy, zp + 390, 45, 40, 16), box(cx - 165, cy - 9, zp + 440, 330, 18, 12), box(cx - 9, cy - 165, zp + 440, 18, 330, 12), { t: 'anneau', x: cx, y: cy, z: zp + 446, r1: 98, r2: 110, h: 8, n: 24 }] });
+    b.add({ nom: 'Plaque induction BOMA monoplace', cat: 'equip', couleur: '#17191c', info: HYP.induction.txt,
+      formes: [box(500 + 95, 90, zb + 788, 290, 360, 60), cyl('z', 500 + 240, 250, zb + 848, 85, 2, 24)] });
+    b.add({ nom: 'Réchaud électrique monoplace', cat: 'equip', couleur: '#e7e4dc', info: HYP.rechaud.txt,
+      formes: [box(1000, 260, zb + 771.5, 270, 260, 75), cyl('z', 1135, 390, zb + 846.5, 92, 10, 24)] });
+    b.add({ nom: 'Zone de dépose casserole chaude', cat: 'equip', couleur: '#9aa3ab', info: 'Fond du bac inox : 280 × 270 mm libres à l\'avant droit',
+      forme: box(1255, -10, zb + 771.6, 280, 255, 0.6) });
+    b.add({ nom: 'Couverture anti-feu (au mur)', cat: 'equip', couleur: '#b3261e', forme: box(-270, murY - 45, 900, 220, 45, 300) });
+
+    // rangement
+    b.set({ etape: 8, module: 0 });
+    b.add({ nom: 'Casserole en cours de cuisson', cat: 'equip', couleur: '#8f969d', formes: [cyl('z', cx, cy, zp + 454, 110, 130, 22), box(cx + 105, cy - 10, zp + 540, 120, 20, 14)] });
+    b.add({ nom: 'Marmite', cat: 'equip', couleur: '#7d848b', forme: cyl('z', 250, 275, zb + 98, 140, 180, 22) });
+    b.set({ module: 1 });
+    [[650, 260, 120, 160], [900, 260, 110, 120], [1150, 260, 100, 110], [1380, 260, 95, 150]].forEach(([x, y, r, h]) => b.add({ nom: 'Casserole', cat: 'equip', couleur: '#8f969d', forme: cyl('z', x, y, zb + 98, r, h, 20) }));
+    b.add({ nom: 'Poêle', cat: 'equip', couleur: '#2e3135', formes: [cyl('z', 650, 260, zb + 438, 125, 45, 22), box(770, 248, zb + 465, 170, 24, 14)] });
+    b.add({ nom: 'Pile de couvercles', cat: 'equip', couleur: '#aab1b8', forme: cyl('z', 1020, 260, zb + 438, 115, 60, 22) });
+    b.add({ nom: 'Saladier / passoire', cat: 'equip', couleur: '#cfd5da', forme: cyl('z', 1300, 260, zb + 438, 120, 110, 20) });
+    for (let k = 0; k < 7; k++) {
+      const x = 560 + k * 85;
+      b.add({ nom: ['Louche', 'Spatule', 'Écumoire', 'Fouet', 'Pince', 'Cuillère en bois', 'Spatule souple'][k], cat: 'equip', couleur: k === 5 ? '#b78a55' : '#9aa1a8',
+        formes: [box(x - 1, 520, zb + 1110, 2, 3, 30), box(x - 6, 512, zb + 840, 12, 6, 270), box(x - 22, 505, zb + 815, 44, 10, 50)] });
+    }
+    b.q('crochetS', 7, 'Crochet en S inox 60 mm', 'barre à ustensiles');
+    [[560, '#d9a441'], [640, '#6b8f3a'], [720, '#a33b2b'], [800, '#e8dfc5'], [880, '#d9a441']].forEach(([x, c], k) => b.add({ nom: k < 2 ? 'Bouteille d\'huile' : 'Pot à épices', cat: 'equip', couleur: c, forme: cyl('z', x, 450, zb + 1315, k < 2 ? 38 : 30, k < 2 ? 280 : 100, 14) }));
+
+    b.finaliser();
+    return {
+      code: 'C', nom: 'Station de cuisson et rangement', court: 'Station cuisson',
+      dims: { L: 1550, P: 570, H: zb + 1400 }, encombrement: '1550 × 570 × 1420 mm ; plan de travail à 808 mm du sol',
+      tube: 'T25', murY, sol: { x0: -400, x1: 1950, y0: -500, y1: murY }, murH: 2200,
+      modules: [{ code: 'G', nom: 'Module gaz', x: 0, w: 500 }, { code: 'E', nom: 'Module cuisson électrique', x: 500, w: 1050 }],
+      typesCadre: b.typesCadre, parts: b.parts, quinc: b.quinc,
+      niveaux: { face: [0, zb, zb + 80, zb + 382, zb + 420, zb + 770, zb + 788, zb + 1150, zb + 1300, zb + 1400] },
+      cotesH: [0, 500, 980, 1550],
+      etapes: [
+        { t: 'Module gaz : cadres et lisses arrière', d: 'Visser les vérins sous les cadres FgG et FgD (FgD porte le montant arrière rehaussé à 1130 mm, il se place à droite). Boulonner la lisse arrière basse et la lisse arrière haute.', ctrl: ['FgD à droite, montant haut à l\'arrière', 'Diagonales contrôlées'] },
+        { t: 'Module gaz : plateau réglable et collier', d: 'Choisir la hauteur du plateau (3 crans : 340 / 400 / 460 mm du sol) pour que le support de casserole arrive à 870 mm environ, à la hauteur de la plaque induction. Boulonner les deux traverses porte-plateau, poser le plateau tôle, puis la lisse porte-collier et le collier.', ctrl: ['Support de casserole à ±20 mm du dessus de la plaque induction', 'Collier à mi-hauteur du corps de bouteille'] },
+        { t: 'Module électrique : cadres, lisses et traverses sous plan', d: 'Assembler les deux cadres Fc avec les lisses avant haute, arrière haute et arrière basse, puis les trois traverses sous plan : la traverse médiane (jonction bois / inox) et les deux traverses qui portent le bac inox (4 vis M6 chacune, dans les écrous à sertir des lisses).', ctrl: ['Dessus des lisses et des traverses dans le même plan (règle de 1 m)'] },
+        { t: 'Module électrique : barre à ustensiles et lisse haute', d: 'Boulonner la barre à ustensiles (z = 1170 du sol) et la lisse haute arrière entre les montants rehaussés.', ctrl: ['Serrage 8 N·m'] },
+        { t: 'Liaison, niveau, ancrage et crédence', d: 'Accoler les modules, passer les 4 boulons M6×60, régler les vérins pour un plan parfaitement horizontal. Fixer la crédence aluminium au mur, puis visser les 4 équerres murales et les cheviller.', ctrl: ['Niveau du plan à ±1 mm/m', 'Aucun mouvement en poussant le haut des montants'] },
+        { t: 'Tablettes, plan bois et bac inox', d: 'Poser les tablettes 18 mm, le plan contreplaqué verni (zone induction) et le bac inox de la zone chaude. Visser le plan par dessous.', ctrl: ['Bac inox posé sans bois dessous', 'Plan bien appuyé sur la traverse médiane'] },
+        { t: 'Écran thermique, étagère, barre aimantée, prises', d: 'Boulonner l\'écran galvanisé sur le cadre FgD. Poser les consoles et l\'étagère à épices. Fixer la barre aimantée et le bloc 2 prises sur le montant arrière droit, le plus loin possible de la bouteille.', ctrl: ['Prises à plus de 1 m de la bouteille', 'Câbles hors de portée des flammes'] },
+        { t: 'Mise en place des appareils', d: 'Placer la bouteille sur le plateau, fermer le collier (sangle). Monter le brûleur et son support alu. Poser la plaque BOMA sur le plan bois (50 mm libres autour, ne rien glisser dessous) et le réchaud sur le bac inox, en arrière. Contrôler l\'étanchéité du brûleur à l\'eau savonneuse.', ctrl: ['Pas de bulles au test à l\'eau savonneuse', 'Aucune étagère à moins de 750 mm au-dessus du brûleur', 'Couverture anti-feu accessible'] },
+        { t: 'Rangement et mise en service', d: 'Marmites sous la bouteille, casseroles et poêles sur les tablettes, ustensiles sur la barre à crochets, huiles à gauche de l\'étagère.', ctrl: ['Rien de combustible à moins de 300 mm de la flamme', 'Robinet de bouteille fermé après chaque usage'] }
+      ]
+    };
+  }
+
+  /* ------------------------------------------------------------------ */
+  const MEUBLES = { A: dressing(), B: etagere(), C: station() };
+
+  /* Scène combinée : implantation cuisine (B à droite de C) */
+  const IMPLANTATION = {
+    code: 'K', nom: 'Implantation cuisine (B + C)', court: 'Cuisine B + C',
+    composants: [{ m: 'C', dx: 0, dy: 0, dz: 0 }, { m: 'B', dx: 1800, dy: 565 - 284, dz: 1250 }],
+    murY: 565, sol: { x0: -500, x1: 3000, y0: -600, y1: 565 }, murH: 2400
+  };
+
+  const MODELE = { SECTIONS, COUL, HYP, MEUBLES, IMPLANTATION, version: 'Indice A', date: '24/11/2026' };
+  if (typeof module !== 'undefined' && module.exports) module.exports = MODELE;
+  root.MODELE = MODELE;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/*
+ * Calculs partagés : propriétés de section, nomenclature, débit en barres, calepinage des panneaux.
+ */
+(function (root) {
+  'use strict';
+  const RHO_ACIER = 7.85e-6;     // kg/mm³
+  const RHO_CP = 0.55e-6;        // kg/mm³ (contreplaqué okoumé / peuplier)
+  const E_ACIER = 210000;        // MPa
+  const E_CP = 6500;             // MPa, sens fil des plis extérieurs (valeur prudente)
+
+  function propSection(S) {
+    let A = 0, I = 0, v = 0;
+    if (S.type === 'carre') {
+      const a = S.a, b = S.a - 2 * S.t;
+      // rayon d'angle extérieur ≈ 1,5 t : on retire environ 4 % (valeur prudente)
+      A = (a * a - b * b) * 0.96; I = (Math.pow(a, 4) - Math.pow(b, 4)) / 12 * 0.95; v = a / 2;
+    } else if (S.type === 'rond') {
+      const d = S.d, di = S.d - 2 * S.t;
+      A = Math.PI / 4 * (d * d - di * di); I = Math.PI / 64 * (Math.pow(d, 4) - Math.pow(di, 4)); v = d / 2;
+    } else if (S.type === 'plein') {
+      A = Math.PI / 4 * S.d * S.d; I = Math.PI / 64 * Math.pow(S.d, 4); v = S.d / 2;
+    } else if (S.type === 'plat') {
+      A = S.b * S.e; I = S.b * Math.pow(S.e, 3) / 12; v = S.e / 2;
+    } else if (S.type === 'corniere') {
+      A = (2 * S.b - S.e) * S.e; I = 0; v = 0;
+    }
+    return { A, I, W: v ? I / v : 0, i: A ? Math.sqrt(I / A) : 0, kgm: A * RHO_ACIER * 1000 };
+  }
+
+  const CAT_PREFIXE = { tube: 'T', rond: 'R', plat: 'F', panneau: 'P', tole: 'S' };
+
+  /* Nomenclature d'un meuble : regroupe les pièces identiques et attribue les repères */
+  function nomenclature(meuble, SECTIONS) {
+    if (meuble._nomenclature) return meuble._nomenclature;
+    const groupes = {};
+    meuble.parts.forEach((p, idx) => {
+      if (!p.debit) return;
+      const d = p.debit;
+      let cle;
+      if (p.cat === 'panneau' || p.cat === 'tole') cle = [p.cat, p.mat, d.ep, Math.max(d.L, d.l), Math.min(d.L, d.l), d.usin].join('|');
+      else cle = [p.cat, d.sec, d.L, d.coupe, d.usin].join('|');
+      if (!groupes[cle]) groupes[cle] = { cat: p.cat, debit: d, mat: p.mat, noms: [], sousEns: [], qte: 0, parts: [] };
+      const g = groupes[cle];
+      g.qte += (d.n || 1);
+      g.parts.push(idx);
+      if (g.noms.indexOf(p.nom) < 0) g.noms.push(p.nom);
+      if (p.sousEns && g.sousEns.indexOf(p.sousEns) < 0) g.sousEns.push(p.sousEns);
+    });
+    const liste = Object.values(groupes);
+    const ordreCat = ['tube', 'rond', 'plat', 'panneau', 'tole'];
+    liste.sort((u, v) => {
+      const c = ordreCat.indexOf(u.cat) - ordreCat.indexOf(v.cat);
+      if (c) return c;
+      if (u.cat === 'panneau' || u.cat === 'tole') return (v.debit.ep - u.debit.ep) || (v.debit.L * v.debit.l - u.debit.L * u.debit.l);
+      return (u.debit.sec < v.debit.sec ? -1 : u.debit.sec > v.debit.sec ? 1 : 0) || (v.debit.L - u.debit.L);
+    });
+    const compteurs = {};
+    liste.forEach(g => {
+      const pre = CAT_PREFIXE[g.cat];
+      compteurs[pre] = (compteurs[pre] || 0) + 1;
+      g.rep = meuble.code + '-' + pre + String(compteurs[pre]).padStart(2, '0');
+      g.parts.forEach(i => { meuble.parts[i].rep = g.rep; });
+      // masse unitaire
+      if (g.cat === 'panneau') g.masseU = g.debit.ep * g.debit.L * g.debit.l * RHO_CP;
+      else if (g.cat === 'tole') g.masseU = g.debit.ep * g.debit.L * g.debit.l * (/alu/i.test(g.mat) ? 2.7e-6 : RHO_ACIER);
+      else {
+        const S = SECTIONS[g.debit.sec];
+        g.masseU = propSection(S).kgm * g.debit.L / 1000;
+      }
+    });
+    // sous-ensembles soudés
+    const se = {};
+    meuble.parts.forEach(p => {
+      if (!p.sousEns || !p.debit) return;
+      se[p.sousEns] = se[p.sousEns] || {};
+      se[p.sousEns][p.rep] = (se[p.sousEns][p.rep] || 0) + (p.debit.n || 1);
+    });
+    const typesCadre = {};
+    meuble.typesCadre.forEach(ft => { typesCadre[ft.nom] = ft.inst; });
+    // nombre d'exemplaires de chaque sous-ensemble
+    const sousEnsembles = Object.keys(se).map(nom => {
+      let n = typesCadre[nom];
+      const comp = se[nom];
+      if (!n) {
+        // lisses : quantité = nombre de tubes de la lisse
+        const repTube = Object.keys(comp).find(r => /-T|-R/.test(r) && !/Platine/.test(r));
+        n = nom.indexOf('Lisse') === 0 ? comp[repTube] : 1;
+        if (nom === 'Collier de bouteille' || nom === 'Râtelier à assiettes') n = 1;
+        if (nom === 'Traverse sous plan') n = comp[repTube];
+        if (nom === 'Console d\'étagère') n = 2;
+      }
+      const parEx = {};
+      Object.keys(comp).forEach(r => { parEx[r] = comp[r] / n; });
+      return { nom, n, composition: parEx };
+    });
+    const quinc = Object.values(meuble.quinc).sort((u, v) => u.designation < v.designation ? -1 : 1);
+    quinc.forEach((q, k) => { q.rep = meuble.code + '-Q' + String(k + 1).padStart(2, '0'); });
+    meuble._nomenclature = { liste, sousEnsembles, quinc };
+    return meuble._nomenclature;
+  }
+
+  /* Débit en barres : premier ajustement décroissant, trait de scie compris */
+  function debitBarres(longueurs, Lbarre, trait) {
+    const tri = longueurs.slice().sort((u, v) => v.L - u.L);
+    const barres = [];
+    tri.forEach(piece => {
+      let b = barres.find(br => br.reste >= piece.L + trait);
+      if (!b) { b = { pieces: [], reste: Lbarre }; barres.push(b); }
+      b.pieces.push(piece);
+      b.reste -= piece.L + trait;
+    });
+    return barres;
+  }
+
+  /* Calepinage par bandes (guillotine) sur panneaux standard */
+  function calepinage(pieces, Lp, lp, trait) {
+    const tri = pieces.map(p => {
+      const L = Math.max(p.L, p.l), l = Math.min(p.L, p.l);
+      return Object.assign({}, p, { L, l });
+    }).sort((u, v) => (v.l - u.l) || (v.L - u.L));
+    const panneaux = [];
+    tri.forEach(pc => {
+      if (pc.L > Lp || pc.l > lp) { pc.horsFormat = true; }
+      let place = false;
+      for (const pan of panneaux) {
+        for (const bd of pan.bandes) {
+          if (bd.h >= pc.l && bd.x + pc.L <= Lp) {
+            pan.pieces.push({ x: bd.x, y: bd.y, L: pc.L, l: pc.l, rep: pc.rep });
+            bd.x += pc.L + trait; place = true; break;
+          }
+        }
+        if (place) break;
+        if (pan.yLibre + pc.l <= lp) {
+          const bd = { y: pan.yLibre, h: pc.l, x: 0 };
+          pan.bandes.push(bd); pan.yLibre += pc.l + trait;
+          pan.pieces.push({ x: 0, y: bd.y, L: pc.L, l: pc.l, rep: pc.rep });
+          bd.x = pc.L + trait; place = true; break;
+        }
+      }
+      if (!place) {
+        const pan = { bandes: [], pieces: [], yLibre: 0 };
+        panneaux.push(pan);
+        const bd = { y: 0, h: pc.l, x: pc.L + trait };
+        pan.bandes.push(bd); pan.yLibre = pc.l + trait;
+        pan.pieces.push({ x: 0, y: 0, L: pc.L, l: pc.l, rep: pc.rep, horsFormat: pc.horsFormat });
+      }
+    });
+    panneaux.forEach(p => { p.surfUtile = p.pieces.reduce((s, q) => s + q.L * q.l, 0); });
+    return panneaux;
+  }
+
+  /* Synthèse achats tous meubles */
+  function syntheseAchats(MODELE) {
+    const S = MODELE.SECTIONS;
+    const parSection = {}, parPanneau = {}, quinc = {};
+    Object.values(MODELE.MEUBLES).forEach(m => {
+      const nom = nomenclature(m, S);
+      nom.liste.forEach(g => {
+        if (g.cat === 'panneau') {
+          const k = g.mat;
+          parPanneau[k] = parPanneau[k] || { mat: k, ep: g.debit.ep, pieces: [] };
+          for (let i = 0; i < g.qte; i++) parPanneau[k].pieces.push({ L: g.debit.L, l: g.debit.l, rep: g.rep });
+        } else if (g.cat !== 'tole') {
+          const k = g.debit.sec;
+          parSection[k] = parSection[k] || { sec: k, pieces: [] };
+          for (let i = 0; i < g.qte; i++) parSection[k].pieces.push({ L: g.debit.L, rep: g.rep });
+        }
+      });
+      nom.quinc.forEach(q => {
+        quinc[q.designation] = quinc[q.designation] || { designation: q.designation, qte: 0, meubles: [] };
+        quinc[q.designation].qte += q.qte;
+        if (quinc[q.designation].meubles.indexOf(m.code) < 0) quinc[q.designation].meubles.push(m.code);
+      });
+    });
+    const sections = Object.values(parSection).map(o => {
+      const Sx = S[o.sec];
+      const barres = debitBarres(o.pieces, Sx.barre, 3);
+      const Ltot = o.pieces.reduce((s, p) => s + p.L, 0);
+      return { sec: o.sec, nom: Sx.nom, barre: Sx.barre, Ltot, barres, kg: propSection(Sx).kgm * Ltot / 1000 };
+    }).sort((u, v) => v.Ltot - u.Ltot);
+    const panneaux = Object.values(parPanneau).map(o => {
+      const pl = calepinage(o.pieces, 2440, 1220, 4);
+      const surf = o.pieces.reduce((s, p) => s + p.L * p.l, 0);
+      return { mat: o.mat, ep: o.ep, panneaux: pl, surf };
+    }).sort((u, v) => v.ep - u.ep);
+    return { sections, panneaux, quinc: Object.values(quinc) };
+  }
+
+  /* Vérifications de flèche et de contrainte (poutre sur 2 appuis, charge répartie) */
+  function flecheRepartie(qNmm, L, E, I) { return 5 * qNmm * Math.pow(L, 4) / (384 * E * I); }
+  function flecheCentree(P, L, E, I) { return P * Math.pow(L, 3) / (48 * E * I); }
+
+  const CALC = { propSection, nomenclature, debitBarres, calepinage, syntheseAchats, flecheRepartie, flecheCentree, E_ACIER, E_CP, RHO_CP, RHO_ACIER };
+  if (typeof module !== 'undefined' && module.exports) module.exports = CALC;
+  root.CALC = CALC;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/*
+ * Moteur de rendu 3D logiciel (aucune bibliothèque externe).
+ * Rastérisation par lignes de balayage avec tampon de profondeur, tampon d'identifiants
+ * (sélection au clic) et détection d'arêtes en post-traitement.
+ */
+(function (root) {
+  'use strict';
+
+  function hexRgb(h) {
+    const n = parseInt(h.slice(1), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
+  /* ---------- Maillage ---------- */
+  // Chaque triangle : 9 coordonnées, normale (3), indice de face (pour les arêtes)
+  function maillageForme(f, out, faceBase) {
+    let face = faceBase;
+    const tri = (a, b, c, n, fid) => { out.push({ v: [a, b, c], n, f: fid }); };
+    const quad = (a, b, c, d, n, fid) => { tri(a, b, c, n, fid); tri(a, c, d, n, fid); };
+    if (f.t === 'box') {
+      const x0 = f.x, y0 = f.y, z0 = f.z, x1 = f.x + f.dx, y1 = f.y + f.dy, z1 = f.z + f.dz;
+      const P = (x, y, z) => [x, y, z];
+      quad(P(x0, y0, z0), P(x1, y0, z0), P(x1, y0, z1), P(x0, y0, z1), [0, -1, 0], face++); // avant
+      quad(P(x1, y1, z0), P(x0, y1, z0), P(x0, y1, z1), P(x1, y1, z1), [0, 1, 0], face++);  // arrière
+      quad(P(x0, y1, z0), P(x0, y0, z0), P(x0, y0, z1), P(x0, y1, z1), [-1, 0, 0], face++); // gauche
+      quad(P(x1, y0, z0), P(x1, y1, z0), P(x1, y1, z1), P(x1, y0, z1), [1, 0, 0], face++);  // droite
+      quad(P(x0, y0, z1), P(x1, y0, z1), P(x1, y1, z1), P(x0, y1, z1), [0, 0, 1], face++);  // dessus
+      quad(P(x0, y1, z0), P(x1, y1, z0), P(x1, y0, z0), P(x0, y0, z0), [0, 0, -1], face++); // dessous
+    } else if (f.t === 'cyl' || f.t === 'anneau') {
+      const n = f.n || 20;
+      const r2 = f.t === 'cyl' ? f.r : f.r2, r1 = f.t === 'anneau' ? f.r1 : 0;
+      // repère local : axe w, base u,v
+      const map = (u, v, w) => {
+        if (f.ax === 'z') return [f.x + u, f.y + v, f.z + w];
+        if (f.ax === 'x') return [f.x + w, f.y + u, f.z + v];
+        return [f.x + u, f.y + w, f.z + v];      // axe y
+      };
+      const nmap = (u, v, w) => {
+        if (f.ax === 'z') return [u, v, w];
+        if (f.ax === 'x') return [w, u, v];
+        return [u, w, v];
+      };
+      // pour l'axe y, l'orientation (u,w,v) inverse le sens : on corrige l'ordre
+      const inv = f.ax === 'y';
+      const T = (a, b, c, nn, fid) => inv ? tri(a, c, b, nn, fid) : tri(a, b, c, nn, fid);
+      const Q = (a, b, c, d, nn, fid) => { T(a, b, c, nn, fid); T(a, c, d, nn, fid); };
+      const fCote = face++, fHaut = face++, fBas = face++, fInt = face++;
+      for (let k = 0; k < n; k++) {
+        const t0 = k / n * Math.PI * 2, t1 = (k + 1) / n * Math.PI * 2;
+        const c0 = Math.cos(t0), s0 = Math.sin(t0), c1 = Math.cos(t1), s1 = Math.sin(t1);
+        const cm = Math.cos((t0 + t1) / 2), sm = Math.sin((t0 + t1) / 2);
+        Q(map(r2 * c0, r2 * s0, 0), map(r2 * c1, r2 * s1, 0), map(r2 * c1, r2 * s1, f.h), map(r2 * c0, r2 * s0, f.h), nmap(cm, sm, 0), fCote);
+        if (r1 > 0) {
+          Q(map(r1 * c1, r1 * s1, 0), map(r1 * c0, r1 * s0, 0), map(r1 * c0, r1 * s0, f.h), map(r1 * c1, r1 * s1, f.h), nmap(-cm, -sm, 0), fInt);
+          Q(map(r1 * c0, r1 * s0, f.h), map(r2 * c0, r2 * s0, f.h), map(r2 * c1, r2 * s1, f.h), map(r1 * c1, r1 * s1, f.h), nmap(0, 0, 1), fHaut);
+          Q(map(r1 * c1, r1 * s1, 0), map(r2 * c1, r2 * s1, 0), map(r2 * c0, r2 * s0, 0), map(r1 * c0, r1 * s0, 0), nmap(0, 0, -1), fBas);
+        } else {
+          T(map(0, 0, f.h), map(r2 * c0, r2 * s0, f.h), map(r2 * c1, r2 * s1, f.h), nmap(0, 0, 1), fHaut);
+          T(map(0, 0, 0), map(r2 * c1, r2 * s1, 0), map(r2 * c0, r2 * s0, 0), nmap(0, 0, -1), fBas);
+        }
+      }
+    }
+    return face;
+  }
+
+  /* ---------- Scène ---------- */
+  function Scene() {
+    this.objets = [];      // {part, tris, rgb, alpha, pick, decal:[dx,dy,dz], visible, teinte}
+    this.nbFaces = 0;
+  }
+  Scene.prototype.ajouter = function (o) {
+    const tris = [];
+    (o.formes || []).forEach(f => { this.nbFaces = maillageForme(f, tris, this.nbFaces); });
+    o.tris = tris;
+    o.rgb = hexRgb(o.couleur || '#888888');
+    if (o.alpha === undefined) o.alpha = 1;
+    if (o.visible === undefined) o.visible = true;
+    o.decal = o.decal || [0, 0, 0];
+    this.objets.push(o);
+    return o;
+  };
+  Scene.prototype.bornes = function (filtre) {
+    const b = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
+    this.objets.forEach(o => {
+      if (filtre && !filtre(o)) return;
+      o.tris.forEach(t => t.v.forEach(p => {
+        for (let i = 0; i < 3; i++) {
+          const v = p[i] + o.decal[i];
+          if (v < b[i]) b[i] = v;
+          if (v > b[i + 3]) b[i + 3] = v;
+        }
+      }));
+    });
+    return b;
+  };
+
+  /* ---------- Caméra ---------- */
+  function Camera() {
+    this.cible = [0, 0, 0];
+    this.lacet = -0.65;     // rotation autour de z (0 = vue de face)
+    this.tangage = 0.42;    // élévation
+    this.distance = 4000;
+    this.focale = 0.48;     // tan(fov/2)
+    this.perspective = true;
+  }
+  Camera.prototype.repere = function () {
+    const cp = Math.cos(this.tangage), sp = Math.sin(this.tangage), cl = Math.cos(this.lacet), sl = Math.sin(this.lacet);
+    const dir = [cp * sl, -cp * cl, sp];                       // de la cible vers l'œil
+    const oeil = [this.cible[0] + dir[0] * this.distance, this.cible[1] + dir[1] * this.distance, this.cible[2] + dir[2] * this.distance];
+    const av = [-dir[0], -dir[1], -dir[2]];
+    let dr = [av[1] * 1 - av[2] * 0, av[2] * 0 - av[0] * 1, 0];  // av × z
+    const ld = Math.hypot(dr[0], dr[1], dr[2]) || 1;
+    dr = [dr[0] / ld, dr[1] / ld, dr[2] / ld];
+    const ht = [dr[1] * av[2] - dr[2] * av[1], dr[2] * av[0] - dr[0] * av[2], dr[0] * av[1] - dr[1] * av[0]];
+    return { oeil, av, dr, ht, dir };
+  };
+
+  /* ---------- Rendu ---------- */
+  function Rendu(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.W = 0; this.H = 0;
+    this.fond = [246, 245, 241];
+    this.lumiere = 0.62;
+  }
+  Rendu.prototype.dimension = function (W, H) {
+    if (W === this.W && H === this.H) return;
+    this.W = W; this.H = H;
+    this.canvas.width = W; this.canvas.height = H;
+    this.img = this.ctx.createImageData(W, H);
+    this.buf32 = new Uint32Array(this.img.data.buffer);
+    this.z = new Float32Array(W * H);
+    this.fid = new Int32Array(W * H);
+    this.pid = new Int32Array(W * H);
+    this.ombre = new Uint8Array(W * H);
+  };
+
+  Rendu.prototype.projeteur = function (cam) {
+    const R = cam.repere(), W = this.W, H = this.H;
+    const F = (H / 2) / cam.focale;
+    const ech = F / cam.distance;
+    const cx = W / 2, cy = H / 2;
+    const persp = cam.perspective;
+    return {
+      R, F, ech, persp,
+      p(x, y, z) {
+        const qx = x - R.oeil[0], qy = y - R.oeil[1], qz = z - R.oeil[2];
+        const X = qx * R.dr[0] + qy * R.dr[1] + qz * R.dr[2];
+        const Y = qx * R.ht[0] + qy * R.ht[1] + qz * R.ht[2];
+        const Z = qx * R.av[0] + qy * R.av[1] + qz * R.av[2];
+        if (persp) return [cx + F * X / Z, cy - F * Y / Z, 1 / Z, Z];
+        return [cx + X * ech, cy - Y * ech, -Z, Z];
+      }
+    };
+  };
+
+  Rendu.prototype.dessiner = function (scene, cam, opts) {
+    opts = opts || {};
+    const W = this.W, H = this.H, z = this.z, fid = this.fid, pid = this.pid, buf = this.buf32;
+    const fond = opts.fond || this.fond;
+    const fondPix = (255 << 24) | (fond[2] << 16) | (fond[1] << 8) | fond[0];
+    buf.fill(fondPix);
+    z.fill(-Infinity);
+    fid.fill(-1);
+    pid.fill(-1);
+    const pr = this.projeteur(cam);
+    const R = pr.R;
+    // lumière liée à la caméra (en haut à gauche, légèrement devant)
+    const L = [
+      -R.av[0] * 0.55 + R.ht[0] * 0.65 - R.dr[0] * 0.35,
+      -R.av[1] * 0.55 + R.ht[1] * 0.65 - R.dr[1] * 0.35,
+      -R.av[2] * 0.55 + R.ht[2] * 0.65 - R.dr[2] * 0.35
+    ];
+    const lL = Math.hypot(L[0], L[1], L[2]); L[0] /= lL; L[1] /= lL; L[2] /= lL;
+    const transparents = [];
+    const self = this;
+
+    function rasterTri(a, b, c, couleur, f, p, alpha) {
+      // tri par y
+      let t;
+      if (b[1] < a[1]) { t = a; a = b; b = t; }
+      if (c[1] < a[1]) { t = a; a = c; c = t; }
+      if (c[1] < b[1]) { t = b; b = c; c = t; }
+      const x0 = a[0], y0 = a[1], d0 = a[2], x1 = b[0], y1 = b[1], d1 = b[2], x2 = c[0], y2 = c[1], d2 = c[2];
+      if (y2 - y0 < 1e-6) return;
+      const yS = Math.max(0, Math.ceil(y0 - 0.5)), yE = Math.min(H - 1, Math.ceil(y2 - 0.5) - 1);
+      const r = couleur & 255, g = (couleur >> 8) & 255, bl = (couleur >> 16) & 255;
+      for (let y = yS; y <= yE; y++) {
+        const py = y + 0.5;
+        const tl = (py - y0) / (y2 - y0);
+        let xa = x0 + (x2 - x0) * tl, da = d0 + (d2 - d0) * tl, xb, db;
+        if (py < y1) { const u = (py - y0) / (y1 - y0); xb = x0 + (x1 - x0) * u; db = d0 + (d1 - d0) * u; }
+        else { const u = (py - y1) / (y2 - y1); xb = x1 + (x2 - x1) * u; db = d1 + (d2 - d1) * u; }
+        if (xa > xb) { t = xa; xa = xb; xb = t; t = da; da = db; db = t; }
+        const xs = Math.max(0, Math.ceil(xa - 0.5)), xe = Math.min(W - 1, Math.ceil(xb - 0.5) - 1);
+        if (xe < xs) continue;
+        const dd = (db - da) / ((xb - xa) || 1e-9);
+        let d = da + (xs + 0.5 - xa) * dd;
+        let i = y * W + xs;
+        if (alpha >= 1) {
+          for (let x = xs; x <= xe; x++, i++, d += dd) {
+            if (d > z[i]) { z[i] = d; buf[i] = couleur; fid[i] = f; pid[i] = p; }
+          }
+        } else {
+          const ia = 1 - alpha;
+          for (let x = xs; x <= xe; x++, i++, d += dd) {
+            if (d > z[i]) {
+              const o = buf[i];
+              const nr = (r * alpha + (o & 255) * ia) | 0, ng = (g * alpha + ((o >> 8) & 255) * ia) | 0, nb = (bl * alpha + ((o >> 16) & 255) * ia) | 0;
+              buf[i] = (255 << 24) | (nb << 16) | (ng << 8) | nr;
+              if (p >= 0) pid[i] = p;
+            }
+          }
+        }
+      }
+    }
+
+    const near = 20;
+    for (let oi = 0; oi < scene.objets.length; oi++) {
+      const o = scene.objets[oi];
+      if (!o.visible) continue;
+      const dx = o.decal[0], dy = o.decal[1], dz = o.decal[2];
+      let rgb = o.rgb;
+      if (o.teinte) {
+        const tt = o.teinte, k = tt[3];
+        rgb = [rgb[0] * (1 - k) + tt[0] * k, rgb[1] * (1 - k) + tt[1] * k, rgb[2] * (1 - k) + tt[2] * k];
+      }
+      const alpha = o.alpha;
+      const pickId = o.pick === false ? -2 : oi;
+      for (let ti = 0; ti < o.tris.length; ti++) {
+        const T = o.tris[ti];
+        const n = T.n;
+        // élimination des faces arrière
+        const v0 = T.v[0];
+        const ex = v0[0] + dx - R.oeil[0], ey = v0[1] + dy - R.oeil[1], ez = v0[2] + dz - R.oeil[2];
+        let vis;
+        if (pr.persp) vis = ex * n[0] + ey * n[1] + ez * n[2] < 0;
+        else vis = R.av[0] * n[0] + R.av[1] * n[1] + R.av[2] * n[2] < 0;
+        if (!vis) continue;
+        const A = pr.p(v0[0] + dx, v0[1] + dy, v0[2] + dz);
+        const B = pr.p(T.v[1][0] + dx, T.v[1][1] + dy, T.v[1][2] + dz);
+        const C = pr.p(T.v[2][0] + dx, T.v[2][1] + dy, T.v[2][2] + dz);
+        if (pr.persp && (A[3] < near || B[3] < near || C[3] < near)) continue;
+        let lum = n[0] * L[0] + n[1] * L[1] + n[2] * L[2];
+        lum = lum > 0 ? 0.66 + 0.42 * lum : 0.66 + 0.2 * lum;
+        if (o.pick === false) lum = 0.9 + 0.1 * lum;
+        // légère différenciation des faces selon l'axe, pour la lisibilité
+        if (n[2] > 0.5) lum += 0.06;
+        lum = Math.min(1.12, lum);
+        const cr = Math.min(255, rgb[0] * lum) | 0, cg = Math.min(255, rgb[1] * lum) | 0, cb = Math.min(255, rgb[2] * lum) | 0;
+        const col = (255 << 24) | (cb << 16) | (cg << 8) | cr;
+        if (alpha < 1) { transparents.push([A, B, C, col, T.f, pickId, alpha]); continue; }
+        rasterTri(A, B, C, col, T.f, pickId, 1);
+      }
+    }
+    // arêtes
+    const fort = opts.aretes === undefined ? 0.42 : opts.aretes;
+    if (fort > 0) {
+      for (let y = 0; y < H - 1; y++) {
+        let i = y * W;
+        for (let x = 0; x < W - 1; x++, i++) {
+          const f = fid[i];
+          const fr = fid[i + 1], fb = fid[i + W];
+          if (f !== fr || f !== fb) {
+            // l'arête est dessinée sur le pixel le plus proche
+            let j = i;
+            if (f !== fr && z[i + 1] > z[j]) j = i + 1;
+            if (f !== fb && z[i + W] > z[j]) j = i + W;
+            if (fid[j] < 0) continue;
+            const k = pid[j] === -2 ? 0.93 : fort;
+            const o = buf[j];
+            buf[j] = (255 << 24) | ((((o >> 16) & 255) * k | 0) << 16) | ((((o >> 8) & 255) * k | 0) << 8) | (((o & 255) * k) | 0);
+          }
+        }
+      }
+    }
+    // transparents, du plus loin au plus proche
+    transparents.sort((u, v) => (u[0][3] + u[1][3] + u[2][3]) < (v[0][3] + v[1][3] + v[2][3]) ? 1 : -1);
+    transparents.forEach(t => rasterTri(t[0], t[1], t[2], t[3], t[4], t[5], t[6]));
+    this.ctx.putImageData(this.img, 0, 0);
+    this.dernierProjeteur = pr;
+    return pr;
+  };
+
+  Rendu.prototype.objetA = function (x, y) {
+    if (x < 0 || y < 0 || x >= this.W || y >= this.H) return -1;
+    return this.pid[(y | 0) * this.W + (x | 0)];
+  };
+
+  const MOTEUR = { Scene, Camera, Rendu, hexRgb };
+  root.MOTEUR = MOTEUR;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/*
+ * Construction des scènes 3D à partir du modèle (partagé entre la simulation et les documents).
+ */
+(function (root) {
+  'use strict';
+
+  const COUCHES = [
+    { id: 'structure', nom: 'Structure métallique' },
+    { id: 'quinc', nom: 'Platines, pattes, quincaillerie' },
+    { id: 'bois', nom: 'Panneaux bois / triplex' },
+    { id: 'toles', nom: 'Tôles (inox, galva, alu)' },
+    { id: 'equip', nom: 'Équipements et objets rangés' },
+    { id: 'rideaux', nom: 'Rideaux' },
+    { id: 'mur', nom: 'Mur et sol' }
+  ];
+
+  function coucheDe(p) {
+    if (p.cat === 'tube' || p.cat === 'rond') return 'structure';
+    if (p.cat === 'plat' || p.cat === 'quinc') return 'quinc';
+    if (p.cat === 'panneau') return 'bois';
+    if (p.cat === 'tole') return 'toles';
+    if (p.cat === 'rideau') return 'rideaux';
+    return 'equip';
+  }
+
+  function decaler(f, dx, dy, dz) {
+    return Object.assign({}, f, { x: f.x + dx, y: f.y + dy, z: f.z + dz });
+  }
+
+  function construireScene(MODELE, code) {
+    const sc = new root.MOTEUR.Scene();
+    const K = code === 'K';
+    const cfg = K ? MODELE.IMPLANTATION : MODELE.MEUBLES[code];
+    const comps = K ? cfg.composants : [{ m: code, dx: 0, dy: 0, dz: 0 }];
+    comps.forEach(c => {
+      const m = MODELE.MEUBLES[c.m];
+      m.parts.forEach(p => {
+        if (!p.formes || !p.formes.length) return;
+        sc.ajouter({
+          formes: p.formes.map(f => decaler(f, c.dx, c.dy, c.dz)),
+          couleur: p.couleur, alpha: p.cat === 'rideau' ? 0.6 : 1,
+          part: p, meuble: m, couche: coucheDe(p)
+        });
+      });
+    });
+    // emprise pour le sol et le mur
+    const b = sc.bornes();
+    const C = MODELE.COUL;
+    const tuile = 500;
+    let x0, x1, y0, y1;
+    if (cfg.sol) { x0 = cfg.sol.x0; x1 = cfg.sol.x1; y0 = cfg.sol.y0; y1 = cfg.sol.y1; }
+    else { x0 = b[0] - 400; x1 = b[3] + 400; y0 = b[1] - 300; y1 = cfg.murY; }
+    x0 = Math.floor(x0 / tuile) * tuile; x1 = Math.ceil(x1 / tuile) * tuile;
+    if (cfg.sol) {
+      for (let x = x0; x < x1; x += tuile) {
+        for (let y = Math.floor(y0 / tuile) * tuile; y < y1; y += tuile) {
+          const yy1 = Math.min(y + tuile, y1);
+          const k = ((x / tuile) + Math.floor(y / tuile)) & 1;
+          sc.ajouter({ formes: [{ t: 'box', x, y, z: -4, dx: tuile, dy: yy1 - y, dz: 4 }], couleur: k ? C.sol1 : C.sol2, couche: 'mur', pick: false });
+        }
+      }
+    }
+    const z0m = cfg.murZ0 !== undefined ? cfg.murZ0 : 0;
+    const zh = cfg.murH;
+    for (let x = x0; x < x1; x += tuile) {
+      for (let z = z0m; z < zh; z += tuile) {
+        const k = ((x / tuile) + Math.floor(z / tuile)) & 1;
+        sc.ajouter({ formes: [{ t: 'box', x, y: cfg.murY, z, dx: tuile, dy: 30, dz: Math.min(tuile, zh - z) }], couleur: k ? C.mur : '#e4dfd6', couche: 'mur', pick: false });
+      }
+    }
+    return sc;
+  }
+
+  function cadrer(scene, cam, W, H, marge) {
+    const b = scene.bornes(o => o.couche !== 'mur' && o.visible);
+    if (!isFinite(b[0])) return;
+    cam.cible = [(b[0] + b[3]) / 2, (b[1] + b[4]) / 2, (b[2] + b[5]) / 2];
+    const r = Math.hypot(b[3] - b[0], b[4] - b[1], b[5] - b[2]) / 2;
+    const asp = Math.min(1, W / H);
+    cam.distance = r * (marge || 1.08) / (cam.focale * asp);
+  }
+
+  const SCENES = { COUCHES, coucheDe, construireScene, cadrer };
+  root.SCENES = SCENES;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/*
+ * Plans 2D en SVG : vues orthogonales cotées, cadres soudés, détails d'assemblage.
+ * Les vues sont calculées à partir du modèle (projection des boîtes et cylindres).
+ */
+(function (root) {
+  'use strict';
+
+  const STYLE = {
+    tube: { f: '#9aa2ab', s: '#1d2126' }, rond: { f: '#c9cfd4', s: '#1d2126' }, plat: { f: '#b8bec5', s: '#1d2126' },
+    quinc: { f: '#7d858e', s: '#1d2126' }, panneau: { f: '#efdcbc', s: '#5c4526' }, tole: { f: '#dfe4e8', s: '#3d4650' },
+    equip: { f: 'none', s: '#8a9097', d: '6 4' }, rideau: { f: 'none', s: '#6f8f80', d: '2 3' }
+  };
+  const fmt = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
+
+  function bornesFormes(formes) {
+    const b = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
+    formes.forEach(f => {
+      let x0, y0, z0, x1, y1, z1;
+      if (f.t === 'box') { x0 = f.x; y0 = f.y; z0 = f.z; x1 = f.x + f.dx; y1 = f.y + f.dy; z1 = f.z + f.dz; }
+      else {
+        const r = f.t === 'cyl' ? f.r : f.r2;
+        if (f.ax === 'z') { x0 = f.x - r; x1 = f.x + r; y0 = f.y - r; y1 = f.y + r; z0 = f.z; z1 = f.z + f.h; }
+        else if (f.ax === 'x') { x0 = f.x; x1 = f.x + f.h; y0 = f.y - r; y1 = f.y + r; z0 = f.z - r; z1 = f.z + r; }
+        else { x0 = f.x - r; x1 = f.x + r; y0 = f.y; y1 = f.y + f.h; z0 = f.z - r; z1 = f.z + r; }
+      }
+      b[0] = Math.min(b[0], x0); b[1] = Math.min(b[1], y0); b[2] = Math.min(b[2], z0);
+      b[3] = Math.max(b[3], x1); b[4] = Math.max(b[4], y1); b[5] = Math.max(b[5], z1);
+    });
+    return b;
+  }
+
+  /* Projection d'une forme dans une vue. Renvoie {prim, prof} ; prof croissante = plus proche */
+  function projeter(f, vue) {
+    const b = bornesFormes([f]);
+    // axes (u horizontal, v vertical vers le haut) et profondeur
+    let u0, u1, v0, v1, prof;
+    if (vue === 'face') { u0 = b[0]; u1 = b[3]; v0 = b[2]; v1 = b[5]; prof = -b[1]; }
+    else if (vue === 'droite') { u0 = b[1]; u1 = b[4]; v0 = b[2]; v1 = b[5]; prof = b[3]; }
+    else { u0 = b[0]; u1 = b[3]; v0 = b[1]; v1 = b[4]; prof = b[5]; }
+    const axeVue = vue === 'face' ? 'y' : vue === 'droite' ? 'x' : 'z';
+    if ((f.t === 'cyl' || f.t === 'anneau') && f.ax === axeVue) {
+      const cu = (u0 + u1) / 2, cv = (v0 + v1) / 2;
+      return { prim: { t: 'cercle', cu, cv, r: f.t === 'cyl' ? f.r : f.r2, ri: f.t === 'anneau' ? f.r1 : 0 }, prof };
+    }
+    return { prim: { t: 'rect', u0, v0, u1, v1 }, prof };
+  }
+
+  /* Vue orthogonale d'un meuble */
+  function vue(meuble, nomVue, opt) {
+    opt = opt || {};
+    const prims = [];
+    meuble.parts.forEach(p => {
+      if (opt.filtre && !opt.filtre(p)) return;
+      if (p.cat === 'rideau' && !opt.rideaux) return;
+      if (p.variante === 'ouvert') return;
+      if (p.cat === 'equip' && !opt.equip) return;
+      p.formes.forEach(f => {
+        const pr = projeter(f, nomVue);
+        pr.st = STYLE[p.cat] || STYLE.tube;
+        pr.p = p;
+        prims.push(pr);
+      });
+    });
+    prims.sort((u, v) => u.prof - v.prof);
+    // emprise
+    let U0 = Infinity, U1 = -Infinity, V0 = Infinity, V1 = -Infinity;
+    prims.forEach(({ prim }) => {
+      if (prim.t === 'rect') { U0 = Math.min(U0, prim.u0); U1 = Math.max(U1, prim.u1); V0 = Math.min(V0, prim.v0); V1 = Math.max(V1, prim.v1); }
+      else { U0 = Math.min(U0, prim.cu - prim.r); U1 = Math.max(U1, prim.cu + prim.r); V0 = Math.min(V0, prim.cv - prim.r); V1 = Math.max(V1, prim.cv + prim.r); }
+    });
+    if (opt.emprise) { U0 = opt.emprise[0]; U1 = opt.emprise[1]; V0 = opt.emprise[2]; V1 = opt.emprise[3]; }
+    const ech = opt.ech;                 // mm papier par mm réel
+    const tx = 2.3 / ech;                // hauteur de texte
+    const lw = 0.18 / ech;
+    const mG = (opt.margeG || 26) / ech, mD = (opt.margeD || 14) / ech, mH = (opt.margeH || 10) / ech, mB = (opt.margeB || 22) / ech;
+    const X0 = U0 - mG, Y0 = -(V1 + mH), Wd = (U1 - U0) + mG + mD, Hd = (V1 - V0) + mH + mB;
+    let s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + [X0, Y0, Wd, Hd].map(fmt).join(' ').replace(/,/g, '.') + '" width="' + (Wd * ech).toFixed(1) + 'mm" height="' + (Hd * ech).toFixed(1) + 'mm" font-family="Arial, Helvetica, sans-serif">';
+    s += '<g stroke-linejoin="round">';
+    prims.forEach(({ prim, st }) => {
+      const att = ' fill="' + st.f + '" stroke="' + st.s + '" stroke-width="' + (lw * (st.d ? 0.8 : 1)).toFixed(3) + '"' + (st.d ? ' stroke-dasharray="' + st.d.split(' ').map(k => (k * lw * 3).toFixed(2)).join(' ') + '"' : '');
+      if (prim.t === 'rect') s += '<rect x="' + prim.u0.toFixed(1) + '" y="' + (-prim.v1).toFixed(1) + '" width="' + Math.max(0.3, prim.u1 - prim.u0).toFixed(1) + '" height="' + Math.max(0.3, prim.v1 - prim.v0).toFixed(1) + '"' + att + '/>';
+      else {
+        s += '<circle cx="' + prim.cu.toFixed(1) + '" cy="' + (-prim.cv).toFixed(1) + '" r="' + prim.r.toFixed(1) + '"' + att + '/>';
+        if (prim.ri) s += '<circle cx="' + prim.cu.toFixed(1) + '" cy="' + (-prim.cv).toFixed(1) + '" r="' + prim.ri.toFixed(1) + '" fill="#fff" stroke="' + st.s + '" stroke-width="' + lw.toFixed(3) + '"/>';
+      }
+    });
+    s += '</g>';
+    // sol / mur
+    if (opt.sol) s += '<line x1="' + (U0 - 8 / ech) + '" y1="0" x2="' + (U1 + 8 / ech) + '" y2="0" stroke="#000" stroke-width="' + (lw * 2.2) + '"/>' + hachures(U0 - 8 / ech, U1 + 8 / ech, 0, 4 / ech, lw);
+    if (opt.mur !== undefined) {
+      if (nomVue === 'droite') s += '<line x1="' + opt.mur + '" y1="' + (-(V1 + 4 / ech)) + '" x2="' + opt.mur + '" y2="' + (-(V0 - 2 / ech)) + '" stroke="#000" stroke-width="' + (lw * 2.2) + '"/>';
+      if (nomVue === 'dessus') s += '<line x1="' + (U0 - 6 / ech) + '" y1="' + (-opt.mur) + '" x2="' + (U1 + 6 / ech) + '" y2="' + (-opt.mur) + '" stroke="#000" stroke-width="' + (lw * 2.2) + '"/>';
+    }
+    // cotes
+    const C = cotation(ech);
+    (opt.cotesH || []).forEach(ch => { s += C.chaineH(ch.pos, ch.v, ch.decal); });
+    (opt.cotesV || []).forEach(ch => { s += C.chaineV(ch.pos, ch.u, ch.decal, ch.cote); });
+    (opt.textes || []).forEach(t => { s += '<text x="' + t.u + '" y="' + (-t.v) + '" font-size="' + (tx * (t.k || 1)).toFixed(1) + '" fill="' + (t.c || '#1d2126') + '" text-anchor="' + (t.a || 'start') + '">' + t.t + '</text>'; });
+    s += '</svg>';
+    return s;
+  }
+
+  function hachures(u0, u1, v, h, lw) {
+    let s = '';
+    for (let u = u0; u < u1; u += h * 1.2) s += '<line x1="' + u.toFixed(1) + '" y1="' + (h * 0.1).toFixed(1) + '" x2="' + (u - h).toFixed(1) + '" y2="' + h.toFixed(1) + '" stroke="#555" stroke-width="' + (lw * 0.7).toFixed(3) + '"/>';
+    return s;
+  }
+
+  /* Outils de cotation (coordonnées réelles, v vers le haut) */
+  function cotation(ech) {
+    const tx = 2.2 / ech, lw = 0.13 / ech, fl = 1.6 / ech, coul = '#1b4f7a';
+    function fleche(x, y, ang) {
+      const a1 = ang + 0.3, a2 = ang - 0.3;
+      return '<path d="M' + x.toFixed(1) + ' ' + y.toFixed(1) + ' L' + (x + Math.cos(a1) * fl).toFixed(1) + ' ' + (y + Math.sin(a1) * fl).toFixed(1) + ' L' + (x + Math.cos(a2) * fl).toFixed(1) + ' ' + (y + Math.sin(a2) * fl).toFixed(1) + 'Z" fill="' + coul + '"/>';
+    }
+    function ligne(x1, y1, x2, y2, w) { return '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" stroke="' + coul + '" stroke-width="' + (w || lw).toFixed(3) + '"/>'; }
+    function texte(x, y, t, rot) {
+      return '<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" font-size="' + tx.toFixed(1) + '" fill="' + coul + '" text-anchor="middle"' + (rot ? ' transform="rotate(-90 ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"' : '') + '>' + t + '</text>';
+    }
+    return {
+      // cote horizontale : pos = abscisses, v = ordonnée de la ligne d'attache (bord de l'objet), decal = distance de la ligne de cote (mm papier, négatif = vers le bas)
+      chaineH(pos, v, decal) {
+        const y = -(v + decal / ech), yA = -v;
+        let s = '';
+        pos.forEach(u => { s += ligne(u, yA - Math.sign(decal) * 1 / ech, u, y - Math.sign(decal) * 1.2 / ech); });
+        for (let i = 0; i < pos.length - 1; i++) {
+          const a = pos[i], b = pos[i + 1], L = b - a;
+          s += ligne(a, y, b, y);
+          s += fleche(a, y, 0) + fleche(b, y, Math.PI);
+          const petit = L * ech < 7;
+          s += texte(petit ? (a + b) / 2 : (a + b) / 2, y - 0.8 / ech - (petit && i % 2 ? tx * 1.1 : 0), fmt(L));
+        }
+        return s;
+      },
+      chaineV(pos, u, decal, cumul) {
+        const x = u + decal / ech;
+        let s = '';
+        pos.forEach(v => { s += ligne(u + Math.sign(decal) * 1 / ech, -v, x + Math.sign(decal) * 1.2 / ech, -v); });
+        if (cumul) {
+          // cotation cumulée depuis le premier point
+          s += ligne(x, -pos[0], x, -pos[pos.length - 1]);
+          s += fleche(x, -pos[0], -Math.PI / 2);
+          for (let i = 1; i < pos.length; i++) {
+            s += fleche(x, -pos[i], Math.PI / 2);
+            s += '<text x="' + (x + (decal < 0 ? -0.8 : 0.8) / ech).toFixed(1) + '" y="' + (-pos[i] + tx * 0.35).toFixed(1) + '" font-size="' + (tx * 0.92).toFixed(1) + '" fill="' + coul + '" text-anchor="' + (decal < 0 ? 'end' : 'start') + '">' + fmt(pos[i] - pos[0]) + '</text>';
+          }
+          return s;
+        }
+        for (let i = 0; i < pos.length - 1; i++) {
+          const a = pos[i], b = pos[i + 1], L = b - a;
+          s += ligne(x, -a, x, -b);
+          s += fleche(x, -a, -Math.PI / 2) + fleche(x, -b, Math.PI / 2);
+          s += texte(x - 0.8 / ech, -(a + b) / 2, fmt(L), true);
+        }
+        return s;
+      }
+    };
+  }
+
+  /* Plan d'un cadre soudé, vu de côté (face latérale visible) */
+  function cadre(ft, SECTIONS, ech) {
+    const a = SECTIONS[ft.sec].a, D = ft.D, Hf = ft.Hf, Hb = ft.Hb, H = Math.max(Hf, Hb);
+    const lw = 0.2 / ech, tx = 2.2 / ech;
+    const mG = 34 / ech, mD = 34 / ech, mH = 8 / ech, mB = 18 / ech;
+    const X0 = -mG, Y0 = -(H + mH), W = D + mG + mD, Hd = H + mH + mB;
+    let s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + [X0, Y0, W, Hd].map(v => v.toFixed(1)).join(' ') + '" width="' + (W * ech).toFixed(1) + 'mm" height="' + (Hd * ech).toFixed(1) + 'mm" font-family="Arial, Helvetica, sans-serif">';
+    const R = (x, y, w, h, f) => '<rect x="' + x.toFixed(1) + '" y="' + (-(y + h)).toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" fill="' + (f || '#b9c0c7') + '" stroke="#1d2126" stroke-width="' + lw.toFixed(3) + '"/>';
+    s += R(0, 0, a, Hf) + R(D - a, 0, a, Hb);
+    ft.traverses.forEach(t => {
+      s += R(a, t.z - a, D - 2 * a, a, t.us === 'tab' ? '#d9c39d' : (t.us === 'tringle' ? '#c9cfd4' : '#b9c0c7'));
+      // cordons de soudure (triangles)
+      [[a, 1], [D - a, -1]].forEach(([x, sg]) => {
+        s += '<path d="M' + x + ' ' + (-(t.z - a)) + ' l' + (sg * 3 / ech) + ' 0 l' + (-sg * 3 / ech) + ' ' + (-3 / ech) + 'Z" fill="#1d2126"/>';
+      });
+    });
+    // trous
+    const trous = (cote, x) => Object.values(ft.trous[cote]).forEach(t => {
+      s += '<circle cx="' + (x + a / 2) + '" cy="' + (-t.z).toFixed(1) + '" r="' + (t.filet === 'M6' ? 4.5 : 3.5) + '" fill="#fff" stroke="#c0392b" stroke-width="' + (lw * 0.9).toFixed(3) + '"/>';
+    });
+    trous('av', 0); trous('ar', D - a);
+    Object.values(ft.traversants).forEach(t => {
+      const x = t.cote === 'av' ? a / 2 : D - a / 2;
+      s += '<circle cx="' + x + '" cy="' + (-t.z) + '" r="3.25" fill="#fff" stroke="#1b4f7a" stroke-width="' + lw.toFixed(3) + '"/><path d="M' + (x - 5) + ' ' + (-t.z) + 'h10M' + x + ' ' + (-t.z - 5) + 'v10" stroke="#1b4f7a" stroke-width="' + (lw * 0.7).toFixed(3) + '"/>';
+    });
+    Object.values(ft.faceAvant).forEach(t => { s += '<path d="M0 ' + (-t.z) + ' l' + (-4 / ech) + ' ' + (-1.5 / ech) + ' v' + (3 / ech) + 'Z" fill="#c0392b"/>'; });
+    // vérins
+    if (ft.verins) [a / 2, D - a / 2].forEach(x => { s += '<rect x="' + (x - 15) + '" y="0" width="30" height="' + (4 / ech).toFixed(1) + '" fill="#333"/>'; });
+    // cotes
+    const C = cotation(ech);
+    s += C.chaineH([0, a, D - a, D], 0, -9);
+    const zt = ft.traverses.map(t => t.z).sort((u, v) => u - v);
+    s += C.chaineV([0].concat(zt.filter(z => z < Hb)).concat([Hb]).filter((v, i, arr) => arr.indexOf(v) === i), D, 12, true);
+    if (Hb !== Hf) s += C.chaineV([0, Hf], 0, -6);
+    const zf = Object.values(ft.trous.av).map(t => t.z).concat(Object.values(ft.traversants).filter(t => t.cote === 'av').map(t => t.z)).concat(Object.values(ft.faceAvant).map(t => t.z)).sort((u, v) => u - v);
+    if (zf.length) s += C.chaineV([0].concat(zf), 0, Hb !== Hf ? -16 : -10, true);
+    const zb = Object.values(ft.trous.ar).map(t => t.z).concat(Object.values(ft.traversants).filter(t => t.cote === 'ar').map(t => t.z)).sort((u, v) => u - v);
+    if (zb.length) s += C.chaineV([0].concat(zb), D, 26, true);
+    s += '</svg>';
+    return s;
+  }
+
+  /* ---------- Détails d'assemblage (dessins à l'échelle 1:1 ou 1:2, en mm) ---------- */
+  function cadreDetail(vb, contenu, titre, largeurMm) {
+    const p = vb.split(' ').map(Number);
+    const ech = largeurMm / p[2];
+    return '<figure class="detail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="' + vb + '" width="' + largeurMm + 'mm" height="' + (p[3] * ech).toFixed(1) + 'mm" font-family="Arial, Helvetica, sans-serif" font-size="' + (2.4 / ech).toFixed(2) + '">' + contenu + '</svg><figcaption>' + titre + '</figcaption></figure>';
+  }
+  function rep(x1, y1, x2, y2, t, anc) {
+    return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#1b4f7a" stroke-width="0.35"/><circle cx="' + x1 + '" cy="' + y1 + '" r="0.9" fill="#1b4f7a"/><text x="' + (x2 + (anc === 'end' ? -1 : 1)) + '" y="' + (y2 + 1.2) + '" fill="#1b4f7a" text-anchor="' + (anc || 'start') + '">' + t + '</text>';
+  }
+  const HACH = '<defs><pattern id="hach" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="3" stroke="#555" stroke-width="0.35"/></pattern><pattern id="hachB" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#8a6a3a" stroke-width="0.35"/></pattern><pattern id="hachM" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#999" stroke-width="0.5"/><line x1="2.5" y1="0" x2="2.5" y2="5" stroke="#bbb" stroke-width="0.3"/></pattern></defs>';
+  function tubeCoupe(x, y, a, t) {
+    return '<rect x="' + x + '" y="' + y + '" width="' + a + '" height="' + a + '" rx="' + (1.5 * t) + '" fill="url(#hach)" stroke="#111" stroke-width="0.35"/><rect x="' + (x + t) + '" y="' + (y + t) + '" width="' + (a - 2 * t) + '" height="' + (a - 2 * t) + '" rx="' + (0.5 * t) + '" fill="#fff" stroke="#111" stroke-width="0.35"/>';
+  }
+
+  function details() {
+    const L = [];
+    // D1 : platine d'about boulonnée sur écrous à sertir (coupe horizontale)
+    let c = HACH;
+    c += tubeCoupe(10, 20, 25, 1.5);                                         // montant en coupe
+    c += '<rect x="35" y="20" width="3" height="25" fill="#b8bec5" stroke="#111" stroke-width="0.35"/>';   // platine
+    c += '<rect x="38" y="20" width="50" height="25" fill="#d6dade" stroke="#111" stroke-width="0.35"/><line x1="38" y1="21.5" x2="88" y2="21.5" stroke="#111" stroke-width="0.25" stroke-dasharray="1.5 1"/><line x1="38" y1="43.5" x2="88" y2="43.5" stroke="#111" stroke-width="0.25" stroke-dasharray="1.5 1"/>';
+    c += '<path d="M38 20 l3 -3 v3z M38 45 l3 3 v-3z" fill="#111"/>';        // soudures
+    c += '<rect x="26.5" y="28" width="7" height="9" fill="#e0b84a" stroke="#111" stroke-width="0.3"/><rect x="33.5" y="26.5" width="1.5" height="12" fill="#e0b84a" stroke="#111" stroke-width="0.3"/>';  // écrou à sertir
+    c += '<line x1="20" y1="32.5" x2="48" y2="32.5" stroke="#111" stroke-width="0.25" stroke-dasharray="4 1 1 1"/>';
+    c += '<text x="8" y="12" font-weight="bold">Coupe horizontale au droit d\'un boulon</text>';
+    c += rep(30, 30, 20, 58, 'Écrou à sertir M6 (perçage Ø9)', 'start') + rep(36.5, 40, 50, 58, 'Platine 25×3, trous Ø6,5') + rep(70, 25, 80, 10, 'Lisse 25×25×1,5') + rep(16, 22, 6, 8, 'Montant 25×25×1,5', 'start');
+    L.push(cadreDetail('0 0 110 64', c, 'D1 · Lisse sur platine d\'about : 2 vis CHC M6×16 + rondelles, serrage 8 N·m. La vis traverse la platine au-dessus et au-dessous de la lisse.', 80));
+    // D2 : liaison inter-modules
+    c = HACH;
+    c += tubeCoupe(20, 20, 25, 1.5) + tubeCoupe(45, 20, 25, 1.5);
+    c += '<rect x="10" y="30" width="70" height="5" fill="#d0d4d8" stroke="#111" stroke-width="0.3"/>';
+    c += '<rect x="7" y="27" width="3" height="11" fill="#9aa1a8" stroke="#111" stroke-width="0.3"/><rect x="17" y="26" width="3" height="13" fill="#bbb" stroke="#111" stroke-width="0.3"/><rect x="70" y="26" width="3" height="13" fill="#bbb" stroke="#111" stroke-width="0.3"/><rect x="73" y="27.5" width="6" height="10" fill="#9aa1a8" stroke="#111" stroke-width="0.3"/>';
+    c += '<text x="8" y="12" font-weight="bold">Coupe horizontale, montants accolés</text>';
+    c += rep(8.5, 32.5, 4, 52, 'Tête de vis M6×60', 'start') + rep(18.5, 37, 26, 54, 'Rondelle large M6×18') + rep(76, 34, 84, 50, 'Écrou frein Nylstop') + rep(57, 22, 66, 10, 'Trou traversant Ø6,5');
+    L.push(cadreDetail('0 0 100 60', c, 'D2 · Liaison entre deux modules : boulons traversants, 2 hauteurs × avant et arrière. Serrage limité à 5 N·m pour ne pas écraser les tubes.', 72));
+    // D3 : ancrage mural
+    c = HACH;
+    c += '<rect x="70" y="5" width="22" height="70" fill="url(#hachM)" stroke="#111" stroke-width="0.35"/>';
+    c += tubeCoupe(20, 30, 25, 1.5);
+    c += '<rect x="45" y="30" width="4" height="25" fill="#b8bec5" stroke="#111" stroke-width="0.3"/>';
+    c += '<path d="M45 30 h21 v-24 h4 v28 h-25z" fill="#b8bec5" stroke="#111" stroke-width="0.35"/>';
+    c += '<rect x="70" y="16" width="16" height="7" fill="#f2f2f2" stroke="#111" stroke-width="0.3"/><rect x="58" y="17.5" width="28" height="4" fill="#9aa1a8" stroke="#111" stroke-width="0.3"/><rect x="62" y="15" width="4" height="9" fill="#9aa1a8" stroke="#111" stroke-width="0.3"/>';
+    c += '<line x1="45" y1="70" x2="70" y2="70" stroke="#1b4f7a" stroke-width="0.3"/><text x="57.5" y="68.5" text-anchor="middle" fill="#1b4f7a">jeu 15–20</text>';
+    c += '<text x="8" y="10" font-weight="bold">Vue de dessus</text>';
+    c += rep(32, 42, 10, 64, 'Montant arrière', 'start') + rep(47, 44, 52, 62, 'Vis CHC M6×16') + rep(67, 8, 40, 8, 'Équerre 40×40×4, trou oblong 8,5×20', 'end') + rep(78, 19.5, 96, 36, 'Cheville Ø8') + rep(80, 60, 96, 52, 'Mur');
+    L.push(cadreDetail('0 0 120 78', c, 'D3 · Équerre d\'ancrage mural : le trou oblong rattrape la plinthe et les défauts du mur. Cheville choisie selon le support (tableau des chevilles).', 80));
+    // D4 : vérin
+    c = HACH;
+    c += '<rect x="30" y="5" width="25" height="40" fill="none" stroke="#111" stroke-width="0.35"/><rect x="31.5" y="5" width="22" height="40" fill="#fff" stroke="none"/><path d="M30 5 v40 h1.5 v-40z M53.5 5 v40 h1.5 v-40z" fill="url(#hach)" stroke="#111" stroke-width="0.3"/>';
+    c += '<rect x="31.5" y="27" width="22" height="18" fill="#444" stroke="#111" stroke-width="0.3"/><rect x="38.5" y="38" width="8" height="18" fill="#9aa1a8" stroke="#111" stroke-width="0.3"/>';
+    c += '<rect x="27.5" y="56" width="30" height="5" rx="1.5" fill="#222"/><line x1="10" y1="61" x2="75" y2="61" stroke="#111" stroke-width="0.6"/>';
+    c += rep(32, 35, 8, 30, 'Embout taraudé M8', 'start') + rep(46, 50, 64, 47, 'Tige M8, course 15–30') + rep(55, 58, 64, 60, 'Patin Ø30');
+    L.push(cadreDetail('0 0 90 66', c, 'D4 · Vérin de nivellement sous chaque montant (A et C). Régler à mi-course au montage, puis ajuster au niveau.', 62));
+    // D5 : tablette vissée par dessous
+    c = HACH;
+    c += '<rect x="5" y="18" width="80" height="15" fill="url(#hachB)" stroke="#5c4526" stroke-width="0.35"/>';
+    c += tubeCoupe(30, 33, 25, 1.5);
+    c += '<rect x="41" y="20" width="3" height="21" fill="#9aa1a8" stroke="#111" stroke-width="0.25"/><path d="M38.5 58 h8 l-2 -2.5 h-4z" fill="#9aa1a8" stroke="#111" stroke-width="0.25"/><rect x="41" y="41" width="3" height="15" fill="#9aa1a8" stroke="#111" stroke-width="0.25"/>';
+    c += rep(60, 25, 70, 10, 'Tablette CP 15 ou 18') + rep(31, 45, 6, 52, 'Traverse 25×25', 'start') + rep(42.5, 34, 64, 46, 'Ø4,5 dessus') + rep(45, 57, 64, 62, 'Ø8 dessous (passage tournevis)') + rep(42.5, 24, 20, 10, 'Vis bois 4×30', 'end');
+    L.push(cadreDetail('0 0 100 66', c, 'D5 · Fixation des tablettes : 2 vis à bois par extrémité, passées par dessous. La vis ne doit pas déboucher (longueur 30 pour 15 mm de bois + 1,5 mm de paroi).', 70));
+    // D6 : poste gaz
+    c = HACH;
+    c += '<rect x="5" y="10" width="6" height="110" fill="#9aa1a8" stroke="#111" stroke-width="0.3"/><rect x="129" y="10" width="6" height="110" fill="#9aa1a8" stroke="#111" stroke-width="0.3"/>';
+    c += '<rect x="11" y="88" width="118" height="6" fill="#9aa1a8" stroke="#111" stroke-width="0.3"/><rect x="11" y="85.5" width="118" height="2.5" fill="#cfd5da" stroke="#111" stroke-width="0.3"/>';
+    [74, 88, 102].forEach((y, i) => { c += '<circle cx="8" cy="' + y + '" r="1.6" fill="' + (i === 1 ? '#c0392b' : '#fff') + '" stroke="#111" stroke-width="0.25"/>'; });
+    c += '<rect x="40" y="40" width="60" height="45.5" rx="6" fill="#2a63a8" stroke="#111" stroke-width="0.35"/><rect x="50" y="30" width="40" height="10" fill="#2a63a8" stroke="#111" stroke-width="0.3"/><rect x="62" y="22" width="16" height="8" fill="#bbb" stroke="#111" stroke-width="0.3"/><rect x="30" y="19" width="80" height="3" fill="#ccc" stroke="#111" stroke-width="0.3"/>';
+    c += '<rect x="37" y="52" width="66" height="5" fill="none" stroke="#c4532f" stroke-width="1.2"/>';
+    c += '<rect x="134" y="5" width="2" height="60" fill="#aeb6bd" stroke="#111" stroke-width="0.2"/>';
+    c += rep(70, 20, 120, 4, 'Support casserole ≈ 870 du sol') + rep(100, 54.5, 112, 50, 'Collier + sangle') + rep(8, 88, 20, 112, 'Crans de réglage : 340 / 400 / 460', 'start') + rep(70, 86, 92, 112, 'Plateau tôle 2 mm sur 2 traverses');
+    L.push(cadreDetail('0 0 150 122', c, 'D6 · Poste gaz (vue de face simplifiée, 1:10) : plateau réglable en hauteur, collier anti-basculement, écran galvanisé côté plaque induction.', 72));
+    return L;
+  }
+
+  const PLANS = { vue, cadre, details, cotation, bornesFormes };
+  root.PLANS = PLANS;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+/*
+ * Génération des trois documents imprimables (dossier de conception, nomenclature et débit, notice).
+ * Le contenu est recalculé à partir du modèle à chaque ouverture.
+ */
+(function () {
+  'use strict';
+  const M = window.MODELE, C = window.CALC, S = window.SCENES, P = window.PLANS, E = window.MOTEUR;
+  const TYPE = window.TYPE_DOC;
+  const ME = M.MEUBLES;
+  Object.values(ME).forEach(m => C.nomenclature(m, M.SECTIONS));
+
+  /* ---------- Formatage ---------- */
+  function nf(x, d) {
+    if (x === undefined || x === null || isNaN(x)) return '';
+    const s = Number(x).toFixed(d === undefined ? 0 : d);
+    const [ent, dec] = s.split('.');
+    const e = ent.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return dec ? e + ',' + dec : e;
+  }
+  const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  function tableau(entetes, lignes, classes) {
+    classes = classes || [];
+    let h = '<table><thead><tr>' + entetes.map((e, i) => '<th class="' + (classes[i] || '') + '">' + e + '</th>').join('') + '</tr></thead><tbody>';
+    lignes.forEach(l => { h += '<tr>' + l.map((c, i) => '<td class="' + (classes[i] || '') + '">' + (c === undefined ? '' : c) + '</td>').join('') + '</tr>'; });
+    return h + '</tbody></table>';
+  }
+  const ok = (b) => b ? '<span class="ok">conforme</span>' : '<span class="ko">à reprendre</span>';
+
+  /* ---------- Rendus 3D ---------- */
+  const scenes = {};
+  const rendu = new E.Rendu(document.createElement('canvas'));
+  function image(code, opts) {
+    opts = opts || {};
+    if (!scenes[code]) scenes[code] = S.construireScene(M, code);
+    const sc = scenes[code];
+    const m = ME[code];
+    const W = opts.W || 1200, H = opts.H || 820;
+    const cam = new E.Camera();
+    cam.lacet = opts.lacet !== undefined ? opts.lacet : -0.62;
+    cam.tangage = opts.tangage !== undefined ? opts.tangage : 0.36;
+    cam.focale = 0.42;
+    sc.objets.forEach(o => { o.visible = o.couche !== 'mur' || opts.mur !== false; o.teinte = null; o.decal = [0, 0, 0]; });
+    S.cadrer(sc, cam, W, H, opts.marge || 1.0);
+    const etape = opts.etape;
+    sc.objets.forEach(o => {
+      if (!o.part) return;
+      const p = o.part;
+      let v = true;
+      if (etape !== undefined && p.etape > etape) v = false;
+      if (p.variante === 'ouvert' && !opts.rideauxOuverts) v = false;
+      if (p.variante === 'ferme' && opts.rideauxOuverts) v = false;
+      if (opts.sans && opts.sans.indexOf(o.couche) >= 0) v = false;
+      o.visible = v;
+      if (etape !== undefined && p.etape === etape) o.teinte = [217, 104, 43, 0.5];
+      if (opts.eclate && m) o.decal = [(p.module || 0) * opts.eclate, 0, 0];
+    });
+    rendu.dimension(W, H);
+    rendu.dessiner(sc, cam, { fond: [255, 255, 255] });
+    return rendu.canvas.toDataURL('image/png');
+  }
+
+  /* ---------- Calculs de dimensionnement ---------- */
+  const SIG_ADM = 235 / 1.5;
+  function masseMeuble(m) {
+    const n = C.nomenclature(m, M.SECTIONS);
+    let acier = 0, bois = 0, tole = 0;
+    n.liste.forEach(g => {
+      const t = g.masseU * g.qte;
+      if (g.cat === 'panneau') bois += t; else if (g.cat === 'tole') tole += t; else acier += t;
+    });
+    return { acier, bois, tole, total: acier + bois + tole + 1.5 };
+  }
+  const MASSES = { A: masseMeuble(ME.A), B: masseMeuble(ME.B), C: masseMeuble(ME.C) };
+
+  function verifications() {
+    const L = [];
+    const g = 9.81;
+    const T25 = C.propSection(M.SECTIONS.T25), T20 = C.propSection(M.SECTIONS.T20), R25 = C.propSection(M.SECTIONS.R25);
+    const plaque = (b, h) => b * Math.pow(h, 3) / 12;
+    function ligneFleche(meuble, elt, portee, larg, ep, kg, critere) {
+      const I = plaque(larg, ep);
+      const d = C.flecheRepartie(kg * g / portee, portee, C.E_CP, I);
+      L.push([meuble, elt, 'CP ' + ep + ' mm, portée ' + portee + ', ' + kg + ' kg répartis', nf(d, 2) + ' mm (L/' + nf(portee / d) + ')', 'L/' + critere, ok(portee / d >= critere)]);
+    }
+    // A
+    ligneFleche('A', 'Tablette penderie 698 × 498', 675, 498, 15, 30, 250);
+    ligneFleche('A', 'Tablette étagère 448 × 498', 425, 498, 15, 30, 250);
+    ligneFleche('A', 'Dessus 700 × 550', 675, 550, 15, 15, 250);
+    {
+      const q = 35 * g / 642;
+      const d = C.flecheRepartie(q, 642, C.E_ACIER, R25.I), s = q * 642 * 642 / 8 / R25.W;
+      L.push(['A', 'Tringle Ø25×1,5', 'portée 642, 35 kg de vêtements', nf(d, 2) + ' mm ; σ = ' + nf(s) + ' MPa', 'L/300 ; ' + nf(SIG_ADM) + ' MPa', ok(642 / d >= 300 && s <= SIG_ADM)]);
+    }
+    {
+      const q = 15 * g / 500;
+      const d = C.flecheRepartie(q, 500, C.E_ACIER, T25.I), s = q * 500 * 500 / 8 / T25.W;
+      L.push(['A', 'Traverse porte-tablette 25×25', 'portée 500, demi-tablette 15 kg', nf(d, 3) + ' mm ; σ = ' + nf(s, 1) + ' MPa', 'L/300 ; ' + nf(SIG_ADM) + ' MPa', ok(500 / d >= 300 && s <= SIG_ADM)]);
+    }
+    {
+      const N = (195 + 25) * g / 4;
+      const Ncr = Math.PI * Math.PI * C.E_ACIER * T25.I / (1900 * 1900);
+      L.push(['A', 'Montant 25×25 (flambement)', 'module étagères plein, 4 montants, Lf = 1900', 'N = ' + nf(N) + ' N ; Ncr = ' + nf(Ncr) + ' N', 'coefficient ≥ 3', ok(Ncr / N >= 3) + ' (×' + nf(Ncr / N, 0) + ')']);
+    }
+    // B
+    ligneFleche('B', 'Tablette bouteilles 448 × 238', 428, 238, 15, 14, 250);
+    ligneFleche('B', 'Tablette verres 448 × 238', 428, 238, 15, 8, 250);
+    {
+      const Mf = (60 / 4) * g * 140;
+      const s = Mf / (2 * T20.W);
+      L.push(['B', 'Nœuds soudés traverse / montant 20×20', 'charge par cadre 15 kg, bras de levier 140, repris par 2 traverses', 'σ = ' + nf(s, 1) + ' MPa', nf(SIG_ADM) + ' MPa', ok(s <= SIG_ADM)]);
+    }
+    // C
+    {
+      const I = plaque(570, 18), Pp = 1000;
+      const d = C.flecheCentree(Pp, 455, C.E_CP, I);
+      L.push(['C', 'Plan bois zone induction', 'CP 18, portée 455, appui d\'une personne 100 kg au centre', nf(d, 2) + ' mm', '3 mm', ok(d <= 3)]);
+    }
+    ligneFleche('C', 'Tablette casseroles 1048 × 498', 1000, 498, 18, 25, 200);
+    {
+      const I = plaque(300, 1.5);
+      const d = C.flecheCentree(100, 190, 193000, I);
+      const d2 = C.flecheCentree(100, 545, 193000, I);
+      L.push(['C', 'Bac inox 1,5 mm (zone chaude)', 'casserole 10 kg, bande de 300 mm ; portée 190 grâce aux 2 traverses (545 sans)', nf(d, 2) + ' mm (sans traverses : ' + nf(d2, 0) + ' mm)', '1,5 mm', ok(d <= 1.5)]);
+    }
+    {
+      const I = 2 * (2 * Math.pow(20, 3) / 12);
+      const d = C.flecheCentree(200, 500, C.E_ACIER, I);
+      L.push(['C', 'Plateau bouteille, tôle 2 mm à bords tombés', 'portée 500, bouteille pleine + casserole 20 kg', nf(d, 2) + ' mm', '2 mm', ok(d <= 2)]);
+    }
+    return L;
+  }
+
+  function stabilite() {
+    const g = 9.81;
+    const r = [];
+    // A sans ancrage
+    const WA = (MASSES.A.total + 0.4 * 415) * g;
+    const FA = WA * 275 / 1935;
+    r.push(['A', 'Effort horizontal en haut qui fait basculer le meuble non fixé (charge à 40 %)', nf(FA) + ' N', 'Un adulte qui tire sur une tablette ou s\'y accroche dépasse 300 N : ancrage obligatoire']);
+    r.push(['A', 'Effort par équerre si 300 N en haut sont repris par 2 équerres seulement', nf(150) + ' N', 'Brique creuse : 300 à 600 N par cheville, coefficient ≥ 2']);
+    // B
+    const WB = (MASSES.B.total + 60) * g;
+    const T = WB * 140 / 700 / 4, V = WB / 8;
+    r.push(['B', 'Traction par cheville haute (4 chevilles hautes, bras de levier 140 mm, entraxe vertical 700 mm)', nf(T) + ' N', 'Très inférieure à la tenue d\'une cheville Ø8, même en brique creuse']);
+    r.push(['B', 'Cisaillement par cheville (8 chevilles)', nf(V) + ' N', 'Charge totale admise : 60 kg d\'objets']);
+    // C
+    const WG = (12 + 6) * g, hG = 870 - 402, rb = 125;
+    r.push(['C', 'Poussée latérale qui renverse la bouteille sur son plateau sans collier (casserole pleine)', nf(WG * rb / hG) + ' N', 'Moins de 5 kg de poussée : le collier fermé est indispensable']);
+    const WC = (MASSES.C.total + 40) * g;
+    r.push(['C', 'Effort horizontal en haut des montants (1420) qui fait basculer la station non fixée', nf(WC * 275 / 1420) + ' N', '4 équerres murales, chacune reprend largement cet effort']);
+    return r;
+  }
+
+  /* ---------- Morceaux communs ---------- */
+  function couverture(titre, sousTitre, img, liste) {
+    return '<section class="couverture"><div class="bandeau"><div class="sur">Colocation étudiante · mobilier sur mesure</div>' +
+      '<h1>' + titre + '</h1><div class="sous">' + sousTitre + '</div></div>' +
+      '<img src="' + img + '" alt="Vue d\'ensemble">' +
+      '<div class="pied">' + tableau(['Document', 'Contenu'], liste) +
+      tableau(['Indice', 'Date', 'Objet'], [[M.version.replace('Indice ', ''), M.date, 'Première diffusion : conception complète des trois meubles, à affiner après relevé des appareils et de la pièce']]) + '</div></section>';
+  }
+  const LISTE_DOCS = [
+    ['01 · Dossier de conception et plans', 'Hypothèses, choix des tubes et des panneaux, vérifications, assemblages, sécurité, plans 2D cotés et perspectives'],
+    ['02 · Nomenclature et fiches de débit', 'Repères, longueurs, usinages, sous-ensembles soudés, quincaillerie, plans de débit des barres et des panneaux, liste d\'achat'],
+    ['03 · Notice de montage, pose et démontage', 'Fabrication en atelier, montage pas à pas, pose murale, démontage et transport, entretien'],
+    ['simulation_mobilier.html', 'Visualisation 3D interactive : étapes de montage, rendu final, couches, fiches pièces']
+  ];
+  function cartouche(meuble, titre, echelle, folio) {
+    return '<div class="cartouche"><table><tr><td colspan="3" class="t">' + titre + '</td></tr>' +
+      '<tr><td>Meuble</td><td colspan="2">' + meuble + '</td></tr>' +
+      '<tr><td>Échelle ' + echelle + '</td><td>Cotes en mm</td><td>Format A4</td></tr>' +
+      '<tr><td>' + M.version + '</td><td>' + M.date + '</td><td>Folio ' + folio + '</td></tr></table></div>';
+  }
+  const LEGENDE = '<div class="legende">' + [['#9aa2ab', 'tube acier'], ['#b8bec5', 'plat / platine'], ['#efdcbc', 'contreplaqué'], ['#dfe4e8', 'tôle'], ['#fff', 'équipement (pointillé)']].map(l => '<span style="background:' + l[0] + '"></span>' + l[1]).join('') + '</div>';
+
+  /* Tableau des chevilles */
+  const CHEVILLES = tableau(['Support', 'Fixation conseillée', 'Perçage', 'Tenue indicative par point*'], [
+    ['Béton plein', 'Cheville nylon universelle Ø8 × 50 + vis Ø5 × 50, ou goujon d\'ancrage M6', 'Ø8, percussion, profondeur 60', '1,5 à 3 kN'],
+    ['Brique pleine, pierre', 'Cheville nylon Ø8 × 50 à collerette', 'Ø8, percussion légère', '1 à 2 kN'],
+    ['Brique creuse', 'Cheville longue spéciale corps creux Ø8 × 60, ou scellement chimique avec tamis', 'Ø8, rotation seule (sans percussion)', '0,3 à 0,6 kN'],
+    ['Parpaing creux', 'Cheville métallique à expansion pour corps creux, ou scellement chimique avec tamis', 'Ø8 à Ø10, rotation seule', '0,4 à 0,8 kN'],
+    ['Cloison plaque de plâtre', 'À éviter pour B et C. Pour A : cheville métallique à expansion, en complément d\'au moins une fixation dans un mur porteur', 'Ø8 ou selon cheville', '0,1 à 0,2 kN']
+  ]) + '<p class="petit">* Valeurs courantes de catalogue, à confirmer sur la notice de la cheville achetée. On vise au moins 3 fois l\'effort calculé.</p>';
+
+  /* ====================================================================== */
+  /*  DOCUMENT 1 : DOSSIER DE CONCEPTION ET PLANS                           */
+  /* ====================================================================== */
+  function dossier() {
+    let h = couverture('Dossier de conception et plans', 'Dressing modulaire à rideaux · Étagère murale de cuisine · Station de cuisson', image('K', { W: 1500, H: 900, lacet: -0.5, tangage: 0.3 }), LISTE_DOCS);
+    h += '<section class="sommaire"><h2>Sommaire</h2><ol><li>Programme et hypothèses</li><li>Choix des tubes : 20×20 ou 25×25</li><li>Panneaux bois et tôles</li><li>Charges et vérifications</li><li>Assemblages démontables et fixations murales</li><li>Sécurité gaz, chaleur, électricité, poussière</li><li>Finitions et protection</li><li>Plans et perspectives</li></ol></section>';
+
+    // 1. Programme
+    h += '<h2>1. Programme et hypothèses</h2>';
+    h += '<p>Deux étudiants partagent un logement. Le mobilier doit ranger les vêtements et les chaussures des deux occupants, organiser la vaisselle du quotidien et regrouper la cuisson dans un poste compact et sûr. Les trois meubles reposent sur le même principe : des <b>cadres latéraux soudés en échelle</b>, reliés par des <b>lisses boulonnées</b>, garnis de <b>panneaux contreplaqués</b> vissés par dessous. Rien n\'est soudé sur place ; tout se démonte avec une clé Allen de 5 et une clé de 10.</p>';
+    h += tableau(['Meuble', 'Fonction', 'Encombrement', 'Modules', 'Masse à vide'], Object.values(ME).map(m => [
+      '<b>' + m.code + '</b> · ' + m.nom, m.code === 'A' ? 'Penderie × 2, casiers pliés, chaussures, protection poussière' : m.code === 'B' ? 'Assiettes (égouttoir), verres eau / bière / whisky, tasses, gobelets, bouteilles' : 'Bouteille gaz 5 kg + brûleur, induction BOMA, réchaud, dépose chaude, casseroles et ustensiles',
+      m.encombrement, m.modules.map(x => x.code + ' (' + x.w + ')').join(' + '), nf(MASSES[m.code].total, 0) + ' kg'
+    ]));
+    h += '<h3>1.1 Exigences retenues</h3><ul>' +
+      '<li><b>Démontage :</b> chaque module se sépare des autres ; la plus grande pièce mesure 1900 × 550 mm (cadre du dressing) et passe dans un utilitaire ou sur une galerie de toit. Aucune pièce ne dépasse 10 kg.</li>' +
+      '<li><b>Économie :</b> deux sections de tube seulement, achetées en barres de 6 m ; contreplaqué en panneaux standard 2440 × 1220 ; quincaillerie courante (M5, M6, M8).</li>' +
+      '<li><b>Fabrication :</b> réalisable par un atelier de soudure de quartier (poste à l\'électrode ou semi-automatique), perceuse à colonne et pince à écrous à sertir.</li>' +
+      '<li><b>Sécurité :</b> ancrage mural anti-basculement sur les trois meubles, poste gaz ventilé avec collier de maintien, zone chaude entièrement métallique, écran thermique entre gaz et électrique.</li></ul>';
+    h += '<h3>1.2 Conventions</h3><p>Cotes en millimètres. Repère : x de gauche à droite vu de face, y de l\'avant vers le mur, z vers le haut depuis le sol (depuis le dessous du meuble pour l\'étagère B). Tolérances de fabrication : débit ±1 mm, entraxe des perçages ±0,5 mm, équerrage des cadres : écart des diagonales ≤ 2 mm.</p>';
+    h += '<h3>1.3 Hypothèses sur les appareils et les objets rangés</h3><p>Les dimensions exactes dépendent des modèles achetés. Les valeurs ci-dessous ont servi au dimensionnement ; la colonne de droite indique ce qui change si le modèle réel est différent.</p>';
+    h += tableau(['Objet', 'Hypothèse retenue', 'Si le modèle réel diffère'], [
+      ['Bouteille gaz 5 kg', M.HYP.bouteille.txt, 'Le plateau se règle sur 3 crans (340 / 400 / 460 mm) ; collier Ø 276 intérieur avec garniture caoutchouc, accepte Ø 230 à 270'],
+      ['Brûleur + support alu', M.HYP.bruleur.txt, 'Ajuster le cran du plateau pour amener le support à la hauteur de la plaque induction (≈ 870 mm du sol)'],
+      ['Plaque induction BOMA', M.HYP.induction.txt, 'La zone bois de 480 × 570 accepte jusqu\'à 380 × 470 en gardant 50 mm de dégagement'],
+      ['Réchaud monoplace', M.HYP.rechaud.txt, 'Bac inox utile 565 × 565 ; si le réchaud est à gaz ou à pétrole, mêmes distances que le brûleur gaz'],
+      ['Casseroles, marmites', M.HYP.casserole.txt, 'Tablettes 1048 × 498, hauteur libre 300 mm sous la tablette médiane'],
+      ['Assiettes', M.HYP.assiette.txt, 'Le râtelier (pas 36 mm) prend des assiettes de 200 à 280 mm'],
+      ['Bouteilles', M.HYP.bouteilles.txt, 'Hauteur libre 345 mm au niveau bas du module M2'],
+      ['Verres et tasses', M.HYP.verres.txt, 'Hauteurs libres : 195 mm (niveau 1) et 235 mm (niveau 2)']
+    ]);
+
+    // 2. Tubes
+    h += '<h2>2. Choix des tubes : 20×20 ou 25×25</h2>';
+    const secs = [['20×20×1,2', { type: 'carre', a: 20, t: 1.2 }], ['20×20×1,5', { type: 'carre', a: 20, t: 1.5 }], ['25×25×1,2', { type: 'carre', a: 25, t: 1.2 }], ['25×25×1,5', { type: 'carre', a: 25, t: 1.5 }], ['25×25×2', { type: 'carre', a: 25, t: 2 }]];
+    const ref = C.propSection(secs[1][1]);
+    h += tableau(['Section', 'Aire (mm²)', 'I (mm⁴)', 'W (mm³)', 'Masse (kg/m)', 'Rigidité / 20×1,5', 'Prix / 20×1,5*', 'Soudure électrode', 'Écrou à sertir'], secs.map(([n, s]) => {
+      const p = C.propSection(s);
+      return [n, nf(p.A), nf(p.I), nf(p.W), nf(p.kgm, 2), '×' + nf(p.I / ref.I, 2), '×' + nf(p.kgm / ref.kgm, 2), s.t < 1.5 ? 'délicate (risque de percer)' : s.t > 1.5 ? 'facile' : 'bonne', s.a === 20 ? 'M5 (Ø7)' : 'M6 (Ø9)'];
+    }), ['', 'n', 'n', 'n', 'n', 'n', 'n', '', '']);
+    h += '<p class="petit">* Le prix d\'un tube suit à peu près sa masse ; l\'écart réel dépend du fournisseur. Valeurs de section minorées de 4 à 5 % pour tenir compte des angles arrondis.</p>';
+    const syn = C.syntheseAchats(M);
+    const t25 = syn.sections.find(s => s.sec === 'T25'), t20 = syn.sections.find(s => s.sec === 'T20');
+    const kg20 = C.propSection(M.SECTIONS.T20).kgm;
+    h += '<h3>2.1 Décision</h3>';
+    h += tableau(['Meuble', 'Section retenue', 'Raisons'], [
+      ['A · Dressing', '<b>25×25×1,5</b>', 'Montants de 1,9 m : le 25 est deux fois plus rigide que le 20 pour 27 % de masse en plus, ce qui supprime l\'effet « meuble qui vibre ». Les écrous à sertir M6 tiennent mieux dans une face de 25. Charge totale de calcul 415 kg.'],
+      ['B · Étagère murale', '<b>20×20×1,5</b>', 'Charges faibles (60 kg au total) et meuble suspendu : chaque kilo d\'acier économisé est un kilo de moins sur les chevilles. Aspect plus fin au-dessus du plan de travail. Écrous à sertir M5.'],
+      ['C · Station cuisson', '<b>25×25×1,5</b>', 'Plan de travail sollicité (appuis, casseroles), bouteille pleine, montants rehaussés à 1,4 m pour l\'ancrage mural et la barre à ustensiles. Même section que A : un seul approvisionnement.']
+    ]);
+    h += '<p><b>Épaisseur 1,5 mm partout.</b> Le 1,2 mm ne fait gagner que 15 à 20 % de masse, mais il se perce facilement à l\'électrode, s\'écrase sous un boulon serré et donne moins de filets aux vis autoperceuses. Le 2 mm coûterait 30 % de plus sans besoin mécanique. Pour l\'ensemble du projet : ' + nf(t25.Ltot / 1000, 1) + ' m de 25×25×1,5 (' + nf(t25.barres.length) + ' barres de 6 m, ' + nf(t25.kg, 1) + ' kg) et ' + nf(t20.Ltot / 1000, 1) + ' m de 20×20×1,5 (' + nf(t20.barres.length) + ' barres, ' + nf(t20.kg, 1) + ' kg). Tout faire en 20×20 économiserait environ ' + nf(t25.kg - t25.Ltot / 1000 * kg20, 0) + ' kg d\'acier, au prix d\'une rigidité divisée par deux sur les deux grands meubles : ce n\'est pas un bon calcul.</p>';
+
+    // 3. Panneaux
+    h += '<h2>3. Panneaux bois et tôles</h2>';
+    h += tableau(['Matériau', 'Emploi', 'Justification'], [
+      ['Contreplaqué 15 mm (okoumé ou triplex bouleau)', 'Tablettes et dessus de A et B, étagère à épices de C', 'Rigidité suffisante jusqu\'à 700 mm de portée sous 30 kg ; tient les vis 4×30 ; un panneau de 2440 × 1220 pèse environ 22 kg et se manipule seul.'],
+      ['Contreplaqué 18 mm (collage extérieur)', 'Plan de travail bois et tablettes de C', 'Portée de 1000 mm sous casseroles, appuis sur le plan, ambiance humide de cuisine. Le collage extérieur (classe 3, « CTB-X » ou « WBP ») évite le décollement des plis.'],
+      ['Contreplaqué 5 mm', 'Joues latérales de A', 'Fermeture anti-poussière, sans rôle structurel. Peut être remplacé par un tissu tendu.'],
+      ['Tôle inox 304 1,5 mm', 'Bac de la zone chaude de C', 'Pas de bois sous le réchaud ni sous la casserole chaude ; bords relevés de 15 mm qui retiennent les débordements.'],
+      ['Tôle inox 304 0,8 mm', 'Bac égouttoir de B', 'Inoxydable, se vide et se lave.'],
+      ['Tôle acier 2 mm', 'Plateau porte-bouteille de C', 'Bords tombés de 20 mm qui servent de raidisseurs ; peinte.'],
+      ['Tôle galvanisée 1 mm', 'Écran thermique de C', 'Réfléchit la chaleur de la flamme vers le haut, côté gaz.'],
+      ['Tôle aluminium 1 mm', 'Crédence murale de C', 'Protège le mur derrière le brûleur et le réchaud ; se nettoie à l\'éponge.']
+    ]);
+    h += '<p>L\'aggloméré et le MDF sont écartés : ils gonflent à l\'humidité, tiennent mal les vis après deux ou trois démontages et sont plus lourds à rigidité égale.</p>';
+
+    // 4. Vérifications
+    h += '<h2>4. Charges et vérifications</h2>';
+    h += '<h3>4.1 Charges d\'exploitation retenues</h3>';
+    h += tableau(['Meuble', 'Élément', 'Charge de calcul'], [
+      ['A', 'Tablette (chaussures, vêtements pliés)', '30 kg par tablette'], ['A', 'Tringle de penderie', '35 kg répartis'], ['A', 'Dessus (bagages légers)', '15 kg'], ['A', 'Total meuble chargé', '415 kg'],
+      ['B', 'Bouteilles (niveau bas M2)', '14 kg'], ['B', 'Verres, tasses, assiettes, dessus', '6 à 8 kg par niveau'], ['B', 'Total suspendu au mur', '60 kg + ' + nf(MASSES.B.total) + ' kg de meuble'],
+      ['C', 'Bouteille pleine + casserole', '18 kg sur le plateau'], ['C', 'Tablettes casseroles', '25 kg chacune'], ['C', 'Plan de travail', 'appui ponctuel de 100 kg + appareils']
+    ]);
+    h += '<p>Acier S235 : contrainte admissible retenue 235 / 1,5 = ' + nf(SIG_ADM) + ' MPa ; E = 210 000 MPa. Contreplaqué : E = 6 500 MPa (valeur prudente dans le sens des plis extérieurs).</p>';
+    h += '<h3>4.2 Résultats</h3>';
+    h += tableau(['', 'Élément', 'Hypothèse', 'Résultat', 'Limite', 'Avis'], verifications());
+    h += '<h3>4.3 Stabilité et ancrage</h3>';
+    h += tableau(['', 'Situation', 'Valeur', 'Conclusion'], stabilite());
+    h += '<div class="note">Les trois meubles doivent être fixés au mur avant d\'être chargés. Le dressing, haut et peu profond, bascule sous un effort qu\'un adulte exerce sans s\'en rendre compte ; la bouteille surélevée bascule sous une poussée de quelques kilos si le collier n\'est pas fermé.</div>';
+
+    // 5. Assemblages
+    h += '<h2 class="saut">5. Assemblages démontables et fixations murales</h2>';
+    h += '<h3>5.1 Principe</h3><ul>' +
+      '<li><b>Cadres latéraux soudés</b> (deux montants + traverses de profondeur) : c\'est la partie rigide, fabriquée en atelier sur gabarit. Les cadres sont plats, ils s\'empilent pour le transport.</li>' +
+      '<li><b>Lisses boulonnées</b> : tube de largeur avec une platine 3 mm soudée à chaque bout. Deux vis CHC par platine (une au-dessus, une au-dessous du tube) bloquent la rotation : le module ne se déforme pas en parallélogramme.</li>' +
+      '<li><b>Écrous à sertir</b> dans les montants : filetage acier permanent, aucun écrou à tenir derrière le tube, et le filetage ne s\'use pas au fil des démontages, contrairement à une vis autoperceuse.</li>' +
+      '<li><b>Cadres réversibles</b> : chaque cadre est percé et serti sur ses deux faces latérales. Un même cadre se monte à gauche ou à droite d\'un module, ce qui évite les erreurs et permet de recomposer les modules dans un autre logement.</li>' +
+      '<li><b>Liaison entre modules</b> : boulons traversants M6 (M5 pour B) à travers deux montants accolés.</li>' +
+      '<li><b>Panneaux</b> posés sur les traverses avec 1 mm de jeu de chaque côté et vissés par dessous ; ils participent au contreventement.</li></ul>';
+    h += '<h3>5.2 Jeux, tolérances et couples de serrage</h3>';
+    h += tableau(['Liaison', 'Jeu / tolérance', 'Serrage'], [
+      ['Vis M6 dans platine', 'Trou Ø6,5 (jeu 0,5 mm) ; entraxe ±0,5 mm', 'Vis CHC M6×16 classe 8.8 : 8 N·m'],
+      ['Vis M5 dans platine (B)', 'Trou Ø5,5', 'Vis CHC M5×16 : 5 N·m'],
+      ['Écrou à sertir M6 / M5', 'Perçage Ø9 / Ø7 exact, ébavuré', 'Sertissage à la pince, contrôle à la vis'],
+      ['Boulon inter-modules', 'Trou Ø6,5 traversant', '5 N·m seulement (ne pas écraser les tubes)'],
+      ['Tablette entre cadres', '1 mm de chaque côté, appui ≥ 22 mm sur la traverse', 'Vis bois 4×30 à la main'],
+      ['Tringle de penderie', 'Longueur = entre-traverses − 8 mm', 'Cuvettes vissées M5'],
+      ['Rideau', 'Bas à 15 mm du sol, recouvrement central 50 mm', '—'],
+      ['Vérins M8', 'Course 15 à 30 mm, réglés à mi-course au montage', 'Contre-écrou à la main']
+    ]);
+    h += '<h3>5.3 Fixation murale selon le support</h3>' + CHEVILLES;
+    h += '<h3>5.4 Détails</h3><div class="details">' + P.details().join('') + '</div>';
+
+    // 6. Sécurité
+    h += '<h2 class="saut">6. Sécurité gaz, chaleur, électricité, poussière</h2>';
+    h += '<h3>6.1 Poste gaz</h3><ul>' +
+      '<li>Bouteille toujours debout, dans un logement ouvert devant et dessous : jamais dans un placard fermé. Le gaz butane ou propane est plus lourd que l\'air ; le local doit avoir une entrée d\'air basse et une sortie haute permanentes.</li>' +
+      '<li>Plateau surélevé à 400 mm (réglable) pour cuisiner debout, collier fermé par sangle pendant toute la cuisson.</li>' +
+      '<li>Robinet et détendeur accessibles en façade ; robinet fermé après chaque utilisation.</li>' +
+      '<li>Étanchéité contrôlée à l\'eau savonneuse à chaque changement de bouteille, jamais à la flamme. Joint du brûleur remplacé au moindre défaut.</li>' +
+      '<li>Casserole de Ø 300 mm au plus : une casserole plus large renvoie la chaleur vers le haut de la bouteille.</li>' +
+      '<li>Rien au-dessus du brûleur sur 750 mm (l\'étagère B est placée à côté, jamais au-dessus).</li>' +
+      '<li>Couverture anti-feu fixée au mur à gauche du poste ; détecteur de monoxyde de carbone conseillé dans la pièce.</li></ul>';
+    h += '<h3>6.2 Distances thermiques</h3>';
+    h += tableau(['Entre', 'Distance prévue', 'Minimum visé'], [
+      ['Bord de casserole Ø 300 et écran galvanisé', '75 mm', '50 mm, avec écran métallique'],
+      ['Axe du brûleur et carter de la plaque induction', '345 mm + écran', '300 mm'],
+      ['Brûleur et tout élément au-dessus', 'dégagé', '750 mm'],
+      ['Réchaud et bois', 'réchaud posé sur inox, plan bois à 20 mm du bac, rien sous la zone chaude', 'jamais de bois sous un réchaud'],
+      ['Foyer du réchaud et étagère à épices', '≈ 450 mm', '400 mm'],
+      ['Bouteille et bloc de prises', '≈ 1 230 mm', '1 000 mm'],
+      ['Plaque induction et parois (ventilation)', '95 mm sur les côtés, 100 mm à l\'arrière', '50 mm']
+    ]);
+    h += '<h3>6.3 Électricité</h3><p>Plaque induction 2000 W et réchaud 1500 W : 3,5 kW, soit environ 15 A sous 230 V, à la limite d\'une prise 16 A. Les deux appareils ne doivent pas fonctionner en même temps sur la même prise ; jamais de multiprise. Le bloc 2 prises 16 A est vissé sur le montant arrière droit, à plus d\'un mètre de la bouteille, alimenté par un câble 3 × 2,5 mm² (3 × 1,5 mm² au minimum). Les câbles ne passent ni au-dessus du bac inox ni près de la flamme.</p>';
+    h += '<h3>6.4 Poussière (dressing)</h3><p>Dessus pleins de 15 mm qui recouvrent toute la surface, joues latérales de 5 mm, et deux rideaux tombant à 15 mm du sol avec 50 mm de recouvrement au centre. La tringle est avancée de 55 mm devant les montants pour que les rideaux ne frottent pas sur les tablettes. Un lambrequin (bande de tissu de 100 mm agrafée sur le chant avant des dessus) peut fermer le jour en haut.</p>';
+
+    // 7. Finitions
+    h += '<h2>7. Finitions et protection</h2><ul>' +
+      '<li>Acier : dégraissage, brossage des soudures, une couche d\'antirouille, deux couches de laque glycérophtalique ou de peinture époxy. Surface à peindre ≈ ' + nf((t25.Ltot * 0.1 + t20.Ltot * 0.08) / 1000, 1) + ' m² : 1 L d\'antirouille et 1 L de laque suffisent.</li>' +
+      '<li>Module gaz : peinture haute température (600 °C) sur la partie haute des cadres ; écran galvanisé laissé brut.</li>' +
+      '<li>Contreplaqué : ponçage grain 120, chants arrondis, vernis polyuréthane deux couches (trois sur le plan de travail). Pour l\'étagère B, vernis compatible contact alimentaire.</li>' +
+      '<li>Écrous à sertir posés après peinture ou protégés par une vis pendant la peinture.</li></ul>';
+
+    // 8. Plans
+    h += plansMeubles();
+    return h;
+  }
+
+  function plansMeubles() {
+    let h = '';
+    let folio = 1;
+    const cfg = {
+      A: { ech: 1 / 15, echT: '1:15', echCadre: 1 / 12.5, echCadreT: '1:12,5' },
+      B: { ech: 1 / 7.5, echT: '1:7,5', echCadre: 1 / 6, echCadreT: '1:6' },
+      C: { ech: 1 / 12.5, echT: '1:12,5', echCadre: 1 / 10, echCadreT: '1:10' }
+    };
+    Object.values(ME).forEach(m => {
+      const c = cfg[m.code];
+      const sol = m.code !== 'B';
+      const zMax = m.dims.H;
+      const nivFace = m.niveaux.face.slice().sort((u, v) => u - v).filter((v, i, a) => a.indexOf(v) === i);
+      const textesE = m.code === 'A' ? m.niveaux.faceE.map(z => ({ u: 925, v: z + 30, t: 'z ' + z, a: 'middle', k: 0.85, c: '#1b4f7a' })) : [];
+      // Feuille 1 : face + droite
+      const face = P.vue(m, 'face', { ech: c.ech, sol, equip: true, rideaux: false, margeG: 34, margeB: 26,
+        cotesH: [{ pos: m.cotesH, v: 0, decal: -12 }, { pos: [m.cotesH[0], m.cotesH[m.cotesH.length - 1]], v: 0, decal: -20 }],
+        cotesV: [{ pos: nivFace, u: m.code === 'A' ? -5 : 0, decal: -8, cote: true }, { pos: [0, zMax], u: m.code === 'A' ? -5 : 0, decal: -26 }],
+        textes: textesE });
+      const yMin = m.code === 'A' ? -70 : (m.code === 'C' ? -20 : -95);
+      const droite = P.vue(m, 'droite', { ech: c.ech, sol, equip: true, rideaux: m.code === 'A', mur: m.murY, filtre: p => !/^Joue/.test(p.nom), margeG: 12, margeD: 24, margeB: 26,
+        cotesH: [{ pos: [yMin, 0, m.code === 'B' ? 280 : 550, m.murY], v: m.code === 'B' ? -160 : 0, decal: -12 }],
+        cotesV: [{ pos: [0, zMax], u: m.murY, decal: 10 }] });
+      h += '<section class="paysage"><div class="feuille"><h2>' + m.code + ' · ' + m.nom + ' — vue de face et vue de droite</h2>' +
+        '<div class="vues"><figure>' + face + '<figcaption>Vue de face (rideaux non représentés, équipements en pointillé)</figcaption></figure>' +
+        '<figure>' + droite + '<figcaption>Vue de droite' + (m.code === 'A' ? ' avec rideau, joue latérale retirée' : '') + ' — mur à droite</figcaption></figure></div>' + LEGENDE +
+        cartouche(m.code + ' · ' + m.nom, 'Vues de face et de droite', c.echT, folio++) + '</div>';
+      // Feuille 2 : dessus + perspective
+      const dessus = P.vue(m, 'dessus', { ech: c.ech, equip: false, rideaux: false, mur: m.murY, margeG: 20, margeB: 22, margeH: 14,
+        cotesH: [{ pos: m.cotesH, v: yMin, decal: -10 }],
+        cotesV: [{ pos: [yMin, m.murY], u: m.dims.L, decal: 12 }] });
+      const iso = image(m.code, { W: 1500, H: 1100, rideauxOuverts: true, lacet: -0.6, tangage: 0.38 });
+      h += '<div class="feuille"><h2>' + m.code + ' · ' + m.nom + ' — vue de dessus et perspective</h2>' +
+        '<div class="vues" style="align-items:flex-start"><figure>' + dessus + '<figcaption>Vue de dessus, mur en haut</figcaption></figure>' +
+        '<figure style="flex:1"><img src="' + iso + '" style="width:100%;max-height:150mm;object-fit:contain;border:0.5pt solid #ccc"><figcaption>Perspective, ' + (m.code === 'A' ? 'rideaux ouverts' : 'équipée') + '</figcaption></figure></div>' +
+        cartouche(m.code + ' · ' + m.nom, 'Vue de dessus et perspective', c.echT, folio++) + '</div>';
+      // Feuille 3 : cadres soudés
+      h += '<div class="feuille"><h2>' + m.code + ' · Cadres soudés (vue de la face latérale)</h2><div class="vues" style="gap:8mm">';
+      m.typesCadre.forEach(ft => {
+        h += '<figure>' + P.cadre(ft, M.SECTIONS, c.echCadre) + '<figcaption><b>' + ft.nom + '</b> — ' + ft.inst + ' exemplaire' + (ft.inst > 1 ? 's' : '') + '<br>Section ' + M.SECTIONS[ft.sec].nom + '</figcaption></figure>';
+      });
+      h += '</div><p class="legende" style="max-width:170mm">Cercles rouges : écrous à sertir sur les deux faces latérales (cotes cumulées depuis le bas : à gauche montant avant, à droite montant arrière). Cercles bleus barrés : trous traversants de liaison entre modules. Triangles rouges : écrous à sertir sur la face avant. Cotes de droite proches du cadre : niveaux des traverses (dessus de traverse).</p>' +
+        cartouche(m.code + ' · ' + m.nom, 'Cadres soudés', c.echCadreT, folio++) + '</div></section>';
+    });
+    return h;
+  }
+
+  /* ====================================================================== */
+  /*  DOCUMENT 2 : NOMENCLATURE ET FICHES DE DÉBIT                          */
+  /* ====================================================================== */
+  function debit() {
+    let h = couverture('Nomenclature et fiches de débit', 'Pièces repérées, usinages, sous-ensembles soudés, quincaillerie et liste d\'achat', image('A', { W: 1500, H: 900, eclate: 260, sans: ['equip', 'rideaux'], lacet: -0.55, tangage: 0.3 }), LISTE_DOCS);
+    h += '<h2>Lecture des repères</h2><p>Chaque pièce porte un repère <b>meuble-type-numéro</b> : A, B ou C pour le meuble, puis <b>T</b> tube carré, <b>R</b> rond (tube ou plein), <b>F</b> fer plat ou cornière, <b>P</b> panneau bois, <b>S</b> tôle, <b>Q</b> quincaillerie. Les longueurs sont des longueurs de débit, coupes droites sauf mention. Marquer le repère au feutre ou à la pointe à tracer dès la coupe.</p>';
+    h += '<div class="note bleu">Contrôler les cotes d\'un premier cadre complet avant de lancer la série : un écart sur la longueur des traverses se retrouve sur toutes les tablettes.</div>';
+    Object.values(ME).forEach(m => {
+      const n = C.nomenclature(m, M.SECTIONS);
+      h += '<h2 class="saut">' + m.code + ' · ' + m.nom + '</h2>';
+      const metal = n.liste.filter(g => ['tube', 'rond', 'plat'].indexOf(g.cat) >= 0);
+      h += '<h3>Profilés : tubes, ronds, plats</h3>';
+      h += tableau(['Rep.', 'Désignation', 'Section', 'L (mm)', 'Qté', 'Coupes', 'Usinages', 'Sous-ensemble', 'kg'], metal.map(g => [
+        '<span class="cle">' + g.rep + '</span>', g.noms.join(' / '), M.SECTIONS[g.debit.sec].nom.replace(/ \(.*\)/, ''), nf(g.debit.L), nf(g.qte), g.debit.coupe || '', g.debit.usin || '—', g.sousEns.join(', ') || '—', nf(g.masseU * g.qte, 2)
+      ]), ['', '', '', 'n', 'n', '', '', '', 'n']);
+      const pan = n.liste.filter(g => g.cat === 'panneau' || g.cat === 'tole');
+      h += '<h3>Panneaux et tôles</h3>';
+      h += tableau(['Rep.', 'Désignation', 'Matériau', 'L × l (mm)', 'Qté', 'Usinages, finition', 'kg'], pan.map(g => [
+        '<span class="cle">' + g.rep + '</span>', g.noms.join(' / '), g.mat, nf(g.debit.L) + ' × ' + nf(g.debit.l), nf(g.qte), g.debit.usin || '', nf(g.masseU * g.qte, 1)
+      ]), ['', '', '', 'n', 'n', '', 'n']);
+      h += '<h3>Sous-ensembles soudés</h3>';
+      h += tableau(['Sous-ensemble', 'Nombre', 'Composition (par exemplaire)', 'Masse unitaire'], n.sousEnsembles.map(se => {
+        let kg = 0;
+        const comp = Object.keys(se.composition).map(r => {
+          const g = n.liste.find(x => x.rep === r);
+          kg += g.masseU * se.composition[r];
+          return se.composition[r] + ' × ' + r;
+        }).join(' + ');
+        return [se.nom, nf(se.n), comp, nf(kg, 2) + ' kg'];
+      }), ['', 'n', '', 'n']);
+      h += '<h3>Quincaillerie</h3>';
+      h += tableau(['Rep.', 'Désignation', 'Qté', 'Emploi'], n.quinc.map(q => ['<span class="cle">' + q.rep + '</span>', q.designation, nf(q.qte), q.usages.join(', ')]), ['', '', 'n', '']);
+      const ms = MASSES[m.code];
+      h += '<p><b>Masse du meuble :</b> acier ' + nf(ms.acier, 1) + ' kg, bois ' + nf(ms.bois, 1) + ' kg, tôles ' + nf(ms.tole, 1) + ' kg, quincaillerie ≈ 1,5 kg ; total ≈ <b>' + nf(ms.total, 0) + ' kg</b>.</p>';
+    });
+
+    // synthèse achats
+    const syn = C.syntheseAchats(M);
+    h += '<h2 class="saut">Synthèse des achats (trois meubles)</h2>';
+    h += '<p>Les colonnes de prix sont laissées vides pour être complétées avec les tarifs du fournisseur local.</p>';
+    h += '<h3>Acier en barres</h3>';
+    h += tableau(['Section', 'Longueur utile', 'Barres', 'Chute', 'Masse', 'Prix unitaire', 'Total'], syn.sections.map(s => {
+      const chute = s.barres.length * s.barre - s.Ltot;
+      return [s.nom, nf(s.Ltot / 1000, 2) + ' m', s.barres.length + ' × ' + nf(s.barre / 1000, 0) + ' m', nf(chute / 1000, 2) + ' m (' + nf(100 * chute / (s.barres.length * s.barre), 0) + ' %)', nf(s.kg, 1) + ' kg', '', ''];
+    }), ['', 'n', 'n', 'n', 'n', 'vide', 'vide']);
+    h += '<h3>Plans de débit des barres</h3><p class="petit">Optimisation « plus longue pièce d\'abord », trait de scie 3 mm. Les chutes de plus de 300 mm sont à garder pour les platines et les pattes.</p>';
+    syn.sections.forEach(s => {
+      if (s.barres.length > 20) return;
+      h += '<h4>' + s.nom + '</h4><div class="barres">' + dessinBarres(s) + '</div>';
+    });
+    h += '<h3>Panneaux bois (format 2440 × 1220)</h3>';
+    h += tableau(['Matériau', 'Surface utile', 'Panneaux', 'Taux d\'utilisation', 'Prix unitaire', 'Total'], syn.panneaux.map(p => [p.mat, nf(p.surf / 1e6, 2) + ' m²', nf(p.panneaux.length), nf(100 * p.surf / (p.panneaux.length * 2440 * 1220), 0) + ' %', '', '']), ['', 'n', 'n', 'n', 'vide', 'vide']);
+    syn.panneaux.forEach(p => {
+      h += '<h4>' + p.mat + '</h4><div class="calepin">' + dessinCalepin(p) + '</div>';
+    });
+    h += '<h3>Tôles (à faire découper et plier par le fournisseur)</h3>';
+    const toles = [];
+    Object.values(ME).forEach(m => C.nomenclature(m, M.SECTIONS).liste.filter(g => g.cat === 'tole').forEach(g => toles.push([g.rep, g.noms.join(' / '), g.mat, nf(g.debit.L) + ' × ' + nf(g.debit.l), g.debit.usin, nf(g.qte), ''])));
+    h += tableau(['Rep.', 'Pièce', 'Matériau', 'Développé', 'Façonnage', 'Qté', 'Prix'], toles, ['', '', '', 'n', '', 'n', 'vide']);
+    h += '<h3>Quincaillerie (total)</h3>';
+    h += tableau(['Désignation', 'Qté', 'À acheter (+10 %)', 'Meubles', 'Prix'], syn.quinc.sort((u, v) => u.designation < v.designation ? -1 : 1).map(q => [q.designation, nf(q.qte), nf(Math.ceil(q.qte * 1.1)), q.meubles.join(', '), '']), ['', 'n', 'n', '', 'vide']);
+    h += '<h3>Fournitures diverses</h3>';
+    h += tableau(['Article', 'Quantité', 'Remarque', 'Prix'], [
+      ['Tissu de rideau coton / polyester serré, laize 150 cm', '4,3 m', '2 panneaux de 1460 × 2060 coupés (ourlets compris)', ''],
+      ['Antirouille', '1 L', '≈ ' + nf((syn.sections.find(s => s.sec === 'T25').Ltot * 0.1 + syn.sections.find(s => s.sec === 'T20').Ltot * 0.08) / 1000, 1) + ' m² d\'acier', ''],
+      ['Laque ou peinture époxy', '1 L', 'Deux couches', ''],
+      ['Peinture haute température 600 °C (aérosol)', '1', 'Haut du module gaz', ''],
+      ['Vernis polyuréthane (alimentaire pour B)', '1 L', 'Deux à trois couches', ''],
+      ['Garniture caoutchouc 3 mm, bande 30 mm', '1 m', 'Intérieur du collier de bouteille', ''],
+      ['Câble 3 × 2,5 mm² + fiche 16 A', 'selon distance à la prise', 'Alimentation du bloc de prises', ''],
+      ['Couverture anti-feu 1 × 1 m', '1', 'Fixée au mur près du poste gaz', ''],
+      ['Détecteur de monoxyde de carbone', '1', 'Conseillé', '']
+    ], ['', 'n', '', 'vide']);
+    const tot = MASSES.A.total + MASSES.B.total + MASSES.C.total;
+    h += '<p><b>Masse totale des trois meubles :</b> ≈ ' + nf(tot, 0) + ' kg (A ' + nf(MASSES.A.total) + ' kg, B ' + nf(MASSES.B.total) + ' kg, C ' + nf(MASSES.C.total) + ' kg).</p>';
+    return h;
+  }
+
+  const PALETTE = ['#9fb7cf', '#d8b98a', '#a9c79a', '#e0a58a', '#c3a9d6', '#e6d27e', '#8fc7c0', '#d79fb3', '#b5b5b5', '#f0bf7a'];
+  function couleurRep(rep) { let x = 0; for (const ch of rep) x = (x * 31 + ch.charCodeAt(0)) % 9973; return PALETTE[x % PALETTE.length]; }
+  function dessinBarres(s) {
+    const Wmm = 180, k = Wmm / s.barre, hb = 6;
+    const H = s.barres.length * (hb + 3) + 2;
+    let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (Wmm + 2) + 'mm" height="' + H + 'mm" viewBox="-1 -1 ' + (Wmm + 2) + ' ' + H + '" font-family="Arial" font-size="2.3">';
+    s.barres.forEach((b, i) => {
+      const y = i * (hb + 3);
+      svg += '<rect x="0" y="' + y + '" width="' + Wmm + '" height="' + hb + '" fill="#f4f4f4" stroke="#999" stroke-width="0.15"/>';
+      let x = 0;
+      b.pieces.forEach(p => {
+        const w = p.L * k;
+        svg += '<rect x="' + x.toFixed(2) + '" y="' + y + '" width="' + w.toFixed(2) + '" height="' + hb + '" fill="' + couleurRep(p.rep) + '" stroke="#333" stroke-width="0.15"/>';
+        if (w > 7) svg += '<text x="' + (x + w / 2).toFixed(2) + '" y="' + (y + 2.6) + '" text-anchor="middle">' + p.rep.slice(2) + '</text><text x="' + (x + w / 2).toFixed(2) + '" y="' + (y + 5.1) + '" text-anchor="middle" font-size="1.9">' + p.L + '</text>';
+        x += w + 3 * k;
+      });
+      svg += '<text x="' + (Wmm - 0.5) + '" y="' + (y + 3.8) + '" text-anchor="end" font-size="2" fill="#666">chute ' + Math.round(b.reste) + '</text>';
+    });
+    return svg + '</svg>';
+  }
+  function dessinCalepin(p) {
+    const Wmm = 120, k = Wmm / 2440, Hp = 1220 * k;
+    let h = '<div style="display:flex;flex-wrap:wrap;gap:4mm">';
+    p.panneaux.forEach((pan, i) => {
+      let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + (Wmm + 1) + 'mm" height="' + (Hp + 5) + 'mm" viewBox="-0.5 -4 ' + (Wmm + 1) + ' ' + (Hp + 5) + '" font-family="Arial" font-size="2.4">';
+      svg += '<text x="0" y="-1" font-size="2.6">Panneau ' + (i + 1) + ' · utilisation ' + nf(100 * pan.surfUtile / (2440 * 1220)) + ' %</text>';
+      svg += '<rect x="0" y="0" width="' + Wmm + '" height="' + Hp + '" fill="#faf6ee" stroke="#555" stroke-width="0.25"/>';
+      pan.pieces.forEach(q => {
+        svg += '<rect x="' + (q.x * k).toFixed(2) + '" y="' + (q.y * k).toFixed(2) + '" width="' + (q.L * k).toFixed(2) + '" height="' + (q.l * k).toFixed(2) + '" fill="' + couleurRep(q.rep) + '" stroke="#333" stroke-width="0.2"/>';
+        svg += '<text x="' + ((q.x + q.L / 2) * k).toFixed(2) + '" y="' + ((q.y + q.l / 2) * k - 0.3).toFixed(2) + '" text-anchor="middle">' + q.rep + '</text><text x="' + ((q.x + q.L / 2) * k).toFixed(2) + '" y="' + ((q.y + q.l / 2) * k + 2.5).toFixed(2) + '" text-anchor="middle" font-size="2">' + q.L + '×' + q.l + '</text>';
+      });
+      h += svg + '</svg>';
+    });
+    return h + '</div>';
+  }
+
+  /* ====================================================================== */
+  /*  DOCUMENT 3 : NOTICE                                                   */
+  /* ====================================================================== */
+  function notice() {
+    let h = couverture('Notice de montage, pose et démontage', 'Fabrication en atelier, montage pas à pas, fixation murale, démontage pour déménagement', image('C', { W: 1500, H: 900, lacet: -0.45, tangage: 0.32 }), LISTE_DOCS);
+    h += '<h2>1. Outillage et sécurité</h2><div class="deux"><div><h4>Atelier (fabrication)</h4><ul>' +
+      '<li>Scie à ruban ou tronçonneuse à disque, butée de longueur</li><li>Perceuse à colonne, forets Ø4,5 – 5,5 – 6,5 – 7 – 8 – 9</li><li>Pince à écrous à sertir M5 / M6</li><li>Poste de soudure (électrode 2 mm ou semi-automatique), serre-joints, équerre de soudeur</li><li>Gabarit de cadre : planche ou marbre avec butées</li><li>Lime, ébavureur, brosse métallique</li></ul></div>' +
+      '<div><h4>Montage et pose (à la maison)</h4><ul><li>Clé Allen 5 (vis M6) et 4 (vis M5), clé plate de 10 et 8</li><li>Tournevis cruciforme PZ2, visseuse</li><li>Niveau à bulle 60 cm, mètre, crayon</li><li>Perceuse à percussion, foret béton Ø8 (et Ø6 pour la crédence)</li><li>Chevilles adaptées au mur (voir § 4)</li><li>Gants, lunettes pour le perçage</li></ul></div></div>';
+    h += '<div class="note">Le montage du dressing et la pose de l\'étagère murale se font à deux. Ne jamais monter sur une tablette. Le poste gaz n\'est mis en service qu\'une fois la station complète, mise à niveau et fixée au mur.</div>';
+
+    h += '<h2>2. Fabrication en atelier</h2><ol>' +
+      '<li><b>Débit.</b> Couper les tubes et les plats aux longueurs de la fiche de débit (document 02), en suivant les plans de débit des barres. Ébavurer chaque coupe, repérer chaque pièce.</li>' +
+      '<li><b>Perçage des montants avant soudure.</b> Tracer depuis le bas du montant (côté vérin) les cotes du plan « cadres soudés ». Percer Ø9 (M6) ou Ø7 (M5) sur les deux faces latérales, Ø6,5 traversant pour les liaisons entre modules. Pointer avant de percer.</li>' +
+      '<li><b>Perçage des traverses porte-tablette :</b> Ø4,5 sur la face supérieure, Ø8 en face inférieure dans le même axe, à 60 mm de chaque extrémité.</li>' +
+      '<li><b>Soudage des cadres sur gabarit.</b> Poser les deux montants sur le gabarit, traverses entre eux aux niveaux du plan. Pointer les quatre angles, contrôler les diagonales (écart ≤ 2 mm), puis souder en alternant les côtés pour limiter les déformations. Cordons sur les trois faces accessibles.</li>' +
+      '<li><b>Soudage des lisses.</b> Souder une platine à chaque extrémité de tube, d\'équerre (contrôler à l\'équerre de soudeur). Respecter la longueur hors tout : longueur de tube + 2 × 3 mm.</li>' +
+      '<li><b>Sous-ensembles particuliers :</b> collier de bouteille roulé Ø 276 intérieur, consoles d\'étagère en L, râtelier à assiettes (picots Ø6 soudés sur plats percés).</li>' +
+      '<li><b>Préparation et peinture.</b> Brosser les soudures, dégraisser, antirouille, deux couches de laque. Protéger les perçages Ø9 / Ø7 avec un bouchon ou une vis.</li>' +
+      '<li><b>Sertissage.</b> Poser les écrous à sertir après peinture : engager l\'écrou sur la pince, l\'insérer à fond, serrer jusqu\'au blocage. Vérifier chaque écrou en vissant une vis à la main.</li>' +
+      '<li><b>Bois.</b> Débiter les panneaux suivant le calepinage, poncer, arrondir les chants, vernir. Encoches 26 × 26 du plan de travail de C à la scie sauteuse.</li>' +
+      '<li><b>Contrôle avant livraison :</b> présenter à blanc un module complet de chaque meuble en atelier.</li></ol>';
+
+    Object.values(ME).forEach((m, im) => {
+      h += '<h2 class="saut">' + (3) + '.' + (im + 1) + ' Montage de ' + m.code + ' · ' + m.nom + '</h2>';
+      h += '<p>' + m.encombrement + '. Masse à vide ≈ ' + nf(MASSES[m.code].total) + ' kg. Les pièces de chaque étape sont en orange sur les vues.</p>';
+      m.etapes.forEach((e, i) => {
+        const ps = {};
+        m.parts.forEach(p => {
+          if (p.etape !== i || p.cat === 'equip' || p.cat === 'rideau') return;
+          const k = (p.rep ? p.rep + ' ' : '') + p.nom;
+          ps[k] = (ps[k] || 0) + (p.debit && p.debit.n ? p.debit.n : 1);
+        });
+        const img = image(m.code, { etape: i, W: 1100, H: 760, rideauxOuverts: m.code === 'A' && i < 10 });
+        h += '<div class="etape"><img src="' + img + '" alt=""><div><h4><span class="num">' + (i + 1) + '</span>' + e.t + '</h4><p>' + e.d + '</p>' +
+          (e.ctrl && e.ctrl.length ? '<ul class="ctrl">' + e.ctrl.map(c => '<li>' + c + '</li>').join('') + '</ul>' : '') +
+          (Object.keys(ps).length ? '<p class="petit"><b>Pièces :</b> ' + Object.keys(ps).map(k => ps[k] + ' × ' + k).join(' ; ') + '</p>' : '') + '</div></div>';
+      });
+    });
+
+    h += '<h2 class="saut">4. Pose murale</h2><ol>' +
+      '<li>Identifier le mur : frapper, percer un avant-trou Ø6 dans une zone qui sera cachée. Poussière rouge et trou qui « tombe dans le vide » : brique creuse ; poussière grise et perçage dur et continu : béton ; grise puis vide : parpaing creux.</li>' +
+      '<li>Repérer les conduites : pas de perçage à la verticale d\'une prise ou d\'un interrupteur ni à l\'horizontale d\'un robinet.</li>' +
+      '<li>Mettre le meuble en place et de niveau (vérins), marquer le centre des trous oblongs des équerres.</li>' +
+      '<li>Écarter le meuble, percer (sans percussion dans la brique creuse et le parpaing), dépoussiérer, cheviller.</li>' +
+      '<li>Remettre le meuble, visser les vis Ø5 × 50 avec rondelle. Tirer franchement le haut du meuble vers soi : aucun jeu ne doit apparaître.</li>' +
+      '<li>Étagère B : tracer le dessous du meuble à 1250 mm du sol, poser les 4 chevilles hautes d\'abord, contrôler le niveau, puis les 4 basses.</li></ol>' + CHEVILLES;
+
+    h += '<h2>5. Démontage et transport</h2><p>Le démontage suit les étapes de montage à l\'envers : vider, décrocher rideaux et tringles, dévisser les panneaux, retirer les équerres murales, séparer les modules, puis déboulonner les lisses. Les vis restent dans leurs écrous à sertir pendant le transport (revisser chaque vis dans son trou après démontage de la lisse) : rien ne se perd.</p>';
+    h += '<h3>Colisage</h3>' + colisage();
+    h += '<div class="note bleu">Pour transporter la bouteille de gaz : robinet fermé, brûleur démonté, bouteille debout et calée, jamais dans un coffre fermé en plein soleil.</div>';
+
+    h += '<h2>6. Entretien et contrôles</h2>' + tableau(['Fréquence', 'Contrôle'], [
+      ['À chaque changement de bouteille', 'Test à l\'eau savonneuse du raccord du brûleur, état du joint, collier refermé'],
+      ['Chaque mois', 'Nettoyage du bac inox et de la crédence ; vérifier qu\'aucun objet n\'a été posé au-dessus du brûleur'],
+      ['Tous les 6 mois', 'Resserrer les vis des lisses (8 N·m) et les boulons de liaison ; contrôler les chevilles murales ; recoucher un vernis sur le plan si besoin'],
+      ['Après un déménagement', 'Contrôle des diagonales de chaque module, remplacement des chevilles (ne jamais réutiliser une cheville arrachée)'],
+      ['Date limite du détendeur ou du joint', 'Remplacer selon la date inscrite par le fabricant']
+    ]);
+    return h;
+  }
+
+  function colisage() {
+    const lignes = [];
+    Object.values(ME).forEach(m => {
+      const n = C.nomenclature(m, M.SECTIONS);
+      const masseSE = {};
+      n.sousEnsembles.forEach(se => {
+        let kg = 0;
+        Object.keys(se.composition).forEach(r => { const g = n.liste.find(x => x.rep === r); kg += g.masseU * se.composition[r]; });
+        masseSE[se.nom] = { kg, n: se.n };
+      });
+      m.typesCadre.forEach(ft => {
+        lignes.push([m.code, ft.nom, nf(ft.inst), nf(Math.max(ft.Hf, ft.Hb)) + ' × ' + nf(ft.D) + ' × ' + M.SECTIONS[ft.sec].a, nf(masseSE[ft.nom].kg, 1) + ' kg l\'un']);
+      });
+      const lisses = n.sousEnsembles.filter(se => se.nom.indexOf('Lisse') === 0 || se.nom === 'Traverse sous plan');
+      if (lisses.length) {
+        const nb = lisses.reduce((s, x) => s + x.n, 0), kg = lisses.reduce((s, x) => s + masseSE[x.nom].kg * x.n, 0);
+        const Lmax = Math.max.apply(null, lisses.map(x => parseInt(x.nom.replace(/\D+/g, ' ').trim().split(' ')[0], 10) || 494));
+        lignes.push([m.code, 'Botte de lisses et traverses (scotchées ensemble)', nf(nb), '≈ ' + nf(Lmax + 6) + ' × 60 × 60', nf(kg, 1) + ' kg']);
+      }
+      const pans = n.liste.filter(g => g.cat === 'panneau' || g.cat === 'tole');
+      const kgp = pans.reduce((s, g) => s + g.masseU * g.qte, 0), nbp = pans.reduce((s, g) => s + g.qte, 0);
+      const Lp = Math.max.apply(null, pans.map(g => Math.max(g.debit.L, g.debit.l)));
+      lignes.push([m.code, 'Pile de panneaux et tôles (cartons entre panneaux)', nf(nbp), 'jusqu\'à ' + nf(Lp) + ' de long', nf(kgp, 1) + ' kg']);
+      lignes.push([m.code, 'Carton de petites pièces (équerres, pattes, vérins, tringles courtes, sachet de vis étiqueté)', '1', '400 × 300 × 150', '≈ 3 kg']);
+    });
+    return tableau(['Meuble', 'Colis', 'Nombre', 'Dimensions (mm)', 'Masse'], lignes, ['', '', 'n', '', 'n']);
+  }
+
+  /* ---------- Assemblage ---------- */
+  function lancer() {
+    let html = '';
+    if (TYPE === 'dossier') html = dossier();
+    else if (TYPE === 'debit') html = debit();
+    else html = notice();
+    document.getElementById('contenu').innerHTML = html;
+    const imgs = Array.from(document.images);
+    Promise.all(imgs.map(i => i.complete ? Promise.resolve() : new Promise(r => { i.onload = r; i.onerror = r; }))).then(() => { window.DOCUMENT_PRET = true; });
+  }
+  setTimeout(lancer, 10);
+})();
+
+</script>
+</body>
+</html>

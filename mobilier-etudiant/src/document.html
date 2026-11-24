@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITRE_DOC__</title>
+<style>
+@page { size: A4 portrait; margin: 14mm 14mm 16mm 14mm; }
+@page paysage { size: A4 landscape; margin: 9mm 10mm 12mm 10mm; }
+:root { --texte: #1d2126; --doux: #5b636c; --ligne: #c9ccd0; --fond: #f3f1ec; --accent: #c4581f; --bleu: #1b4f7a; }
+* { box-sizing: border-box; }
+html { background: #e9e7e2; }
+body { margin: 0 auto; max-width: 210mm; background: #fff; color: var(--texte); font: 9.6pt/1.42 "Segoe UI", Arial, Helvetica, sans-serif; padding: 14mm; }
+@media print { html { background: #fff; } body { max-width: none; padding: 0; } }
+h1 { font-size: 20pt; margin: 0 0 4mm; line-height: 1.15; }
+h2 { font-size: 13.5pt; margin: 7mm 0 2.5mm; padding-bottom: 1.2mm; border-bottom: 1.4pt solid var(--texte); break-after: avoid; }
+h3 { font-size: 11pt; margin: 5mm 0 1.8mm; break-after: avoid; color: var(--bleu); }
+h4 { font-size: 9.8pt; margin: 3.5mm 0 1.2mm; break-after: avoid; }
+p { margin: 1.4mm 0; }
+ul, ol { margin: 1.2mm 0 1.6mm; padding-left: 5.5mm; }
+li { margin: 0.6mm 0; }
+table { border-collapse: collapse; width: 100%; margin: 2mm 0 3mm; font-size: 8.4pt; break-inside: auto; }
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th, td { border: 0.5pt solid var(--ligne); padding: 1.1mm 1.6mm; text-align: left; vertical-align: top; }
+th { background: var(--fond); font-weight: 600; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+td.c, th.c { text-align: center; }
+.ok { color: #1e7a3c; font-weight: 600; }
+.ko { color: #b3261e; font-weight: 600; }
+.note { background: var(--fond); border-left: 2.5pt solid var(--accent); padding: 2mm 3mm; margin: 2.5mm 0; break-inside: avoid; }
+.note.bleu { border-left-color: var(--bleu); }
+.petit { font-size: 8pt; color: var(--doux); }
+.saut { break-before: page; }
+.couverture { height: 262mm; display: flex; flex-direction: column; break-after: page; }
+.couverture .bandeau { border-top: 5pt solid var(--texte); padding-top: 6mm; }
+.couverture .sur { text-transform: uppercase; letter-spacing: 1.5pt; font-size: 9pt; color: var(--doux); }
+.couverture h1 { font-size: 26pt; margin-top: 3mm; }
+.couverture .sous { font-size: 13pt; color: var(--doux); margin-bottom: 6mm; }
+.couverture img { width: 100%; border: 0.5pt solid var(--ligne); margin: 4mm 0; }
+.couverture .pied { margin-top: auto; }
+.couverture table td { font-size: 9pt; }
+.sommaire ol { columns: 2; column-gap: 8mm; }
+.paysage { page: paysage; break-before: page; }
+.feuille { position: relative; width: 277mm; height: 186mm; break-after: page; overflow: hidden; }
+.feuille:last-child { break-after: auto; }
+.feuille h2 { margin-top: 0; font-size: 12pt; }
+.feuille .vues { display: flex; gap: 6mm; align-items: flex-end; flex-wrap: nowrap; }
+.feuille figure { margin: 0; }
+.feuille figcaption, figure.detail figcaption { font-size: 8pt; color: var(--doux); margin-top: 1mm; }
+.cartouche { position: absolute; right: 0; bottom: 0; border: 0.8pt solid var(--texte); font-size: 7.4pt; width: 98mm; background: #fff; }
+.cartouche table { margin: 0; font-size: 7.4pt; }
+.cartouche td { border: 0.4pt solid var(--texte); padding: 0.6mm 1.4mm; }
+.cartouche .t { font-weight: 700; font-size: 9pt; }
+.legende { font-size: 7.6pt; color: var(--doux); }
+.legende span { display: inline-block; width: 3mm; height: 3mm; vertical-align: -0.5mm; margin: 0 1mm 0 3mm; border: 0.4pt solid #444; }
+.details { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 6mm; }
+figure.detail { margin: 0; break-inside: avoid; }
+.etape { display: grid; grid-template-columns: 92mm 1fr; gap: 4mm; padding: 2.5mm 0; border-top: 0.5pt solid var(--ligne); break-inside: avoid; }
+.etape img { width: 92mm; border: 0.5pt solid var(--ligne); display: block; }
+.etape h4 { margin-top: 0; }
+.etape .num { display: inline-block; background: var(--accent); color: #fff; border-radius: 2mm; padding: 0 1.6mm; margin-right: 1.5mm; font-size: 8.6pt; }
+.etape ul.ctrl { list-style: none; padding-left: 0; }
+.etape ul.ctrl li::before { content: "☐ "; color: var(--accent); }
+.barres svg, .calepin svg { display: block; margin: 1mm 0 2.5mm; }
+.deux { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+.img-pleine { width: 100%; border: 0.5pt solid var(--ligne); }
+.cle { font-weight: 600; }
+td.vide { background: repeating-linear-gradient(90deg, #fff 0 4mm, #fafafa 4mm 8mm); }
+</style>
+</head>
+<body>
+<div id="contenu">Préparation du document…</div>
+<script>window.TYPE_DOC = '__TYPE_DOC__';</script>
+<script src="modele.js"></script>
+<script src="calculs.js"></script>
+<script src="moteur3d.js"></script>
+<script src="scenes.js"></script>
+<script src="plans.js"></script>
+<script src="documents.js"></script>
+</body>
+</html>
