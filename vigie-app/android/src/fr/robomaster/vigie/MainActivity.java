@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -11,6 +12,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Coquille Android de l'application VIGIE : affiche l'application web embarquée dans les assets,
@@ -19,7 +22,9 @@ import java.io.InputStream;
  */
 public class MainActivity extends Activity {
     private static final String HOST = "appassets.androidplatform.net";
+    private static final int ENREGISTRER = 42;
     private WebView web;
+    private String aEnregistrer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +64,45 @@ public class MainActivity extends Activity {
             }
         });
 
+        web.addJavascriptInterface(new Pont(), "VigieNative");
+
         if (savedInstanceState != null) web.restoreState(savedInstanceState);
         else web.loadUrl("https://" + HOST + "/index.html");
+    }
+
+    /** Pont appelé par la page : ouvre le sélecteur de fichier du système pour enregistrer un export. */
+    private class Pont {
+        @JavascriptInterface
+        public void enregistrer(final String nom, final String texte) {
+            runOnUiThread(() -> {
+                aEnregistrer = texte;
+                Intent i = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+                i.addCategory(Intent.CATEGORY_OPENABLE);
+                i.setType(nom.endsWith(".csv") ? "text/csv" : "text/plain");
+                i.putExtra(Intent.EXTRA_TITLE, nom);
+                try { startActivityForResult(i, ENREGISTRER); } catch (Exception e) { repondre(false); }
+            });
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int code, int resultat, Intent data) {
+        super.onActivityResult(code, resultat, data);
+        if (code != ENREGISTRER) return;
+        boolean ok = false;
+        if (resultat == RESULT_OK && data != null && data.getData() != null && aEnregistrer != null) {
+            try (OutputStream out = getContentResolver().openOutputStream(data.getData())) {
+                out.write(new byte[] { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF });
+                out.write(aEnregistrer.getBytes(StandardCharsets.UTF_8));
+                ok = true;
+            } catch (Exception ignored) { }
+        }
+        aEnregistrer = null;
+        repondre(ok);
+    }
+
+    private void repondre(boolean ok) {
+        web.evaluateJavascript("window.__vigieSaved && window.__vigieSaved(" + ok + ")", null);
     }
 
     private static String mime(String p) {

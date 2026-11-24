@@ -33,6 +33,19 @@ export async function copy(text) {
   catch { const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select(); let ok = false; try { ok = document.execCommand('copy'); } catch { ok = false; } t.remove(); return ok; }
 }
 
+/** Enregistre un fichier texte : sélecteur de fichier Android via la coquille native, sinon téléchargement. */
+export function saveText(name, text, mime = 'text/csv') {
+  if (window.VigieNative && window.VigieNative.enregistrer) {
+    return new Promise(res => { window.__vigieSaved = ok => { window.__vigieSaved = null; res(!!ok); }; window.VigieNative.enregistrer(name, text); });
+  }
+  try {
+    const url = URL.createObjectURL(new Blob(['\ufeff' + text], { type: `${mime};charset=utf-8` }));
+    const a = Object.assign(document.createElement('a'), { href: url, download: name });
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 4000);
+    return Promise.resolve(true);
+  } catch { return Promise.resolve(false); }
+}
+
 /** Puces à sélection (simple ou multiple). */
 export function chips(el, items, selected, { multi = false, onChange } = {}) {
   let sel = multi ? new Set(selected) : selected;

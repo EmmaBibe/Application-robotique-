@@ -3,7 +3,7 @@ import { store } from '../lib/store.js';
 import { runCampaign } from '../lib/pool.js';
 import { renderResults } from '../lib/results.js';
 import { paired } from '../lib/stats.js';
-import { SCENES, CONDS, chips, fmt, esc } from '../lib/ui.js';
+import { SCENES, CONDS, chips, fmt, esc, saveText, toast, worldCode } from '../lib/ui.js';
 
 const ALL = Object.keys(SCENES);
 const QUICK = ['goulot', 'coin_aveugle', 'traversee', 'foule_dense'];
@@ -17,8 +17,11 @@ export default function banc(view) {
       <div class="row" style="margin-top:.5rem"><button class="btn ghost" data-a="all">Toutes les scènes</button><button class="btn ghost" data-a="quick">Les plus disputées</button></div>
       <h3 style="margin-top:.9rem">Condition</h3><div class="chips" data-k="cond"></div>
       <h3 style="margin-top:.9rem">Mondes par scène</h3><div class="chips" data-k="n"></div>
+      <h3 style="margin-top:.9rem">Première graine</h3>
+      <div class="code-box"><input data-k="seed" inputmode="numeric" placeholder="vide : tirée au hasard" aria-label="Première graine" spellcheck="false" autocomplete="off"></div>
+      <p class="small muted" style="margin-top:.3rem">Chaque graine fabrique toujours le même monde. Reprends la même première graine pour rejouer exactement la même comparaison, ou celle d'une comparaison précédente pour la vérifier.</p>
       <p class="small muted" data-k="eta"></p>
-      <div class="row"><button class="btn primary" data-a="run">Lancer la comparaison</button><button class="btn" data-a="stop" hidden>Arrêter</button></div>
+      <div class="row"><button class="btn primary" data-a="run">Lancer la comparaison</button><button class="btn" data-a="stop" hidden>Arrêter</button><button class="btn ghost" data-a="csv" hidden>Exporter les essais (CSV)</button></div>
       <div class="progress" hidden><i></i></div><p class="small muted" data-k="prog"></p>
     </div>
     <div data-k="out"></div>
@@ -42,9 +45,13 @@ export default function banc(view) {
   }
   eta(); drawHistory();
 
-  let camp = null;
+  let camp = null, last = null;
   view.querySelector('[data-a="run"]').onclick = () => {
-    const sc = scenes.get(), cd = cond.get(), N = +nper.get(), first = 200 + Math.floor(Math.random() * 800);
+    const sc = scenes.get(), cd = cond.get(), N = +nper.get(), raw = $('seed').value.trim();
+    if (raw && !/^\d{1,6}$/.test(raw)) { toast('La graine est un nombre entier entre 0 et 999999.'); $('seed').focus(); return; }
+    const first = raw ? +raw : 200 + Math.floor(Math.random() * 800);
+    $('seed').value = String(first);
+    view.querySelector('[data-a="csv"]').hidden = true;
     const jobs = []; let id = 0;
     for (const s of sc) for (let k = 0; k < N; k++) jobs.push({ id: id++, scene: s, seed: first + k, cond: cd, contenders: [{ key: 'v', which: 'vigie' }, { key: 'd', which: 'dra' }] });
     const rows = [], t0 = performance.now();
@@ -58,23 +65,38 @@ export default function banc(view) {
         view.querySelector('.progress i').style.width = `${done / jobs.length * 100}%`;
         $('prog').textContent = `${done} mondes sur ${jobs.length}${done < jobs.length ? ` · encore environ ${left < 60 ? `${Math.ceil(left)} s` : `${Math.ceil(left / 60)} min`}` : ''}`;
       },
-      onDone: () => finish(rows, sc, cd),
+      onDone: () => finish(rows, sc, cd, first),
     });
     $('prog').textContent = `Calcul sur ${camp.workers} fil${camp.workers > 1 ? 's' : ''} en parallèle…`;
   };
   view.querySelector('[data-a="stop"]').onclick = () => { if (camp) camp.stop(); finish(null); };
+  view.querySelector('[data-a="csv"]').onclick = async () => {
+    if (!last) return;
+    const ok = await saveText(`banc-vigie-${last.date}-graine${last.first}.csv`, csv(last.rows));
+    toast(ok ? 'Fichier enregistré.' : 'Export annulé.');
+  };
 
-  function finish(rows, sc, cd) {
+  function csv(rows) {
+    const head = 'scene,graine,condition,vigie_resultat,vigie_temps_s,reference_resultat,reference_temps_s,code_du_monde';
+    const lines = [...rows].sort((a, b) => a.job.id - b.job.id).map(r => [r.job.scene, r.job.seed, r.job.cond,
+      r.res.v.out, r.res.v.t, r.res.d.out, r.res.d.t, worldCode(r.job)].join(','));
+    return [head, ...lines].join('\r\n') + '\r\n';
+  }
+
+  function finish(rows, sc, cd, first) {
     camp = null;
     view.querySelector('[data-a="run"]').disabled = false; view.querySelector('[data-a="stop"]').hidden = true;
     if (!rows || !rows.length) return;
+    const date = new Date().toISOString().slice(0, 10);
+    last = { rows: rows.slice(), date, first };
+    view.querySelector('[data-a="csv"]').hidden = false;
     const r = paired(rows.map(x => x.res.v.out === 'succes'), rows.map(x => x.res.d.out === 'succes'));
-    store.update(s => { s.campaigns = [{ date: new Date().toISOString().slice(0, 10), scenes: sc, cond: cd, n: r.n, pa: r.pa, pb: r.pb, diff: r.diff, lo: r.lo, hi: r.hi }, ...s.campaigns].slice(0, 6); });
+    store.update(s => { s.campaigns = [{ date, scenes: sc, cond: cd, first, per: rows.length / sc.length, n: r.n, pa: r.pa, pb: r.pb, diff: r.diff, lo: r.lo, hi: r.hi }, ...s.campaigns].slice(0, 6); });
     drawHistory();
   }
   function drawHistory() {
     const H = store.get().campaigns;
-    $('hist').innerHTML = H.length ? H.map(c => `<div class="card"><p class="small muted" style="margin:0">${c.date} · ${esc(CONDS[c.cond])} · ${c.n} mondes · ${c.scenes.map(s => SCENES[s]).join(', ')}</p>
+    $('hist').innerHTML = H.length ? H.map(c => `<div class="card"><p class="small muted" style="margin:0">${c.date} · ${esc(CONDS[c.cond])} · ${c.n} mondes · ${c.scenes.map(s => SCENES[s]).join(', ')}${c.first != null ? ` · graines ${c.first} à ${c.first + Math.round(c.per) - 1}` : ''}</p>
       <p style="margin:.2rem 0 0">VIGIE ${fmt(c.pa * 100, 0)} % · référence ${fmt(c.pb * 100, 0)} % · écart ${c.diff >= 0 ? '+' : '−'}${fmt(Math.abs(c.diff * 100))} (de ${fmt(c.lo * 100)} à ${fmt(c.hi * 100)})${c.lo > 0 || c.hi < 0 ? ' · <b>significatif</b>' : ''}</p></div>`).join('') : '<p class="muted small">Aucune pour l\'instant.</p>';
   }
   return () => { if (camp) camp.stop(); };
