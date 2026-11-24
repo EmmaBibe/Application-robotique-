@@ -26,13 +26,17 @@
   let sale = true, interaction = false, timerQualite = null, derniereVue = 'iso';
 
   /* Moteur : rendu réaliste WebGL si disponible, sinon moteur logiciel */
+  const PARAMS = new URLSearchParams(location.search);   // ex. ?meuble=C&rendu=photo
   const webgl = !!(window.RENDU3D && window.RENDU3D.disponible());
   const tactile = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
   let V, cam, rendu;
   if (webgl) {
     canvas.style.display = 'none';
-    V = window.RENDU3D.creer(vue, { modele: M, qualite: tactile ? 'standard' : 'haute', pixelRatioMax: tactile ? 1.5 : 2 });
-    $('qualite').value = tactile ? 'standard' : 'haute';
+    let q0 = tactile ? 'standard' : 'photo';
+    const qp = PARAMS.get('rendu');
+    if (['photo', 'haute', 'standard'].indexOf(qp) >= 0) q0 = qp;
+    V = window.RENDU3D.creer(vue, { modele: M, qualite: q0, pixelRatioMax: tactile ? 1.5 : 2 });
+    $('qualite').value = q0;
     $('qualite').onchange = (ev) => V.definirQualite(ev.target.value);
   } else {
     rendu = new E.Rendu(canvas);
@@ -160,7 +164,7 @@
     $('titreVue').innerHTML = meuble ? '<b>' + meuble.code + '</b> · ' + meuble.nom + ' — ' + (e.final ? 'rendu final' : 'étape ' + (i + 1) + ' : ' + e.t) : '<b>Cuisine</b> · implantation de B et C';
     $('bPrec').disabled = i === 0; $('bDebut').disabled = i === 0;
     $('bSuiv').disabled = i === etapes.length - 1; $('bFin').disabled = i === etapes.length - 1;
-    etat.anim = animer ? { t0: performance.now(), duree: 700 } : null;
+    etat.anim = animer && !(webgl && V.qualite === 'photo') ? { t0: performance.now(), duree: 700 } : null;
     majVisibilite();
   }
 
@@ -451,7 +455,9 @@
     if (scene) {
       if (webgl) V.fond.set(sombre() ? '#1b1e22' : '#f3f1ec');
       if (sale) V.demander();
-      if (V.tic()) {
+      const rendu3 = V.tic();
+      if (webgl) majEtatPhoto();
+      if (rendu3) {
         const r = vue.getBoundingClientRect();
         const kd = Math.min(window.devicePixelRatio || 1, 2);
         calque.width = Math.round(r.width * kd); calque.height = Math.round(r.height * kd);
@@ -462,7 +468,19 @@
     requestAnimationFrame(boucle);
   }
   window.addEventListener('resize', () => { sale = true; });
+  let dernierEtatPhoto = '';
+  function majEtatPhoto() {
+    const i = V.infoPhoto && V.infoPhoto();
+    const el = $('photoEtat');
+    let html = '';
+    if (i) {
+      if (i.compilation) html = 'Préparation du rendu photo…';
+      else if (i.passes < i.max) html = 'Rendu photo : ' + Math.floor(i.passes) + ' / ' + i.max + ' passes<span class="barre"><i style="width:' + (100 * i.passes / i.max).toFixed(1) + '%"></i></span>';
+      else html = 'Rendu photo terminé (' + i.max + ' passes)';
+    }
+    if (html !== dernierEtatPhoto) { el.innerHTML = html; el.style.display = html ? 'block' : 'none'; dernierEtatPhoto = html; }
+  }
 
-  charger('A');
+  charger(['A', 'B', 'C', 'K'].indexOf(PARAMS.get('meuble')) >= 0 ? PARAMS.get('meuble') : 'A');
   requestAnimationFrame(boucle);
 })();

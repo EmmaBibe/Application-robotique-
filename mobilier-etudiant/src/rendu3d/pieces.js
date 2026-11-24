@@ -5,6 +5,7 @@
  */
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import { tetesVis, boulonLiaison, cablesStation } from './details.js';
 
 export function bornes(formes) {
   const b = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
@@ -80,7 +81,19 @@ function uvPanneau(g, dims) {
 function panneau(f, mat) {
   const g = new THREE.BoxGeometry(f.dx, f.dy, f.dz);
   uvPanneau(g, [f.dx, f.dy, f.dz]);
-  return M(g, [mat.get('bois'), mat.get('chant')], f.x + f.dx / 2, f.y + f.dy / 2, f.z + f.dz / 2);
+  // deux maillages (faces / chants) plutôt qu'un maillage multi-matières : plus sûr pour le moteur photo
+  const grp = new THREE.Group();
+  const idx = g.index.array;
+  [[0, mat.get('bois')], [1, mat.get('chant')]].forEach(([mi, m]) => {
+    const sel = [];
+    g.groups.forEach(gr => { if (gr.materialIndex === mi) for (let k = gr.start; k < gr.start + gr.count; k++) sel.push(idx[k]); });
+    const gg = g.clone();
+    gg.setIndex(sel);
+    gg.clearGroups();
+    grp.add(new THREE.Mesh(gg, m));
+  });
+  grp.position.set(f.x + f.dx / 2, f.y + f.dy / 2, f.z + f.dz / 2);
+  return grp;
 }
 
 /* ---------- Équipements ---------- */
@@ -166,6 +179,7 @@ const EQUIP = {
       [-5, 5].forEach(d => g.add(M(cylindre(2, 5, 8, 'x'), mat.get('caoutchouc'), f.x - 2, f.y + f.dy / 2 + d, f.z + dz)));
     });
     g.add(M(rboite(4, 14, 10, 1.5), mat.get('emissif', '#ff3b1f'), f.x - 1, f.y + f.dy / 2, f.z + 125));
+    g.add(cablesStation(f, mat));
     return g;
   },
   'Barre aimantée à couteaux'(p, b, mat) {
@@ -407,7 +421,9 @@ function rideau(p, mat) {
 export function construirePiece(p, meuble, mat) {
   if (p.cat === 'equip') return equipement(p, meuble, mat);
   if (p.cat === 'rideau') return rideau(p, mat);
+  if (/^Boulon de liaison/.test(p.nom)) return boulonLiaison(p, mat);
   const g = new THREE.Group();
+  if (p.vis) g.add(tetesVis(p.vis, mat));
   const acier = mat.get('peinture', meuble.code === 'B' ? '#2b2e33' : '#3a4048');
   p.formes.forEach(f => {
     let m;

@@ -70,6 +70,9 @@ label.case input { accent-color: var(--accent); }
 .titre-vue { position: absolute; left: 12px; top: 10px; font-size: 13px; background: color-mix(in srgb, var(--panneau) 85%, transparent); padding: 6px 10px; border-radius: 6px; max-width: calc(100% - 24px); }
 .titre-vue b { color: var(--accent); }
 .petit { font-size: 12px; color: var(--doux); }
+.photo-etat { position: absolute; right: 12px; bottom: 10px; font-size: 12px; color: var(--doux); background: color-mix(in srgb, var(--panneau) 85%, transparent); padding: 4px 8px; border-radius: 6px; display: none; font-variant-numeric: tabular-nums; }
+.photo-etat .barre { display: inline-block; width: 80px; height: 4px; border-radius: 2px; background: var(--ligne); vertical-align: middle; margin-left: 6px; overflow: hidden; }
+.photo-etat .barre i { display: block; height: 100%; background: var(--accent); }
 .repli { display: none; }
 @media (max-width: 1100px) {
   main { grid-template-columns: 270px 1fr; }
@@ -121,6 +124,7 @@ label.case input { accent-color: var(--accent); }
     <div class="titre-vue" id="titreVue"></div>
     <div class="legende-vue">Glisser : rotation · Clic droit ou Maj : déplacement · Molette / pincement : zoom · Double-clic : recadrer</div>
     <div id="infobulle"></div>
+    <div class="photo-etat" id="photoEtat"></div>
   </section>
   <aside class="droite" id="panneauDroit">
     <h2>Vues</h2>
@@ -130,7 +134,7 @@ label.case input { accent-color: var(--accent); }
     </div>
     <label class="case" style="margin-top:6px"><input type="checkbox" id="perspective" checked> Perspective</label>
     <label class="case"><input type="checkbox" id="cotes" checked> Cotes principales</label>
-    <label class="case" id="ligneQualite">Rendu <select id="qualite" style="margin-left:auto"><option value="haute">Réaliste</option><option value="standard">Rapide</option></select></label>
+    <label class="case" id="ligneQualite">Rendu <select id="qualite" style="margin-left:auto"><option value="photo">Photo</option><option value="haute">Réaliste</option><option value="standard">Rapide</option></select></label>
     <h2>Couches</h2>
     <div id="couches"></div>
     <label class="case" id="ligneRideaux"><input type="checkbox" id="rideauxOuverts" checked> Rideaux ouverts</label>

@@ -11,10 +11,47 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { WebGLPathTracer, DenoiseMaterial } from 'three-gpu-pathtracer';
+import { FullScreenQuad } from 'three/examples/jsm/postprocessing/Pass.js';
 import { MATIERES } from './matieres.js';
+import { detailsCadres } from './details.js';
 import { construirePiece, bornes } from './pieces.js';
 
 const MM = 0.001;   // la scène est construite en millimètres puis ramenée en mètres
+const ENV_LACET = 2.2;   // orientation de la pièce photographiée (fenêtre en avant à gauche)
+
+/* Éclairage HDR codé en RGBE dans une image PNG (moitié haute : mantisses, moitié basse : exposant) */
+function chargerHDR(src) {
+  return new Promise(res => {
+    if (!src) { res(null); return; }
+    const img = new Image();
+    img.onload = () => {
+      const W = img.width, H = img.height / 2;
+      const c = document.createElement('canvas');
+      c.width = img.width; c.height = img.height;
+      const x = c.getContext('2d', { willReadFrequently: true });
+      x.drawImage(img, 0, 0);
+      const d = x.getImageData(0, 0, c.width, c.height).data;
+      const out = new Uint16Array(W * H * 4);
+      const h = THREE.DataUtils.toHalfFloat;
+      for (let i = 0; i < W * H; i++) {
+        const e = d[(W * H + i) * 4];
+        const f = e ? Math.pow(2, e - 136) : 0;
+        out[i * 4] = h(d[i * 4] * f); out[i * 4 + 1] = h(d[i * 4 + 1] * f); out[i * 4 + 2] = h(d[i * 4 + 2] * f); out[i * 4 + 3] = h(1);
+      }
+      const t = new THREE.DataTexture(out, W, H, THREE.RGBAFormat, THREE.HalfFloatType);
+      t.mapping = THREE.EquirectangularReflectionMapping;
+      t.colorSpace = THREE.LinearSRGBColorSpace;
+      t.flipY = true;
+      t.minFilter = t.magFilter = THREE.LinearFilter;
+      t.generateMipmaps = false;
+      t.needsUpdate = true;
+      res(t);
+    };
+    img.onerror = () => res(null);
+    img.src = src;
+  });
+}
 
 function webglDisponible() {
   try {
@@ -56,6 +93,13 @@ function construireScene(MODELE, code, mat) {
       gm.add(g);
       objets.push(o);
     });
+    detailsCadres(m, mat).forEach(d => {
+      const g = new THREE.Group();
+      g.add(d.groupe);
+      g.traverse(n => { if (n.isMesh) { n.userData.idx = -2; n.castShadow = true; n.receiveShadow = true; n.userData.matBase = n.material; } });
+      gm.add(g);
+      objets.push({ part: d.part, meuble: m, couche: 'structure', groupe: g, visible: true, teinte: null, decal: [0, 0, 0], pick: false });
+    });
   });
   // emprise
   const b = new THREE.Box3().setFromObject(racine);
@@ -87,6 +131,9 @@ function construireScene(MODELE, code, mat) {
   decor.add(mur);
   decor.traverse(n => { if (n.isMesh) n.userData.idx = -2; });
   racine.add(decor);
+  // une seule matière par maillage : on retire les groupes de faces hérités des géométries
+  // (cylindres, boîtes arrondies), sinon le moteur photo affecte des matières voisines
+  racine.traverse(n => { if (n.isMesh && !Array.isArray(n.material) && n.geometry.groups.length) n.geometry.clearGroups(); });
   objets.push({ part: null, couche: 'mur', groupe: decor, visible: true, teinte: null, decal: [0, 0, 0], pick: false });
   return { racine, objets, cfg };
 }
@@ -101,7 +148,7 @@ function Visionneuse(conteneur, options) {
   options = options || {};
   this.conteneur = conteneur;
   this.MODELE = options.modele;
-  const rendu = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: !!options.capture, alpha: false });
+  const rendu = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: !!options.capture, alpha: true });
   rendu.setPixelRatio(Math.min(window.devicePixelRatio || 1, options.pixelRatioMax || 2));
   rendu.outputColorSpace = THREE.SRGBColorSpace;
   rendu.toneMapping = THREE.ACESFilmicToneMapping;
@@ -122,6 +169,18 @@ function Visionneuse(conteneur, options) {
   const pmrem = new THREE.PMREMGenerator(rendu);
   this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   this.scene.environmentIntensity = 0.75;
+  const sources = options.textures || window.TEXTURES_3D || {};
+  MATIERES.attendre(chargerHDR(sources.eclairage_hdr).then(t => {
+    if (!t) return;
+    this.envHDR = t;
+    this.scene.environment = t;
+    this.scene.environmentRotation.set(Math.PI / 2, ENV_LACET, 0);
+    this.scene.environmentIntensity = this.qualite === 'photo' ? 1.15 : 0.95;
+    this.soleil.intensity = 1.5;
+    this.hemi.intensity = 0.15;
+    this._ptScene = true;
+    this.demander();
+  }));
   // lumières
   this.hemi = new THREE.HemisphereLight(0xfff6ea, 0xb8b2a8, 0.35);
   this.scene.add(this.hemi);
@@ -149,14 +208,58 @@ function Visionneuse(conteneur, options) {
     this.controles.enableDamping = true;
     this.controles.dampingFactor = 0.12;
     this.controles.screenSpacePanning = true;
-    this.controles.addEventListener('change', () => this.demander());
+    this.controles.addEventListener('change', () => { this._ptCam = true; this.demander(); });
   }
+  this.ptMax = options.passesPhoto || 600;
   this._composer();
+  if (this.qualite === 'photo') this._activerPhoto();
   this.ray = new THREE.Raycaster();
 }
 
+/* En mode photo, seul l'éclairage HDR de la pièce éclaire la scène (lumière physiquement cohérente) */
+Visionneuse.prototype._lumieresRaster = function (actives) {
+  [this.soleil, this.hemi].forEach(l => { if (actives && !l.parent) this.scene.add(l); if (!actives && l.parent) this.scene.remove(l); });
+  if (actives && !this.soleil.target.parent) this.scene.add(this.soleil.target);
+};
+
+Visionneuse.prototype._activerPhoto = function () {
+  this._lumieresRaster(false);
+  if (!this.pt) {
+    const pt = new WebGLPathTracer(this.rendu);
+    pt.minSamples = 2;
+    pt.renderDelay = 80;
+    pt.fadeDuration = 300;
+    pt.bounces = 7;
+    pt.transmissiveBounces = 10;
+    pt.filterGlossyFactor = 0.6;
+    pt.dynamicLowRes = true;
+    pt.lowResScale = 0.33;
+    // débruitage des premières passes (lissage préservant les arêtes), puis image brute une fois convergée
+    this.seuilDebruitage = 90;
+    const dq = new FullScreenQuad(new DenoiseMaterial({ map: null, sigma: 2.6, threshold: 0.09, kSigma: 1.0 }));
+    pt.renderToCanvasCallback = (target, renderer, quad) => {
+      const ac = renderer.autoClear;
+      renderer.autoClear = false;
+      if (pt.samples < this.seuilDebruitage) {
+        dq.material.map = target.texture;
+        dq.material.uniforms.sigma.value = 1.2 + 2.4 * (1 - pt.samples / this.seuilDebruitage);
+        dq.render(renderer);
+      } else quad.render(renderer);
+      renderer.autoClear = ac;
+    };
+    this.pt = pt;
+  }
+  this._ptScene = true;
+};
+
+Visionneuse.prototype.infoPhoto = function () {
+  if (this.qualite !== 'photo' || !this.pt) return null;
+  return { passes: this.pt.samples, max: this.ptMax, compilation: this.pt.isCompiling };
+};
+
 Visionneuse.prototype._composer = function () {
   if (this.qualite !== 'haute') { this.composer = null; return; }
+  if (this.composer) return;
   const cible = new THREE.WebGLRenderTarget(1, 1, { samples: 4, type: THREE.HalfFloatType });
   this.composer = new EffectComposer(this.rendu, cible);
   this.passeRendu = new RenderPass(this.scene, this.cam);
@@ -172,7 +275,11 @@ Visionneuse.prototype._composer = function () {
 
 Visionneuse.prototype.definirQualite = function (q) {
   this.qualite = q;
+  this._lumieresRaster(q !== 'photo');
+  if (q !== 'haute') this.composer = null;
   this._composer();
+  if (q === 'photo') this._activerPhoto();
+  if (this.envHDR) this.scene.environmentIntensity = q === 'photo' ? 1.15 : 0.95;
   this.redimensionner(true);
   this.demander();
 };
@@ -225,6 +332,7 @@ Visionneuse.prototype.synchroniser = function () {
       });
     }
   });
+  this._ptScene = true;
   this.demander();
 };
 
@@ -256,6 +364,7 @@ Visionneuse.prototype.vue = function (lacet, tangage, perspective, marge) {
     this.camO.updateProjectionMatrix();
   }
   this.cible.copy(c);
+  this._ptCam = true;
   this._installerControles();
   this._placerSoleil(b);
   this.demander();
@@ -269,7 +378,7 @@ Visionneuse.prototype._installerControles = function () {
     this.controles.enableDamping = true;
     this.controles.dampingFactor = 0.12;
     this.controles.screenSpacePanning = true;
-    this.controles.addEventListener('change', () => this.demander());
+    this.controles.addEventListener('change', () => { this._ptCam = true; this.demander(); });
   }
   this.controles.target.copy(this.cible);
   this.controles.update();
@@ -292,6 +401,7 @@ Visionneuse.prototype.redimensionner = function (force) {
   this.largeur = w; this.hauteur = h;
   this.rendu.setSize(w, h, false);
   this.camP.aspect = w / h; this.camP.updateProjectionMatrix();
+  this._ptCam = true;
   const asp = w / h, hh = (this.camO.top - this.camO.bottom) / 2;
   this.camO.left = -hh * asp; this.camO.right = hh * asp; this.camO.updateProjectionMatrix();
   if (this.composer) {
@@ -309,7 +419,17 @@ Visionneuse.prototype.image = function () {
 /* À appeler à chaque image d'animation ; renvoie vrai si un rendu a eu lieu */
 Visionneuse.prototype.tic = function () {
   this.redimensionner();
-  if (this.controles && this.controles.update()) this.sale = true;
+  if (this.controles && this.controles.update()) { this.sale = true; this._ptCam = true; }
+  if (this.qualite === 'photo' && this.pt && this.envHDR) {
+    if (this._ptScene) { this._ptScene = false; this._ptCam = false; this.pt.setScene(this.scene, this.cam); }
+    if (this._ptCam) { this._ptCam = false; this.pt.setCamera(this.cam); }
+    if (this.pt.isCompiling || this.pt.samples < this.ptMax || this.sale) {
+      this.sale = false;
+      this.pt.renderSample();
+      return true;
+    }
+    return false;
+  }
   if (!this.sale) return false;
   this.sale = false;
   this.image();
@@ -378,6 +498,54 @@ Capture.prototype.image = function (code, opts) {
   v.synchroniser();
   v.image();
   return v.rendu.domElement.toDataURL('image/jpeg', 0.9);
+};
+/* Rendu photo (lancer de rayons) hors écran, pour les documents */
+Capture.prototype.imagePhoto = async function (code, opts, passes) {
+  opts = opts || {};
+  const v = this.v;
+  this.image(code, opts);                 // prépare visibilités et caméra
+  // masque des objets (alpha) : le fond du lancer de rayons sera remplacé par un fond uni
+  const fondScene = v.scene.background;
+  v.scene.background = null;
+  v.scene.overrideMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  v.rendu.setClearColor(0x000000, 0);
+  v.rendu.render(v.scene, v.cam);
+  v.scene.overrideMaterial = null;
+  v.scene.background = fondScene;
+  const masque = document.createElement('canvas');
+  masque.width = v.rendu.domElement.width; masque.height = v.rendu.domElement.height;
+  masque.getContext('2d').drawImage(v.rendu.domElement, 0, 0);
+  v.qualite = 'photo';
+  v._activerPhoto();
+  const pt = v.pt;
+  pt.renderDelay = 0; pt.fadeDuration = 0; pt.minSamples = 1; pt.dynamicLowRes = false; pt.rasterizeScene = false;
+  v.seuilDebruitage = (passes || 48) + 1;
+  v.scene.environmentIntensity = 1.15;
+  pt.setScene(v.scene, v.cam);
+  const t0 = performance.now();
+  while (pt.samples < (passes || 48) && performance.now() - t0 < (opts.dureeMax || 600000)) {
+    pt.renderSample();
+    await new Promise(r => setTimeout(r, 0));
+  }
+  // composition : image photo découpée par le masque, posée sur un fond uni
+  const src = v.rendu.domElement;
+  const tmp = document.createElement('canvas');
+  tmp.width = src.width; tmp.height = src.height;
+  const xt = tmp.getContext('2d');
+  xt.drawImage(src, 0, 0);
+  xt.globalCompositeOperation = 'destination-in';
+  xt.drawImage(masque, 0, 0);
+  const c2 = document.createElement('canvas');
+  c2.width = src.width; c2.height = src.height;
+  const x2 = c2.getContext('2d');
+  x2.fillStyle = opts.fond || '#ffffff';
+  x2.fillRect(0, 0, c2.width, c2.height);
+  x2.drawImage(tmp, 0, 0);
+  const url = c2.toDataURL('image/jpeg', 0.92);
+  v.qualite = 'haute';
+  v._lumieresRaster(true);
+  v.scene.environmentIntensity = 0.95;
+  return url;
 };
 const MODELE_REF = { M: null };
 

@@ -10,7 +10,12 @@ Trois meubles en tube acier et contreplaqué pour une colocation de deux étudia
 
 ## Livrables (dossier `livrables/`)
 
-- `simulation_mobilier.html` : visualisation 3D autonome (aucune connexion nécessaire, environ 1,3 Mo). Rendu réaliste WebGL : matières physiques (acier peint, inox brossé, contreplaqué, verre, céramique, tissu), textures photographiques, ombres douces et occlusion ambiante. Montage étape par étape avec Précédent / Suivant / lecture automatique / sens démontage, rendu final, vues prédéfinies, couches affichables, rideaux ouverts ou fermés, écartement des modules, fiche de chaque pièce au clic. Le mode « Rapide » allège le rendu sur les téléphones modestes ; sans WebGL, la page bascule sur un rendu simplifié.
+- `simulation_mobilier.html` : visualisation 3D autonome (aucune connexion nécessaire, environ 2,4 Mo). Trois niveaux de rendu :
+  - **Photo** (par défaut sur ordinateur) : lancer de rayons progressif. La lumière d'une vraie pièce photographiée (HDRI) éclaire la scène, rebondit sur les murs et le bois, se reflète dans l'inox et traverse les verres. L'image s'affine pendant quelques secondes dès qu'on lâche la souris (compteur de passes en bas à droite).
+  - **Réaliste** : rendu temps réel avec ombres douces et occlusion ambiante, pour manipuler la vue sans attendre.
+  - **Rapide** : allégé pour les téléphones (choisi automatiquement sur écran tactile).
+
+  Matières physiques (acier peint, inox brossé, chrome, contreplaqué avec chants, verre, céramique, lin, jersey, denim), détails de fabrication visibles (cordons de soudure, collerettes des écrous à sertir, têtes de vis CHC, boulons de liaison, bouchons, câbles électriques). Montage étape par étape avec Précédent / Suivant / lecture automatique / sens démontage, rendu final, vues prédéfinies, couches affichables, rideaux ouverts ou fermés, écartement des modules, fiche de chaque pièce au clic. Adresse directe d'un meuble et d'un rendu : `simulation_mobilier.html?meuble=C&rendu=photo` (meuble A, B, C ou K pour la cuisine ; rendu photo, haute ou standard).
 - `01_dossier_conception_plans.pdf` : hypothèses, choix 20×20 / 25×25, panneaux, calculs de flèche, flambement et ancrage, assemblages, chevilles selon le mur, sécurité gaz / chaleur / électricité, plans cotés (face, droite, dessus, cadres soudés) et perspectives.
 - `02_nomenclature_fiches_debit.pdf` : pièces repérées avec longueurs et usinages, sous-ensembles soudés, quincaillerie, plans de débit des barres de 6 m, calepinage des panneaux 2440 × 1220, liste d'achat avec colonnes de prix à remplir.
 - `03_notice_montage_pose_demontage.pdf` : fabrication en atelier, montage illustré pas à pas, pose murale, démontage et colisage, entretien.
@@ -25,9 +30,10 @@ Toutes les dimensions sont dans `src/modele.js`. Après modification :
 npm install                          # une seule fois : three.js et esbuild
 node outils/construire.js            # simulation + documents HTML + PDF
 node outils/construire.js --sans-pdf # sans les PDF
+node outils/construire.js --passes=0 # PDF avec perspectives en rendu temps réel (rapide)
 ```
 
-La génération des PDF utilise Playwright (Chromium, rendu WebGL logiciel SwiftShader pour les perspectives). Les listes de débit, les plans, les vues 3D et les calculs sont recalculés à chaque construction.
+La génération des PDF utilise Playwright (Chromium). Les perspectives principales sont calculées par lancer de rayons (`--passes=40` par défaut) ; sans carte graphique, le calcul passe par le WebGL logiciel SwiftShader et prend une vingtaine de minutes. Les listes de débit, les plans, les vues 3D et les calculs sont recalculés à chaque construction.
 
 ## Organisation des sources
 
@@ -36,7 +42,8 @@ La génération des PDF utilise Playwright (Chromium, rendu WebGL logiciel Swift
 | `src/modele.js` | Géométrie paramétrique des trois meubles, étapes de montage, hypothèses appareils |
 | `src/calculs.js` | Sections, nomenclature et repères, débit en barres, calepinage |
 | `src/rendu3d/` | Rendu réaliste WebGL (three.js) : matières, géométrie détaillée des équipements, éclairage, ombres |
-| `src/textures/` | Textures photographiques CC0 (Poly Haven), voir `SOURCES.txt` |
+| `src/rendu3d/details.js` | Détails de fabrication (soudures, écrous à sertir, vis, câbles) |
+| `src/textures/` | Textures photographiques et éclairage HDRI, CC0 (Poly Haven), voir `SOURCES.txt` |
 | `src/moteur3d.js` | Rendu 3D logiciel de secours et vues techniques |
 | `src/scenes.js` | Construction des scènes (couches, sol, mur) |
 | `src/plans.js` | Vues 2D cotées en SVG, cadres soudés, détails d'assemblage |

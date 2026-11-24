@@ -78,12 +78,13 @@ export function MATIERES(THREE, rafraichir, sources) {
       case 'galva': return new THREE.MeshStandardMaterial({ color: C('#c4cbd1'), metalness: 0.95, roughness: 0.45, roughnessMap: textureBrossee() });
       case 'alu': return new THREE.MeshStandardMaterial({ color: C('#d8dce0'), metalness: 1, roughness: 0.32, roughnessMap: textureBrossee() });
       case 'zinc': return new THREE.MeshStandardMaterial({ color: C('#b9bec4'), metalness: 0.9, roughness: 0.35 });
+      case 'noirOxyde': return new THREE.MeshStandardMaterial({ color: C('#2a2c2f'), metalness: 0.7, roughness: 0.38 });
       case 'laiton': return new THREE.MeshStandardMaterial({ color: C('#c9a24a'), metalness: 1, roughness: 0.3 });
       case 'bois': return new THREE.MeshStandardMaterial({ color: C('#ffffff'), map: texture('bois_diff', true), normalMap: texture('bois_nor'), normalScale: new THREE.Vector2(0.35, 0.35), roughness: 0.52 });
       case 'boisFonce': return new THREE.MeshStandardMaterial({ color: C('#b58b5c'), map: texture('bois_diff', true), roughness: 0.55 });
       case 'chant': return new THREE.MeshStandardMaterial({ map: textureChant(), roughness: 0.7 });
       case 'carrelage': return new THREE.MeshStandardMaterial({ map: texture('carrelage_diff', true), normalMap: texture('carrelage_nor'), roughness: 0.32, color: C('#ffffff') });
-      case 'enduit': return new THREE.MeshStandardMaterial({ map: texture('enduit_diff', true), normalMap: texture('enduit_nor'), normalScale: new THREE.Vector2(0.6, 0.6), roughness: 0.92, color: C('#f6f1e8') });
+      case 'enduit': return new THREE.MeshStandardMaterial({ map: texture('enduit_diff', true), normalMap: texture('enduit_nor'), normalScale: new THREE.Vector2(0.35, 0.35), roughness: 0.92, color: C('#fdfbf7') });
       case 'plinthe': return new THREE.MeshStandardMaterial({ color: C('#f4f2ee'), roughness: 0.5 });
       case 'verre': return new THREE.MeshPhysicalMaterial({ color: C('#ffffff'), metalness: 0, roughness: 0.03, transmission: 1, thickness: 2.5, ior: 1.5, specularIntensity: 1, envMapIntensity: 1.2 });
       case 'verreTeinte': return new THREE.MeshPhysicalMaterial({ color: C(couleur), metalness: 0, roughness: 0.05, transmission: 0.92, thickness: 4, ior: 1.5, attenuationColor: C(couleur), attenuationDistance: 60 });
@@ -98,7 +99,7 @@ export function MATIERES(THREE, rafraichir, sources) {
       case 'verreNoir': return new THREE.MeshPhysicalMaterial({ color: C('#060607'), roughness: 0.05, clearcoat: 1, clearcoatRoughness: 0.03, metalness: 0.1 });
       case 'antiadhesif': return new THREE.MeshStandardMaterial({ color: C('#232427'), roughness: 0.55, metalness: 0.2 });
       case 'peintureBouteille': return new THREE.MeshPhysicalMaterial({ color: C(couleur || '#1f5aa6'), roughness: 0.3, clearcoat: 0.8, clearcoatRoughness: 0.2, metalness: 0.2 });
-      case 'tissuLin': return new THREE.MeshPhysicalMaterial({ color: C(couleur), map: texture('lin_diff', true), normalMap: texture('lin_nor'), normalScale: new THREE.Vector2(0.8, 0.8), roughness: 0.95, sheen: 0.6, sheenRoughness: 0.8, sheenColor: C('#ffffff'), side: THREE.DoubleSide });
+      case 'tissuLin': return new THREE.MeshPhysicalMaterial({ color: C(couleur), map: texture('lin_diff', true), normalMap: texture('lin_nor'), normalScale: new THREE.Vector2(0.8, 0.8), roughness: 0.95, sheen: 0.25, sheenRoughness: 0.9, sheenColor: C('#ffffff'), side: THREE.DoubleSide });
       case 'tissuJersey': return new THREE.MeshPhysicalMaterial({ color: C(couleur), map: texture('jersey_diff', true), normalMap: texture('jersey_nor'), roughness: 0.95, sheen: 0.5, sheenRoughness: 0.7, sheenColor: C('#ffffff') });
       case 'denim': return new THREE.MeshPhysicalMaterial({ color: C(couleur || '#ffffff'), map: texture('denim_diff', true), normalMap: texture('denim_nor'), roughness: 0.95, sheen: 0.3, sheenColor: C('#ffffff') });
       case 'cuir': return new THREE.MeshPhysicalMaterial({ color: C(couleur), roughness: 0.45, clearcoat: 0.3 });
@@ -118,3 +119,4 @@ export function MATIERES(THREE, rafraichir, sources) {
 }
 
 MATIERES.pret = () => Promise.all(EN_ATTENTE);
+MATIERES.attendre = (p) => { EN_ATTENTE.push(p); return p; };

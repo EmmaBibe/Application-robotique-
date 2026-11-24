@@ -30,6 +30,20 @@
   const scenes = {};
   const rendu = new E.Rendu(document.createElement('canvas'));
   let capture = null;      // rendu réaliste WebGL quand il est disponible
+  const PHOTOS = {};       // images calculées par lancer de rayons avant la mise en page
+  const VUES_PHOTO = {
+    couvK: ['K', { W: 1200, H: 720, lacet: -0.5, tangage: 0.3 }],
+    couvC: ['C', { W: 1200, H: 720, lacet: -0.45, tangage: 0.32 }],
+    persA: ['A', { W: 1000, H: 760, rideauxOuverts: true, lacet: -0.6, tangage: 0.38 }],
+    persB: ['B', { W: 1000, H: 760, lacet: -0.6, tangage: 0.38 }],
+    persC: ['C', { W: 1000, H: 760, lacet: -0.6, tangage: 0.38 }]
+  };
+  const PHOTOS_PAR_DOC = { dossier: ['couvK', 'persA', 'persB', 'persC'], notice: ['couvC'], debit: [] };
+  function imageVue(cle) {
+    if (PHOTOS[cle]) return PHOTOS[cle];
+    const v = VUES_PHOTO[cle];
+    return image(v[0], Object.assign({}, v[1], { W: Math.round(v[1].W * 1.25), H: Math.round(v[1].H * 1.25) }));
+  }
   function image(code, opts) {
     opts = opts || {};
     if (capture) {
@@ -190,7 +204,7 @@
   /*  DOCUMENT 1 : DOSSIER DE CONCEPTION ET PLANS                           */
   /* ====================================================================== */
   function dossier() {
-    let h = couverture('Dossier de conception et plans', 'Dressing modulaire à rideaux · Étagère murale de cuisine · Station de cuisson', image('K', { W: 1500, H: 900, lacet: -0.5, tangage: 0.3 }), LISTE_DOCS);
+    let h = couverture('Dossier de conception et plans', 'Dressing modulaire à rideaux · Étagère murale de cuisine · Station de cuisson', imageVue('couvK'), LISTE_DOCS);
     h += '<section class="sommaire"><h2>Sommaire</h2><ol><li>Programme et hypothèses</li><li>Choix des tubes : 20×20 ou 25×25</li><li>Panneaux bois et tôles</li><li>Charges et vérifications</li><li>Assemblages démontables et fixations murales</li><li>Sécurité gaz, chaleur, électricité, poussière</li><li>Finitions et protection</li><li>Plans et perspectives</li></ol></section>';
 
     // 1. Programme
@@ -356,7 +370,7 @@
       const dessus = P.vue(m, 'dessus', { ech: c.ech, equip: false, rideaux: false, mur: m.murY, margeG: 20, margeB: 22, margeH: 14,
         cotesH: [{ pos: m.cotesH, v: yMin, decal: -10 }],
         cotesV: [{ pos: [yMin, m.murY], u: m.dims.L, decal: 12 }] });
-      const iso = image(m.code, { W: 1500, H: 1100, rideauxOuverts: true, lacet: -0.6, tangage: 0.38 });
+      const iso = imageVue('pers' + m.code);
       h += '<div class="feuille"><h2>' + m.code + ' · ' + m.nom + ' — vue de dessus et perspective</h2>' +
         '<div class="vues" style="align-items:flex-start"><figure>' + dessus + '<figcaption>Vue de dessus, mur en haut</figcaption></figure>' +
         '<figure style="flex:1;min-width:125mm"><img src="' + iso + '" style="width:100%;max-height:158mm;object-fit:contain;border:0.5pt solid #ccc"><figcaption>Perspective, ' + (m.code === 'A' ? 'rideaux ouverts' : 'équipée') + '</figcaption></figure></div>' +
@@ -490,7 +504,7 @@
   /*  DOCUMENT 3 : NOTICE                                                   */
   /* ====================================================================== */
   function notice() {
-    let h = couverture('Notice de montage, pose et démontage', 'Fabrication en atelier, montage pas à pas, fixation murale, démontage pour déménagement', image('C', { W: 1500, H: 900, lacet: -0.45, tangage: 0.32 }), LISTE_DOCS);
+    let h = couverture('Notice de montage, pose et démontage', 'Fabrication en atelier, montage pas à pas, fixation murale, démontage pour déménagement', imageVue('couvC'), LISTE_DOCS);
     h += '<h2>1. Outillage et sécurité</h2><div class="deux"><div><h4>Atelier (fabrication)</h4><ul>' +
       '<li>Scie à ruban ou tronçonneuse à disque, butée de longueur</li><li>Perceuse à colonne, forets Ø4,5 – 5,5 – 6,5 – 7 – 8 – 9</li><li>Pince à écrous à sertir M5 / M6</li><li>Poste de soudure (électrode 2 mm ou semi-automatique), serre-joints, équerre de soudeur</li><li>Gabarit de cadre : planche ou marbre avec butées</li><li>Lime, ébavureur, brosse métallique</li></ul></div>' +
       '<div><h4>Montage et pose (à la maison)</h4><ul><li>Clé Allen 5 (vis M6) et 4 (vis M5), clé plate de 10 et 8</li><li>Tournevis cruciforme PZ2, visseuse</li><li>Niveau à bulle 60 cm, mètre, crayon</li><li>Perceuse à percussion, foret béton Ø8 (et Ø6 pour la crédence)</li><li>Chevilles adaptées au mur (voir § 4)</li><li>Gants, lunettes pour le perçage</li></ul></div></div>';
@@ -583,6 +597,13 @@
         ['A', 'B', 'C', 'K'].forEach(c => capture.v.charger(c));
         capture.code = 'K';
         await window.RENDU3D.pret();
+        const passes = +(new URLSearchParams(location.search).get('passes') || 0);
+        if (passes > 0) {
+          for (const cle of PHOTOS_PAR_DOC[TYPE] || []) {
+            const v = VUES_PHOTO[cle];
+            PHOTOS[cle] = await capture.imagePhoto(v[0], v[1], passes);
+          }
+        }
       } catch (e) { capture = null; }
     }
     let html = '';

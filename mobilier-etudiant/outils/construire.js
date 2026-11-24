@@ -5,7 +5,8 @@
  *   - livrables/0x_*.html (documents imprimables, autonomes)
  *   - livrables/0x_*.pdf  (si Chromium/Playwright est disponible)
  *
- * Usage : node outils/construire.js [--sans-pdf]
+ * Usage : node outils/construire.js [--sans-pdf] [--passes=40]
+ *   --passes : nombre de passes du rendu photo des perspectives (0 = rendu temps réel, plus rapide)
  */
 'use strict';
 const fs = require('fs');
@@ -27,8 +28,9 @@ function construireRendu3D() {
   });
   const dir = path.join(SRC, 'textures');
   const tex = {};
-  fs.readdirSync(dir).filter(f => f.endsWith('.jpg')).forEach(f => {
-    tex[f.replace('.jpg', '')] = 'data:image/jpeg;base64,' + fs.readFileSync(path.join(dir, f)).toString('base64');
+  fs.readdirSync(dir).filter(f => /\.(jpg|png)$/.test(f)).forEach(f => {
+    const mime = f.endsWith('.png') ? 'image/png' : 'image/jpeg';
+    tex[f.replace(/\.(jpg|png)$/, '')] = 'data:' + mime + ';base64,' + fs.readFileSync(path.join(dir, f)).toString('base64');
   });
   const js = 'window.TEXTURES_3D = ' + JSON.stringify(tex) + ';\n' + fs.readFileSync(path.join(BUILD, 'rendu3d.bundle.js'), 'utf8');
   fs.writeFileSync(path.join(BUILD, 'rendu3d.js'), js);
@@ -53,6 +55,8 @@ const DOCUMENTS = [
 
 async function main() {
   const sansPdf = process.argv.includes('--sans-pdf');
+  const arg = process.argv.find(a => a.startsWith('--passes='));
+  global.PASSES = arg ? +arg.split('=')[1] : 40;
   construireRendu3D();
   fs.writeFileSync(path.join(OUT, 'simulation_mobilier.html'), integrer('simulation.html'));
   console.log('simulation_mobilier.html');
@@ -71,7 +75,8 @@ async function main() {
   const navigateur = await chromium.launch({ args: ['--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist'] });
   const page = await navigateur.newPage();
   for (const d of DOCUMENTS) {
-    await page.goto('file://' + path.join(OUT, d.fichier + '.html'));
+    // les perspectives principales sont calculées par lancer de rayons (passes réglables, 0 = rendu temps réel)
+    await page.goto('file://' + path.join(OUT, d.fichier + '.html') + '?passes=' + PASSES, { waitUntil: 'commit', timeout: 900000 });
     await page.waitForFunction(() => window.DOCUMENT_PRET === true, null, { timeout: 900000 });
     await page.pdf({
       path: path.join(OUT, d.fichier + '.pdf'), preferCSSPageSize: true, printBackground: true,

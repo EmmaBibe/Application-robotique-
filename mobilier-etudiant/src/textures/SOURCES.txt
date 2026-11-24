@@ -7,3 +7,6 @@ enduit_*    : white_plaster_02 (désaturé, éclairci)
 lin_*       : rough_linen (niveaux de gris, teinté dans le rendu)
 jersey_*    : cotton_jersey (niveaux de gris, teinté dans le rendu)
 denim_*     : denim_fabric
+
+eclairage_hdr.png : HDRI « lebombo » (Poly Haven, CC0), pièce d'habitation éclairée par une fenêtre.
+  Codage RGBE : moitié haute = mantisses RGB, moitié basse = exposant (même valeur sur les 3 canaux).

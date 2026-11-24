@@ -59,6 +59,7 @@
     this.parts = [];
     this.cur = { etape: 0, module: 0 };
     this.typesCadre = [];
+    this.instances = [];
     this.quinc = {};
     this.coulAcier = opts.coulAcier;
     this.notesUsinage = [];
@@ -95,7 +96,8 @@
     const S = SECTIONS[ft.sec], a = S.a, D = ft.D;
     ft.inst++;
     const sousEns = ft.nom;
-    const inst = { ft, x, z0, a, D, mod };
+    const inst = { ft, x, z0, a, D, mod, etape: this.cur.etape };
+    this.instances.push(inst);
     // montants
     inst.mAv = this.add({
       nom: 'Montant avant', cat: 'tube', sousEns, couleur: this.coulAcier,
@@ -154,9 +156,10 @@
       forme: box(xa, y, z0 + zc - a / 2, L, a, a)
     });
     const secP = a === 25 ? 'P25x3' : 'P20x3';
-    [cG.x + a, xb].forEach(xp => {
+    [cG.x + a, xb].forEach((xp, k) => {
       this.add({
         nom: 'Platine d\'about', cat: 'plat', sousEns, couleur: COUL.platine,
+        vis: { x: k === 0 ? xp + e : xp, sens: k === 0 ? 1 : -1, y: y + a / 2, zs: trous.map(z => z0 + z), d: a === 25 ? 10 : 8.5 },
         debit: { sec: secP, L: hp, coupe: '90° / 90°', usin: nbB + ' trou' + (nbB > 1 ? 's' : '') + ' Ø' + (a === 25 ? '6,5' : '5,5') + (nb === 2 ? ' entraxe ' + (trous[1] - trous[0]) : (nb === 1 ? ' à 20 mm au-dessus de l\'axe du tube' : ' à 11 mm du bas de la platine')) },
         forme: box(xp, y, z0 + zp0, e, a, hp)
       });
@@ -178,6 +181,7 @@
     const f2 = box(sens > 0 ? xf : xf - 40, murY - ep, c.z0 + z - larg / 2, 40, ep, larg);
     this.add({
       nom: 'Équerre d\'ancrage mural', cat: 'plat', couleur: COUL.platine, sousEns: null,
+      vis: { x: xf + sens * ep, sens, y: (y1 + D) / 2, zs: [c.z0 + z], d: a === 25 ? 10 : 8.5, ymur: murY, xmur: xf + sens * 26 },
       debit: { sec: 'P40x4', L: larg, coupe: '90° / 90°', usin: 'aile meuble : 1 trou Ø' + (a === 25 ? '6,5' : '5,5') + ' ; aile mur : 1 trou oblong 8,5 × 20' },
       info: 'Fixation au mur par cheville Ø8 (voir tableau des chevilles selon le support)',
       formes: [f1, f2]
@@ -235,6 +239,16 @@
       if (fa.length) this.q('sertirM6', fa.length * ft.inst, 'Écrou à sertir M6 acier zingué tête plate (perçage Ø9)', 'pattes de tringle à rideau');
     });
   };
+
+  /* Instances de cadres soudés (pour les détails du rendu : soudures, écrous à sertir, bouchons) */
+  function exporterCadres(b) {
+    return b.instances.map(i => ({
+      x: i.x, z0: i.z0, a: i.a, D: i.D, Hf: i.ft.Hf, Hb: i.ft.Hb, module: i.mod, etape: i.etape, verins: !!i.ft.verins,
+      traverses: i.ft.traverses.map(t => t.z),
+      trousAv: Object.values(i.ft.trous.av).map(t => t.z), trousAr: Object.values(i.ft.trous.ar).map(t => t.z),
+      filet: i.a === 25 ? 'M6' : 'M5'
+    }));
+  }
 
   /* ------------------------------------------------------------------ */
   /*  A. DRESSING MODULAIRE                                              */
@@ -370,7 +384,7 @@
       dims: { L: 1850, P: 550, H: zb + H + 15 }, encombrement: '1850 × 620 × 1945 mm (tringle et rideaux compris)',
       tube: 'T25', murY, sol: { x0: -400, x1: 2250, y0: -500, y1: murY }, murH: 2400,
       modules: mods.map(m => ({ code: m.code, nom: m.nom, x: m.x, w: m.w })),
-      typesCadre: b.typesCadre, parts: b.parts, quinc: b.quinc,
+      typesCadre: b.typesCadre, cadres: exporterCadres(b), parts: b.parts, quinc: b.quinc,
       niveaux: { face: [0, zb, zb + 80, zb + 330, zb + 1100, zb + 1760, zb + H, zb + H + 15], faceE: [zb + 650, zb + 950, zb + 1250, zb + 1550] },
       cotesH: [0, 700, 1150, 1850],
       etapes: [
@@ -504,7 +518,7 @@
       dims: { L: 900, P: 280, H: 915 }, encombrement: '900 × 290 × 915 mm (tasses suspendues : 160 mm sous le meuble)',
       tube: 'T20', murY, poseZ: 1250, sol: null, murH: 1200, murZ0: -350,
       modules: mods.map(m => ({ code: m.code, nom: m.nom, x: m.x, w: m.w })),
-      typesCadre: b.typesCadre, parts: b.parts, quinc: b.quinc,
+      typesCadre: b.typesCadre, cadres: exporterCadres(b), parts: b.parts, quinc: b.quinc,
       niveaux: { face: [0, 20, 400, 630, 900, 915] },
       cotesH: [0, 450, 900],
       etapes: [
@@ -680,7 +694,7 @@
       dims: { L: 1550, P: 570, H: zb + 1400 }, encombrement: '1550 × 570 × 1420 mm ; plan de travail à 808 mm du sol',
       tube: 'T25', murY, sol: { x0: -400, x1: 1950, y0: -500, y1: murY }, murH: 2200,
       modules: [{ code: 'G', nom: 'Module gaz', x: 0, w: 500 }, { code: 'E', nom: 'Module cuisson électrique', x: 500, w: 1050 }],
-      typesCadre: b.typesCadre, parts: b.parts, quinc: b.quinc,
+      typesCadre: b.typesCadre, cadres: exporterCadres(b), parts: b.parts, quinc: b.quinc,
       niveaux: { face: [0, zb, zb + 80, zb + 382, zb + 420, zb + 770, zb + 788, zb + 1150, zb + 1300, zb + 1400] },
       cotesH: [0, 500, 980, 1550],
       etapes: [
