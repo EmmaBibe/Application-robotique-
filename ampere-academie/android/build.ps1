@@ -20,6 +20,7 @@ New-Item -ItemType Directory -Force "$w\assets\www", "$w\gen", "$w\classes", "$w
 Copy-Item -Recurse "$here\res", "$here\src" $w
 Copy-Item "$here\AndroidManifest.xml" $w
 Copy-Item "$dist\index.html", "$dist\manifest.webmanifest", "$dist\icon-192.png", "$dist\icon-512.png" "$w\assets\www\"
+if (Test-Path "$dist\img") { Copy-Item -Recurse "$dist\img" "$w\assets\www\img" }
 
 # --- Icônes ---
 Add-Type -AssemblyName System.Drawing

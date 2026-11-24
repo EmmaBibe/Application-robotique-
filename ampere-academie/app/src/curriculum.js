@@ -11,7 +11,7 @@
         M('n0m1', 'Les grandeurs fondamentales', ['Le courant électrique : des charges qui se déplacent', 'La tension : la « pression » électrique', 'La résistance et la loi d\'Ohm', 'Puissance et énergie : watts, kilowattheures, facture', 'Courant continu et courant alternatif', 'Bilan : lire une plaque signalétique']),
         M('n0m2', 'Le danger électrique', ['Ce que le courant fait au corps humain', 'Contact direct, contact indirect', 'Les domaines de tension (TBT, BT, HTA, HTB)', 'Les tensions limites de sécurité', 'Le premier réflexe en cas d\'électrisation']),
         M('n0m3', 'Habilitation et consignation', ['Pourquoi une habilitation ? (NF C 18-510)', 'Les symboles B0, B1V, B2V, BR, BC, BS, BE', 'Les 5 étapes de la consignation', 'VAT : vérifier l\'absence de tension', 'Équipements de protection individuelle']),
-        M('n0m4', 'Outillage et mesures', ['Le multimètre : voltmètre, ampèremètre, ohmmètre|sim', 'Mesurer une tension sans risque|sim', 'La pince ampèremétrique', 'Les catégories de mesure CAT II, III, IV', 'Outillage isolé 1000 V'], { sim: 'atelier' })
+        M('n0m4', 'Premiers outils', ['Le multimètre : voltmètre, ampèremètre, ohmmètre|sim', 'Mesurer une tension sans risque|sim', 'Outillage isolé 1000 V'], { sim: 'atelier' })
       ]
     },
     {
@@ -21,6 +21,17 @@
         M('n1m2', 'Les types de schémas', ['Schéma architectural et synoptique', 'Schéma unifilaire', 'Schéma multifilaire', 'Schéma développé (commande et puissance)', 'Plan d\'implantation et de câblage', 'Lire un schéma : la méthode en 5 questions']),
         M('n1m3', 'Repérage et dossier', ['Repérer les appareils (IEC 81346 : Q, K, F, S, H, M…)', 'Repérer les bornes (13-14, 21-22, A1-A2, 95-96)', 'Les folios, colonnes et renvois', 'Le cartouche et la nomenclature', 'Repérer les conducteurs et les borniers']),
         M('n1m4', 'Conducteurs et câbles', ['Âme, isolant, gaine : anatomie d\'un câble', 'Couleurs normalisées (phase, neutre, PE, commande)', 'Sections et courants admissibles', 'Câbles rigides, souples, embouts de câblage', 'Désignations U-1000 R2V, H07V-K, H07RN-F'])
+      ]
+    },
+    {
+      id: 'nm', n: 0, t: 'Les instruments de mesure', sub: 'Aide-électricien', d: "Mesurer juste et sans danger : choisir l'appareil, la fonction, le calibre, l'échelle, et brancher correctement.",
+      modules: [
+        M('nmm1', 'Bases de la métrologie', ['Grandeurs, unités et préfixes|sim', 'Erreur, précision, résolution|sim', 'Analogique ou numérique ?|sim', 'Valeur moyenne, efficace, TRMS|sim', 'Sécurité des mesures : catégories CAT II, III, IV|sim']),
+        M('nmm2', 'Le multimètre numérique', ['Anatomie : bornes, commutateur, écran|sim', 'Fonction, calibre manuel ou automatique, « OL »|sim', 'Mesurer une tension|sim', 'Mesurer un courant|sim', 'Résistance, continuité, diode|sim', 'Les erreurs qui détruisent l\'appareil|sim']),
+        M('nmm3', 'Les appareils analogiques', ['Cadre mobile et ferromagnétique|sim', 'Lire une échelle et choisir le calibre|sim', 'Classe de précision et incertitude|sim', 'Symboles du cadran et parallaxe|sim']),
+        M('nmm4', 'Mesurer courant et puissance', ['La pince ampèremétrique|sim', 'Mesurer un courant de fuite|sim', 'Wattmètre : mesure de puissance|sim', 'Puissance en triphasé : 1 ou 2 wattmètres|sim', 'Transformateurs de courant et compteurs|sim']),
+        M('nmm5', 'Contrôler une installation', ['Le mégohmmètre : mesure d\'isolement|sim', 'Mesure de la prise de terre|sim', 'Tester un dispositif différentiel|sim', 'Le contrôleur multifonction|sim', 'Ordre des phases et VAT|sim']),
+        M('nmm6', 'Instruments avancés', ['L\'oscilloscope|sim', 'Analyseur de réseau et harmoniques|sim', 'La caméra thermique|sim', 'Tachymètre, luxmètre et autres capteurs|sim'])
       ]
     },
     {
@@ -60,6 +71,16 @@
         M('n5m3', 'Schémas de liaison à la terre', ['Régime TT', 'Régime TN-C et TN-S', 'Régime IT et contrôleur d\'isolement', 'Choisir un régime de neutre']),
         M('n5m4', 'L\'équipement électrique des machines', ['IEC 60204-1 : les exigences essentielles', 'Indices IP et IK', 'Compatibilité électromagnétique', 'Dossier technique et marquage CE']),
         M('n5m5', 'Projet : dossier électrique complet', ['Synoptique et bilan de puissance', 'Folios de puissance et de commande', 'Borniers, nomenclature, implantation', 'Revue de conception'])
+      ]
+    },
+    {
+      id: 'ns', n: 0, t: 'Solaire, stockage et ASI', sub: 'Technicien', d: "Produire, stocker et secourir l'énergie : photovoltaïque raccordé ou autonome, batteries, onduleurs hybrides, alimentations sans interruption.",
+      modules: [
+        M('nsm1', 'Le photovoltaïque', ['De la lumière à l\'électricité|sim', 'Courbes I-V et conditions STC|sim', 'Température, ombrage et diodes de dérivation|sim', 'Ressource solaire, orientation et inclinaison|sim']),
+        M('nsm2', 'Les architectures', ['Raccordé au réseau : vente et autoconsommation|sim', 'Site isolé|sim', 'Hybride avec batterie|sim', 'Onduleur central, string, micro-onduleurs, optimiseurs|sim', 'Lire un schéma photovoltaïque|sim']),
+        M('nsm3', 'Le stockage', ['Batteries plomb et lithium fer phosphate|sim', 'Capacité, tension, profondeur de décharge, cycles|sim', 'BMS et sécurité des batteries|sim', 'Régulateurs PWM et MPPT|sim']),
+        M('nsm4', 'Dimensionner une installation', ['Le bilan énergétique|sim', 'Puissance du champ photovoltaïque|sim', 'Capacité du parc de batteries|sim', 'Chaînes de modules et onduleur|sim', 'Câbles et protections côté continu|sim', 'Projet : maison autonome|sim']),
+        M('nsm5', 'Les ASI (onduleurs)', ['Pourquoi une alimentation sans interruption|sim', 'Les trois technologies (IEC 62040-3)|sim', 'Bypass statique et bypass de maintenance|sim', 'Dimensionner une ASI et son autonomie|sim', 'ASI, groupe électrogène et inverseur de sources|sim'])
       ]
     },
     {
@@ -107,6 +128,7 @@
       ]
     }
   ];
+  AA.CURRICULUM.forEach((lv, i) => { lv.n = i; });
   AA.L = AA.L || {};
   AA.allLessons = () => { const out = []; AA.CURRICULUM.forEach(lv => lv.modules.forEach(m => m.lessons.forEach(l => out.push(Object.assign({ level: lv, module: m }, l))))); return out; };
   AA.findLesson = id => AA.allLessons().find(l => l.id === id);

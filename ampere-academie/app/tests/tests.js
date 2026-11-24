@@ -166,6 +166,7 @@
   if (window.AA && AA.Defis) AA.Defis.selfTest(log, eq);
   if (window.AA && AA.Projets) AA.Projets.selfTest(log, eq);
   if (window.AA && AA.Labo) AA.Labo.selfTest(log, eq);
+  if (window.AA && AA.SOLAR) AA.SOLAR.selfTest(log, eq);
 
   // Syntaxe de TOUS les scripts de l'application (une erreur dans un seul fichier casse l'appli)
   (async () => {

@@ -66,6 +66,8 @@ public class MainActivity extends Activity {
         MIME.put("json", "application/json");
         MIME.put("webmanifest", "application/manifest+json");
         MIME.put("png", "image/png");
+        MIME.put("jpg", "image/jpeg");
+        MIME.put("jpeg", "image/jpeg");
         MIME.put("svg", "image/svg+xml");
     }
 

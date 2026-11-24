@@ -37,6 +37,7 @@ New-Item -ItemType Directory -Force "$here\obj" | Out-Null
 Remove-Item -Recurse -Force $out -ErrorAction SilentlyContinue
 New-Item -ItemType Directory -Force "$out\www" | Out-Null
 Copy-Item "$dist\index.html", "$dist\manifest.webmanifest", "$dist\icon-192.png", "$dist\icon-512.png" "$out\www\"
+if (Test-Path "$dist\img") { Copy-Item -Recurse "$dist\img" "$out\www\img" }
 Copy-Item "$wv2\lib\net462\Microsoft.Web.WebView2.Core.dll", "$wv2\lib\net462\Microsoft.Web.WebView2.WinForms.dll", `
     "$wv2\runtimes\win-x64\native\WebView2Loader.dll" $out
 

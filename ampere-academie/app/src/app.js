@@ -183,6 +183,11 @@
       gen();
       return d;
     }
+    if (b.photos) {
+      // Photographies réelles d'appareils (Wikimedia Commons, licences libres, crédits affichés)
+      d.innerHTML = `<div class="photos">${b.photos.map(k => { const p = AA.PHOTOS && AA.PHOTOS[k]; if (!p) return ''; return `<figure class="photo"><img src="${p.src}" alt="${esc(p.cap)}" loading="lazy"><figcaption>${esc(p.cap)}<small>Photo : ${esc(p.author)} — ${esc(p.license)} — Wikimedia Commons</small></figcaption></figure>`; }).join('')}</div>`;
+      return d;
+    }
     if (b.symbols) {
       // Galerie de symboles IEC dessinés par le moteur des folios (état repos / actionné)
       const SYM = window.AASchema.SYM;
@@ -355,6 +360,7 @@
         </div>
         <div class="card"><p class="eyebrow">Sauvegarde</p><p class="muted">Ta progression reste sur cet appareil. Exporte-la pour la transférer.</p>
           <div class="row"><button class="btn js-exp">Exporter</button><label class="btn">Importer<input type="file" accept=".json,application/json" hidden class="js-imp"></label><button class="btn ghost js-rst">Tout effacer</button></div>
+          <p class="eyebrow" style="margin-top:20px">Crédits photographiques</p><div class="log credits">${Object.values(AA.PHOTOS || {}).map(p => `${esc(p.title)} — ${esc(p.author)} — ${esc(p.license)}`).join('<br>')}<br>Source : Wikimedia Commons. Les photographies sous licence CC BY-SA restent sous cette licence.</div>
           <p class="eyebrow" style="margin-top:20px">Dernières activités</p><div class="log">${last.map(h => `${new Date(h.t).toLocaleDateString('fr-FR')} · +${h.xp} XP · ${esc(h.why)}`).join('<br>') || 'Aucune activité pour le moment.'}</div></div>
       </div>`;
     main.querySelector('.js-name').addEventListener('change', e => { S.name = e.target.value.trim(); AA.save(); });

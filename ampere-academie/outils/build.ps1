@@ -63,4 +63,5 @@ if ($html.IndexOf([char]0) -ge 0) { throw "Caractere NUL detecte dans les source
 New-Item -ItemType Directory -Force $dist | Out-Null
 [IO.File]::WriteAllText("$dist\index.html", $html, $utf8)
 Copy-Item "$app\manifest.webmanifest", "$app\icon-192.png", "$app\icon-512.png", "$app\icon-maskable.png" $dist -Force
+if (Test-Path "$app\img") { New-Item -ItemType Directory -Force "$dist\img" | Out-Null; Copy-Item "$app\img\*" "$dist\img" -Force }
 "OK : $dist\index.html ({0:N0} Ko)" -f ((Get-Item "$dist\index.html").Length / 1KB)
