@@ -33,6 +33,8 @@ Limite déclarée : les temps de calcul sont ceux de nos programmes Python. Un p
 - **Validation** : graines neuves 7100 à 7159, 11 scènes, trois conditions, contre VIGIE 6 et T-MPC++.
 - **Règle d'adoption** : une variante remplace VIGIE 6 si elle fait au moins 1 point de mieux que VIGIE 6 en validation, sans recul significatif dans aucune condition. On dira que VIGIE **bat** T-MPC++ seulement si l'écart à T-MPC++ en validation est significatif (intervalle entièrement au-dessus de zéro).
 
+**Précision ajoutée le 24 novembre, avant tout essai sur ces graines :** la troisième relecture a montré que, dans les mondes d'origine, les piétons traversent les obstacles fixes de quatre scènes. Développement et validation de ce chantier se feront donc sur les mondes corrigés (version 2, piétons au modèle simple), avec le robot réaliste, comme la campagne de la section 6. Les graines, la règle d'adoption et le critère « bat » ne changent pas. La comparaison de référence pour la variante sera VIGIE 6 et T-MPC++ sur ces mêmes mondes corrigés.
+
 ## 3. Portage C++ de VIGIE
 
 - **But** : un VIGIE qui tienne ses dix décisions par seconde même dans le pire cas, sur un ordinateur embarqué.
