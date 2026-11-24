@@ -119,19 +119,44 @@
       <button class="btn primary" data-close>Continuer</button></div>`, { cls: 'center' });
   };
 
+  /* Compteur d'énergie : l'XP défile comme les rouleaux d'un compteur électromécanique */
   AA.refreshStats = () => {
     const p = AA.rankProgress(S.xp);
+    const digits = String(Math.min(999999, Math.round(S.xp))).padStart(6, '0').split('');
     AA.$$('.js-stats').forEach(el => {
-      el.innerHTML = `<div class="mini-rank">${AA.insignia(p.i, 34)}<div><b>${AA.esc(p.r.n)}</b><span>${AA.fmt(S.xp, 0)} XP${p.next ? ' · encore ' + AA.fmt(p.need, 0) : ''}</span>
-        <i class="bar"><i style="width:${Math.round(p.frac * 100)}%"></i></i></div></div>`;
+      if (!el.querySelector('.kwh')) {
+        el.innerHTML = `<a href="#/profil" class="kwh" title="Expérience et galon"><span class="kwh-digits">${digits.map(() => '<span><b></b></span>').join('')}</span><span class="kwh-lbl"></span></a><a href="#/profil" class="ins-link" aria-label="Galon"></a>`;
+      }
+      el.querySelectorAll('.kwh-digits b').forEach((n, i) => {
+        if (n.dataset.v === digits[i]) return;
+        n.dataset.v = digits[i];
+        n.innerHTML = '0123456789'.split('').join('<br>');
+        n.style.transform = `translateY(${-22 * +digits[i]}px)`;
+      });
+      el.querySelector('.kwh-lbl').innerHTML = `XP · <b>${AA.esc(p.r.n)}</b>`;
+      el.querySelector('.ins-link').innerHTML = AA.insignia(p.i, 36);
     });
   };
 
-  /* ---------- Thème ---------- */
+  /* ---------- Thèmes ---------- */
+  AA.THEMES = [
+    { id: 'chantier', n: 'Clair de chantier', d: 'Papier clair, orange de sécurité', sw: ['#f2efe8', '#ff6b1a', '#00897b', '#1c2329'] },
+    { id: 'plan', n: 'Plan bleu', d: "Le bleu des plans d'architecte", sw: ['#0d3b66', '#ffd23f', '#7fdbff', '#f2f7ff'] },
+    { id: 'tableau', n: 'Tableau vert', d: 'Calme, contrasté, reposant', sw: ['#16302b', '#f2c14e', '#7fd1ae', '#eef5ee'] },
+    { id: 'neon', n: 'Néon de nuit', d: 'Sombre, vert et cyan électriques', sw: ['#0a0a0f', '#39ff88', '#00e5ff', '#ff4fd8'] },
+    { id: 'sable', n: 'Sable et terre', d: 'Chaud, doux pour les yeux', sw: ['#f4e7d3', '#c4441c', '#2f6f5e', '#33200f'] },
+    { id: 'contraste', n: 'Contraste élevé', d: 'Lisibilité maximale', sw: ['#000000', '#ffeb3b', '#40c4ff', '#ffffff'] }
+  ];
+  AA.resolvedTheme = () => {
+    let t = S.settings.theme || 'auto';
+    if (t === 'auto' || t === 'dark' || t === 'light') t = (t === 'dark' || (t === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)) ? 'neon' : 'chantier';
+    return t;
+  };
   AA.applyTheme = () => {
-    const t = S.settings.theme;
-    if (t === 'auto') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = t;
+    document.documentElement.dataset.theme = AA.resolvedTheme();
     document.documentElement.classList.toggle('reduce-motion', S.settings.motion === false);
+    const m = document.querySelector('meta[name=theme-color]');
+    if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#f2efe8';
   };
 
   /* ---------- Son (retour discret des manœuvres) ---------- */

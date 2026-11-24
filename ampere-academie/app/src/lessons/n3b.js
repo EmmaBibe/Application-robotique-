@@ -56,9 +56,9 @@
     screens: [
       [
         { h: 'Couleurs des boutons et voyants (IEC 60204-1)' },
-        { table: { head: ['Couleur', 'Bouton', 'Voyant'], rows: [['Rouge', 'Arrêt d\'urgence (sur fond jaune), arrêt', 'Urgence, état dangereux'], ['Jaune', 'Intervention pour supprimer une condition anormale', 'Anomalie, attention'], ['Vert', 'Marche, mise en service', 'Fonctionnement normal'], ['Bleu', 'Action obligatoire (réarmement)', 'Action obligatoire de l\'opérateur'], ['Blanc / gris / noir', 'Fonctions générales (marche, arrêt sauf urgence)', 'Information neutre']] } },
+        { table: { head: ['Couleur', 'Bouton', 'Voyant'], rows: [['Rouge', 'Arrêt d\'urgence (sur fond jaune) ; admis pour l\'arrêt normal', 'Urgence, état dangereux'], ['Jaune', 'Intervention pour supprimer une condition anormale', 'Anomalie, attention'], ['Vert', 'Admis pour la marche', 'Fonctionnement normal'], ['Bleu', 'Action obligatoire (admis pour le réarmement)', 'Action obligatoire de l\'opérateur'], ['Blanc / gris / noir', 'Marche (blanc de préférence), arrêt (noir de préférence), réarmement', 'Information neutre']] } },
         { warn: "<b>Arrêt d'urgence</b>Bouton rouge « coup de poing » sur fond jaune, à accrochage, contacts à ouverture positive, câblé directement ou via un relais de sécurité ; son déverrouillage ne doit jamais redémarrer la machine." },
-        { quiz: { q: 'Quelle couleur pour le bouton de réarmement après un défaut ?', opts: ['Vert', 'Bleu', 'Rouge', 'Jaune sur fond rouge'], a: 1, why: 'Action obligatoire de l\'opérateur : bleu.' } }
+        { quiz: { q: 'Quelle couleur est INTERDITE pour un bouton Marche ?', opts: ['Blanc', 'Vert', 'Rouge', 'Noir'], a: 2, why: 'Le rouge est réservé à l\'arrêt et à l\'urgence. Marche : blanc de préférence, ou gris, noir, vert.' } }
       ]
     ]
   };

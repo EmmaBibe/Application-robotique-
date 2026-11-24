@@ -34,7 +34,8 @@ New-Item -ItemType Directory -Force "$w\res\drawable-nodpi" | Out-Null
 Copy-Item "$root\app\icon-glyph.png" "$w\res\drawable-nodpi\icon_glyph.png"
 
 # --- Clé de signature : la garder ! Sans elle, impossible de mettre à jour l'application installée. ---
-$ksDir = "$here\signing"; $pf = "$ksDir\keystore.properties"
+# La clé est conservée hors du dépôt, dans le dossier des outils (sauvegarde à faire aussi sur un autre support).
+$ksDir = "$tools\cles\ampere-academie"; $pf = "$ksDir\keystore.properties"
 New-Item -ItemType Directory -Force $ksDir | Out-Null
 if (-not (Test-Path "$ksDir\ampere-academie.jks")) {
     $pw = -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 24 | ForEach-Object { [char]$_ })

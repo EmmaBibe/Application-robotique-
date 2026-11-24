@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ampère Académie</title>
 <meta name="description" content="Schémas électriques, câblage, coffrets 3D et automates : de zéro au niveau ingénieur, par la pratique et la simulation.">
-<meta name="theme-color" content="#0a0d12">
+<meta name="theme-color" content="#f2efe8">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Ampère Académie">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
-<script>try{var s=JSON.parse(localStorage.getItem('ampere-academie-v1')||'{}').settings||{};if(s.theme&&s.theme!=='auto')document.documentElement.dataset.theme=s.theme;}catch(e){}</script>
-<!--STYLE--><link rel="stylesheet" href="src/styles.css"><!--/STYLE-->
+<script>try{var s=JSON.parse(localStorage.getItem('ampere-academie-v1')||'{}').settings||{},t=s.theme||'auto';if(t==='auto'||t==='dark'||t==='light')t=(t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches))?'neon':'chantier';document.documentElement.dataset.theme=t;}catch(e){}</script>
+<!--STYLE--><link rel="stylesheet" href="src/base.css"><link rel="stylesheet" href="src/styles.css"><link rel="stylesheet" href="src/visuals.css"><!--/STYLE-->
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -28,23 +28,23 @@
     </symbol>
   </defs>
 </svg>
-<div class="topbar"><a class="brand" href="#/accueil"><svg class="brand-mark"><use href="#brandmark"/></svg><span><b>AMPÈRE</b></span></a><div class="js-stats"></div></div>
-<div class="app">
-  <aside class="side">
-    <a class="brand" href="#/accueil"><svg class="brand-mark"><use href="#brandmark"/></svg><span><b>AMPÈRE ACADÉMIE</b><small>de l'apprenti à l'ingénieur</small></span></a>
-    <nav class="nav" id="nav" aria-label="Navigation principale"></nav>
-    <div class="side-foot"><div class="js-stats"></div></div>
-  </aside>
-  <main id="main"></main>
-</div>
-<nav class="tabbar" id="tabbar" aria-label="Navigation"></nav>
+<header class="rail">
+  <a class="maker" href="#/accueil" aria-label="Accueil"><svg><use href="#brandmark"/></svg><span><b>AMPÈRE</b><small>académie</small></span></a>
+  <nav class="din" id="din" aria-label="Navigation principale"></nav>
+  <div class="meter-box js-stats"></div>
+</header>
+<main id="main"></main>
 <!--SCRIPTS-->
 <script src="src/core.js"></script>
+<script src="src/fx.js"></script>
 <script src="src/sim.js"></script>
 <script src="src/circuits.js"></script>
 <script src="src/schema-view.js"></script>
 <script src="src/bench.js"></script>
 <script src="src/lesson-sims.js"></script>
+<script src="src/visuals-a.js"></script>
+<script src="src/visuals-b.js"></script>
+<script src="src/visuals-map.js"></script>
 <script src="src/curriculum.js"></script>
 <script src="src/lessons/n0.js"></script>
 <script src="src/lessons/n3.js"></script>

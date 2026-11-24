@@ -52,6 +52,8 @@
     coil: (p, a) => leads(12) + `<rect x="-15" y="-12" width="30" height="24" rx="1" class="body coilbox${a.on ? ' on' : ''}"/>`,
     telerupt: (p, a) => leads(12) + `<rect x="-15" y="-12" width="30" height="24" rx="1" class="body coilbox${a.on ? ' on' : ''}"/>` +
       `<path d="M-9 6 L-3 -5 L3 6 L9 -5" class="thin"/>`,
+    minut: (p, a) => leads(12) + `<rect x="-15" y="-12" width="30" height="24" rx="1" class="body coilbox${a.on || a.run ? ' on' : ''}"/>` +
+      `<circle cx="0" cy="0" r="7" class="thin"/><path d="M0 0 V-5 M0 0 H4" class="thin"/>`,
     coil_ton: (p, a) => leads(12) + `<rect x="-15" y="-12" width="30" height="24" rx="1" class="body coilbox${a.on ? ' on' : ''}"/>` +
       `<rect x="-15" y="-12" width="11" height="24" class="thin"/>` + L(-15, -12, -4, 12, 'thin') + L(-4, -12, -15, 12, 'thin') +
       (a.on ? `<rect x="-3" y="8" width="${Math.min(1, a.prog || 0) * 17}" height="3" class="progress"/>` : ''),
@@ -85,6 +87,7 @@
     else if (k === 'cb') a.closed = sim.pairs(p).length > 0;
     else if (k === 'sw2') a.pos = p.st.pos;
     else if (p.type === 'coil' || p.type === 'telerupt') a.on = sim.coil[p.id];
+    else if (p.type === 'minut') { a.on = sim.coil[p.id]; a.run = sim.time < (p.st.until || 0); }
     else if (p.type === 'coil_ton') { a.on = sim.coil[p.id]; const tm = sim.timer[p.id]; a.prog = tm ? Math.round(tm.acc / (p.delay || 3) * 20) / 20 : 0; }
     else if (p.type === 'lamp') a.on = sim.lamp[p.id];
     else if (p.type === 'km3' || p.type === 'breaker3') a.closed = sim.pairs(p).length > 0;
@@ -166,7 +169,7 @@
       s += `<g class="src" transform="translate(${src.x * G},${src.y * G})"><circle r="4.5"/><text y="-9" text-anchor="middle">${esc(src.label)}</text></g>`;
     });
     // Renvois
-    circ.parts.filter(p => p.type === 'coil' || p.type === 'coil_ton' || p.type === 'telerupt').forEach(c => { s += crossRef(circ, c); });
+    circ.parts.filter(p => p.type === 'coil' || p.type === 'coil_ton' || p.type === 'telerupt' || p.type === 'minut').forEach(c => { s += crossRef(circ, c); });
     s += '<g class="parts"></g><g class="tps"></g><g class="hl"></g><g class="probes"></g>';
     return s;
   }

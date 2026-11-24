@@ -142,7 +142,7 @@
       g.fillStyle = '#ffb43a'; g.fillText(`U eff = ${U} V`, 10, mid - U * scale - 6);
       if (wave === 'ac') {
         g.fillStyle = '#ff6b8b'; g.fillText(`Û = ${AA.fmt(peak, 0)} V`, 10, mid - peak * scale + 14);
-        g.fillStyle = '#9fffd0'; g.textAlign = 'right'; g.fillText(`T = ${AA.fmt(1000 / f, 1)} ms   ·   10 ms/div`, W - 10, H - 10);
+        g.fillStyle = '#9fffd0'; g.textAlign = 'right'; g.fillText(`T = ${AA.fmt(1000 / f, 1)} ms   ·   4 ms/div   ·   écran = 40 ms`, W - 10, H - 10);
       }
     });
     return cv.stop;

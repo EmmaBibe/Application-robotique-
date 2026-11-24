@@ -242,6 +242,49 @@
     ]
   });
 
-  const LIST = ['simple', 'vaetvient', 'telerupteur', 'dol', 'inversion', 'etoile'];
+  /* ---------- Double allumage ---------- */
+  C.double = finish({
+    id: 'double', title: 'Double allumage', folio: 'Éclairage — double allumage', level: 'Domestique',
+    w: 26, h: 32,
+    intro: "Un interrupteur double (deux mécanismes dans un même boîtier) commande deux groupes de lampes. La phase arrive sur le commun, un retour part vers chaque groupe ; le neutre va directement aux lampes.",
+    sources: [{ net: 'L', pot: 'L1', x: 6, y: 2, label: 'L' }, { net: 'N', pot: 'N', x: 20, y: 2, label: 'N' }],
+    parts: [
+      P('cb', 'Q1', 6, 6, { a: 'L', b: 'l1' }, { rating: 10, t: ['1', '2'], info: 'Disjoncteur 10 A' }),
+      P('sw1', 'S1', 6, 14, { a: 'l1', b: 'r1' }, { t: ['1', '2'], info: 'Interrupteur double, mécanisme 1' }),
+      P('sw1', 'S1.2', 12, 14, { a: 'l1', b: 'r2' }, { tag: 'S1', t: ['3', '4'], info: 'Interrupteur double, mécanisme 2' }),
+      P('lamp', 'E1', 6, 22, { a: 'r1', b: 'N' }, { color: 'warm', info: 'Groupe de lampes 1' }),
+      P('lamp', 'E2', 12, 22, { a: 'r2', b: 'N' }, { color: 'warm', info: 'Groupe de lampes 2' })
+    ],
+    wires: [W('L', [6, 2], [6, 4]), W('l1', [6, 8], [6, 12]), W('l1', [6, 10], [12, 10], [12, 12]),
+      W('r1', [6, 16], [6, 20]), W('r2', [12, 16], [12, 20]),
+      W('N', [6, 24], [6, 27], [20, 27], [20, 2]), W('N', [12, 24], [12, 27])],
+    dots: [[6, 10], [12, 27]], sections: [{ x: 2, y: 0.9, t: 'Éclairage — deux groupes' }],
+    guide: [{ id: 'S1', t: "Chaque mécanisme commande un groupe de lampes indépendamment." }, { id: 'E1', t: "Le neutre est commun aux deux groupes ; seule la phase est coupée." }]
+  });
+
+  /* ---------- Minuterie d'escalier ---------- */
+  C.minuterie = finish({
+    id: 'minuterie', title: 'Minuterie', folio: 'Éclairage — minuterie d\'escalier', level: 'Domestique',
+    w: 30, h: 34,
+    intro: "Une impulsion sur n'importe quel poussoir alimente la minuterie KT1 : son contact reste fermé pendant la durée réglée (ici 8 s pour la démonstration, quelques minutes en réalité), puis l'éclairage s'éteint seul. Un nouvel appui relance la durée.",
+    sources: [{ net: 'L', pot: 'L1', x: 4, y: 2, label: 'L' }, { net: 'N', pot: 'N', x: 2, y: 30, label: 'N' }],
+    parts: [
+      P('cb', 'Q1', 4, 6, { a: 'L', b: 'c1' }, { rating: 10, t: ['1', '2'] }),
+      P('pb_no', 'S1', 4, 14, { a: 'c1', b: 'c2' }, { t: ['3', '4'], info: 'Poussoir rez-de-chaussée' }),
+      P('pb_no', 'S2', 9, 14, { a: 'c1', b: 'c2' }, { t: ['3', '4'], info: 'Poussoir 1er étage' }),
+      P('pb_no', 'S3', 14, 14, { a: 'c1', b: 'c2' }, { t: ['3', '4'], info: 'Poussoir 2e étage' }),
+      P('minut', 'KT1', 4, 22, { a: 'c2', b: 'N' }, { t: ['A1', 'A2'], delay: 8, info: 'Minuterie (durée réglée à 8 s pour la démonstration)' }),
+      P('no', 'KT1.1', 21, 14, { a: 'c1', b: 'c3' }, { of: 'KT1', t: ['1', '2'] }),
+      P('lamp', 'E1', 21, 22, { a: 'c3', b: 'N' }, { color: 'warm' })
+    ],
+    wires: [W('L', [4, 2], [4, 4]), W('c1', [4, 8], [4, 12]), W('c1', [4, 10], [21, 10], [21, 12]), W('c1', [9, 10], [9, 12]), W('c1', [14, 10], [14, 12]),
+      W('c2', [4, 16], [4, 20]), W('c2', [9, 16], [9, 18], [4, 18]), W('c2', [14, 16], [14, 18], [9, 18]),
+      W('c3', [21, 16], [21, 20]), W('N', [4, 24], [4, 30], [2, 30]), W('N', [21, 24], [21, 30], [4, 30])],
+    dots: [[4, 10], [9, 10], [14, 10], [4, 18], [9, 18], [4, 30]],
+    sections: [{ x: 2, y: 0.9, t: 'Commande' }, { x: 18, y: 0.9, t: 'Éclairage' }],
+    guide: [{ id: 'S2', t: "Une impulsion brève suffit." }, { id: 'KT1', t: "La minuterie garde son contact fermé pendant la durée réglée, puis le rouvre seule." }]
+  });
+
+  const LIST = ['simple', 'vaetvient', 'double', 'telerupteur', 'minuterie', 'dol', 'inversion', 'etoile'];
   window.AACircuits = { C, LIST, finish, P, W };
 })();

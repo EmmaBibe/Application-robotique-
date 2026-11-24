@@ -55,6 +55,7 @@
     coil: { terms: [['a', 0, -2], ['b', 0, 2]], kind: 'load', R: 480 },
     coil_ton: { terms: [['a', 0, -2], ['b', 0, 2]], kind: 'load', R: 620 },
     telerupt: { terms: [['a', 0, -2], ['b', 0, 2]], kind: 'load', R: 420 },
+    minut: { terms: [['a', 0, -2], ['b', 0, 2]], kind: 'load', R: 900 },
     lamp: { terms: T2, kind: 'load', R: 530 },
     km3: { terms: [['a1', 0, -2], ['b1', 0, 2], ['a2', 2, -2], ['b2', 2, 2], ['a3', 4, -2], ['b3', 4, 2]], kind: 'pole3' },
     breaker3: { terms: [['a1', 0, -2], ['b1', 0, 2], ['a2', 2, -2], ['b2', 2, 2], ['a3', 4, -2], ['b3', 4, 2]], kind: 'pole3' },
@@ -76,7 +77,7 @@
       this.parts = circ.parts.map(p => Object.assign({}, p, { st: Object.assign({}, p.st || {}), fault: null }));
       this.byId = {};
       this.parts.forEach(p => { this.byId[p.id] = p; });
-      this.coils = this.parts.filter(p => p.type === 'coil' || p.type === 'coil_ton' || p.type === 'telerupt');
+      this.coils = this.parts.filter(p => p.type === 'coil' || p.type === 'coil_ton' || p.type === 'telerupt' || p.type === 'minut');
       this.coil = {};
       this.timer = {};
       this.coils.forEach(p => { this.coil[p.id] = false; if (p.type === 'coil_ton') this.timer[p.id] = { acc: 0, done: false }; });
@@ -105,6 +106,7 @@
       if (t === 'no' || t === 'nc') {
         const c = this.byId[p.of];
         if (c && c.type === 'telerupt') return !!c.st.toggled;
+        if (c && c.type === 'minut') return this.time < (c.st.until || 0);
         return !!this.coil[p.of];
       }
       if (t === 'ton_no' || t === 'ton_nc') return !!(this.timer[p.of] && this.timer[p.of].done);
@@ -209,6 +211,7 @@
           if (e !== this.coil[p.id]) {
             this.coil[p.id] = e;
             if (p.type === 'telerupt' && e) p.st.toggled = !p.st.toggled;
+            if (p.type === 'minut' && e) p.st.until = this.time + (p.delay || 60);
             if (p.type === 'coil_ton' && !e) { this.timer[p.id].acc = 0; this.timer[p.id].done = false; }
             changed = true;
             break; // séquentiel : une bobine à la fois, comme des relais réels
@@ -231,7 +234,7 @@
           const on = this.loadOn(p, g);
           this.lamp[p.id] = on;
           if (on) { anchors.add(p.n.a); anchors.add(p.n.b); }
-        } else if (p.type === 'coil' || p.type === 'coil_ton' || p.type === 'telerupt') {
+        } else if (p.type === 'coil' || p.type === 'coil_ton' || p.type === 'telerupt' || p.type === 'minut') {
           if (this.coil[p.id]) { anchors.add(p.n.a); anchors.add(p.n.b); }
         } else if (p.type === 'motor3') {
           const ph = ['U', 'V', 'W'].map(k => this.potOf(g, p.n[k]));
@@ -377,8 +380,11 @@
     netPot(net) { return this.potOf(this.g, net); }
 
     step(dt) {
+      const before = this.time;
       this.time += dt;
       let dirty = false;
+      for (const p of this.coils) if (p.type === 'minut' && p.st.until && before < p.st.until && this.time >= p.st.until) dirty = true;
+      for (const p of this.coils) if (p.type === 'minut' && this.coil[p.id] && p.st.until) p.st.until = Math.max(p.st.until, this.time + (p.delay || 60));
       for (const id in this.timer) {
         const tm = this.timer[id], p = this.byId[id];
         if (this.coil[id]) {

@@ -134,12 +134,48 @@
     });
   }
 
+  // Double allumage et minuterie
+  s = new Sim(C.double);
+  s.toggle('S1'); eq([s.lamp.E1, s.lamp.E2], [true, false], 'Double allumage : S1 allume seulement le groupe 1');
+  s.toggle('S1.2'); eq([s.lamp.E1, s.lamp.E2], [true, true], 'Double allumage : les deux groupes indépendants');
+  s = new Sim(C.minuterie);
+  s.press('S2', true); run(s, 0.2); s.press('S2', false);
+  eq(s.lamp.E1, true, 'Minuterie : une impulsion allume');
+  run(s, 5); eq(s.lamp.E1, true, 'Minuterie : toujours allumé à 5 s (durée 8 s)');
+  s.press('S3', true); run(s, 0.2); s.press('S3', false); run(s, 5);
+  eq(s.lamp.E1, true, 'Minuterie : un nouvel appui relance la durée');
+  run(s, 4); eq(s.lamp.E1, false, 'Minuterie : extinction automatique après la durée');
+
+  // Instruments et courbes (visualisations)
+  if (AA.VIS && AA.VIS.dmmFormat) {
+    const F = (v, r, u) => { const o = AA.VIS.dmmFormat(v, r, u); return o === 'OL' ? 'OL' : o.txt + ' ' + o.unit; };
+    eq([F(12, 60, 'V'), F(230, 600, 'V'), F(5.5, 6, 'V'), F(0.2345, 0.6, 'V'), F(400, 1000, 'V'), F(7, 6, 'V')], ['12.00 V', '230.0 V', '5.500 V', '234.5 mV', '400 V', 'OL'], 'Multimètre 6 000 points : résolution selon le calibre, OL au-delà');
+    eq([F(0.0255, 0.06, 'A'), F(8.7, 10, 'A'), F(470, 600, 'Ω'), F(4700, 6000, 'Ω')], ['25.50 mA', '8.70 A', '470.0 Ω', '4.700 kΩ'], 'Multimètre : courant et résistance avec les bons préfixes');
+    const cb = AA.VIS.cbTime;
+    log(cb(1.1, 'C').zone === 'none' && cb(1.5, 'C').zone === 'th' && cb(12, 'C').zone === 'mag' && cb(7, 'C').zone === 'maybe', 'Disjoncteur C : rien à 1,1 In, thermique à 1,5 In, incertain à 7 In, magnétique à 12 In');
+    const t255 = cb(2.55, 'C').t;
+    log(t255 > 1 && t255 < 60, `Disjoncteur : à 2,55 In le temps (${AA.fmt(t255, 1)} s) est dans la plage normalisée 1-60 s`);
+    log(cb(4, 'B').zone === 'maybe' && cb(6, 'B').zone === 'mag' && cb(6, 'D').zone === 'th', 'Courbes B et D : seuils magnétiques 3-5 In et 10-20 In');
+    const th = AA.VIS.thTime;
+    log(th(7.2, 10) >= 4 && th(7.2, 10) <= 10 && th(7.2, 20) <= 20 && th(7.2, 30) <= 30 && th(1.05, 10) === Infinity, 'Relais thermique : classes 10/20/30 respectées à 7,2 Ir, pas de déclenchement à 1,05 Ir');
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis
   if (window.AA && AA.Defis) AA.Defis.selfTest(log, eq);
   if (window.AA && AA.Projets) AA.Projets.selfTest(log, eq);
   if (window.AA && AA.Labo) AA.Labo.selfTest(log, eq);
+
+  // Syntaxe de TOUS les scripts de l'application (une erreur dans un seul fichier casse l'appli)
+  (async () => {
+    const html = await (await fetch('../index.html', { cache: 'no-store' })).text();
+    const srcs = [...html.matchAll(/src="(src\/[^"]+)"/g)].map(m => m[1]);
+    const bad = [];
+    for (const u of srcs) { const t = await (await fetch('../' + u, { cache: 'no-store' })).text(); try { new Function(t); } catch (e) { bad.push(u + ' : ' + e.message); } }
+    log(!bad.length, `Syntaxe : ${srcs.length} scripts de l'application analysés ${bad.length ? '— ' + bad.join(' ; ') : ''}`);
+    const hh = document.querySelector('h2'); hh.textContent = `${pass} réussis, ${fail} échoués`; hh.className = fail ? 'ko' : 'ok'; document.title = fail ? 'ECHEC ' + fail : 'OK ' + pass;
+  })();
 
   const h = document.createElement('h2');
   h.textContent = `${pass} réussis, ${fail} échoués`;
