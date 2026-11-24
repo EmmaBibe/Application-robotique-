@@ -216,7 +216,7 @@ const EQUIP = {
     g.add(M(cylindre(1.6, 62, 8, 'z'), ch, x, -5, 9));
     const s2 = M(tore(12.5, 1.6, Math.PI * 1.2, 16), ch, x, -17.5, -22); s2.rotation.set(Math.PI * 0.9, Math.PI / 2, 0, 'YXZ'); g.add(s2);
     const cer = mat.get('ceramique', p.couleur);
-    const corps = tour(profilCreux(c.r * 0.92, c.r, c.h, 7, 4), 36);
+    const corps = tour([[0, 0], [c.r * 0.92 - 4, 0], [c.r * 0.92, 4], [c.r, c.h], [c.r - 4, c.h], [c.r - 4, c.h - 8], [0, c.h - 8]], 36);
     corps.rotateX(Math.PI / 2);
     g.add(M(corps, cer, x, -4, -95));
     const anse = tore(20, 5, Math.PI, 20);
