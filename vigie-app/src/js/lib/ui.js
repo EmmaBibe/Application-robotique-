@@ -2,7 +2,7 @@
 import { SCENES } from '../sims/vigie6/world.js';
 import { encodeWorld, decodeWorld } from '../sims/vigie3d/editor.js';
 export { SCENES };
-export const APP_VERSION = '1.3.0';
+export const APP_VERSION = '1.4.0';
 export const CONDS = { nominal: 'Vision complète', perception: 'Perception limitée', reactifs: 'Piétons qui réagissent' };
 export const OUT = { succes: 'arrivé', collision: 'collision', temps: 'temps dépassé' };
 export const OUT_SHORT = { succes: 'OK', collision: 'choc', temps: 'lent' };
