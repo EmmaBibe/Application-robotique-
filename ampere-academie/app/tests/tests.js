@@ -95,6 +95,23 @@
   eq(s.byId.Q1.st.tripped, true, 'Inversion : sans verrouillage, les deux contacteurs collés -> court-circuit, Q1 déclenche');
   eq(s.byId.F1.st.blown, false, 'Inversion : le fusible de commande F1 reste intact (sélectivité de la bonne protection)');
 
+  // Étoile-triangle
+  s = new Sim(C.etoile);
+  s.press('S2', true); s.press('S2', false); run(s, 1);
+  eq(s.snapshot().motors.M1, 'run+Y', 'Étoile-triangle : démarrage en étoile');
+  eq([s.coil.KM1, s.coil.KM2, s.coil.KM3], [true, true, false], 'Étoile-triangle : KM1 + KM2 collés, KM3 au repos');
+  eq(Math.round(s.measure('pc1', 'm4', 'V').value), 231, 'Étoile-triangle : 230 V par enroulement en étoile');
+  let both = false; for (let i = 0; i < 250; i++) { s.step(0.02); if (s.coil.KM2 && s.coil.KM3) both = true; }
+  eq(s.snapshot().motors.M1, 'run+D', 'Étoile-triangle : passage en triangle après la temporisation');
+  log(!both, 'Étoile-triangle : KM2 et KM3 jamais fermés ensemble pendant la transition');
+  eq(Math.round(s.measure('pc1', 'm4', 'V').value), 400, 'Étoile-triangle : 400 V par enroulement en triangle');
+  s.press('S1', true); s.press('S1', false); run(s, 1);
+  eq([s.coil.KM1, s.coil.KM2, s.coil.KM3, s.timer.KA1.done], [false, false, false, false], 'Étoile-triangle : arrêt complet et temporisation réinitialisée');
+  s = new Sim(C.etoile); s.setFault('KA1.55', 'stuck'); s.press('S2', true); s.press('S2', false); run(s, 6);
+  eq(s.snapshot().motors.M1, 'run+Y', 'Étoile-triangle : contact 55-56 soudé → le moteur reste en étoile (verrouillage KM2.21 bloque KM3)');
+  s = new Sim(C.etoile); s.setFault('KA1.55', 'stuck'); s.setFault('KM2.21', 'stuck'); s.press('S2', true); s.press('S2', false); run(s, 6);
+  eq(s.byId.Q1.st.tripped, true, 'Étoile-triangle : sans verrouillage, étoile + triangle ensemble → court-circuit, Q1 déclenche');
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis

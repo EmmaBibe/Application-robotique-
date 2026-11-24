@@ -188,6 +188,60 @@
     ]
   });
 
-  const LIST = ['simple', 'vaetvient', 'telerupteur', 'dol', 'inversion'];
+  /* ---------- 6. Démarrage étoile-triangle ---------- */
+  const OE = 22;
+  C.etoile = finish({
+    id: 'etoile', title: 'Étoile-triangle', folio: 'Moteur M1 — démarrage étoile-triangle', level: 'Industriel',
+    w: 46, h: 54,
+    intro: "Pour réduire le courant de démarrage d'un moteur prévu pour fonctionner en triangle (plaque 400/690 V sur un réseau 400 V) : on démarre en étoile (KM2), chaque enroulement ne reçoit que 230 V ; après la temporisation de KA1, on passe en triangle (KM3). KM1 est le contacteur de ligne. KM2 et KM3 ne doivent jamais être fermés ensemble.",
+    sources: powerSources.concat([{ net: 'L', pot: 'L1', x: 4 + OE, y: 2, label: 'L1' }, { net: 'N', pot: 'N', x: 2 + OE, y: 50, label: 'N' }]),
+    parts: [
+      P('breaker3', 'Q1', 3, 6, { a1: 'L1', a2: 'L2', a3: 'L3', b1: 'pa1', b2: 'pa2', b3: 'pa3' }, { rating: 32, t: ['1', '2', '3', '4', '5', '6'], info: 'Disjoncteur-moteur' }),
+      P('km3', 'KM1:P', 3, 14, { a1: 'pa1', a2: 'pa2', a3: 'pa3', b1: 'pb1', b2: 'pb2', b3: 'pb3' }, { of: 'KM1', t: ['1', '2', '3', '4', '5', '6'], info: 'Contacteur de ligne' }),
+      P('thermal3', 'F2', 3, 20, { a1: 'pb1', a2: 'pb2', a3: 'pb3', b1: 'pc1', b2: 'pc2', b3: 'pc3' }, { motor: 'M1', t: ['1', '2', '3', '4', '5', '6'], info: 'Relais thermique réglé à I/√3 (courant dans les enroulements)' }),
+      P('motor6', 'M1', 5, 28, { U1: 'pc1', V1: 'pc2', W1: 'pc3', U2: 'm4', V2: 'm5', W2: 'm6' }, { info: 'Moteur 400/690 V : couplé en triangle sur le réseau 400 V' }),
+      P('km3', 'KM2:P', 3, 36, { a1: 'm4', a2: 'm5', a3: 'm6', b1: 'ys', b2: 'ys', b3: 'ys' }, { of: 'KM2', t: ['1', '2', '3', '4', '5', '6'], info: 'Contacteur étoile : relie U2, V2, W2' }),
+      P('km3', 'KM3:P', 11, 36, { a1: 'm6', a2: 'm4', a3: 'm5', b1: 'pc1', b2: 'pc2', b3: 'pc3' }, { of: 'KM3', t: ['1', '2', '3', '4', '5', '6'], info: 'Contacteur triangle : W2-U1, U2-V1, V2-W1' })
+    ].concat(shift([
+      P('fuse', 'F1', 4, 6, { a: 'L', b: 'c1' }, { rating: 2, t: ['1', '2'] }),
+      P('th_nc', 'F2.95', 4, 12, { a: 'c1', b: 'c2' }, { of: 'F2', tag: 'F2', t: ['95', '96'] }),
+      P('pb_nc', 'S1', 4, 18, { a: 'c2', b: 'c3' }, { t: ['1', '2'], color: 'red', info: 'Arrêt' }),
+      P('pb_no', 'S2', 4, 26, { a: 'c3', b: 'c4' }, { t: ['3', '4'], color: 'green', info: 'Marche' }),
+      P('no', 'KM1.13', 9, 26, { a: 'c3', b: 'c4' }, { of: 'KM1', tag: 'KM1', t: ['13', '14'], info: 'Auto-maintien' }),
+      P('ton_nc', 'KA1.55', 4, 34, { a: 'c4', b: 'c5' }, { of: 'KA1', tag: 'KA1', t: ['55', '56'], info: 'Contact temporisé à ouverture : fin de l\'étoile' }),
+      P('nc', 'KM3.21', 4, 40, { a: 'c5', b: 'c6' }, { of: 'KM3', tag: 'KM3', t: ['21', '22'], info: 'Verrouillage : pas d\'étoile si triangle' }),
+      P('coil', 'KM2', 4, 46, { a: 'c6', b: 'N' }, { t: ['A1', 'A2'], u: 230, info: 'Bobine du contacteur étoile' }),
+      P('coil', 'KM1', 10, 46, { a: 'c4', b: 'N' }, { t: ['A1', 'A2'], u: 230, info: 'Bobine du contacteur de ligne' }),
+      P('coil_ton', 'KA1', 15, 46, { a: 'c4', b: 'N' }, { t: ['A1', 'A2'], u: 230, delay: 4, info: 'Relais temporisé au travail : 4 s' }),
+      P('ton_no', 'KA1.67', 20, 34, { a: 'c4', b: 'c7' }, { of: 'KA1', tag: 'KA1', t: ['67', '68'], info: 'Contact temporisé à fermeture : passage en triangle' }),
+      P('nc', 'KM2.21', 20, 40, { a: 'c7', b: 'c8' }, { of: 'KM2', tag: 'KM2', t: ['21', '22'], info: 'Verrouillage : pas de triangle si étoile' }),
+      P('coil', 'KM3', 20, 46, { a: 'c8', b: 'N' }, { t: ['A1', 'A2'], u: 230, info: 'Bobine du contacteur triangle' })
+    ], OE)),
+    wires: dolPowerWires.slice(0, 9).concat([
+      W('pc1', [3, 22], [3, 25]), W('pc2', [5, 22], [5, 25]), W('pc3', [7, 22], [7, 25]),
+      W('m4', [3, 31], [3, 34]), W('m5', [5, 31], [5, 34]), W('m6', [7, 31], [7, 34]),
+      W('m6', [7, 32], [11, 32], [11, 34]), W('m4', [3, 32.5], [13, 32.5], [13, 34]), W('m5', [5, 33], [15, 33], [15, 34]),
+      W('ys', [3, 38], [3, 39], [7, 39], [7, 38]), W('ys', [5, 38], [5, 39]),
+      W('pc1', [3, 23], [19, 23], [19, 41], [11, 41], [11, 38]), W('pc2', [5, 23.5], [18, 23.5], [18, 40.5], [13, 40.5], [13, 38]), W('pc3', [7, 24], [17, 24], [17, 40], [15, 40], [15, 38])
+    ]).concat(shift([
+      W('L', [4, 2], [4, 4]), W('c1', [4, 8], [4, 10]), W('c2', [4, 14], [4, 16]),
+      W('c3', [4, 20], [4, 24]), W('c3', [4, 22], [9, 22], [9, 24]),
+      W('c4', [4, 28], [4, 32]), W('c4', [9, 28], [9, 30]), W('c4', [4, 30], [20, 30], [20, 32]), W('c4', [10, 30], [10, 44]), W('c4', [15, 30], [15, 44]),
+      W('c5', [4, 36], [4, 38]), W('c6', [4, 42], [4, 44]), W('c7', [20, 36], [20, 38]), W('c8', [20, 42], [20, 44]),
+      W('N', [4, 48], [4, 50]), W('N', [10, 48], [10, 50]), W('N', [15, 48], [15, 50]), W('N', [20, 48], [20, 50], [2, 50])
+    ], OE)),
+    dots: [[3, 23], [5, 23.5], [7, 24], [7, 32], [3, 32.5], [5, 33], [5, 39]].concat(shiftPts([[4, 22], [4, 30], [9, 30], [10, 30], [15, 30], [4, 50], [10, 50], [15, 50]], OE)),
+    sections: [{ x: 1.5, y: 0.9, t: 'Puissance 3 × 400 V' }, { x: 1.5 + OE, y: 0.9, t: 'Commande 230 V' }],
+    guide: [
+      { id: 'S2', t: "Appui sur Marche : KM1 (ligne), KM2 (étoile) et le relais temporisé KA1 sont alimentés." },
+      { id: 'KM2:P', t: "KM2 relie U2, V2 et W2 : couplage étoile, chaque enroulement reçoit 400/√3 ≈ 230 V. Courant et couple de démarrage divisés par 3." },
+      { id: 'KA1', t: "KA1 compte 4 s. Pendant ce temps le moteur accélère en étoile." },
+      { id: 'KA1.55', t: "À la fin de la temporisation, KA1 55-56 s'ouvre : KM2 retombe." },
+      { id: 'KA1.67', t: "KA1 67-68 se ferme et, dès que KM2 est retombé (KM2 21-22 refermé), KM3 colle : couplage triangle, 400 V par enroulement." },
+      { id: 'KM3.21', t: "Les contacts 21-22 croisés interdisent KM2 et KM3 ensemble : sinon, court-circuit franc entre phases." }
+    ]
+  });
+
+  const LIST = ['simple', 'vaetvient', 'telerupteur', 'dol', 'inversion', 'etoile'];
   window.AACircuits = { C, LIST, finish, P, W };
 })();

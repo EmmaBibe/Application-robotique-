@@ -50,6 +50,7 @@
     vaetvient: [['init', 'au repos'], ['toggle:SA1', 'quand on manœuvre SA1'], ['toggle:SA2', 'quand on manœuvre ensuite SA2'], ['toggle:SA1', 'quand on manœuvre de nouveau SA1']],
     telerupteur: [['init', 'au repos'], ['pulse:S1', 'après un appui sur S1'], ['pulse:S2', 'après un appui sur S2'], ['pulse:S3', 'après un appui sur S3']],
     dol: [['init', 'à la mise sous tension'], ['hold:S2', 'pendant l\'appui sur Marche (S2)'], ['release:S2', 'quand on relâche Marche'], ['wait', 'après quelques secondes de marche'], ['pulse:S1', 'après un appui sur Arrêt (S1)']],
+    etoile: [['init', 'à la mise sous tension'], ['pulse:S2', 'juste après un appui sur Marche (S2)'], ['wait', 'au bout de quelques secondes'], ['pulse:S1', 'après un appui sur Arrêt (S1)']],
     inversion: [['init', 'à la mise sous tension'], ['pulse:S2', 'après un appui sur Avant (S2)'], ['wait', 'après quelques secondes'], ['pulse:S3', 'quand on appuie sur Arrière (S3) sans arrêter'], ['pulse:S1', 'après un appui sur Arrêt (S1)'], ['pulse:S3', 'après un appui sur Arrière (S3)'], ['wait', 'après quelques secondes'], ['pulse:S1', 'après un nouvel arrêt']]
   };
   function runSeq(cid, faults) {
@@ -76,6 +77,8 @@
       for (const m in r.motors) {
         if (r.motors[m] === b.motors[m]) continue;
         if (b.motors[m] === 'mono') parts.push('le moteur grogne et vibre sans démarrer franchement');
+        else if (r.motors[m] === 'run+D' && b.motors[m] === 'run+Y') parts.push('le moteur reste en étoile : il ne passe jamais en triangle et peine en charge');
+        else if (r.motors[m] === 'run+Y' && b.motors[m] === 'run+D') parts.push('le moteur démarre directement en triangle avec un fort appel de courant');
         else if (r.motors[m].startsWith('run') && b.motors[m] === 'stop') parts.push('le moteur ne tourne pas');
         else if (r.motors[m] === 'stop' && b.motors[m].startsWith('run')) parts.push('le moteur tourne alors qu\'il devrait être arrêté');
         else if (r.motors[m] !== b.motors[m]) parts.push('le moteur tourne dans le mauvais sens');
@@ -94,7 +97,7 @@
     name: 'Diagnostic de panne', icon: 'bug', min: 1,
     desc: 'Une installation ne fonctionne plus. Reproduis le symptôme, mesure, raisonne sur le schéma et désigne l\'appareil défaillant.',
     gen(r, lvl) {
-      const pool = lvl <= 1 ? ['simple', 'vaetvient', 'telerupteur'] : lvl === 2 ? ['telerupteur', 'dol', 'vaetvient'] : ['dol', 'inversion'];
+      const pool = lvl <= 1 ? ['simple', 'vaetvient', 'telerupteur'] : lvl === 2 ? ['telerupteur', 'dol', 'vaetvient'] : lvl === 3 ? ['dol', 'inversion'] : ['dol', 'inversion', 'etoile', 'etoile'];
       const cid = r.pick(pool);
       const parts = C[cid].parts.filter(p => FAULTS_BY_TYPE[p.type] && !(p.type === 'breaker3'));
       const ref = runSeq(cid, []);
@@ -182,12 +185,13 @@
     name: 'Logique à relais', icon: 'schema', min: 1,
     desc: 'Une suite de manœuvres est imposée. Sans simuler, prévois l\'état final des voyants, contacteurs et moteurs. Ensuite, la simulation tranche.',
     gen(r, lvl) {
-      const cid = r.pick(lvl <= 1 ? ['vaetvient', 'telerupteur', 'simple'] : lvl <= 2 ? ['telerupteur', 'dol', 'vaetvient'] : ['dol', 'inversion']);
+      const cid = r.pick(lvl <= 1 ? ['vaetvient', 'telerupteur', 'simple'] : lvl <= 2 ? ['telerupteur', 'dol', 'vaetvient'] : lvl === 3 ? ['dol', 'inversion'] : ['dol', 'inversion', 'etoile']);
       const acts = {
         simple: [['toggle', 'S1', 'bascule S1'], ['toggle', 'Q1', 'manœuvre Q1']],
         vaetvient: [['toggle', 'SA1', 'manœuvre SA1'], ['toggle', 'SA2', 'manœuvre SA2'], ['toggle', 'Q1', 'manœuvre Q1']],
         telerupteur: [['pulse', 'S1', 'appui bref sur S1'], ['pulse', 'S2', 'appui bref sur S2'], ['pulse', 'S3', 'appui bref sur S3'], ['toggle', 'Q1', 'manœuvre Q1']],
         dol: [['pulse', 'S2', 'appui bref sur Marche S2'], ['pulse', 'S1', 'appui bref sur Arrêt S1'], ['both', 'S1+S2', 'appui simultané sur S1 et S2, puis relâchement'], ['toggle', 'Q1', 'manœuvre Q1'], ['overload', 'F2', 'surcharge du moteur pendant 5 s'], ['toggle', 'F2', 'tentative de réarmement de F2']],
+        etoile: [['pulse', 'S2', 'appui bref sur Marche S2'], ['pulse', 'S1', 'appui bref sur Arrêt S1'], ['wait', '', 'attente de 5 secondes'], ['toggle', 'Q1', 'manœuvre Q1'], ['overload', 'F2', 'surcharge du moteur pendant 5 s']],
         inversion: [['pulse', 'S2', 'appui bref sur Avant S2'], ['pulse', 'S3', 'appui bref sur Arrière S3'], ['pulse', 'S1', 'appui bref sur Arrêt S1'], ['toggle', 'Q1', 'manœuvre Q1'], ['overload', 'F2', 'surcharge du moteur pendant 5 s']]
       }[cid];
       const n = 2 + lvl + r.int(0, 1);
@@ -207,6 +211,7 @@
         if (op === 'toggle') s.toggle(id);
         if (op === 'pulse') { s.press(id, true); adv(0.3); s.press(id, false); }
         if (op === 'both') { s.press('S1', true); s.press('S2', true); adv(0.3); s.press('S2', false); s.press('S1', false); }
+        if (op === 'wait') adv(5);
         if (op === 'overload') { s.setFault('F2', 'overload'); adv(5); s.setFault('F2', null); if (inst.pre) s.setFault(inst.pre.id, inst.pre.f); }
         adv(0.4);
       }
@@ -218,7 +223,12 @@
       const items = [];
       Object.keys(snap.lamps).forEach(k => items.push({ k, t: 'Voyant / lampe ' + k, opts: ['éteint', 'allumé'], a: snap.lamps[k] ? 1 : 0 }));
       Object.keys(snap.coils).forEach(k => items.push({ k, t: 'Contacteur / relais ' + k, opts: ['repos', 'collé'], a: snap.coils[k] ? 1 : 0 }));
-      Object.keys(snap.motors).forEach(k => items.push({ k, t: 'Moteur ' + k, opts: ['arrêt', 'marche avant', 'marche arrière', 'monophasé'], a: ['stop', 'run+', 'run-', 'mono'].indexOf(snap.motors[k]) }));
+      Object.keys(snap.motors).forEach(k => {
+        const six = inst.cid === 'etoile';
+        const opts = six ? ['arrêt', 'marche en étoile', 'marche en triangle', 'monophasé'] : ['arrêt', 'marche avant', 'marche arrière', 'monophasé'];
+        const vals = six ? ['stop', 'run+Y', 'run+D', 'mono'] : ['stop', 'run+', 'run-', 'mono'];
+        items.push({ k, t: 'Moteur ' + k, opts, a: vals.indexOf(snap.motors[k]) });
+      });
       const prot = s.parts.filter(p => ['cb', 'breaker3', 'fuse', 'thermal3'].includes(p.type));
       prot.forEach(p => items.push({ k: p.id, t: 'Protection ' + p.id, opts: ['enclenchée / intacte', 'déclenchée / fondue / ouverte'], a: (p.st.tripped || p.st.blown || (p.st.on === false)) ? 1 : 0 }));
       main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Défi · Logique à relais · ${LVL[inst.lvl]}</p><h1>Que se passe-t-il ?</h1><p>Lis le schéma « ${esc(C[inst.cid].title)} » ci-dessous (au repos, sans le manœuvrer), puis prévois l'état final.</p></div></div>

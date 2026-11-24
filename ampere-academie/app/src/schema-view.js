@@ -69,6 +69,11 @@
       `<circle cy="6" r="34" class="body motorbody ${a.state}"/>` +
       `<text class="mtxt" y="8" text-anchor="middle">M</text><text class="mtxt2" y="26" text-anchor="middle">3~</text>` +
       `<g class="rotor" transform="translate(0,6) rotate(${a.angle || 0})"><path class="rotarr" d="M0 -41 A41 41 0 0 1 35.5 -20.5"/><path class="rotarr" d="M0 41 A41 41 0 0 1 -35.5 20.5"/>` +
+      `<circle cx="0" cy="-41" r="2.5" class="fill-live"/><circle cx="0" cy="41" r="2.5" class="fill-live"/></g>`,
+    motor6: (p, a) => `<path d="M-40 -60 V-40 L-24 -18 M0 -60 V-34 M40 -60 V-40 L24 -18 M-40 60 V40 L-24 18 M0 60 V34 M40 60 V40 L24 18"/>` +
+      `<circle r="34" class="body motorbody ${a.state}"/>` +
+      `<text class="mtxt" y="2" text-anchor="middle">M</text><text class="mtxt2" y="20" text-anchor="middle">3~ ${a.coupling === 'D' ? 'Δ' : a.coupling === 'Y' ? 'Y' : ''}</text>` +
+      `<g class="rotor" transform="rotate(${a.angle || 0})"><path class="rotarr" d="M0 -41 A41 41 0 0 1 35.5 -20.5"/><path class="rotarr" d="M0 41 A41 41 0 0 1 -35.5 20.5"/>` +
       `<circle cx="0" cy="-41" r="2.5" class="fill-live"/><circle cx="0" cy="41" r="2.5" class="fill-live"/></g>`
   };
 
@@ -85,6 +90,7 @@
     else if (p.type === 'km3' || p.type === 'breaker3') a.closed = sim.pairs(p).length > 0;
     else if (p.type === 'thermal3') a.tripped = p.st.tripped;
     else if (p.type === 'motor3') { a.state = sim.motor[p.id].state; }
+    else if (p.type === 'motor6') { a.state = sim.motor[p.id].state; a.coupling = sim.motor[p.id].coupling; }
     a.pressed = !!(p.st.pressed || p.st.latched);
     return a;
   }
@@ -96,6 +102,9 @@
     if (t.kind === 'pole3') {
       s += `<text class="tag" x="-34" y="4" text-anchor="end">${esc(tag)}</text>`;
       if (p.t) [0, 1, 2].forEach(i => { s += `<text class="tn" x="${i * 40 + 4}" y="-28">${p.t[i * 2]}</text><text class="tn" x="${i * 40 + 4}" y="36">${p.t[i * 2 + 1]}</text>`; });
+    } else if (p.type === 'motor6') {
+      s += `<text class="tag" x="-46" y="4" text-anchor="end">${esc(tag)}</text>`;
+      s += `<text class="tn" x="-37" y="-48">U1</text><text class="tn" x="3" y="-48">V1</text><text class="tn" x="43" y="-48">W1</text><text class="tn" x="-37" y="54">U2</text><text class="tn" x="3" y="54">V2</text><text class="tn" x="43" y="54">W2</text>`;
     } else if (t.kind === 'motor') {
       s += `<text class="tag" x="-46" y="10" text-anchor="end">${esc(tag)}</text>`;
       s += `<text class="tn" x="-37" y="-48">U</text><text class="tn" x="3" y="-48">V</text><text class="tn" x="43" y="-48">W</text>`;
@@ -215,6 +224,7 @@
     hitBox(p) {
       const k = TYPES[p.type].kind;
       if (k === 'pole3') return `<rect class="hit" x="-30" y="-36" width="124" height="72"/>`;
+      if (p.type === 'motor6') return `<rect class="hit" x="-46" y="-40" width="92" height="80"/>`;
       if (k === 'motor') return `<rect class="hit" x="-46" y="-30" width="92" height="76"/>`;
       if (k === 'sw2') return `<rect class="hit" x="-30" y="-34" width="60" height="68"/>`;
       return `<rect class="hit" x="-36" y="-30" width="58" height="60"/>`;
@@ -224,17 +234,17 @@
       const sim = this.sim;
       for (const p of sim.parts) {
         const a = partState(sim, p);
-        if (p.type === 'motor3') {
+        if (p.type === 'motor3' || p.type === 'motor6') {
           const rot = this.partEls[p.id].querySelector('.rotor');
           if (rot && !force) {
-            rot.setAttribute('transform', `translate(0,6) rotate(${p.st.angle.toFixed(1)})`);
+            rot.setAttribute('transform', `${p.type === 'motor3' ? 'translate(0,6) ' : ''}rotate(${p.st.angle.toFixed(1)})`);
             rot.style.opacity = Math.min(1, Math.abs(p.st.speed) * 1.4);
           }
         }
         const key = JSON.stringify(a) + (p.fault && this.o.showFaults ? p.fault : '');
         if (!force && this.keys[p.id] === key) continue;
         this.keys[p.id] = key;
-        if (p.type === 'motor3') a.angle = p.st.angle;
+        if (p.type === 'motor3' || p.type === 'motor6') a.angle = p.st.angle;
         const flip = p.r === 180 ? ' transform="rotate(180)"' : '';
         const g = this.partEls[p.id];
         g.innerHTML = `<g class="sym"${flip}>${SYM[p.type](p, a)}</g>${labelFor(p)}${this.o.interactive ? this.hitBox(p) : ''}`;

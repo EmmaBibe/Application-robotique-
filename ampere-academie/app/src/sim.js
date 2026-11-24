@@ -59,7 +59,9 @@
     km3: { terms: [['a1', 0, -2], ['b1', 0, 2], ['a2', 2, -2], ['b2', 2, 2], ['a3', 4, -2], ['b3', 4, 2]], kind: 'pole3' },
     breaker3: { terms: [['a1', 0, -2], ['b1', 0, 2], ['a2', 2, -2], ['b2', 2, 2], ['a3', 4, -2], ['b3', 4, 2]], kind: 'pole3' },
     thermal3: { terms: [['a1', 0, -2], ['b1', 0, 2], ['a2', 2, -2], ['b2', 2, 2], ['a3', 4, -2], ['b3', 4, 2]], kind: 'pole3' },
-    motor3: { terms: [['U', -2, -3], ['V', 0, -3], ['W', 2, -3]], kind: 'motor', R: 6 }
+    motor3: { terms: [['U', -2, -3], ['V', 0, -3], ['W', 2, -3]], kind: 'motor', R: 6 },
+    /* Moteur à 6 bornes (étoile-triangle) : enroulements U1-U2, V1-V2, W1-W2 */
+    motor6: { terms: [['U1', -2, -3], ['V1', 0, -3], ['W1', 2, -3], ['U2', -2, 3], ['V2', 0, 3], ['W2', 2, 3]], kind: 'motor', R: 4 }
   };
   const PROT = { fuse: 1, cb: 1, breaker3: 1 };
 
@@ -82,7 +84,7 @@
         if (p.type === 'cb' || p.type === 'breaker3') { if (p.st.on === undefined) p.st.on = true; p.st.tripped = false; }
         if (p.type === 'fuse') p.st.blown = false;
         if (p.type === 'thermal3') { p.st.tripped = false; p.st.heat = 0; }
-        if (p.type === 'motor3') { p.st.speed = 0; p.st.angle = 0; }
+        if (p.type === 'motor3' || p.type === 'motor6') { p.st.speed = 0; p.st.angle = 0; }
         if (p.type === 'sw2' && !p.st.pos) p.st.pos = 1;
       });
       this.events = [];
@@ -242,6 +244,19 @@
           else if (distinct === 2) state = 'mono';
           this.motor[p.id] = { state, dir };
           if (state !== 'stop') ['U', 'V', 'W'].forEach(k => { if (this.potOf(g, p.n[k])) anchors.add(p.n[k]); });
+        } else if (p.type === 'motor6') {
+          // chaque enroulement : 'D' = deux phases différentes (400 V), 'Y' = une phase + point étoile commun isolé
+          const W = [['U1', 'U2'], ['V1', 'V2'], ['W1', 'W2']];
+          const P = k => this.potOf(g, p.n[k]), R = k => g.uf.f(p.n[k]);
+          const star = !P('U2') && !P('V2') && !P('W2') && R('U2') === R('V2') && R('V2') === R('W2');
+          const wst = W.map(([a, b]) => { const pa = P(a), pb = P(b); if (pa && pb && pa !== pb) return 'D'; if (pa && !pb && star) return 'Y'; if (!pa && pb && star) return 'Y'; return pa || pb ? 'x' : '0'; });
+          const first = ['U1', 'V1', 'W1'].map(k => ({ L1: 0, L2: 1, L3: 2 })[P(k)]);
+          let state = 'stop', dir = 0, coupling = '';
+          const allD = wst.every(x => x === 'D'), allY = wst.every(x => x === 'Y');
+          if ((allD || allY) && new Set(first).size === 3 && !first.includes(undefined) && p.fault !== 'open') { state = 'run'; coupling = allD ? 'D' : 'Y'; dir = ((first[1] - first[0] + 3) % 3 === 1) ? 1 : -1; }
+          else if (wst.some(x => x === 'D' || x === 'Y' || x === 'x') && wst.some(x => x !== '0')) state = (wst.filter(x => x === 'D' || x === 'Y').length ? 'mono' : 'stop');
+          this.motor[p.id] = { state, dir, coupling };
+          if (state !== 'stop') ['U1', 'V1', 'W1', 'U2', 'V2', 'W2'].forEach(k => { if (P(k)) anchors.add(p.n[k]); });
         }
       }
       this.c.sources.forEach(s => anchors.add(s.net));
@@ -285,25 +300,31 @@
         const k = TYPES[p.type].kind;
         if (p.fault === 'open' || p.fault === 'burnt') continue;
         if (k === 'load') link(p.n.a, p.n.b);
-        if (k === 'motor') { link(p.n.U, p.n.V); link(p.n.V, p.n.W); }
+        if (p.type === 'motor3') { link(p.n.U, p.n.V); link(p.n.V, p.n.W); }
+        if (p.type === 'motor6') { link(p.n.U1, p.n.U2); link(p.n.V1, p.n.V2); link(p.n.W1, p.n.W2); }
       }
       const roots = new Set(Object.keys(this.c.nets).map(n => g.uf.f(n)));
       for (const r of roots) {
         const own = g.pots.get(r);
         if (own && own.size === 1) { res.set(r, [...own][0]); continue; }
         // parcours en largeur vers le potentiel le plus proche
-        const seen = new Set([r]); let frontier = [r], found = null;
-        while (frontier.length && !found) {
+        // Parcours en largeur ; si le nœud isolé est relié de façon symétrique aux trois phases
+        // (point étoile d'un récepteur équilibré), son potentiel est celui du neutre.
+        const seen = new Set([r]); let frontier = [r], found = [];
+        while (frontier.length && !found.length) {
           const next = [];
           for (const x of frontier) for (const y of (edges.get(x) || [])) {
-            if (seen.has(y)) continue; seen.add(y);
             const s = g.pots.get(y);
-            if (s && s.size === 1) { found = [...s][0]; break; }
+            if (s && s.size === 1) { found.push([...s][0]); continue; }
+            if (seen.has(y)) continue; seen.add(y);
             next.push(y);
           }
           frontier = next;
         }
-        if (found) res.set(r, found);
+        if (found.length) {
+          const set = new Set(found);
+          res.set(r, set.has('L1') && set.has('L2') && set.has('L3') ? 'N' : found[0]);
+        }
       }
       return res;
     }
@@ -329,7 +350,8 @@
           const k = TYPES[p.type].kind;
           if (p.fault === 'open' || p.fault === 'burnt') continue;
           if (k === 'load') link(p.n.a, p.n.b, TYPES[p.type].R);
-          if (k === 'motor') { link(p.n.U, p.n.V, 2 * TYPES.motor3.R); link(p.n.V, p.n.W, 2 * TYPES.motor3.R); link(p.n.U, p.n.W, 2 * TYPES.motor3.R); }
+          if (p.type === 'motor3') { link(p.n.U, p.n.V, 2 * TYPES.motor3.R); link(p.n.V, p.n.W, 2 * TYPES.motor3.R); link(p.n.U, p.n.W, 2 * TYPES.motor3.R); }
+          if (p.type === 'motor6') { link(p.n.U1, p.n.U2, TYPES.motor6.R); link(p.n.V1, p.n.V2, TYPES.motor6.R); link(p.n.W1, p.n.W2, TYPES.motor6.R); }
         }
         const dist = new Map([[ra, 0]]), todo = [ra];
         while (todo.length) {
@@ -373,7 +395,7 @@
           p.st.heat = Math.max(0, Math.min(5, p.st.heat + rate * dt));
           if (!p.st.tripped && p.st.heat >= 3.2) { p.st.tripped = true; dirty = true; this.emit('trip', { id: p.id, why: 'surcharge' }); }
         }
-        if (p.type === 'motor3') {
+        if (p.type === 'motor3' || p.type === 'motor6') {
           const m = this.motor[p.id];
           const target = m.state === 'run' ? m.dir : 0;
           const k = target === 0 ? 0.9 : 1.6;
@@ -416,7 +438,7 @@
     /* Photographie de l'état observable (pour les défis et les tests). */
     snapshot() {
       const o = { coils: Object.assign({}, this.coil), lamps: Object.assign({}, this.lamp), motors: {} };
-      for (const id in this.motor) o.motors[id] = this.motor[id].state + (this.motor[id].dir ? (this.motor[id].dir > 0 ? '+' : '-') : '');
+      for (const id in this.motor) o.motors[id] = this.motor[id].state + (this.motor[id].dir ? (this.motor[id].dir > 0 ? '+' : '-') : '') + (this.motor[id].coupling || '');
       o.trips = this.parts.filter(p => p.st.tripped || p.st.blown).map(p => p.id);
       return o;
     }
