@@ -868,3 +868,19 @@ Le placement valide et le contournement des obstacles par les piétons sont port
 - **Fidélité au Python** (`parite_monde2.py` puis `parite_monde2.mjs`, test 38) : 48 cas (8 scènes, 6 graines, 250 pas, poursuivants compris). En repartant à chaque pas de l'état Python, l'écart maximal est de 3,6e-15 : même logique, à l'arrondi près. Sur des trajectoires entières, la poursuite fait grossir des écarts d'arrondi de 1e-12 (le poursuivant vise le robot, la moindre différence se propage), jusqu'à 6e-6 au pas 248 ; les autres scènes restent sous 1e-11. Le test passe par 3 003 contacts avec un obstacle et 51 quarts de tour.
 - **Effet sur les mondes de l'application** (11 scènes, 40 graines, 30 s de marche) : avec la version 1, des personnes entrent dans les obstacles dans presque tous les mondes du carrefour, du couloir, du piège, des foules et de la poursuite, jusqu'à 1,3 m ; avec la version 2, aucune n'est mal placée au départ, et en marche l'enfoncement ne dépasse jamais 5 cm (13 % des mondes du piège en U touchent plus de 2 cm, 5 % au plus ailleurs). Aucun échec de placement.
 - Les générateurs aléatoires restent différents (numpy contre JavaScript) : mêmes règles, pas les mêmes tirages. Un code de monde partagé avec la version 1.3.0 de l'application ouvre désormais le monde corrigé.
+
+## Séance 8 : mondes corrigés (plan, section 6)
+
+Graines neuves 8000 à 8059, 11 scènes, trois conditions de l'évaluation finale, robot réaliste, mondes version 2 (placement valide, piétons qui contournent les obstacles fixes), piétons au modèle simple. 5 940 essais, campagne complète, aucune méthode retouchée. Détail dans `seance8_monde2_analyse.txt`.
+
+| Réussite (%) | Global | Vision complète | Perception limitée | Piétons réactifs |
+|---|---|---|---|---|
+| VIGIE 6 | 88,9 | 88,6 | 83,0 | 95,2 |
+| T-MPC++ | 87,6 | 87,4 | 81,7 | 93,6 |
+| DRA-MPPI | 85,5 | 85,8 | 79,2 | 91,5 |
+
+- **VIGIE 6 − DRA-MPPI : +3,4 [+1,9 ; +4,9]**, et par grappes (un monde garde ses trois conditions, tirage par scène) [+1,6 ; +5,3]. Significatif dans chacune des trois conditions (+2,9, +3,8, +3,6). Selon la règle fixée d'avance, **l'avance de VIGIE sur DRA-MPPI est robuste à la correction des mondes**. Elle est presque identique à celle de l'évaluation finale sur les anciens mondes (+3,8).
+- VIGIE 6 − T-MPC++ : +1,4 [−0,4 ; +3,0], par grappes [−0,6 ; +3,3]. Toujours une égalité, un peu plus favorable à VIGIE qu'à l'évaluation finale (+0,5).
+- Les quatre scènes touchées par la correction, lues à part : VIGIE − DRA-MPPI +2,5 [+0,1 ; +4,9], mais par grappes [−0,1 ; +5,3], donc limite. Le carrefour et le carrefour rapide, où VIGIE gagnait nettement sur les anciens mondes (+6), donnent maintenant −0,6 chacun face à DRA-MPPI. Une partie de cet avantage venait donc de personnes qui sortaient des murs : VIGIE, qui imagine des personnes cachées, y était mieux préparé. Le couloir reste très favorable (+11,7). Sur les sept autres scènes : +4,0 [+1,9 ; +6,0].
+- Face à T-MPC++, par scène (60 mondes × 3 conditions chacune, donc à lire avec prudence) : VIGIE gagne à la poursuite (+11,1, alors qu'il y perdait −16,7 avec toutes les difficultés réunies), au carrefour rapide et à la traversée (+6,1) ; il perd en foule (−4,4), au couloir (−3,9) et à la porte étroite (−2,8).
+- Collisions en roulant : VIGIE 9,3 %, T-MPC++ 11,9 %, DRA-MPPI 12,5 %. Temps moyen d'un trajet réussi : T-MPC++ 18,1 s, VIGIE 20,0 s, DRA-MPPI 20,3 s.

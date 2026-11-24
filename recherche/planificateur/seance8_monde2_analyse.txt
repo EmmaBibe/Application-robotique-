@@ -1,0 +1,53 @@
+m           DRA-MPPI  T-MPC++  VIGIE 6
+cond                                  
+nominal          660      660      660
+perception       660      660      660
+reactifs         660      660      660
+
+=== Global (1980 essais appariés par méthode)
+  DRA-MPPI 85.5  T-MPC++ 87.6  VIGIE 6 88.9
+  VIGIE 6 − DRA-MPPI : +3.4 [+1.9 ; +4.9]*   par grappes [+1.6 ; +5.3]*   gagnés 164, perdus 96
+  VIGIE 6 − T-MPC++ : +1.4 [-0.4 ; +3.0]   par grappes [-0.6 ; +3.3]   gagnés 158, perdus 131
+
+=== Condition nominal (660 essais appariés par méthode)
+  DRA-MPPI 85.8  T-MPC++ 87.4  VIGIE 6 88.6
+  VIGIE 6 − DRA-MPPI : +2.9 [+0.2 ; +5.6]*   gagnés 50, perdus 31
+  VIGIE 6 − T-MPC++ : +1.2 [-1.7 ; +4.1]   gagnés 53, perdus 45
+
+=== Condition perception (660 essais appariés par méthode)
+  DRA-MPPI 79.2  T-MPC++ 81.7  VIGIE 6 83.0
+  VIGIE 6 − DRA-MPPI : +3.8 [+0.6 ; +7.0]*   gagnés 75, perdus 50
+  VIGIE 6 − T-MPC++ : +1.4 [-2.1 ; +4.7]   gagnés 73, perdus 64
+
+=== Condition reactifs (660 essais appariés par méthode)
+  DRA-MPPI 91.5  T-MPC++ 93.6  VIGIE 6 95.2
+  VIGIE 6 − DRA-MPPI : +3.6 [+1.4 ; +5.8]*   gagnés 39, perdus 15
+  VIGIE 6 − T-MPC++ : +1.5 [-0.6 ; +3.8]   gagnés 32, perdus 22
+
+=== Les quatre scènes touchées par la correction (720 essais appariés par méthode)
+  DRA-MPPI 87.9  T-MPC++ 89.6  VIGIE 6 90.4
+  VIGIE 6 − DRA-MPPI : +2.5 [+0.1 ; +4.9]*   par grappes [-0.1 ; +5.3]   gagnés 47, perdus 29
+  VIGIE 6 − T-MPC++ : +0.8 [-1.8 ; +3.5]   par grappes [-2.4 ; +4.0]   gagnés 48, perdus 42
+
+=== Les sept autres scènes (1260 essais appariés par méthode)
+  DRA-MPPI 84.1  T-MPC++ 86.4  VIGIE 6 88.1
+  VIGIE 6 − DRA-MPPI : +4.0 [+1.9 ; +6.0]*   par grappes [+1.6 ; +6.4]*   gagnés 117, perdus 67
+  VIGIE 6 − T-MPC++ : +1.7 [-0.6 ; +3.8]   par grappes [-0.9 ; +4.1]   gagnés 110, perdus 89
+
+=== Par scène (réussite %, VIGIE 6 − DRA-MPPI, VIGIE 6 − T-MPC++)
+  carrefour         V  89.4  T  87.8  D  90.0   V−D   -0.6   V−T   +1.7
+  carrefour_rapide  V  84.4  T  78.3  D  85.0   V−D   -0.6   V−T   +6.1
+  coin_aveugle      V  75.0  T  75.6  D  68.3   V−D   +6.7   V−T   -0.6
+  couloir           V  88.3  T  92.2  D  76.7   V−D  +11.7   V−T   -3.9
+  foret             V  98.9  T  98.3  D 100.0   V−D   -1.1   V−T   +0.6
+  foule             V  87.2  T  91.7  D  89.4   V−D   -2.2   V−T   -4.4
+  foule_dense       V  83.9  T  82.2  D  74.4   V−D   +9.4   V−T   +1.7
+  goulot            V  88.3  T  91.1  D  80.6   V−D   +7.8   V−T   -2.8
+  piege             V  99.4  T 100.0  D 100.0   V−D   -0.6   V−T   -0.6
+  poursuite         V  90.0  T  78.9  D  85.6   V−D   +4.4   V−T  +11.1
+  traversee         V  93.3  T  87.2  D  90.6   V−D   +2.8   V−T   +6.1
+
+=== Collisions en roulant et temps de trajet réussi
+  DRA-MPPI   collisions 12.5 %   temps dépassé 2.0 %   temps moyen 20.3 s
+  T-MPC++    collisions 11.9 %   temps dépassé 0.5 %   temps moyen 18.1 s
+  VIGIE 6    collisions 9.3 %   temps dépassé 1.8 %   temps moyen 20.0 s
