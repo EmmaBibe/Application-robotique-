@@ -425,6 +425,23 @@
     log(CM.closedAt([true, true, false], 60, 0.5, 30) && !CM.closedAt([true, true, false], 60, 0.5, 100) && CM.closedAt([true, false, true], 60, 0.5, 125) && !CM.closedAt([true, false, true], 60, 0.5, 60), 'Cames : creux continu entre deux positions fermées voisines, creux séparés sinon');
   }
 
+  // Dépannage : tous les folios, plusieurs défauts, intervention multi-équipements
+  if (window.AA && AA.Defis && AA.Defis.TYPES.intervention) {
+    const PN = AA.Defis.TYPES.panne, cids = ['simple', 'vaetvient', 'telerupteur', 'double', 'minuterie', 'dol', 'multipostes', 'acoups', 'inversion', 'etoile', 'fdc'];
+    let okA = true, msgA = '';
+    cids.forEach(cid => { for (let i = 0; i < 12 && okA; i++) { const lv = 1 + (i % 5), x = PN.gen(AA.rng(cid + i), lv, cid); if (x.cid !== cid || !x.faults.length || x.sy.length < 1) { okA = false; msgA = cid + ' graine ' + i + ' : panne sans symptôme'; } } });
+    log(okA, 'Pannes : chacun des 11 folios produit des pannes à symptôme observable (12 tirages par folio) ' + msgA);
+    let n3 = 0, n2 = 0;
+    for (let i = 0; i < 40; i++) { const x = PN.gen(AA.rng('m' + i), 5); if (x.faults.length === 3) n3++; if (x.faults.length >= 2) n2++; }
+    log(n2 === 40 && n3 >= 5, `Pannes niveau Maître : toujours au moins 2 défauts, ${n3} tirages sur 40 avec 3 défauts simultanés`);
+    const IV = AA.Defis.TYPES.intervention; let okI = true, msgI = '';
+    for (let i = 0; i < 25 && okI; i++) {
+      const lv = 1 + (i % 5), x = IV.gen(AA.rng('iv' + i), lv), ids = x.subs.map(s => s.cid), want = lv <= 1 ? 2 : lv <= 3 ? 3 : 4;
+      if (ids.length !== want || new Set(ids).size !== ids.length || x.subs.some(s => !s.sy.length)) { okI = false; msgI = 'graine iv' + i; }
+    }
+    log(okI, 'Intervention sur site : 2 à 4 équipements distincts selon le niveau, chacun avec un symptôme ' + msgI);
+  }
+
   // Bornes des appareils
   if (window.AA && AA.BORNES) {
     const BO = AA.BORNES, D = BO.DEV, m = (k, st, a, b) => BO.measure(D[k].links(Object.assign({}, D[k].st, st)), a, b);

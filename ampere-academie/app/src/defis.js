@@ -41,7 +41,7 @@
   const FAULTS_BY_TYPE = {
     pb_no: ['open', 'stuck'], pb_nc: ['open', 'stuck'], no: ['open', 'stuck'], nc: ['open', 'stuck'],
     th_nc: ['open', 'stuck'], th_no: ['open', 'stuck'], sw1: ['open', 'stuck'], fuse: ['open'], cb: ['open'],
-    sw2: ['open'], coil: ['open'], telerupt: ['open'], lamp: ['burnt'], km3: ['pole', 'stuck'], thermal3: ['open'], motor3: ['open']
+    ls_no: ['open', 'stuck'], ls_nc: ['open', 'stuck'], sw2: ['open'], coil: ['open'], telerupt: ['open'], lamp: ['burnt'], km3: ['pole', 'stuck'], thermal3: ['open'], motor3: ['open']
   };
   const FAULT_TXT = { open: 'coupé / ouvert (contact, fil ou bobine interrompu)', stuck: 'soudé / collé (reste fermé)', burnt: 'lampe grillée', pole: 'un pôle de puissance usé (ne ferme plus)' };
   /* Séquences d'essai : ce que fait un opérateur pour constater le fonctionnement */
@@ -51,6 +51,11 @@
     telerupteur: [['init', 'au repos'], ['pulse:S1', 'après un appui sur S1'], ['pulse:S2', 'après un appui sur S2'], ['pulse:S3', 'après un appui sur S3']],
     dol: [['init', 'à la mise sous tension'], ['hold:S2', 'pendant l\'appui sur Marche (S2)'], ['release:S2', 'quand on relâche Marche'], ['wait', 'après quelques secondes de marche'], ['pulse:S1', 'après un appui sur Arrêt (S1)']],
     etoile: [['init', 'à la mise sous tension'], ['pulse:S2', 'juste après un appui sur Marche (S2)'], ['wait', 'au bout de quelques secondes'], ['pulse:S1', 'après un appui sur Arrêt (S1)']],
+    double: [['init', 'au repos'], ['toggle:S1', 'quand on bascule le premier mécanisme S1'], ['toggle:S1.2', 'quand on bascule ensuite le second mécanisme'], ['toggle:S1', 'quand on rebascule le premier mécanisme']],
+    minuterie: [['init', 'au repos'], ['pulse:S2', 'juste après un appui sur le poussoir du 1er étage (S2)'], ['wait', 'quelques secondes plus tard'], ['wait', "une dizaine de secondes après l'appui"]],
+    multipostes: [['init', 'à la mise sous tension'], ['pulse:S2', 'après un appui sur Marche au poste 1 (S2)'], ['pulse:S3', 'après un appui sur Arrêt au poste 2 (S3)'], ['pulse:S4', 'après un appui sur Marche au poste 2 (S4)'], ['pulse:S1', 'après un appui sur Arrêt au poste 1 (S1)']],
+    acoups: [['init', 'à la mise sous tension, sélecteur SA1 sur à-coups'], ['hold:S2', "pendant l'appui sur S2 en mode à-coups"], ['release:S2', 'quand on relâche S2 en mode à-coups'], ['toggle:SA1', 'quand on bascule SA1 sur marche continue'], ['pulse:S2', 'après un appui sur S2 en marche continue'], ['pulse:S1', 'après un appui sur Arrêt (S1)']],
+    fdc: [['init', 'à la mise sous tension'], ['pulse:S2', 'après un appui sur Départ avant (S2)'], ['pulse:SQ1', 'quand le chariot atteint la fin de course avant SQ1'], ['pulse:SQ2', 'quand il revient sur la fin de course arrière SQ2'], ['pulse:S1', 'après un appui sur Arrêt (S1)']],
     inversion: [['init', 'à la mise sous tension'], ['pulse:S2', 'après un appui sur Avant (S2)'], ['wait', 'après quelques secondes'], ['pulse:S3', 'quand on appuie sur Arrière (S3) sans arrêter'], ['pulse:S1', 'après un appui sur Arrêt (S1)'], ['pulse:S3', 'après un appui sur Arrière (S3)'], ['wait', 'après quelques secondes'], ['pulse:S1', 'après un nouvel arrêt']]
   };
   function runSeq(cid, faults) {
@@ -69,10 +74,11 @@
     }
     return out;
   }
-  const nameOf = id => ({ E1: 'la lampe', H1: 'le voyant Marche H1', H2: 'le voyant Défaut H2', M1: 'le moteur' })[id] || id;
-  function symptoms(ref, bad) {
+  const nameOf = (id, cid) => (cid === 'double' && id === 'E1') ? 'la lampe du premier groupe' : ({ E1: 'la lampe', E2: 'la lampe du second groupe', H1: 'le voyant Marche H1', H2: 'le voyant Défaut H2', M1: 'le moteur' })[id] || id;
+  const fem = id => id === 'E1' || id === 'E2';
+  function symptoms(ref, bad, max, cid) {
     const out = [];
-    for (let i = 0; i < ref.length && out.length < 2; i++) {
+    for (let i = 0; i < ref.length && out.length < (max || 2); i++) {
       const r = ref[i].snap, b = bad[i].snap, lab = ref[i].lab, parts = [];
       for (const m in r.motors) {
         if (r.motors[m] === b.motors[m]) continue;
@@ -83,10 +89,13 @@
         else if (r.motors[m] === 'stop' && b.motors[m].startsWith('run')) parts.push('le moteur tourne alors qu\'il devrait être arrêté');
         else if (r.motors[m] !== b.motors[m]) parts.push('le moteur tourne dans le mauvais sens');
       }
-      for (const l in r.lamps) if (r.lamps[l] !== b.lamps[l]) parts.push(nameOf(l) + (b.lamps[l] ? ' est allumé' + (l === 'E1' ? 'e' : '') + ' alors qu\'' + (l === 'E1' ? 'elle' : 'il') + ' devrait être éteint' + (l === 'E1' ? 'e' : '') : ' reste éteint' + (l === 'E1' ? 'e' : '')));
+      for (const l in r.lamps) if (r.lamps[l] !== b.lamps[l]) { const e = fem(l) ? 'e' : ''; parts.push(nameOf(l, cid) + (b.lamps[l] ? ' est allumé' + e + " alors qu'" + (e ? 'elle' : 'il') + ' devrait être éteint' + e : ' reste éteint' + e)); }
       const newTrips = b.trips.filter(t => !r.trips.includes(t));
       newTrips.forEach(t => parts.push(t === 'Q1' ? 'le disjoncteur Q1 déclenche' : t === 'F2' ? 'le relais thermique F2 déclenche' : t + ' déclenche'));
-      if (!parts.length) for (const c in r.coils) if (r.coils[c] !== b.coils[c]) parts.push(`le contacteur ${c} ${b.coils[c] ? 'est collé' : 'ne colle pas'}`);
+      if (!parts.length) for (const c in r.coils) if (r.coils[c] !== b.coils[c]) {
+        const ty = ((C[cid] && C[cid].parts.find(p => p.id === c)) || {}).type, on = b.coils[c];
+        parts.push(ty === 'minut' ? `la minuterie ${c} ${on ? 'reste enclenchée' : 'ne s\'enclenche pas'}` : ty === 'telerupt' ? `le télérupteur ${c} ${on ? 'reste alimenté' : 'ne reçoit pas d\'impulsion'}` : `le contacteur ${c} ${on ? 'est collé' : 'ne colle pas'}`);
+      }
       if (parts.length) out.push(lab.charAt(0).toUpperCase() + lab.slice(1) + ', ' + parts.slice(0, 2).join(' et ') + '.');
     }
     return out;
@@ -96,14 +105,15 @@
   D.TYPES.panne = {
     name: 'Diagnostic de panne', icon: 'bug', min: 1,
     desc: 'Une installation ne fonctionne plus. Reproduis le symptôme, mesure, raisonne sur le schéma et désigne l\'appareil défaillant.',
-    gen(r, lvl) {
-      const pool = lvl <= 1 ? ['simple', 'vaetvient', 'telerupteur'] : lvl === 2 ? ['telerupteur', 'dol', 'vaetvient'] : lvl === 3 ? ['dol', 'inversion'] : ['dol', 'inversion', 'etoile', 'etoile'];
-      const cid = r.pick(pool);
+    gen(r, lvl, forced) {
+      const pool = lvl <= 1 ? ['simple', 'vaetvient', 'telerupteur', 'double', 'minuterie'] : lvl === 2 ? ['telerupteur', 'minuterie', 'dol', 'multipostes', 'vaetvient'] : lvl === 3 ? ['dol', 'inversion', 'multipostes', 'acoups'] : lvl === 4 ? ['inversion', 'etoile', 'acoups', 'fdc'] : ['etoile', 'fdc', 'inversion', 'acoups'];
+      const cid = forced || r.pick(pool);
       const parts = C[cid].parts.filter(p => FAULTS_BY_TYPE[p.type] && !(p.type === 'breaker3'));
       const ref = runSeq(cid, []);
-      const nf = lvl >= 5 ? 2 : (lvl >= 4 && r() < 0.5 ? 2 : 1);
+      const nf = lvl >= 5 ? (r() < 0.5 ? 3 : 2) : lvl === 4 ? 2 : lvl === 3 ? (r() < 0.5 ? 2 : 1) : lvl === 2 ? (r() < 0.3 ? 2 : 1) : 1;
       let faults = [];
-      for (let k = 0; k < 60 && faults.length < nf; k++) {
+      for (let k = 0; k < 400 && faults.length < nf; k++) {
+        if (k % 60 === 59) faults = []; // le premier défaut masque tout : on recommence le tirage
         const p = r.pick(parts), f = r.pick(FAULTS_BY_TYPE[p.type]);
         if (faults.some(x => x.id === p.id)) continue;
         const cand = faults.concat([{ id: p.id, f }]);
@@ -113,7 +123,7 @@
         faults = cand;
       }
       const bad = runSeq(cid, faults);
-      const sy = symptoms(ref, bad);
+      const sy = symptoms(ref, bad, 1 + faults.length, cid);
       const site = r.pick(T.SITES), who = r.pick(T.WHO), when = r.pick(T.WHEN);
       const budget = lvl >= 5 ? 10 : lvl >= 4 ? 14 : null;
       const time = lvl >= 4 ? (lvl >= 5 ? 360 : 480) : null;
@@ -124,7 +134,7 @@
       main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Défi · Diagnostic de panne · ${LVL[inst.lvl]}</p><h1>Panne sur « ${esc(c.title)} »</h1></div>
         <div class="row">${inst.time ? `<span class="timer js-timer"></span>` : ''}${inst.budget ? `<span class="chip copper js-budget"></span>` : ''}</div></div>
         <div class="brief"><b>${esc(inst.who)}</b> ${esc(AA.de(inst.site))} signale, ${esc(inst.when)} : « ${inst.sy.join(' ')} »
-        ${inst.faults.length > 1 ? '<br><b>Attention :</b> le dossier d\'intervention précise que <b>deux défauts</b> peuvent coexister.' : ''}
+        ${inst.faults.length > 1 ? `<br><b>Attention :</b> le dossier d'intervention précise que <b>${['', '', 'deux', 'trois'][inst.faults.length]} défauts</b> coexistent.` : ''}
         ${inst.budget ? `<br>Le client facture l'immobilisation : tu disposes d'au plus <b>${inst.budget} mesures</b>.` : ''}</div>
         <div class="workbench" style="margin-top:14px"><div class="wb-host"></div><aside class="wb-side">
           <div class="card"><p class="eyebrow">Méthode conseillée</p><ol class="steps"><li>Reproduis le symptôme en manœuvrant.</li><li>Passe en <b>Multimètre</b> : pointe noire sur N, remonte la tension.</li><li>Un contact fermé : 0 V à ses bornes. Ouvert sous tension : toute la tension.</li><li>Hors tension seulement : contrôle de continuité (Ω).</li></ol></div>
