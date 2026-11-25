@@ -322,6 +322,31 @@
     log(nr(N.charge(true, 400, 16), 11085.1, 0.1) && nr(N.charge(false, 230, 32), 7360), 'Recharge VE : 16 A tri ≈ 11 kW, 32 A mono ≈ 7,4 kW');
   }
 
+  if (window.AA && AA.EXTRAS && AA.TECH) {
+    const X = AA.EXTRAS, c = X.cableCalc(2.5, false, 25, 16);
+    log(Math.abs(c.R - 0.225) < 1e-9 && Math.abs(c.P - 2 * 0.225 * 256) < 1e-9 && Math.abs(c.dU - 2 * 0.225 * 16 / 230 * 100) < 1e-9, 'Câble 2,5 mm², 25 m, 16 A : R = 225 mΩ par conducteur, pertes 115 W, chute 3,1 %');
+    eq([X.rcdMax(0.4), X.rcdMax(1), X.rcdMax(2), X.rcdMax(5), X.isoMin(250), X.isoMin(500), X.isoMin(1000)], [null, 300, 150, 40, 0.5, 1, 1], "Différentiel type général (300/150/40 ms) et seuils d'isolement IEC 60364-6");
+  }
+
+  // Éditeur de schéma : la recette accepte toutes les solutions qui fonctionnent, refuse les autres
+  if (window.AA && AA.EDITOR) {
+    const E = AA.EDITOR, sp = id => E.SPECS.find(s => s.id === id), sc = (m, id) => E.grade(m, sp(id)).score, B = (groups, load) => ({ groups, load });
+    const dol = { branches: [B([[['S1']], [['S2'], ['KM1.13']]], 'KM1')] };
+    const dolOrder = { branches: [B([[['S2'], ['KM1.13']], [['S1']]], 'KM1')] };
+    const dolNoHold = { branches: [B([[['S1']], [['S2']]], 'KM1')] };
+    const dolNoPrio = { branches: [B([[['S1'], ['KM1.13']], [['S2']]], 'KM1')] };
+    eq([sc(dol, 'dol'), sc(dolOrder, 'dol'), sc(dolNoHold, 'dol') < 100, sc(dolNoPrio, 'dol') < 100], [100, 100, true, true], 'Éditeur : démarrage direct accepté sous deux formes valides ; sans auto-maintien ou mal câblé, refusé');
+    const vy = { branches: [B([[['S1']], [['S2'], ['KM1.13']]], 'KM1'), B([[['KM1.23']]], 'H1')] };
+    const po = { branches: [B([[['S1']], [['S3']], [['S2'], ['S4'], ['KM1.13']]], 'KM1')] };
+    const ac = { branches: [B([[['S1']], [['S2'], ['SA1', 'KM1.13']]], 'KM1')] };
+    const acBad = { branches: [B([[['S1']], [['S2'], ['KM1.13']]], 'KM1')] };
+    const inv = { common: [[['S1']]], branches: [B([[['S2'], ['KM1.13']], [['KM2.21']]], 'KM1'), B([[['S5'], ['KM2.13']], [['KM1.21']]], 'KM2')] };
+    eq([sc(vy, 'voyant'), sc(po, 'postes'), sc(ac, 'acoups'), sc(acBad, 'acoups') < 100], [100, 100, 100, true], 'Éditeur : voyant, deux postes, à-coups (SA1 en série avec l\'auto-maintien) acceptés ; à-coups sans sélecteur refusé');
+    const invNoLock = { common: [[['S1']]], branches: [B([[['S2'], ['KM1.13']]], 'KM1'), B([[['S5'], ['KM2.13']]], 'KM2')] };
+    eq([sc(inv, 'inversion'), sc(invNoLock, 'inversion') < 100], [100, true], 'Éditeur : inversion avec arrêt commun et verrouillages acceptée ; sans verrouillage refusée');
+    const c = E.layout(ac); log(c.parts.length === 6 && c.wires.length >= 8, 'Éditeur : le folio généré contient toutes les pièces et leurs conducteurs');
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis

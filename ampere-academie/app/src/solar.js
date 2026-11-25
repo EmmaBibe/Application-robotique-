@@ -202,10 +202,11 @@
   SIMS.ups = el => {
     let topo = 'VFI', ev = null, t0 = 0, load = 60, tol = 10;
     el.innerHTML = `<div class="simcard"><div class="simview"></div><div class="simctl"><div class="seg js-t">${Object.entries(SOL.UPS).map(([k, u]) => `<button data-t="${k}" class="${k === topo ? 'on' : ''}">${k}</button>`).join('')}</div>
-      <button class="btn sm" data-e="cut">Coupure réseau</button><button class="btn sm" data-e="sag">Creux de tension (60 %)</button><button class="btn sm" data-e="spike">Surtension</button><button class="btn sm ghost" data-e="none">Réseau normal</button></div>
+      <button class="btn sm" data-e="cut">Coupure réseau</button><button class="btn sm" data-e="sag">Creux de tension (60 %)</button><button class="btn sm" data-e="spike">Surtension</button><button class="btn sm ghost" data-e="none">Réseau normal</button><label class="sl js-tol"><span>Coupure que la charge supporte sans s'arrêter</span><input type="range" min="0" max="40" step="1" value="10"><b>10</b><i>ms</i></label></div>
       <div class="simout"><div><span>Technologie</span><b class="o-n"></b></div><div><span>Temps de transfert typique</span><b class="o-g"></b></div><div><span>Charge sensible (tient ${tol} ms)</span><b class="o-r"></b></div></div></div>`;
     el.querySelectorAll('.js-t button').forEach(b => b.onclick = () => { topo = b.dataset.t; el.querySelectorAll('.js-t button').forEach(x => x.classList.toggle('on', x === b)); });
     el.querySelectorAll('[data-e]').forEach(b => b.onclick = () => { ev = b.dataset.e === 'none' ? null : b.dataset.e; t0 = performance.now() / 1000; });
+    { const tl = el.querySelector('.js-tol input'); tl.oninput = () => { tol = +tl.value; el.querySelector('.js-tol b').textContent = tol; el.querySelector('.o-r').previousElementSibling.textContent = 'Charge sensible (tient ' + tol + ' ms)'; }; }
     const cv = AA.canvas(el.querySelector('.simview'), 250, (g, W, H, t) => {
       const u = SOL.UPS[topo];
       el.querySelector('.o-n').textContent = u.n;

@@ -34,6 +34,8 @@ Application d'apprentissage des schémas électriques, du câblage, des coffrets
 | `app/src/fx.js` | Changement de thème (révélation circulaire) — aucun effet de pointeur |
 | `app/src/sim-formulas.js` | Formules affichées sous les simulations (`AA.SIMFORM`, `AA.addFormula`) |
 | `app/src/defis-elec.js` | Défi « Électrotechnique » : études chiffrées moteur / transformateur / four |
+| `app/src/editeur.js` | Défi « Éditeur de schéma » : tronc commun + branches (cases de chemins parallèles, chemins en série), folio généré (`AA.EDITOR.layout`), recette par la simulation (`AA.EDITOR.grade`) |
+| `app/src/sim-extras.js` | Panneaux « Explorer les valeurs » ajoutés par enveloppe aux simulations à boutons (câbles, tableau, mégohmmètre, test de différentiel, valeur efficace) |
 | `app/src/defis-auto.js` | Défis « Grafcet » (prédire la situation finale), « Réglage PID » (cahier des charges) et « Trame Modbus » (décoder une réponse RTU), « Niveau de performance requis » (graphe de risque) |
 | `app/src/lessons/n6b.js` | Capteurs, sorties, AU câblé, moteur et simulateur Grafcet (`AA.GRAFCET`, IEC 60848), GEMMA |
 | `app/src/lessons/n023.js` | Leçons complémentaires des niveaux 0, 2, 3 (VAT, outillage, gradateur LED, prises, VE, types de différentiels, projet logement, démarrages, deux vitesses, freinages, monophasé, câblage) (`AA.N023`) |
@@ -65,14 +67,15 @@ Les outils (JDK, SDK Android, WebView2) sont dans `C:\Users\SUZANE\AndroidBuild`
 - 13 niveaux ; les 267 leçons du programme sont rédigées, toutes avec une visualisation ou une simulation, toutes avec une visualisation ou une simulation.
 - Modèles vérifiés par les tests : `AA.ELEC`, `AA.DESIGN`, `AA.GRAFCET` (règles d'évolution IEC 60848, actions N/S/R/D/L, traduction Ladder), `AA.N7` (Pt100 IEC 60751, 4-20 mA et NAMUR NE 43, mise à l'échelle, filtre, PID avec anti-saturation, Ziegler-Nichols).
 - 11 folios vivants (dont commande depuis deux postes, marche par à-coups, va-et-vient par fins de course ; contacts liés mécaniquement par la propriété `mech` des pièces) ; 13 types de défis aléatoires (dont électrotechnique avec études de variateur, de maintenance et de protection HTA, Grafcet, réglage PID, trame Modbus, niveau de performance requis) ; 7 labos ; coffret 3D.
-- 172 tests automatiques au vert (dont CRC Modbus comparé aux exemples de référence), dont un contrôle de syntaxe de tous les scripts.
+- 14 types de défis aléatoires, dont l'éditeur de schéma (toute solution qui fonctionne est acceptée).
+- 178 tests automatiques au vert (dont CRC Modbus comparé aux exemples de référence), dont un contrôle de syntaxe de tous les scripts.
 - L'appli Windows est copiée sur le Bureau de la propriétaire (`Desktop\Ampere Academie` + raccourci « Ampère Académie ») : le dossier `dist` est trop profond pour Windows (chemin > 260 caractères). Après chaque fabrication, recopier `dist\Ampere Academie PC\*` vers ce dossier.
 
 ## Suite prévue (par ordre de priorité)
 1. Approfondir : plus d'exercices et de défis par module, relecture de chaque leçon.
-   Continuer la passe sur les simulations : valeurs réglables partout où c'est pertinent (cable, tableau, megger, rcdtest, ups…).
+   Éditeur de schéma : ajouter des cahiers des charges (étoile-triangle avec temporisation, fins de course, minuterie), et un mode « circuit de puissance ».
 2. Nouveaux folios : Dahlander, freinage par injection, démarrage statorique, schémas TT/TN/IT (pour l'instant traités par des simulations dédiées).
-3. Défis : éditeur de schéma (câbler soi-même un folio à partir d'un cahier des charges), Grafcet, diagnostic sur coffret 3D, projets multi-sites et extensions d'usine.
+3. Défis : diagnostic sur coffret 3D, projets multi-sites et extensions d'usine.
 4. Coffret 3D : autres armoires (inversion, étoile-triangle), mode « câblage » où l'apprenant tire les fils.
 5. Labo : variateur détaillé, batteries et recharge VE, protection différentielle, harmoniques.
 

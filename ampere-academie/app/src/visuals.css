@@ -154,3 +154,23 @@
 .amdec input { width: 52px; padding: 4px 6px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--solid); color: var(--ink); font: 600 13px var(--f-mono); }
 .amdec tr.crit td { background: color-mix(in srgb, var(--bad) 10%, transparent); }
 .amdec tr.crit b { color: var(--bad); }
+
+/* Panneau « Explorer les valeurs » */
+.xp-panel { margin-top: 12px; padding: 14px 0 4px; }
+.xp-panel > .eyebrow { margin-left: 16px; }
+
+/* Éditeur de schéma */
+.ed-grid { display: grid; grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.4fr); gap: 16px; margin-top: 14px; align-items: start; }
+.ed-branch { border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; margin-bottom: 10px; background: var(--surface-2); }
+.ed-bh { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.ed-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 12px; border: 1px dashed var(--line-2); background: var(--solid); }
+.ed-link { width: 2px; height: 10px; background: var(--wire); margin-left: 22px; }
+.ed-el { display: inline-flex; align-items: center; gap: 4px; padding: 3px 4px 3px 10px; border-radius: 999px; font: 700 12px var(--f-mono); background: color-mix(in srgb, var(--copper) 14%, transparent); color: var(--copper-2); }
+.ed-el.nc { background: color-mix(in srgb, var(--bad) 12%, transparent); color: var(--bad); }
+.ed-el button { border: 0; background: transparent; cursor: pointer; font-size: 14px; line-height: 1; color: inherit; padding: 0 4px; }
+.ed-par { font-style: normal; color: var(--ink-3); font-weight: 700; }
+.ed-sel { font-size: 12px; padding: 4px 8px; margin: 6px 0; max-width: 100%; }
+.ed-load { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 13px; }
+@media (max-width: 980px) { .ed-grid { grid-template-columns: 1fr; } }
+.ed-path { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 4px 6px; border-radius: 10px; background: var(--surface-2); }
+.ed-ser { font-style: normal; color: var(--ink-3); }
