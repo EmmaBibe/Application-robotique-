@@ -35,6 +35,13 @@ Application d'apprentissage des schémas électriques, du câblage, des coffrets
 | `app/src/sim-formulas.js` | Formules affichées sous les simulations (`AA.SIMFORM`, `AA.addFormula`) |
 | `app/src/defis-elec.js` | Défi « Électrotechnique » : études chiffrées moteur / transformateur / four |
 | `app/src/editeur.js` | Défi « Éditeur de schéma » : tronc commun + branches (cases de chemins parallèles, chemins en série), folio généré (`AA.EDITOR.layout`), recette par la simulation (`AA.EDITOR.grade`) |
+| `app/src/projschema.js` | Défi « Projet : schéma de A à Z » (cahier des charges long : puissance + commande, recette par la simulation) |
+| `app/src/batiment.js` | Défi « Bâtiment » : installation complète d'un immeuble (logements + services généraux, NF C 15-100), solution de référence |
+| `app/src/mesure-montage.js` | Mesure sur montage : choix de l'appareil, du branchement et du calibre (`AA.MONTAGE`) ; cadran analogique agrandissable (`AA.VIS.anaDraw`) |
+| `app/src/bornes.js`, `photos-appareils.js` | Repérage et test des bornes (contacteur, thermique, télérupteur, interrupteur, disjoncteur) à l'ohmmètre, relais inconnu, photos réelles (Wikimedia, licences vérifiées) |
+| `app/src/schemas-types.js` | Un départ moteur en synoptique / unifilaire / multifilaire / développé ; schéma de répartition d'un tableau (leçon n1m2l7) |
+| `app/src/cames.js` | Commutateurs à cames (`AA.CAMES`) : diagramme de fermeture, forme des cames, passages entre positions ; module n3m6 (4 leçons) et défi de conception |
+| `app/src/intervention.js` | Défi « Intervention sur site » : 2 à 4 équipements en panne, 1 à 3 défauts chacun selon le niveau |
 | `app/src/sim-extras.js` | Panneaux « Explorer les valeurs » ajoutés par enveloppe aux simulations à boutons (câbles, tableau, mégohmmètre, test de différentiel, valeur efficace) |
 | `app/src/defis-auto.js` | Défis « Grafcet » (prédire la situation finale), « Réglage PID » (cahier des charges) et « Trame Modbus » (décoder une réponse RTU), « Niveau de performance requis » (graphe de risque) |
 | `app/src/lessons/n6b.js` | Capteurs, sorties, AU câblé, moteur et simulateur Grafcet (`AA.GRAFCET`, IEC 60848), GEMMA |
@@ -63,12 +70,13 @@ powershell -ExecutionPolicy Bypass -File windows\build.ps1    # dist\Ampere-Acad
 ```
 Les outils (JDK, SDK Android, WebView2) sont dans `C:\Users\SUZANE\AndroidBuild`. La clé de signature Android est dans `C:\Users\SUZANE\AndroidBuild\cles\ampere-academie` (hors dépôt) : à sauvegarder aussi sur un support externe.
 
-## État au 25/11/2026 (soir)
-- 13 niveaux ; les 267 leçons du programme sont rédigées, toutes avec une visualisation ou une simulation, toutes avec une visualisation ou une simulation.
-- Modèles vérifiés par les tests : `AA.ELEC`, `AA.DESIGN`, `AA.GRAFCET` (règles d'évolution IEC 60848, actions N/S/R/D/L, traduction Ladder), `AA.N7` (Pt100 IEC 60751, 4-20 mA et NAMUR NE 43, mise à l'échelle, filtre, PID avec anti-saturation, Ziegler-Nichols).
-- 11 folios vivants (dont commande depuis deux postes, marche par à-coups, va-et-vient par fins de course ; contacts liés mécaniquement par la propriété `mech` des pièces) ; 13 types de défis aléatoires (dont électrotechnique avec études de variateur, de maintenance et de protection HTA, Grafcet, réglage PID, trame Modbus, niveau de performance requis) ; 7 labos ; coffret 3D.
-- 14 types de défis aléatoires, dont l'éditeur de schéma (toute solution qui fonctionne est acceptée).
-- 178 tests automatiques au vert (dont CRC Modbus comparé aux exemples de référence), dont un contrôle de syntaxe de tous les scripts.
+## État au 25/11/2026 (nuit)
+- 13 niveaux, 272 leçons, toutes avec une visualisation ou une simulation (parcours automatique sans erreur).
+- 11 folios vivants ; le défi « Diagnostic de panne » les utilise tous, avec 1 défaut (Initiation) à 2 ou 3 défauts simultanés (Maître).
+- 20 types de défis aléatoires, dont : éditeur de schéma, projet de schéma de A à Z, bâtiment complet, brochage d'un relais inconnu, commutateur à cames sur mesure, intervention sur site multi-équipements.
+- Multimètre du banc déplaçable (poignée, réduction, double-clic = position d'origine).
+- Textes générés : utiliser `AA.de()` (de / d' / du / des) et `AA.cap()` ; jamais « de une ».
+- 201 tests automatiques au vert, dont un contrôle de syntaxe de tous les scripts.
 - L'appli Windows est copiée sur le Bureau de la propriétaire (`Desktop\Ampere Academie` + raccourci « Ampère Académie ») : le dossier `dist` est trop profond pour Windows (chemin > 260 caractères). Après chaque fabrication, recopier `dist\Ampere Academie PC\*` vers ce dossier.
 
 ## Suite prévue (par ordre de priorité)
