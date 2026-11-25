@@ -938,3 +938,28 @@ Mêmes mondes de départ que la section 6 (graines 8000 à 8059, 11 scènes, tro
 - VIGIE 7-E seule : campagne arrêtée à 251 essais sur 660 pour libérer le calcul de la validation ; non retenue, faute de résultats complets.
 
 **Variantes retenues pour la validation** (au plus deux, comme prévu) : VIGIE 7-AC (retard × 0,3) et VIGIE 7-EA (interactive + retard × 0,3).
+
+## Validation de VIGIE 7 (plan, section 12) : VIGIE 7-EA adoptée
+
+Graines neuves 7100 à 7159, mondes réalistes (version 3), 11 scènes, trois conditions : 1 980 situations par méthode, 9 900 essais. Aucun réglage modifié après la mise au point. Détail dans `validation_vigie7_analyse.txt`.
+
+| Méthode | Réussite | Garantie (95 %) | Collisions | Au plus (95 %) | Temps dépassé |
+|---|---|---|---|---|---|
+| T-MPC++ | 91,6 % | au moins 90,3 % | 7,4 % | 8,6 % | 1,1 % |
+| **VIGIE 7-EA** | **90,7 %** | **au moins 89,3 %** | 8,7 % | 10,0 % | 0,7 % |
+| VIGIE 7-AC | 90,2 % | au moins 88,8 % | 8,6 % | 10,0 % | 1,2 % |
+| VIGIE 6 | 86,6 % | au moins 85,0 % | 5,2 % | 6,2 % | 8,2 % |
+| DRA-MPPI | 83,7 % | au moins 82,0 % | 11,8 % | 13,3 % | 4,5 % |
+
+**VIGIE 7-EA (prédiction interactive + budget d'échec, retard × 0,3)** :
+- − VIGIE 6 : **+4,0 [+2,7 ; +5,4]**, par grappes [+2,5 ; +5,6] ; significatif dans les trois conditions ; aucune scène en recul significatif. **Règle d'adoption remplie : VIGIE 7-EA devient VIGIE 7.**
+- − DRA-MPPI : +7,0 [+5,5 ; +8,5], significatif partout.
+- − T-MPC++ : −0,9 [−2,3 ; +0,5], par grappes [−2,5 ; +0,8]. **Égalité : VIGIE 7 ne bat pas T-MPC++.**
+- Face à la meilleure référence de chaque scène : égalité ou mieux dans dix scènes sur onze (forêt +3,3, significatif) ; **un seul recul significatif, la porte étroite** : 52,8 % contre 67,8 % pour T-MPC++ (−15,0 [−23,3 ; −6,7]). VIGIE y a pourtant gagné +32,8 points sur VIGIE 6 (de 20,0 % à 52,8 %). Le critère « ne perd nulle part » n'est donc pas atteint.
+- Prix payé : plus de collisions que VIGIE 6 (8,7 % contre 5,2 %), beaucoup moins d'attentes trop longues (0,7 % contre 8,2 %).
+
+**VIGIE 7-AC** : +3,5 sur VIGIE 6, mais recul significatif à la poursuite (−5,0 [−8,3 ; −2,2]) : non adoptée, comme le prévoit la règle.
+
+**Garanties** (Clopper-Pearson, 1 980 essais) : sur ces mondes réalistes jamais vus, VIGIE 7 réussit au moins 89,3 % des trajets et heurte dans au plus 10,0 % d'entre eux, avec 95 % de confiance. Ce sont des garanties pour ce simulateur et ces onze scènes, pas pour un robot réel.
+
+**Ce qui reste** : la porte étroite traversée par un flux continu, seule scène où VIGIE 7 est encore nettement derrière T-MPC++ ; le taux de collisions, plus haut que celui de VIGIE 6 ; le portage de VIGIE 7 dans le JavaScript des applications et en C++.

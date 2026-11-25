@@ -4,7 +4,32 @@ par condition et par scène ; règle d'adoption ; « bat T-MPC++ » ; « ne perd
 import sys
 import numpy as np
 import pandas as pd
-from scipy.stats import beta
+from math import lgamma, log, exp
+
+
+def _binom_cdf(k, n, p):
+    """P(X <= k) pour X ~ Binomiale(n, p), calculée en logarithmes."""
+    if p <= 0: return 1.0
+    if p >= 1: return 1.0 if k >= n else 0.0
+    lp, lq = log(p), log(1 - p)
+    return min(1.0, sum(exp(lgamma(n + 1) - lgamma(i + 1) - lgamma(n - i + 1) + i * lp + (n - i) * lq) for i in range(k + 1)))
+
+
+def _racine(f, a=0.0, b=1.0):
+    for _ in range(80):
+        m = (a + b) / 2
+        if f(m) > 0: a = m
+        else: b = m
+    return (a + b) / 2
+
+
+def cp_bas(k, n, a=0.05):
+    """Borne basse exacte de Clopper-Pearson (bilatérale 1 - a) pour k succès sur n."""
+    return 0.0 if k == 0 else _racine(lambda p: (1 - _binom_cdf(k - 1, n, p)) < a / 2 and 1 or -1)
+
+
+def cp_haut(k, n, a=0.05):
+    return 1.0 if k == n else _racine(lambda p: _binom_cdf(k, n, p) > a / 2 and 1 or -1)
 
 NOMS = {'VIGIE 6': 'VIGIE 6', 'VIGIE 7-AC': 'VIGIE 7-AC', 'VIGIE 7-EA': 'VIGIE 7-EA', 'T-MPC++': 'T-MPC++', 'DRA-MPPI': 'DRA-MPPI'}
 d = pd.read_csv(sys.argv[1])
@@ -41,7 +66,7 @@ def ecrit(a, b, x, grappes=False):
 print('\n=== Taux et garanties (Clopper-Pearson, 95 %)')
 for m in ['VIGIE 7-EA', 'VIGIE 7-AC', 'VIGIE 6', 'T-MPC++', 'DRA-MPPI']:
     v = d[d.m == m]; n = len(v); k = int(v.ok.sum()); c = int(v.coll.sum())
-    lo = beta.ppf(0.025, k, n - k + 1) if k else 0.0; hi_c = beta.ppf(0.975, c + 1, n - c) if c < n else 1.0
+    lo = cp_bas(k, n); hi_c = cp_haut(c, n)
     print(f'  {m:11s} réussite {100 * k / n:5.1f} % (au moins {100 * lo:.1f} %)   collisions {100 * c / n:4.1f} % (au plus {100 * hi_c:.1f} %)   temps dépassé {100 * (v.outcome == "temps").mean():4.1f} %   n={n}')
 
 for v in ['VIGIE 7-EA', 'VIGIE 7-AC']:

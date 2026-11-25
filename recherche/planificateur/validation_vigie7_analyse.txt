@@ -1,0 +1,71 @@
+m
+DRA-MPPI      1980
+T-MPC++       1980
+VIGIE 6       1980
+VIGIE 7-AC    1980
+VIGIE 7-EA    1980
+
+=== Taux et garanties (Clopper-Pearson, 95 %)
+  VIGIE 7-EA  réussite  90.7 % (au moins 89.3 %)   collisions  8.7 % (au plus 10.0 %)   temps dépassé  0.7 %   n=1980
+  VIGIE 7-AC  réussite  90.2 % (au moins 88.8 %)   collisions  8.6 % (au plus 10.0 %)   temps dépassé  1.2 %   n=1980
+  VIGIE 6     réussite  86.6 % (au moins 85.0 %)   collisions  5.2 % (au plus 6.2 %)   temps dépassé  8.2 %   n=1980
+  T-MPC++     réussite  91.6 % (au moins 90.3 %)   collisions  7.4 % (au plus 8.6 %)   temps dépassé  1.1 %   n=1980
+  DRA-MPPI    réussite  83.7 % (au moins 82.0 %)   collisions 11.8 % (au plus 13.3 %)   temps dépassé  4.5 %   n=1980
+
+=== VIGIE 7-EA
+  − VIGIE 6   global  +4.0 [+2.7 ; +5.4]*  par grappes [+2.5 ; +5.6]*
+        nominal      +3.3 [+0.9 ; +5.9]*
+        perception   +3.6 [+1.2 ; +6.1]*
+        reactifs     +5.2 [+3.2 ; +7.3]*
+  − T-MPC++   global  -0.9 [-2.3 ; +0.5]   par grappes [-2.5 ; +0.8]
+        nominal      -1.8 [-4.2 ; +0.8] 
+        perception   -0.5 [-3.2 ; +2.1] 
+        reactifs     -0.5 [-2.4 ; +1.5] 
+  − DRA-MPPI  global  +7.0 [+5.5 ; +8.5]*  par grappes [+5.3 ; +8.7]*
+        nominal      +5.5 [+2.7 ; +8.0]*
+        perception   +7.4 [+4.5 ; +10.3]*
+        reactifs     +8.0 [+5.8 ; +10.5]*
+  par scène : − VIGIE 6 | − meilleure référence (T-MPC++ ou DRA-MPPI, la meilleure sur la scène)
+    carrefour          97.8 %    +1.1 [-1.7 ; +4.4]    | T-MPC++   97.2 %   +0.6 [-2.8 ; +3.9] 
+    carrefour_rapide   91.7 %    +2.2 [-2.8 ; +7.8]    | T-MPC++   91.7 %   +0.0 [-5.6 ; +5.6] 
+    coin_aveugle       77.8 %    +3.3 [-2.8 ; +10.0]    | T-MPC++   77.2 %   +0.6 [-5.6 ; +6.7] 
+    couloir            97.8 %    +5.6 [+2.2 ; +8.9]*   | T-MPC++   97.8 %   +0.0 [-2.8 ; +3.3] 
+    foret             100.0 %    +3.3 [+1.1 ; +6.1]*   | DRA-MPPI  96.7 %   +3.3 [+1.1 ; +6.1]*
+    foule              97.8 %    -0.6 [-3.3 ; +2.2]    | T-MPC++   96.1 %   +1.7 [-1.7 ; +5.0] 
+    foule_dense        91.1 %    +0.6 [-3.9 ; +5.0]    | T-MPC++   93.9 %   -2.8 [-7.2 ; +1.7] 
+    goulot             52.8 %   +32.8 [+25.6 ; +40.0]*   | T-MPC++   67.8 %  -15.0 [-23.3 ; -6.7]*
+    piege              99.4 %    +0.0 [+0.0 ; +0.0]    | T-MPC++  100.0 %   -0.6 [-1.7 ; +0.0] 
+    poursuite          96.1 %    -1.7 [-5.0 ; +1.1]    | T-MPC++   95.0 %   +1.1 [-1.7 ; +4.4] 
+    traversee          95.0 %    -2.2 [-5.6 ; +1.1]    | T-MPC++   97.2 %   -2.2 [-5.6 ; +1.1] 
+  Règle d'adoption : +1 point au moins (+4.0), aucun recul significatif par condition (aucun) ni par scène (aucun) -> ADOPTÉE
+  Bat T-MPC++ : non (-0.9 [-2.3 ; +0.5])
+  Ne perd nulle part face à la meilleure référence : non, recul significatif : goulot
+
+=== VIGIE 7-AC
+  − VIGIE 6   global  +3.5 [+2.1 ; +4.9]*  par grappes [+2.0 ; +5.1]*
+        nominal      +2.9 [+0.2 ; +5.6]*
+        perception   +3.3 [+0.9 ; +5.9]*
+        reactifs     +4.4 [+2.4 ; +6.5]*
+  − T-MPC++   global  -1.4 [-2.9 ; +0.1]   par grappes [-3.2 ; +0.4]
+        nominal      -2.3 [-4.8 ; +0.5] 
+        perception   -0.8 [-3.5 ; +2.0] 
+        reactifs     -1.2 [-3.5 ; +1.1] 
+  − DRA-MPPI  global  +6.5 [+4.8 ; +8.1]*  par grappes [+4.6 ; +8.3]*
+        nominal      +5.0 [+2.1 ; +7.7]*
+        perception   +7.1 [+4.1 ; +10.2]*
+        reactifs     +7.3 [+5.0 ; +9.7]*
+  par scène : − VIGIE 6 | − meilleure référence (T-MPC++ ou DRA-MPPI, la meilleure sur la scène)
+    carrefour          97.8 %    +1.1 [-2.2 ; +4.4]    | T-MPC++   97.2 %   +0.6 [-2.8 ; +3.9] 
+    carrefour_rapide   90.0 %    +0.6 [-4.4 ; +6.1]    | T-MPC++   91.7 %   -1.7 [-7.8 ; +4.4] 
+    coin_aveugle       72.8 %    -1.7 [-7.8 ; +4.4]    | T-MPC++   77.2 %   -4.4 [-11.1 ; +2.2] 
+    couloir            96.1 %    +3.9 [+0.6 ; +7.2]*   | T-MPC++   97.8 %   -1.7 [-5.0 ; +1.7] 
+    foret             100.0 %    +3.3 [+1.1 ; +6.1]*   | DRA-MPPI  96.7 %   +3.3 [+1.1 ; +6.1]*
+    foule              99.4 %    +1.1 [+0.0 ; +2.8]    | T-MPC++   96.1 %   +3.3 [+0.6 ; +6.7]*
+    foule_dense        93.3 %    +2.8 [-1.7 ; +7.2]    | T-MPC++   93.9 %   -0.6 [-3.9 ; +3.3] 
+    goulot             56.1 %   +36.1 [+27.8 ; +44.4]*   | T-MPC++   67.8 %  -11.7 [-21.1 ; -1.7]*
+    piege             100.0 %    +0.6 [+0.0 ; +1.7]    | T-MPC++  100.0 %   +0.0 [+0.0 ; +0.0] 
+    poursuite          92.8 %    -5.0 [-8.3 ; -2.2]*   | T-MPC++   95.0 %   -2.2 [-6.1 ; +1.7] 
+    traversee          93.3 %    -3.9 [-8.3 ; +0.0]    | T-MPC++   97.2 %   -3.9 [-8.3 ; +0.0] 
+  Règle d'adoption : +1 point au moins (+3.5), aucun recul significatif par condition (aucun) ni par scène (['poursuite']) -> non adoptée
+  Bat T-MPC++ : non (-1.4 [-2.9 ; +0.1])
+  Ne perd nulle part face à la meilleure référence : non, recul significatif : goulot
