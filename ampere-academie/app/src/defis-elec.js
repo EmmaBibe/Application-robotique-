@@ -59,6 +59,21 @@
         ]
       };
     },
+    maintenance(r) {
+      const mtbf = r.pick([300, 600, 1200, 2500]), mttr = r.pick([3, 6, 10, 16]), r1 = r.pick([200, 500, 900]), k = r.pick([1.4, 2.6, 3.4]);
+      const A = mtbf / (mtbf + mttr), Ar = 1 - (1 - A) * (1 - A), down = (1 - A) * 8760, downR = (1 - Ar) * 8760 * 60, r10 = Math.round(r1 * k);
+      return {
+        sig: 'm' + mtbf + mttr + r1 + k,
+        brief: `Pompe de relevage critique : MTBF <b>${mtbf} h</b>, MTTR <b>${mttr} h</b>, fonctionnement 24 h/24 (8 760 h par an). Mesure d'isolement de son moteur : <b>${r1} MΩ</b> à 1 min, <b>${r10} MΩ</b> à 10 min.`,
+        steps: [
+          { q: 'Disponibilité de la pompe', a: A * 100, u: '%', tol: 0.0005, sol: `A = ${mtbf} / (${mtbf} + ${mttr}) = ${f(A * 100, 3)} %` },
+          { q: 'Indisponibilité sur une année', a: down, u: 'h', sol: `(1 − A) × 8 760 = ${f(down, 1)} h` },
+          { q: 'Disponibilité avec une seconde pompe identique en redondance', a: Ar * 100, u: '%', tol: 0.00001, sol: `A = 1 − (1 − ${f(A, 4)})² = ${f(Ar * 100, 5)} %` },
+          { q: 'Indisponibilité annuelle avec la redondance', a: downR, u: 'min', sol: `(1 − A) × 8 760 × 60 = ${f(downR, 1)} min` },
+          { q: 'Index de polarisation du moteur', a: r10 / r1, u: '', sol: `IP = ${r10} / ${r1} = ${f(r10 / r1, 2)} (repère usuel : < 2 douteux, 2 à 4 bon)` }
+        ]
+      };
+    },
     four(r) {
       const R = r.pick([10, 15, 20, 23, 30, 40, 46]), cp = r.pick(['Y', 'D']);
       const Iy = 230 / R, Py = 3 * 230 * 230 / R, Id = sq3 * 400 / R, Pd = 3 * 400 * 400 / R;

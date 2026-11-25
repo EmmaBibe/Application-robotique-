@@ -145,3 +145,12 @@
 .mb-part { padding: 8px 12px; border-radius: 12px; background: var(--sch-bg); border: 1px solid var(--line); }
 .mb-part span { display: block; font-size: 11px; color: var(--ink-3); }
 .mb-part b { font: 700 15px var(--f-mono); color: var(--copper-2); letter-spacing: .04em; }
+
+/* AMDEC */
+.amdec-wrap { overflow-x: auto; padding: 12px 14px 0; }
+.amdec { width: 100%; border-collapse: collapse; font-size: 13px; }
+.amdec th, .amdec td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
+.amdec th { font: 600 11px var(--f-display); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.amdec input { width: 52px; padding: 4px 6px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--solid); color: var(--ink); font: 600 13px var(--f-mono); }
+.amdec tr.crit td { background: color-mix(in srgb, var(--bad) 10%, transparent); }
+.amdec tr.crit b { color: var(--bad); }

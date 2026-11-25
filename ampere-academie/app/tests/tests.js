@@ -191,7 +191,7 @@
       if (inst.steps.length !== Math.min(X.count(lvl), X.scenarios[inst.k](AA.rng('e' + i)).steps.length)) allOk = false;
       inst.steps.forEach(s => { if (!(isFinite(s.a) && s.a > 0 && X.ok(s.a, s.a, s.tol) && !X.ok(s.a * 1.05, s.a, s.tol))) allOk = false; });
     }
-    log(allOk && kinds.size === 4 && sigs.size > 40, `Défi électrotechnique : 90 études, 4 types, ${sigs.size} énoncés distincts, réponses exactes acceptées et ± 5 % refusées`);
+    log(allOk && kinds.size === 5 && sigs.size > 40, `Défi électrotechnique : 90 études, 5 types, ${sigs.size} énoncés distincts, réponses exactes acceptées et ± 5 % refusées`);
     eq([X.parse('12,5'), X.parse(' 1 250 '), isNaN(X.parse(''))], [12.5, 1250, true], 'Défi électrotechnique : saisie avec virgule ou espaces');
   }
 
@@ -274,6 +274,17 @@
       else { if (f[1] !== 3 || f[2] !== (f.length - 5)) ok = false; inst.steps.slice(2).forEach((s, k) => { if (k < f[2] / 2 && s.a !== f[3 + 2 * k] * 256 + f[4 + 2 * k]) ok = false; }); }
     }
     log(ok && exc > 5 && sigs.size > 110, `Défi Modbus : 120 trames (${exc} exceptions), CRC valides, réponses cohérentes avec les octets`);
+  }
+
+  // Niveau 9 : maintenance
+  if (window.AA && AA.N9) {
+    const N = AA.N9, nr = (x, y, e) => Math.abs(x - y) <= (e || 1e-9);
+    log(nr(N.pi(500, 1500), 3) && N.piVerdict(0.9) === 'dangereux' && N.piVerdict(1.5) === 'douteux' && N.piVerdict(3) === 'bon' && N.piVerdict(5) === 'très bon', 'Index de polarisation et repères usuels');
+    log(nr(N.zsMax(230, 160), 0.9583, 1e-4) && nr(N.ik(230, 0.5), 460), 'Boucle TN : Zs max = 2/3 × 230 / 160 A = 0,958 Ω ; Ik = 460 A pour 0,5 Ω');
+    log(nr(N.thd([1, 0.3, 0.4]), 0.5, 1e-12), 'THD : √(0,3² + 0,4²) = 50 %');
+    log(nr(N.avail(990, 10), 0.99) && nr(N.series(0.99, 0.99), 0.9801) && nr(N.redund(0.99, 0.99), 0.9999), 'Disponibilité : 99 % → 98,01 % en série, 99,99 % en redondance');
+    eq(N.reorder(4, 3, 5), 17, 'Point de commande : 4 × 3 + 5 = 17 pièces');
+    const q0 = 0.02, R = t => N.Rins(t, 1000, q0); log(N.pi(R(60), R(600)) > 3 && N.pi(N.Rins(60, 1000, 0.8), N.Rins(600, 1000, 0.8)) < 1.3, "Modèle d'isolement : bobinage sec IP > 3, bobinage humide IP < 1,3");
   }
 
   // Automate
