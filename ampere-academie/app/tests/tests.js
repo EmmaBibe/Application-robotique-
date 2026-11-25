@@ -369,6 +369,18 @@
     log(f.parts.filter(p => p.type === 'km3').length === 4 && f.parts.some(p => p.type === 'motor6') && f.parts.some(p => p.type === 'motor3'), 'Projet complet : le folio généré contient la puissance (4 contacteurs, moteur étoile-triangle et moteur direct) et la commande');
   }
 
+  // Installation d'un logement ou d'un immeuble (NF C 15-100)
+  if (window.AA && AA.BATIMENT) {
+    const B = AA.BATIMENT; let all = true;
+    for (let i = 0; i < 60; i++) { const lvl = 1 + (i % 5), inst = B.gen(AA.rng('bt' + i), lvl); if (B.grade(inst, inst.units.map(B.reference), B.refServices()).score !== 100) all = false; }
+    log(all, 'Installation : la solution de référence est conforme pour 60 logements et immeubles générés (niveaux 1 à 5)');
+    eq([B.minSocles('sejour', 18), B.minSocles('sejour', 26), B.minSocles('sejour', 40), B.minSocles('chambre', 12), B.minSocles('cuisine', 9), B.minSocles('cuisine', 4), B.pcMax(1.5, 16), B.pcMax(2.5, 20), B.pcMax(1.5, 20)], [5, 7, 7, 3, 6, 3, 8, 12, 0], 'Installation : socles minimaux par pièce et nombre de socles par circuit');
+    eq([JSON.stringify(B.idRule(30)), JSON.stringify(B.idRule(70)), JSON.stringify(B.idRule(110))], ['{"AC":[25],"A":[40]}', '{"AC":[40,40],"A":[40]}', '{"AC":[40,40,40],"A":[40]}'], 'Installation : interrupteurs différentiels selon la surface');
+    const inst = B.gen(AA.rng('x'), 2), u = inst.units[0], ref = B.reference(u), cp = () => JSON.parse(JSON.stringify(ref));
+    const e1 = cp(); e1.circuits.find(c => c.u === 'plaque').sec = 4; const e2 = cp(); e2.circuits.find(c => c.u === 'll').id = 0; const e3 = cp(); e3.socles[0] = 3;
+    log([e1, e2, e3].every(d => B.grade(inst, [d], null).score < 100), 'Installation : plaque en 4 mm², lave-linge hors type A, séjour sous-équipé : refusés');
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis
