@@ -112,7 +112,7 @@
   /* Rendu d'un bloc de visualisation (appelé par le lecteur de leçon) */
   AA.renderVis = (b, d, ctx) => {
     let stop = null;
-    if (b.sim) stop = AA.SIMS[b.sim](d, b.opts);
+    if (b.sim) { stop = AA.SIMS[b.sim](d, b.opts); if (AA.addFormula) AA.addFormula(d, b.sim); }
     else if (b.order) AA.SIMS.order(d, ORDER[b.order]);
     else if (b.choose) AA.SIMS.choose(d, b.choose === 'epi' ? EPI : IHM);
     else if (b.hot) { const h = AA.VISDATA.HOT[b.hot]; AA.SIMS.hotspots(d, { svg: h[0], spots: h[1], title: h[2] }); }

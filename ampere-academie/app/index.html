@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Ampère Académie</title>
 <meta name="description" content="Schémas électriques, câblage, coffrets 3D et automates : de zéro au niveau ingénieur, par la pratique et la simulation.">
-<meta name="theme-color" content="#f2efe8">
+<meta name="theme-color" content="#eef0f7">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Ampère Académie">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
-<script>try{var s=JSON.parse(localStorage.getItem('ampere-academie-v1')||'{}').settings||{},t=s.theme||'auto';if(t==='auto'||t==='dark'||t==='light')t=(t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches))?'neon':'chantier';document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script>try{var s=JSON.parse(localStorage.getItem('ampere-academie-v1')||'{}').settings||{},t=s.theme||'auto',M={chantier:'aube',plan:'abysses',tableau:'brume',neon:'abysses',sable:'aquarelle'};t=M[t]||t;if(t==='auto'||t==='dark'||t==='light')t=(t==='dark'||(t==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches))?'abysses':'aube';document.documentElement.dataset.theme=t;}catch(e){}</script>
 <!--STYLE--><link rel="stylesheet" href="src/base.css"><link rel="stylesheet" href="src/styles.css"><link rel="stylesheet" href="src/visuals.css"><!--/STYLE-->
 </head>
 <body>
@@ -21,16 +21,21 @@
       <linearGradient id="gSilver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#b9c3cf"/><stop offset="1" stop-color="#6b7684"/></linearGradient>
       <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2b0"/><stop offset=".5" stop-color="#f2b83a"/><stop offset="1" stop-color="#a86b0c"/></linearGradient>
     <linearGradient id="bmCopper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffc08f"/><stop offset=".5" stop-color="#e8894a"/><stop offset="1" stop-color="#9c4a1f"/></linearGradient>
+    <linearGradient id="gLiquid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--copper)"/><stop offset="1" style="stop-color:var(--accent-2)"/></linearGradient>
+    <linearGradient id="gFlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--copper)"/><stop offset="1" style="stop-color:var(--accent-2)"/></linearGradient>
+    <linearGradient id="bmGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8f7bff"/><stop offset=".55" stop-color="#5b4bff"/><stop offset="1" stop-color="#ff7a8a"/></linearGradient>
     <symbol id="brandmark" viewBox="0 0 40 40">
-      <rect x="1" y="1" width="38" height="38" rx="11" fill="#121821" stroke="url(#bmCopper)" stroke-width="1.6"/>
-      <path d="M11.5 30.5 L20 9.5 L28.5 30.5" fill="none" stroke="url(#bmCopper)" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
-      <path d="M7 23 q3.25 -6 6.5 0 t6.5 0 t6.5 0 t6.5 0" fill="none" stroke="#ffb43a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M20 2.5 C27 11 33 17.5 33 25 A13 13 0 0 1 7 25 C7 17.5 13 11 20 2.5Z" fill="url(#bmGlass)"/>
+      <path d="M13.5 30 L20 15 L26.5 30" fill="none" stroke="#fff" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+      <path d="M11 24.5 q2.25 -3.6 4.5 0 t4.5 0 t4.5 0 t4.5 0" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M12.5 19 C13.5 15 15.5 12 17.5 9.5" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round"/>
     </symbol>
   </defs>
 </svg>
+<div class="ambient" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <header class="rail">
-  <a class="maker" href="#/accueil" aria-label="Accueil"><svg><use href="#brandmark"/></svg><span><b>AMPÈRE</b><small>académie</small></span></a>
-  <nav class="din" id="din" aria-label="Navigation principale"></nav>
+  <a class="maker" href="#/accueil" aria-label="Accueil"><svg><use href="#brandmark"/></svg><span><b>Ampère</b><small>académie</small></span></a>
+  <nav class="din glass" id="din" aria-label="Navigation principale"></nav>
   <div class="meter-box js-stats"></div>
 </header>
 <main id="main"></main>
@@ -46,7 +51,9 @@
 <script src="src/visuals-a.js"></script>
 <script src="src/visuals-b.js"></script>
 <script src="src/visuals-map.js"></script>
+<script src="src/sim-formulas.js"></script>
 <script src="src/curriculum.js"></script>
+<script src="src/defis-data.js"></script>
 <script src="src/lessons/n0.js"></script>
 <script src="src/lessons/n3.js"></script>
 <script src="src/lessons/n0b.js"></script>
@@ -56,8 +63,10 @@
 <script src="src/lessons/n6.js"></script>
 <script src="src/lessons/nm.js"></script>
 <script src="src/lessons/ns.js"></script>
-<script src="src/defis-data.js"></script>
+<script src="src/lessons/n4.js"></script>
+<script src="src/lessons/n5.js"></script>
 <script src="src/defis.js"></script>
+<script src="src/defis-elec.js"></script>
 <script src="src/projets.js"></script>
 <script src="src/labo.js"></script>
 <script src="src/solar.js"></script>

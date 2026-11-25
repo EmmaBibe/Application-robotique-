@@ -120,20 +120,27 @@
   };
 
   /* ---------- Courants de démarrage comparés ---------- */
-  AA.VIS.startI = (m, t) => {
-    if (m === 'dol') return t < 0 ? 0 : (t < 1.6 ? 7 - 1.5 * t : Math.max(1, 4.6 - 3 * (t - 1.6)));
-    if (m === 'yd') return t < 0 ? 0 : t < 3 ? 7 / 3 * (t < 2.4 ? 1 : 1 - 0.4 * (t - 2.4)) : (t < 3.15 ? 3.2 : Math.max(1, 3.2 - 6 * (t - 3.15)));
-    if (m === 'ss') return t < 0 ? 0 : Math.min(3, 1 + t * 1.2) * (t < 4 ? 1 : 0) + (t >= 4 ? 1 : 0);
+  /* o.r : rapport courant de démarrage direct / In (7 par défaut) ; o.lim : limitation du démarreur progressif (3 In) */
+  AA.VIS.startI = (m, t, o) => {
+    const r = (o && o.r) || 7, lim = (o && o.lim) || 3, k = r / 7;
+    if (m === 'dol') return t < 0 ? 0 : (t < 1.6 ? (7 - 1.5 * t) * k : Math.max(1, (4.6 - 3 * (t - 1.6)) * k));
+    if (m === 'yd') return t < 0 ? 0 : t < 3 ? r / 3 * (t < 2.4 ? 1 : 1 - 0.4 * (t - 2.4)) : (t < 3.15 ? 3.2 * k : Math.max(1, 3.2 * k - 6 * (t - 3.15)));
+    if (m === 'ss') return t < 0 ? 0 : Math.min(lim, 1 + t * 1.2) * (t < 4 ? 1 : 0) + (t >= 4 ? 1 : 0);
     if (m === 'vfd') return t < 0 ? 0 : (t < 4 ? 1.3 : 1);
     return 0;
   };
   SIMS.startcur = el => {
     const on = { dol: true, yd: true, ss: false, vfd: false };
     const N = { dol: ['Direct', '--bad'], yd: ['Étoile-triangle', '--copper'], ss: ['Démarreur progressif', '--teal'], vfd: ['Variateur', '--ok'] };
-    el.innerHTML = `<div class="simcard"><div class="simctl">${Object.keys(N).map(k => `<label class="chk"><input type="checkbox" data-k="${k}" ${on[k] ? 'checked' : ''}> ${N[k][0]}</label>`).join('')}</div><div class="simview"></div></div>`;
+    const st = { In: 30, r: 7, lim: 3 };
+    el.innerHTML = `<div class="simcard"><div class="simctl">${Object.keys(N).map(k => `<label class="chk"><input type="checkbox" data-k="${k}" ${on[k] ? 'checked' : ''}> ${N[k][0]}</label>`).join('')}</div><div class="simview"></div>
+      <div class="simctl">${sl('In', 'Courant nominal du moteur I<sub>n</sub>', 2, 200, 1, 30, 'A')}${sl('r', 'Courant de démarrage direct (plaque : I<sub>d</sub>/I<sub>n</sub>)', 5, 8, 0.1, 7, '× In')}${sl('lim', 'Limitation réglée sur le démarreur progressif', 2, 4.5, 0.1, 3, '× In')}</div>
+      <div class="simout"><div><span>Pointe en direct = (I<sub>d</sub>/I<sub>n</sub>) × I<sub>n</sub></span><b class="o-d"></b></div><div><span>Étoile-triangle ≈ pointe directe / 3</span><b class="o-y"></b></div><div><span>Démarreur progressif = limitation × I<sub>n</sub></span><b class="o-s"></b></div></div></div>`;
     el.querySelectorAll('input[type=checkbox]').forEach(c => c.onchange = () => { on[c.dataset.k] = c.checked; });
+    bind(el, st, { r: v => AA.fmt(v, 1), lim: v => AA.fmt(v, 1) });
     const cv = AA.canvas(el.querySelector('.simview'), 240, (g, W, H, tt) => {
       const x0 = 46, x1 = W - 14, y0 = H - 30, y1 = 14, X = t => x0 + t / 6 * (x1 - x0), Y = v => y0 - v / 8 * (y0 - y1);
+      el.querySelector('.o-d').textContent = AA.fmt(st.r * st.In, 0) + ' A'; el.querySelector('.o-y').textContent = AA.fmt(st.r * st.In / 3, 0) + ' A'; el.querySelector('.o-s').textContent = AA.fmt(st.lim * st.In, 0) + ' A';
       g.strokeStyle = css('--line'); g.fillStyle = css('--ink-3'); g.font = '500 10.5px Segoe UI'; g.lineWidth = 1;
       for (let v = 0; v <= 8; v += 2) { g.beginPath(); g.moveTo(x0, Y(v)); g.lineTo(x1, Y(v)); g.stroke(); g.fillText(v + ' In', 4, Y(v) + 4); }
       for (let t = 0; t <= 6; t++) g.fillText(t + ' s', X(t) - 6, y0 + 14);
@@ -141,7 +148,7 @@
       Object.keys(N).forEach(k => {
         if (!on[k]) return;
         g.strokeStyle = css(N[k][1]); g.lineWidth = 2.5; g.beginPath();
-        for (let t = 0; t <= Math.min(6, now); t += 0.02) { const y = Y(AA.VIS.startI(k, t)); t ? g.lineTo(X(t), y) : g.moveTo(X(t), y); }
+        for (let t = 0; t <= Math.min(6, now); t += 0.02) { const y = Y(AA.VIS.startI(k, t, st)); t ? g.lineTo(X(t), y) : g.moveTo(X(t), y); }
         g.stroke();
       });
       g.fillStyle = css('--ink-3'); g.fillText('Allures typiques pour un moteur démarrant à faible charge (les valeurs réelles dépendent du moteur et de la charge).', x0, y1 + 6);

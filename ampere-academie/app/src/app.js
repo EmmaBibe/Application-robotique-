@@ -9,7 +9,14 @@
     ['labo', 'Labo', 'bolt', 'Q4', ''], ['coffret', 'Coffret 3D', 'cube', 'Q5', ''], ['automate', 'Automate', 'plc', 'Q6', ''],
     ['defis', 'Défis', 'trophy', 'Q7', 'defi projet'], ['profil', 'Profil', 'user', 'Q8', '']
   ];
-  AA.$('#din').innerHTML = NAV.map(([v, t, i, ref, alt]) => `<a class="mod" href="#/${v}" data-v="${v}" data-alt="${alt}" title="${t}"><span class="mod-led"></span><span class="mod-ref">${ref}</span><span class="mod-lever"><i></i></span><span class="mod-name">${t}</span></a>`).join('');
+  AA.$('#din').innerHTML = '<span class="din-blob"></span>' + NAV.map(([v, t, i, ref, alt]) => `<a class="mod" href="#/${v}" data-v="${v}" data-alt="${alt}" title="${t}">${ic[i] || ''}<span>${t}</span></a>`).join('');
+  AA.placeBlob = () => {
+    const din = AA.$('#din'), blob = din && din.querySelector('.din-blob'), on = din && din.querySelector('.mod.on');
+    if (!blob) return;
+    if (!on) { blob.classList.remove('on'); return; }
+    blob.style.left = on.offsetLeft + 'px'; blob.style.width = on.offsetWidth + 'px'; blob.classList.add('on');
+  };
+  addEventListener('resize', () => AA.placeBlob());
 
   /* ---------- Outils de progression ---------- */
   const lessonsAll = () => AA.allLessons();
@@ -21,61 +28,61 @@
     return { tot, wr, dn };
   };
 
-  /* ---------- Accueil : synoptique de la formation ---------- */
-  function synoptic() {
-    const L = AA.CURRICULUM, RH = 46, y0 = 36, H = y0 + L.length * RH + 10;
-    let g = `<svg viewBox="0 0 760 ${H}" role="img" aria-label="Synoptique de ta formation">`;
-    g += `<circle class="src" cx="38" cy="${y0 - 8}" r="13"/><circle class="src" cx="38" cy="${y0 + 12}" r="13"/>`;
-    g += `<text class="srct" x="38" y="${y0 + 44}" text-anchor="middle">${esc((S.name || 'TOI').toUpperCase().slice(0, 10))}</text>`;
-    g += `<line class="feed" x1="51" y1="${y0 + 2}" x2="88" y2="${y0 + 2}"/>`;
-    g += `<line class="bus" x1="92" y1="${y0 - 10}" x2="92" y2="${y0 + (L.length - 1) * RH + 12}"/>`;
-    L.forEach((lv, i) => {
-      const st = AA.levelStats(lv), y = y0 + i * RH, frac = st.tot ? st.dn / st.tot : 0, done = st.tot && st.dn === st.tot;
-      g += `<g class="row" data-l="${lv.id}" tabindex="0" role="link" aria-label="${esc(lv.t)}">`;
-      g += `<line class="feed" x1="92" y1="${y}" x2="168" y2="${y}"/>`;
-      if (st.dn) g += `<line class="feed-on" x1="92" y1="${y}" x2="168" y2="${y}"/>`;
-      g += `<path class="brk" d="M120 ${y} L136 ${y - 9} M136 ${y} L150 ${y} M117 ${y - 3} l6 6 M123 ${y - 3} l-6 6"/>`;
-      g += `<rect class="load" x="170" y="${y - 18}" width="520" height="36" rx="4"/>`;
-      g += `<text class="num" x="182" y="${y + 4}">${String(lv.n).padStart(2, '0')}</text>`;
-      g += `<text class="lt" x="212" y="${y - 2}">${esc(lv.t)}</text><text class="ls" x="212" y="${y + 12}">${esc(lv.sub)} · ${st.dn}/${st.tot} leçons${st.wr ? '' : ' · en préparation'}</text>`;
-      g += `<rect class="pct-bg" x="566" y="${y - 3}" width="110" height="6" rx="3"/><rect class="pct" x="566" y="${y - 3}" width="${Math.max(0, Math.round(110 * frac))}" height="6" rx="3"/>`;
-      g += `<line class="feed" x1="690" y1="${y}" x2="712" y2="${y}"/><circle class="${done ? 'lamp-on' : 'lamp-off'}" cx="726" cy="${y}" r="10"/>`;
-      g += `<path class="brk" d="M719 ${y - 7} l14 14 M733 ${y - 7} l-14 14" style="stroke-width:1.4;opacity:${done ? .5 : 1}"/></g>`;
-    });
-    return g + '</svg>';
+  /* ---------- Accueil : le fil de la formation (gouttes remplies selon la progression) ---------- */
+  const orb = (id, n, frac) => {
+    const y = (47 - 44 * Math.max(0, Math.min(1, frac))).toFixed(1);
+    return `<svg viewBox="0 0 50 50" aria-hidden="true"><defs><clipPath id="oc-${id}"><circle cx="25" cy="25" r="22"/></clipPath></defs><circle class="o-glass" cx="25" cy="25" r="22"/>
+      ${frac > 0 ? `<g clip-path="url(#oc-${id})"><g transform="translate(0 ${y})"><path class="o-liquid xp-wave" d="M0 0 q6 -3 12.5 0 t12.5 0 t12.5 0 t12.5 0 t12.5 0 t12.5 0 V60 H0Z"/></g></g>` : ''}
+      <path class="o-shine" d="M12 21 C13 16 16 12.5 20 10.5"/><text class="o-num" x="25" y="26">${n}</text></svg>`;
+  };
+  AA.orb = orb;
+  function river() {
+    return `<ol class="stops">${AA.CURRICULUM.map((lv, i) => {
+      const st = AA.levelStats(lv), frac = st.tot ? st.dn / st.tot : 0, full = st.tot && st.dn === st.tot;
+      const x = ((Math.sin(i * 0.8 - 0.6) + 1) / 2 * 0.6).toFixed(3);
+      return `<li class="stop ${full ? 'full' : ''}" data-l="${lv.id}" tabindex="0" role="link" style="--x:${x}"><span class="orb">${orb('h' + lv.id, lv.n, frac)}</span>
+        <span class="stop-t"><b>${esc(lv.t)}</b><span>${esc(lv.sub)} · ${st.dn}/${st.tot} leçons${st.wr ? '' : ' · bientôt'}</span></span></li>`;
+    }).join('')}</ol>`;
   }
+  function drawRiver(box) {
+    const svg = box && box.querySelector('.river-svg'); if (!svg) return;
+    const R = box.getBoundingClientRect();
+    const pts = [...box.querySelectorAll('.orb')].map(o => { const r = o.getBoundingClientRect(); return [r.left - R.left + r.width / 2, r.top - R.top + r.height / 2]; });
+    let d = pts.length ? `M${pts[0][0]} ${pts[0][1]}` : '';
+    for (let k = 1; k < pts.length; k++) { const [x0, y0] = pts[k - 1], [x1, y1] = pts[k], m = (y1 - y0) / 2; d += ` C${x0} ${y0 + m} ${x1} ${y1 - m} ${x1} ${y1}`; }
+    svg.setAttribute('viewBox', `0 0 ${R.width} ${R.height}`);
+    svg.innerHTML = `<path class="r-bed" d="${d}"/><path class="r-flow" d="${d}"/>`;
+  }
+  addEventListener('resize', () => drawRiver(AA.$('.river')));
   AA.route('accueil', main => {
     const p = AA.rankProgress(S.xp), nl = nextLesson();
     const done = Object.keys(S.lessons).length, defisDone = Object.values(S.defis).reduce((a, d) => a + (d.n || 0), 0);
     const hour = new Date().getHours(), hello = hour < 6 ? 'Bonne nuit' : hour < 18 ? 'Bonjour' : 'Bonsoir';
-    const seg = (v, lbl) => `<div class="seg7"><b data-ghost="${'8'.repeat(String(v).length)}">${v}</b><span>${lbl}</span></div>`;
+    const stat = (v, lbl) => `<div class="stat glass"><b>${v}</b><span>${lbl}</span></div>`;
+    const tile = (href, icn, t, d) => `<a class="tile glass" href="${href}"><i>${ic[icn]}</i><span><b>${t}</b><span>${d}</span></span></a>`;
     main.innerHTML = `
-      <div class="home-head"><div><p class="eyebrow">${hello}${S.name ? ', ' + esc(S.name) : ''} · folio F-01 · ton installation</p>
-        <h1>Chaque leçon <span>met sous tension</span> une nouvelle partie de ton savoir.</h1></div>
-        <div class="counters" style="min-width:min(100%,420px)">${seg(AA.fmt(S.xp, 0).replace(/\s/g, ''), 'XP')}${seg(done, 'leçons')}${seg(defisDone, 'défis')}${seg(S.streak.n || 0, 'jours de suite')}</div></div>
+      <section class="home-hero"><div><p class="hello">${hello}${S.name ? ', ' + esc(S.name) : ''}.</p>
+        <h1>Comprendre l'électricité <em>en la regardant vivre.</em></h1></div>
+        <div class="stats">${stat(AA.fmt(S.xp, 0), 'XP')}${stat(done, 'leçons')}${stat(defisDone, 'défis')}${stat(S.streak.n || 0, 'jours de suite')}</div></section>
       <div class="home-grid">
-        <section class="card syno plate"><i class="rv"></i><p class="eyebrow">Synoptique de ta formation — clique un départ</p>${synoptic()}</section>
-        <aside class="pupitre">
-          <div class="card start-panel plate"><i class="rv"></i>
-            <button class="big-push js-go" aria-label="Démarrer la prochaine leçon"><i></i><b>MARCHE</b></button>
-            <div><p class="eyebrow">${nl && S.lessons[nl.id] ? 'Révision' : 'Prochaine leçon'}</p><h3>${nl ? esc(nl.t) : '—'}</h3><p>${nl ? `Niveau ${nl.level.n} · ${esc(nl.module.t)}` : ''}</p></div></div>
-          <div class="ticket"><span class="stamp">${new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</span><p class="eyebrow">Bon d'intervention du jour</p><div class="js-daily"></div></div>
-          <div class="devices">
-            <a class="device" href="#/atelier">${artSchema()}<span>Atelier</span></a>
-            <a class="device" href="#/labo">${artLabo()}<span>Labo</span></a>
-            <a class="device" href="#/coffret">${artCube()}<span>Coffret 3D</span></a>
-            <a class="device" href="#/automate">${artPlc()}<span>Automate</span></a>
-          </div>
-          <div class="card plain" style="padding:14px 16px"><div class="row">${AA.insignia(p.i, 46)}<div style="flex:1"><b style="font-family:var(--f-display)">${esc(p.r.n)}</b><div class="muted" style="font-size:13px">${p.next ? `encore ${AA.fmt(p.need, 0)} XP pour « ${esc(p.next.n)} »` : 'grade maximal atteint'}</div><i class="bar"><i style="width:${Math.round(p.frac * 100)}%"></i></i></div></div></div>
+        <section class="card river"><svg class="river-svg" aria-hidden="true"></svg><p class="eyebrow">Ton parcours · choisis une étape</p>${river()}</section>
+        <aside class="side">
+          <div class="card resume"><p class="eyebrow">${nl && S.lessons[nl.id] ? 'À revoir' : 'Ta prochaine leçon'}</p><h3>${nl ? esc(nl.t) : '—'}</h3><p>${nl ? `Niveau ${nl.level.n} · ${esc(nl.module.t)}` : ''}</p>
+            <button class="btn primary go-liquid js-go">Reprendre</button></div>
+          <div class="card daily"><p class="eyebrow">Défi du jour</p><div class="js-daily"></div></div>
+          <div class="tiles">${tile('#/atelier', 'schema', 'Atelier', 'Folios vivants à manœuvrer')}${tile('#/labo', 'bolt', 'Labo', 'Expériences et mesures')}${tile('#/coffret', 'cube', 'Coffret 3D', 'Une armoire en volume')}${tile('#/automate', 'plc', 'Automate', 'Programmer en Ladder')}</div>
+          <div class="card plain rank-mini">${AA.insignia(p.i, 46)}<div style="flex:1"><b style="font-family:var(--f-display)">${esc(p.r.n)}</b><div class="muted" style="font-size:13px">${p.next ? `encore ${AA.fmt(p.need, 0)} XP pour « ${esc(p.next.n)} »` : 'grade maximal atteint'}</div><i class="bar"><i style="width:${Math.round(p.frac * 100)}%"></i></i></div></div>
         </aside>
       </div>`;
-    main.querySelector('.js-go').onclick = () => { if (nl) setTimeout(() => { location.hash = '#/lecon/' + nl.id; }, 180); };
-    main.querySelectorAll('.syno .row').forEach(r => {
+    main.querySelector('.js-go').onclick = () => { if (nl) location.hash = '#/lecon/' + nl.id; };
+    main.querySelectorAll('.stop').forEach(r => {
       const go = () => { location.hash = '#/parcours/' + r.dataset.l; };
       r.addEventListener('click', go); r.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
     });
+    const box = main.querySelector('.river');
+    requestAnimationFrame(() => drawRiver(box)); setTimeout(() => drawRiver(box), 800);
     if (AA.Defis && AA.Defis.dailyCard) AA.Defis.dailyCard(main.querySelector('.js-daily'));
-    if (!S.settings.themeChosen) setTimeout(() => AA.themePicker(true), 500);
+    if (!S.settings.themeChosen) setTimeout(() => AA.themePicker(true), 600);
   });
   const artSchema = () => `<svg viewBox="0 0 200 70" class="art"><path d="M20 5v18M20 47v18M20 23l-9-14" class="a-ink"/><path d="M20 35h40" class="a-live"/><rect x="60" y="23" width="30" height="24" rx="2" class="a-ink a-on"/><path d="M90 35h50" class="a-live"/><circle cx="160" cy="35" r="14" class="a-ink a-lamp"/><path d="M150 25l20 20M170 25l-20 20" class="a-ink"/></svg>`;
   const artLabo = () => `<svg viewBox="0 0 200 70" class="art"><path d="M10 35 Q35 5 60 35 T110 35 T160 35 T210 35" class="a-l1"/><path d="M10 35 Q35 65 60 35 T110 35 T160 35" class="a-l2" transform="translate(-17 0)"/><path d="M10 35 Q35 5 60 35 T110 35 T160 35" class="a-l3" transform="translate(17 0)"/></svg>`;
@@ -83,11 +90,12 @@
   const artPlc = () => `<svg viewBox="0 0 200 70" class="art"><path d="M15 8v54M185 8v54" class="a-ink"/><path d="M15 25h30M55 25h40M105 25h50M170 25h15" class="a-live"/><path d="M45 15v20M55 15v20M95 15v20M105 15v20" class="a-ink"/><path d="M155 25a8 8 0 0 1 15 0a8 8 0 0 1-15 0" class="a-on"/><path d="M15 50h30M55 50h130" class="a-ink"/><path d="M45 40v20M55 40v20" class="a-ink"/></svg>`;
 
   /* Choix du thème : petites armoires peintes, révélation circulaire */
+  AA.themeCard = (t, on) => `<button class="theme-card ${on ? 'on' : ''}" data-t="${t.id}"><div class="sw" style="background:${t.sw[0]};--acc:${t.acc || t.sw[1]}"><i style="background:${t.sw[1]}"></i><i style="background:${t.sw[2]}"></i><i style="background:${t.sw[3]}"></i><u style="background:rgba(255,255,255,.16)"></u></div><b>${t.n}</b><span>${t.d}</span></button>`;
   AA.themePicker = (first) => {
     const cur = AA.resolvedTheme();
-    const m = AA.modal(`<p class="eyebrow">${first ? 'Bienvenue' : 'Apparence'}</p><h2>${first ? 'Choisis ton atelier' : 'Changer de thème'}</h2>
+    const m = AA.modal(`<p class="eyebrow">${first ? 'Bienvenue' : 'Apparence'}</p><h2>${first ? 'Choisis ton ambiance' : 'Changer d\'ambiance'}</h2>
       <p class="muted">Tu pourras en changer à tout moment dans ton profil.</p>
-      <div class="themes">${AA.THEMES.map(t => `<button class="theme-card ${t.id === cur ? 'on' : ''}" data-t="${t.id}"><div class="sw" style="background:${t.sw[0]}">${t.sw.slice(1).map(c => `<i style="background:${c}"></i>`).join('')}</div><b>${t.n}</b><span>${t.d}</span></button>`).join('')}</div>
+      <div class="themes">${AA.THEMES.map(t => AA.themeCard(t, t.id === cur)).join('')}</div>
       <div class="row" style="margin-top:16px;justify-content:flex-end"><button class="btn primary" data-close>C'est parti</button></div>`, { cls: 'wide' });
     m.el.querySelectorAll('.theme-card').forEach(b => b.onclick = e => {
       m.el.querySelectorAll('.theme-card').forEach(x => x.classList.toggle('on', x === b));
@@ -100,12 +108,12 @@
   AA.route('parcours', (main, [lid]) => {
     const open = lid || S.openLevel || 'n0';
     main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Programme complet</p><h1>Le parcours</h1>
-      <p>${AA.CURRICULUM.length} niveaux, ${AA.CURRICULUM.reduce((a, l) => a + l.modules.length, 0)} modules, ${lessonsAll().length} leçons. Chaque module est une ligne de commande : chaque leçon terminée allume son voyant et le courant descend jusqu'à elle.</p></div>
+      <p>${AA.CURRICULUM.length} niveaux, ${AA.CURRICULUM.reduce((a, l) => a + l.modules.length, 0)} modules, ${lessonsAll().length} leçons. Avance à ton rythme : chaque leçon terminée remplit sa goutte, chaque niveau se remplit comme un verre.</p></div>
       <span class="chip copper">${written().length} leçons disponibles</span></div>
       ${AA.CURRICULUM.map(lv => {
         const s2 = AA.levelStats(lv), pct = s2.tot ? Math.round(s2.dn / s2.tot * 100) : 0;
-        return `<section class="cab ${lv.id === open ? 'open' : ''}" id="lv-${lv.id}" data-l="${lv.id}">
-          <div class="cab-head" tabindex="0"><div class="cab-num">${String(lv.n).padStart(2, '0')}</div>
+        return `<section class="cab glass ${lv.id === open ? 'open' : ''}" id="lv-${lv.id}" data-l="${lv.id}">
+          <div class="cab-head" tabindex="0"><div class="cab-num">${orb('p' + lv.id, lv.n, s2.tot ? s2.dn / s2.tot : 0)}</div>
             <div><h3>${esc(lv.t)}</h3><p>${esc(lv.sub)} — ${esc(lv.d)}</p></div>
             <div class="cab-gauge"><i><b style="width:${pct}%"></b></i><span>${s2.dn}/${s2.tot} · ${s2.wr ? s2.wr + ' dispo.' : 'en préparation'}</span></div></div>
           <div class="cab-body">${lv.modules.map(m => {
@@ -113,7 +121,7 @@
             const last = idx.lastIndexOf(true);
             return `<div class="rung"><h4>${esc(m.t)}</h4><ol style="--lit:${last < 0 ? 0 : Math.round((last + 1) / m.lessons.length * 100)}%">${m.lessons.map(l => {
               const has = !!AA.L[l.id], dn = S.lessons[l.id];
-              return `<li class="${dn ? 'done' : has ? 'avail' : 'soon'}">${has ? `<a href="#/lecon/${l.id}">` : '<span>'}<i class="lampx"></i>${esc(l.t)}${has ? '<em class="vis-tag">◉</em>' : ''}${has ? '</a>' : '</span>'}</li>`;
+              return `<li class="${dn ? 'done' : has ? 'avail' : 'soon'}">${has ? `<a href="#/lecon/${l.id}">` : '<span>'}<i class="drop"></i>${esc(l.t)}${has ? '<em class="vis-tag">◉</em>' : ''}${has ? '</a>' : '</span>'}</li>`;
             }).join('')}</ol></div>`;
           }).join('')}</div></section>`;
       }).join('')}`;
@@ -135,7 +143,7 @@
     if (b.formula) { d.innerHTML = `<div class="formula">${b.formula}${b.small ? `<small>${b.small}</small>` : ''}</div>`; return d; }
     if (b.table) { d.innerHTML = `<div class="card tablecard"><table class="t"><thead><tr>${b.table.head.map(x => `<th>${x}</th>`).join('')}</tr></thead><tbody>${b.table.rows.map(r => `<tr>${r.map(x => `<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`; return d; }
     if (b.recap) { d.innerHTML = `<div class="card recap"><p class="eyebrow">À retenir</p><ul class="nice">${b.recap.map(x => `<li>${x}</li>`).join('')}</ul></div>`; return d; }
-    if (b.sim) { const st = AA.SIMS[b.sim](d); if (st) ctx.cleanups.push(st); return d; }
+    if (b.sim) { const st = AA.SIMS[b.sim](d); if (AA.addFormula) AA.addFormula(d, b.sim); if (st) ctx.cleanups.push(st); return d; }
     if (b.think) {
       d.innerHTML = `<div class="card think"><p class="eyebrow">Réfléchis avant de lire</p><p class="q">${b.think.q}</p><button class="btn sm">${ic.eye}Voir la réponse</button><div class="ans" hidden><p>${b.think.a}</p></div></div>`;
       d.querySelector('button').onclick = e => { d.querySelector('.ans').hidden = false; e.currentTarget.remove(); };
@@ -354,7 +362,7 @@
       <div class="grid" style="margin-top:24px;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)">
         <div class="card"><p class="eyebrow">Réglages</p>
           <div class="field"><label>Prénom</label><input type="text" class="js-name" value="${esc(S.name)}" maxlength="30"></div>
-          <div class="field"><label>Thème</label><div class="themes js-themes">${[{ id: 'auto', n: 'Automatique', d: 'Suit le réglage clair / sombre de l\'appareil', sw: ['#f2efe8', '#0a0a0f', '#ff6b1a', '#39ff88'] }].concat(AA.THEMES).map(t => `<button class="theme-card ${(S.settings.theme || 'auto') === t.id ? 'on' : ''}" data-t="${t.id}"><div class="sw" style="background:${t.sw[0]}">${t.sw.slice(1).map(c => `<i style="background:${c}"></i>`).join('')}</div><b>${t.n}</b><span>${t.d}</span></button>`).join('')}</div></div>
+          <div class="field"><label>Thème</label><div class="themes js-themes">${[{ id: 'auto', n: 'Automatique', d: 'Aube le jour, Abysses si l\'appareil est en mode sombre', sw: ['linear-gradient(135deg,#eef0f7 50%,#04131d 50%)', '#ffb4a6', '#0e6a80', '#aebcff'], acc: '#5b4bff' }].concat(AA.THEMES).map(t => AA.themeCard(t, (S.settings.theme || 'auto') === t.id)).join('')}</div></div>
           <div class="field"><label>Sons des manœuvres</label><div class="seg js-sound"><button data-v="1" class="${S.settings.sound !== false ? 'on' : ''}">Activés</button><button data-v="0" class="${S.settings.sound === false ? 'on' : ''}">Coupés</button></div></div>
           <div class="field"><label>Animations</label><div class="seg js-motion"><button data-v="1" class="${S.settings.motion !== false ? 'on' : ''}">Complètes</button><button data-v="0" class="${S.settings.motion === false ? 'on' : ''}">Réduites</button></div></div>
         </div>

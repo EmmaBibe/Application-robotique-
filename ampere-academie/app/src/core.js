@@ -122,41 +122,46 @@
   /* Compteur d'énergie : l'XP défile comme les rouleaux d'un compteur électromécanique */
   AA.refreshStats = () => {
     const p = AA.rankProgress(S.xp);
-    const digits = String(Math.min(999999, Math.round(S.xp))).padStart(6, '0').split('');
+    // goutte : le niveau du liquide montre la progression vers le prochain galon
+    const y = (36 - 32 * Math.max(0.04, Math.min(1, p.frac))).toFixed(1);
+    const DROP = 'M20 2 C27 10.5 34 17.5 34 25 A14 14 0 0 1 6 25 C6 17.5 13 10.5 20 2Z';
     AA.$$('.js-stats').forEach(el => {
-      if (!el.querySelector('.kwh')) {
-        el.innerHTML = `<a href="#/profil" class="kwh" title="Expérience et galon"><span class="kwh-digits">${digits.map(() => '<span><b></b></span>').join('')}</span><span class="kwh-lbl"></span></a><a href="#/profil" class="ins-link" aria-label="Galon"></a>`;
+      if (!el.querySelector('.xp')) {
+        el.innerHTML = `<a href="#/profil" class="xp glass" title="Expérience et galon"><svg viewBox="0 0 40 40" aria-hidden="true"><defs><clipPath id="xpClip"><path d="${DROP}"/></clipPath></defs>
+          <path class="xp-glass" d="${DROP}"/>
+          <g clip-path="url(#xpClip)"><g class="xp-lvl" style="transition:transform 1.2s cubic-bezier(.22,.8,.26,1)"><path class="xp-liquid xp-wave" d="M0 0 q5 -3 10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 t10 0 V60 H0Z"/></g></g>
+          <path class="xp-shine" d="M12.5 20 C13.5 16 15.5 12.5 17.5 10"/></svg><span class="xp-txt"><b class="xp-n"></b><span class="xp-r"></span></span></a><a href="#/profil" class="ins-link" aria-label="Galon"></a>`;
       }
-      el.querySelectorAll('.kwh-digits b').forEach((n, i) => {
-        if (n.dataset.v === digits[i]) return;
-        n.dataset.v = digits[i];
-        n.innerHTML = '0123456789'.split('').join('<br>');
-        n.style.transform = `translateY(${-22 * +digits[i]}px)`;
-      });
-      el.querySelector('.kwh-lbl').innerHTML = `XP · <b>${AA.esc(p.r.n)}</b>`;
-      el.querySelector('.ins-link').innerHTML = AA.insignia(p.i, 36);
+      el.querySelector('.xp-lvl').style.transform = `translateY(${y}px)`;
+      el.querySelector('.xp-n').textContent = AA.fmt(Math.round(S.xp), 0) + ' XP';
+      el.querySelector('.xp-r').textContent = p.r.n;
+      el.querySelector('.ins-link').innerHTML = AA.insignia(p.i, 34);
     });
   };
 
+
   /* ---------- Thèmes ---------- */
   AA.THEMES = [
-    { id: 'chantier', n: 'Clair de chantier', d: 'Papier clair, orange de sécurité', sw: ['#f2efe8', '#ff6b1a', '#00897b', '#1c2329'] },
-    { id: 'plan', n: 'Plan bleu', d: "Le bleu des plans d'architecte", sw: ['#0d3b66', '#ffd23f', '#7fdbff', '#f2f7ff'] },
-    { id: 'tableau', n: 'Tableau vert', d: 'Calme, contrasté, reposant', sw: ['#16302b', '#f2c14e', '#7fd1ae', '#eef5ee'] },
-    { id: 'neon', n: 'Néon de nuit', d: 'Sombre, vert et cyan électriques', sw: ['#0a0a0f', '#39ff88', '#00e5ff', '#ff4fd8'] },
-    { id: 'sable', n: 'Sable et terre', d: 'Chaud, doux pour les yeux', sw: ['#f4e7d3', '#c4441c', '#2f6f5e', '#33200f'] },
-    { id: 'contraste', n: 'Contraste élevé', d: 'Lisibilité maximale', sw: ['#000000', '#ffeb3b', '#40c4ff', '#ffffff'] }
+    { id: 'aube', n: 'Aube de verre', d: 'Lumière pâle, verre dépoli, reflets pêche et pervenche', sw: ['#eef0f7', '#ffb4a6', '#aebcff', '#9eeedb'], acc: '#5b4bff' },
+    { id: 'abysses', n: 'Abysses', d: 'Eaux profondes, lueurs aqua qui dérivent', sw: ['#04131d', '#0e6a80', '#1c3f9a', '#08806e'], acc: '#46e0cc' },
+    { id: 'aquarelle', n: 'Aquarelle', d: 'Papier chaud, lavis de couleurs, encre bleue', sw: ['#f7f2e9', '#f2bfae', '#b6d3e8', '#d2e2bd'], acc: '#2c5aa0' },
+    { id: 'nebuleuse', n: 'Nébuleuse', d: 'Nuit violette, nuages roses et bleus', sw: ['#0c0919', '#6a2a90', '#a8346f', '#233f9e'], acc: '#ff8ad0' },
+    { id: 'miel', n: 'Miel', d: 'Ambre liquide, chaleur du soir', sw: ['#150e07', '#8a4f10', '#b0671a', '#5c2c12'], acc: '#ffb547' },
+    { id: 'brume', n: 'Brume', d: 'Très calme, vert sauge, idéal pour les longues séances', sw: ['#edf1ee', '#cfe4da', '#d8e1ee', '#e9e1d2'], acc: '#2f7d6d' },
+    { id: 'contraste', n: 'Contraste élevé', d: 'Lisibilité maximale, sans effets', sw: ['#000000', '#000000', '#000000', '#000000'], acc: '#ffeb3b' }
   ];
+  const OLD_THEMES = { chantier: 'aube', plan: 'abysses', tableau: 'brume', neon: 'abysses', sable: 'aquarelle' };
   AA.resolvedTheme = () => {
     let t = S.settings.theme || 'auto';
-    if (t === 'auto' || t === 'dark' || t === 'light') t = (t === 'dark' || (t === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)) ? 'neon' : 'chantier';
+    t = OLD_THEMES[t] || t;
+    if (t === 'auto' || t === 'dark' || t === 'light') t = (t === 'dark' || (t === 'auto' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)) ? 'abysses' : 'aube';
     return t;
   };
   AA.applyTheme = () => {
     document.documentElement.dataset.theme = AA.resolvedTheme();
     document.documentElement.classList.toggle('reduce-motion', S.settings.motion === false);
     const m = document.querySelector('meta[name=theme-color]');
-    if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#f2efe8';
+    if (m) m.content = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim() || '#eef0f7';
   };
 
   /* ---------- Son (retour discret des manœuvres) ---------- */
@@ -187,6 +192,7 @@
     main.scrollTop = 0; window.scrollTo(0, 0);
     current = routes[name](main, h.slice(1)) || null;
     AA.$$('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === name || (a.dataset.alt || '').split(' ').includes(name)));
+    if (AA.placeBlob) AA.placeBlob();
     document.body.dataset.view = name;
     AA.refreshStats();
   };

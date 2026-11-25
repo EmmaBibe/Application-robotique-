@@ -160,6 +160,41 @@
     log(th(7.2, 10) >= 4 && th(7.2, 10) <= 10 && th(7.2, 20) <= 20 && th(7.2, 30) <= 30 && th(1.05, 10) === Infinity, 'Relais thermique : classes 10/20/30 respectées à 7,2 Ir, pas de déclenchement à 1,05 Ir');
   }
 
+  // Électrotechnique (n4) et conception (n5) : valeurs recalculées à la main
+  if (window.AA && AA.ELEC && AA.DESIGN) {
+    const E = AA.ELEC, DS = AA.DESIGN, near = (a, b, rel) => Math.abs(a - b) <= Math.abs(b) * (rel || 0.005);
+    const z = E.rlc(40, 0.1, 0, 50, 230);
+    log(near(z.XL, 31.416) && near(z.Z, 50.87) && near(z.phi * 180 / Math.PI, 38.15), `R-L série 40 Ω / 100 mH : X_L = ${AA.fmt(z.XL, 2)} Ω, Z = ${AA.fmt(z.Z, 2)} Ω, φ = ${AA.fmt(z.phi * 180 / Math.PI, 1)}°`);
+    const zc = E.rlc(10, 0.1, 101.32, 50, 230);
+    log(Math.abs(zc.phi) < 0.01 && near(zc.Z, 10, 0.01), 'R-L-C à la résonance (L = 100 mH, C = 101,3 µF, 50 Hz) : Z = R, courant en phase');
+    const xo = Math.sqrt(600 / 6500), eo = E.transfo(630000, 600, 6500, xo, 0.9).eta;
+    log(eo > E.transfo(630000, 600, 6500, xo - 0.05, 0.9).eta && eo > E.transfo(630000, 600, 6500, xo + 0.05, 0.9).eta, `Transformateur : rendement maximal à x = √(P0/Pk) = ${AA.fmt(xo * 100, 1)} %`);
+    eq([E.clock('Dyn11'), E.clock('Yy0'), E.clock('Dyn5'), E.clock('Yd11')], [11, 0, 5, 11], 'Indices horaires des couplages courants');
+    const as = E.async({ Pabs: 1000, Pfs: 30, Pjs: 40, g: 0.04, Pm: 15 });
+    log(near(as.Ptr, 930) && near(as.Pjr, 37.2) && near(as.Pu, 877.8), 'Bilan moteur asynchrone : Ptr = 930 W, Pjr = 37,2 W, Pu = 877,8 W');
+    const dc = E.dc({ U: 220, R: 1.2, k: 1.3, T: 10 });
+    log(near(dc.I, 7.692) && near(dc.E, 210.77) && near(dc.n, 1548.2), `Moteur à courant continu : I = ${AA.fmt(dc.I, 2)} A, E = ${AA.fmt(dc.E, 1)} V, n = ${AA.fmt(dc.n, 0)} tr/min`);
+    const it = DS.iccTransfo(630, 4), ic0 = DS.icc({ kva: 630, ucc: 4, L: 0, S: 95 }), ic50 = DS.icc({ kva: 630, ucc: 4, L: 50, S: 95 });
+    log(near(it, 22180, 0.003) && ic0 < it && ic0 > 20500 && ic50 < ic0, `Icc 630 kVA 4 % : ${AA.fmt(it / 1000, 1)} kA aux bornes (${AA.fmt(ic0 / 1000, 1)} kA avec le réseau amont, ${AA.fmt(ic50 / 1000, 1)} kA à 50 m)`);
+    log(near(DS.lMax({ S: 2.5, m: 1, Im: 160 }), 62.5) && near(DS.iMin({ S: 2.5, m: 1, L: 62.5 }), 160), 'TN : longueur maximale 62,5 m pour C16 en 2,5 mm² (méthode conventionnelle)');
+    log(near(DS.sMin(6000, 0.1, 115), 16.5, 0.003), 'Contrainte thermique : 6 kA pendant 0,1 s, PVC → 16,5 mm²');
+    eq([DS.ks(1), DS.ks(3), DS.ks(4), DS.ks(7), DS.ks(12)], [1, 0.9, 0.8, 0.7, 0.6], 'Facteurs de simultanéité IEC 61439-2');
+    const b = DS.bilan([true, false, false, false, false, false, false, false], false);
+    log(near(b.P, 22.5) && near(b.S, 22.5 / 0.85) && b.tr === 100, `Bilan : compresseur seul 30 kW × 0,75 → S = ${AA.fmt(b.S, 1)} kVA, transformateur ${b.tr} kVA`);
+    const sI = AA.VIS.startI;
+    log(sI('dol', 0) === 7 && near(sI('dol', 0, { r: 5.6 }), 5.6) && near(sI('yd', 0, { r: 6 }), 2) && sI('ss', 10, { lim: 4 }) === 1, 'Démarrages : direct = Id/In, étoile-triangle = 1/3, progressif limité puis In');
+  }
+  if (window.AA && AA.ELECDEFI && AA.Defis && AA.Defis.TYPES.electrotech) {
+    const T = AA.Defis.TYPES.electrotech, X = AA.ELECDEFI; let allOk = true, kinds = new Set(), sigs = new Set();
+    for (let i = 0; i < 90; i++) {
+      const lvl = 1 + (i % 5), inst = T.gen(AA.rng('e' + i), lvl); kinds.add(inst.k); sigs.add(inst.sig);
+      if (inst.steps.length !== Math.min(X.count(lvl), X.scenarios[inst.k](AA.rng('e' + i)).steps.length)) allOk = false;
+      inst.steps.forEach(s => { if (!(isFinite(s.a) && s.a > 0 && X.ok(s.a, s.a, s.tol) && !X.ok(s.a * 1.05, s.a, s.tol))) allOk = false; });
+    }
+    log(allOk && kinds.size === 3 && sigs.size > 40, `Défi électrotechnique : 90 études, 3 types, ${sigs.size} énoncés distincts, réponses exactes acceptées et ± 5 % refusées`);
+    eq([X.parse('12,5'), X.parse(' 1 250 '), isNaN(X.parse(''))], [12.5, 1250, true], 'Défi électrotechnique : saisie avec virgule ou espaces');
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis
