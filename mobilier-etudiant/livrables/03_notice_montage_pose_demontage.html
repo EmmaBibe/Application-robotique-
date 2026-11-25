@@ -995,7 +995,106 @@ td.vide { background: repeating-linear-gradient(90deg, #fff 0 4mm, #fafafa 4mm 8
   function flecheRepartie(qNmm, L, E, I) { return 5 * qNmm * Math.pow(L, 4) / (384 * E * I); }
   function flecheCentree(P, L, E, I) { return P * Math.pow(L, 3) / (48 * E * I); }
 
-  const CALC = { propSection, nomenclature, debitBarres, calepinage, syntheseAchats, flecheRepartie, flecheCentree, E_ACIER, E_CP, RHO_CP, RHO_ACIER };
+  /* Liste d'achat consolidée (base du devis) : quantités minimales et conseillées avec marge */
+  function listeAchats(MODELE) {
+    const S = MODELE.SECTIONS;
+    const meubles = Object.values(MODELE.MEUBLES);
+    const arr = (x, pas) => Math.round(Math.ceil(x / pas - 1e-9) * pas * 10) / 10;
+    const sections = [];
+    const L = (ref, designation, spec, unite, qMin, qConseil, note) => ({ ref, designation, spec, unite, qMin, qConseil, note: note || '' });
+
+    // --- profilés : regroupement par section (le râtelier est en inox) ---
+    const prof = {};
+    meubles.forEach(m => {
+      const n = nomenclature(m, S);
+      n.liste.forEach(g => {
+        if (g.cat === 'panneau' || g.cat === 'tole') return;
+        const inox = g.sousEns.indexOf('Râtelier à assiettes') >= 0;
+        const cle = g.debit.sec + (inox ? '_inox' : '');
+        prof[cle] = prof[cle] || { sec: g.debit.sec, inox, pieces: [], meubles: [] };
+        for (let i = 0; i < g.qte; i++) prof[cle].pieces.push({ L: g.debit.L, rep: g.rep });
+        if (prof[cle].meubles.indexOf(m.code) < 0) prof[cle].meubles.push(m.code);
+      });
+    });
+    const grosTubes = [], petits = [];
+    Object.values(prof).forEach(o => {
+      const Sx = S[o.sec];
+      const Ltot = o.pieces.reduce((a, p) => a + p.L, 0);
+      const kg = propSection(Sx).kgm * Ltot / 1000;
+      const nom = Sx.type === 'rond' ? Sx.nom : Sx.nom.replace(/ \(.*\)/, '') + (o.inox ? ' inox' : '');
+      if (Sx.type === 'carre') {
+        const barres = debitBarres(o.pieces, Sx.barre, 3).length;
+        const conseil = Math.max(barres, Math.ceil(Ltot * 1.1 / Sx.barre));
+        grosTubes.push(L(o.sec, nom + ', acier S235, barre de ' + Sx.barre / 1000 + ' m', 'meubles ' + o.meubles.join(', '), 'barre', barres, conseil,
+          (Ltot / 1000).toFixed(1).replace('.', ',') + ' m de pièces, ' + kg.toFixed(0) + ' kg' + (conseil > barres ? ' ; 1 barre de réserve pour les erreurs de coupe' : '')));
+      } else {
+        const m = Ltot / 1000;
+        petits.push(L(o.sec + (o.inox ? '-INOX' : ''), nom, (o.inox ? 'râtelier à assiettes (B)' : 'meubles ' + o.meubles.join(', ')) + ', ' + o.pieces.length + ' pièces', 'm',
+          arr(m, 0.1), arr(m * 1.15 + 0.1, 0.5), 'souvent vendu en barre de ' + (Sx.barre / 1000) + ' m ; les chutes d\'atelier suffisent'));
+      }
+    });
+    grosTubes.sort((a, b) => b.qMin - a.qMin);
+    sections.push({ titre: 'Tubes acier (barres)', lignes: grosTubes });
+    sections.push({ titre: 'Petits profilés : plats, cornière, ronds', lignes: petits.sort((a, b) => b.qMin - a.qMin) });
+
+    // --- panneaux ---
+    const syn = syntheseAchats(MODELE);
+    sections.push({ titre: 'Panneaux bois (format 2440 × 1220)', lignes: syn.panneaux.map(p => {
+      const spec = p.ep === 18 ? 'okoumé ou bouleau, collage extérieur (CTB-X / WBP)' : p.ep === 15 ? 'okoumé ou peuplier (bouleau pour la cuisine)' : 'peuplier, ou isorel 3 mm';
+      return L('CP' + p.ep, 'Contreplaqué ' + p.ep + ' mm, panneau 2440 × 1220', spec, 'panneau', p.panneaux.length, p.panneaux.length,
+        (p.surf / 1e6).toFixed(2).replace('.', ',') + ' m² utiles, ' + p.panneaux.reduce((a, x) => a + x.pieces.length, 0) + ' pièces ; ou débit sur mesure (liste des coupes)');
+    }) });
+
+    // --- tôles ---
+    const toles = [];
+    meubles.forEach(m => nomenclature(m, S).liste.filter(g => g.cat === 'tole').forEach(g => {
+      toles.push(L(g.rep, g.noms.join(' / '), g.mat + ', développé ' + g.debit.L + ' × ' + g.debit.l + ' mm', 'pièce', g.qte, g.qte, g.debit.usin));
+    }));
+    sections.push({ titre: 'Tôles découpées et pliées (sous-traitance)', lignes: toles });
+
+    // --- quincaillerie ---
+    const q = syn.quinc.slice().sort((a, b) => a.designation < b.designation ? -1 : 1);
+    sections.push({ titre: 'Quincaillerie', lignes: q.map((x, i) => L('Q' + String(i + 1).padStart(2, '0'), x.designation, 'meubles ' + x.meubles.join(', '), 'pièce', x.qte, Math.ceil(x.qte * 1.1), '')) });
+
+    // --- fournitures ---
+    const acierM2 = syn.sections.reduce((a, s) => a + s.Ltot * (S[s.sec].a ? 4 * S[s.sec].a : 80) / 1e6, 0);
+    sections.push({ titre: 'Finitions, électricité, sécurité', lignes: [
+      L('F01', 'Tissu de rideau coton / polyester serré, laize 150 cm', '2 panneaux 1460 × 2060 coupés', 'm', 4.3, 4.5, 'ourlets compris'),
+      L('F02', 'Antirouille (primaire)', 'surface acier ≈ ' + acierM2.toFixed(1).replace('.', ',') + ' m²', 'L', 1, 1, ''),
+      L('F03', 'Laque glycéro ou époxy, anthracite satiné', '2 couches', 'L', 1, 1.5, ''),
+      L('F04', 'Peinture haute température 600 °C, aérosol', 'haut du module gaz', 'aérosol', 1, 1, ''),
+      L('F05', 'Vernis polyuréthane (compatible contact alimentaire pour B)', '2 à 3 couches', 'L', 1, 1, ''),
+      L('F06', 'Diluant, papier abrasif grains 80 / 120 / 240, chiffons', '', 'lot', 1, 1, ''),
+      L('F07', 'Garniture caoutchouc 3 mm, bande 30 mm', 'intérieur du collier de bouteille', 'm', 1, 1, ''),
+      L('F08', 'Bloc 2 prises 16 A avec interrupteur, à visser', 'station C', 'pièce', 1, 1, ''),
+      L('F09', 'Câble 3 × 2,5 mm² + fiche 16 A', 'alimentation du bloc de prises', 'm', 3, 3, 'selon distance à la prise murale'),
+      L('F10', 'Barre aimantée à couteaux 300 mm', 'station C', 'pièce', 1, 1, ''),
+      L('F11', 'Couverture anti-feu 1 × 1 m', 'au mur, près du gaz', 'pièce', 1, 1, ''),
+      L('F12', 'Détecteur de monoxyde de carbone', 'conseillé', 'pièce', 1, 1, '')
+    ] });
+
+    // --- main d'œuvre (indicative) ---
+    let cadres = 0, lisses = 0, sertir = 0, panneaux = 0;
+    meubles.forEach(m => {
+      const n = nomenclature(m, S);
+      m.typesCadre.forEach(ft => { cadres += ft.inst; });
+      n.sousEnsembles.forEach(se => { if (se.nom.indexOf('Lisse') === 0 || se.nom === 'Traverse sous plan') lisses += se.n; });
+      n.quinc.forEach(x => { if (/sertir/.test(x.designation)) sertir += x.qte; });
+      n.liste.forEach(g => { if (g.cat === 'panneau') panneaux += g.qte; });
+    });
+    const h = (x) => Math.round(x * 2) / 2;
+    sections.push({ titre: 'Main d\'œuvre atelier (estimation)', lignes: [
+      L('M01', 'Débit, ébavurage et perçage des tubes', cadres + ' cadres, ' + lisses + ' lisses', 'heure', h(cadres * 0.5 + lisses * 0.15), h(cadres * 0.5 + lisses * 0.15), ''),
+      L('M02', 'Soudage des cadres sur gabarit et des lisses (platines)', cadres + ' cadres, ' + lisses + ' lisses', 'heure', h(cadres * 0.8 + lisses * 0.2), h(cadres * 0.8 + lisses * 0.2), 'électrodes ou fil compris'),
+      L('M03', 'Pose des écrous à sertir', sertir + ' écrous', 'heure', h(sertir * 1.5 / 60), h(sertir * 1.5 / 60), ''),
+      L('M04', 'Petits sous-ensembles (collier, consoles, râtelier, pattes)', '', 'heure', 3, 3, ''),
+      L('M05', 'Préparation et peinture de l\'acier', '', 'heure', h(cadres * 0.4 + 4), h(cadres * 0.4 + 4), ''),
+      L('M06', 'Débit, ponçage et vernis des panneaux', panneaux + ' pièces', 'heure', h(panneaux * 0.25), h(panneaux * 0.25), 'à faire soi-même si besoin')
+    ] });
+    return { sections, debitTubes: syn.sections, panneaux: syn.panneaux };
+  }
+
+  const CALC = { propSection, nomenclature, debitBarres, calepinage, syntheseAchats, listeAchats, flecheRepartie, flecheCentree, E_ACIER, E_CP, RHO_CP, RHO_ACIER };
   if (typeof module !== 'undefined' && module.exports) module.exports = CALC;
   root.CALC = CALC;
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -10689,7 +10788,7 @@ bool bvhIntersectFogVolumeHit(
     persB: ['B', { W: 1000, H: 760, lacet: -0.6, tangage: 0.38 }],
     persC: ['C', { W: 1000, H: 760, lacet: -0.6, tangage: 0.38 }]
   };
-  const PHOTOS_PAR_DOC = { dossier: ['couvK', 'persA', 'persB', 'persC'], notice: ['couvC'], debit: [] };
+  const PHOTOS_PAR_DOC = { dossier: ['couvK', 'persA', 'persB', 'persC'], notice: ['couvC'], debit: [], devis: [] };
   function imageVue(cle) {
     if (PHOTOS[cle]) return PHOTOS[cle];
     const v = VUES_PHOTO[cle];
@@ -11212,6 +11311,49 @@ bool bvhIntersectFogVolumeHit(
     return h;
   }
 
+  /* ====================================================================== */
+  /*  DOCUMENT 4 : DEVIS D'ACHAT                                            */
+  /* ====================================================================== */
+  function devis() {
+    const A = C.listeAchats(M);
+    const q = (x) => nf(x, Number.isInteger(x) ? 0 : 1);
+    const ligne = (titre, sec) => sec.lignes;
+    const tube = A.sections[0].lignes, pan = A.sections[2].lignes, tol = A.sections[3].lignes, qu = A.sections[4].lignes;
+    let h = '<section><div class="couverture" style="height:auto;break-after:auto"><div class="bandeau"><div class="sur">Colocation étudiante · mobilier sur mesure</div>' +
+      '<h1>Devis d\'achat</h1><div class="sous">Dressing à rideaux (A) · Étagère murale de cuisine (B) · Station de cuisson (C) — ' + M.version + ' du ' + M.date + '</div></div></div>';
+    h += '<div class="note bleu"><b>En bref :</b> ' +
+      tube.map(l => '<b>' + l.qConseil + ' barres</b> de ' + l.designation.replace(/, acier.*/, '').toLowerCase()).join(' et ') + ' ; ' +
+      pan.map(l => '<b>' + l.qConseil + '</b> panneau' + (l.qConseil > 1 ? 'x' : '') + ' de ' + l.designation.replace(', panneau 2440 × 1220', '').replace('Contreplaqué', 'contreplaqué')).join(', ') + ' (format 2440 × 1220) ; ' +
+      '<b>' + tol.length + ' tôles</b> à faire découper et plier ; <b>' + nf(qu.reduce((a, l) => a + l.qConseil, 0)) + ' pièces</b> de quincaillerie. ' +
+      'Masse totale des trois meubles : environ ' + nf(MASSES.A.total + MASSES.B.total + MASSES.C.total) + ' kg.</div>';
+    h += '<p class="petit">« Qté mini » : quantité strictement nécessaire d\'après les plans. « À acheter » : avec une marge (une barre de réserve, environ 10 % de quincaillerie en plus). Prix à compléter avec les tarifs locaux ; la version Excel (04_devis_achats.xlsx) calcule les montants et les totaux.</p>';
+    A.sections.forEach((sec, i) => {
+      h += '<h3>' + (i + 1) + '. ' + sec.titre + '</h3>';
+      h += tableau(['Réf.', 'Désignation', 'Précisions', 'Unité', 'Qté mini', 'À acheter', 'Prix unit.', 'Montant'],
+        sec.lignes.map(l => ['<span class="cle">' + l.ref + '</span>', l.designation + (l.note ? '<br><span class="petit">' + esc(l.note) + '</span>' : ''), l.spec, l.unite, q(l.qMin), '<b>' + q(l.qConseil) + '</b>', '', '']),
+        ['', '', '', '', 'n', 'n', 'vide', 'vide']);
+      h += '<table style="width:60mm;margin-left:auto"><tr><td>Sous-total ' + (i + 1) + '</td><td class="vide" style="width:30mm"></td></tr></table>';
+    });
+    h += '<table style="width:80mm;margin-left:auto;font-size:9pt"><tr><th>Total hors taxes</th><td class="vide" style="width:35mm"></td></tr><tr><td>TVA (…… %)</td><td class="vide"></td></tr><tr><th>Total TTC</th><td class="vide"></td></tr></table>';
+    // annexes : coupes
+    h += '<h2 class="saut">Annexe 1 — Coupes des tubes</h2><p class="petit">À remettre à l\'atelier ou au fournisseur qui coupe à la longueur. Le plan de débit répartit les pièces dans les barres (trait de scie 3 mm).</p>';
+    A.debitTubes.filter(s => s.sec === 'T25' || s.sec === 'T20').forEach(s => {
+      const compte = {};
+      s.barres.forEach(b => b.pieces.forEach(p => { compte[p.L] = compte[p.L] || { n: 0, reps: new Set() }; compte[p.L].n++; compte[p.L].reps.add(p.rep); }));
+      h += '<h4>' + s.nom + ' — plan de débit sur ' + s.barres.length + ' barres de 6 m</h4>';
+      h += tableau(['Longueur (mm)', 'Quantité', 'Repères'], Object.keys(compte).map(Number).sort((a, b) => b - a).map(L => [nf(L), '<b>' + compte[L].n + '</b>', Array.from(compte[L].reps).sort().join(', ')]), ['n', 'n', '']);
+      h += '<div class="barres">' + dessinBarres(s) + '</div>';
+    });
+    h += '<h2 class="saut">Annexe 2 — Coupes des panneaux</h2><p class="petit">Pour un débit sur mesure chez le fournisseur, ou pour découper soi-même dans les panneaux entiers suivant le calepinage.</p>';
+    const pieces = [];
+    Object.values(ME).forEach(m => C.nomenclature(m, M.SECTIONS).liste.filter(g => g.cat === 'panneau').forEach(g => pieces.push(g)));
+    pieces.sort((a, b) => (b.debit.ep - a.debit.ep) || (b.debit.L * b.debit.l - a.debit.L * a.debit.l));
+    h += tableau(['Matériau', 'Repère', 'Pièce', 'Longueur × largeur (mm)', 'Qté', 'Usinage, finition'], pieces.map(g => [g.mat, '<span class="cle">' + g.rep + '</span>', g.noms.join(' / '), nf(g.debit.L) + ' × ' + nf(g.debit.l), '<b>' + g.qte + '</b>', g.debit.usin]), ['', '', '', 'n', 'n', '']);
+    A.panneaux.forEach(p => { h += '<h4>' + p.mat + '</h4><div class="calepin">' + dessinCalepin(p) + '</div>'; });
+    h += '</section>';
+    return h;
+  }
+
   function colisage() {
     const lignes = [];
     Object.values(ME).forEach(m => {
@@ -11242,7 +11384,7 @@ bool bvhIntersectFogVolumeHit(
 
   /* ---------- Assemblage ---------- */
   async function lancer() {
-    if (window.RENDU3D && window.RENDU3D.disponible()) {
+    if (TYPE !== 'devis' && window.RENDU3D && window.RENDU3D.disponible()) {
       try {
         capture = window.RENDU3D.capture(M);
         ['A', 'B', 'C', 'K'].forEach(c => capture.v.charger(c));
@@ -11260,6 +11402,7 @@ bool bvhIntersectFogVolumeHit(
     let html = '';
     if (TYPE === 'dossier') html = dossier();
     else if (TYPE === 'debit') html = debit();
+    else if (TYPE === 'devis') html = devis();
     else html = notice();
     document.getElementById('contenu').innerHTML = html;
     const imgs = Array.from(document.images);

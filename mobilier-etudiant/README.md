@@ -19,6 +19,7 @@ Trois meubles en tube acier et contreplaqué pour une colocation de deux étudia
 - `01_dossier_conception_plans.pdf` : hypothèses, choix 20×20 / 25×25, panneaux, calculs de flèche, flambement et ancrage, assemblages, chevilles selon le mur, sécurité gaz / chaleur / électricité, plans cotés (face, droite, dessus, cadres soudés) et perspectives.
 - `02_nomenclature_fiches_debit.pdf` : pièces repérées avec longueurs et usinages, sous-ensembles soudés, quincaillerie, plans de débit des barres de 6 m, calepinage des panneaux 2440 × 1220, liste d'achat avec colonnes de prix à remplir.
 - `03_notice_montage_pose_demontage.pdf` : fabrication en atelier, montage illustré pas à pas, pose murale, démontage et colisage, entretien.
+- `04_devis_achats.pdf` et `04_devis_achats.xlsx` : liste d'achat consolidée des trois meubles (barres de tube, panneaux, tôles, petits profilés, quincaillerie, finitions, main d'œuvre estimée), quantités minimales et conseillées, coupes des tubes et des panneaux. Dans l'Excel, saisir les prix unitaires (cases jaunes) : montants, sous-totaux, TVA et total se calculent seuls.
 
 Chaque PDF existe aussi en `.html` : il s'ouvre dans un navigateur et s'imprime (Ctrl + P, « Enregistrer en PDF », marges par défaut).
 

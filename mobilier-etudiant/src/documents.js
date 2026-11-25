@@ -38,7 +38,7 @@
     persB: ['B', { W: 1000, H: 760, lacet: -0.6, tangage: 0.38 }],
     persC: ['C', { W: 1000, H: 760, lacet: -0.6, tangage: 0.38 }]
   };
-  const PHOTOS_PAR_DOC = { dossier: ['couvK', 'persA', 'persB', 'persC'], notice: ['couvC'], debit: [] };
+  const PHOTOS_PAR_DOC = { dossier: ['couvK', 'persA', 'persB', 'persC'], notice: ['couvC'], debit: [], devis: [] };
   function imageVue(cle) {
     if (PHOTOS[cle]) return PHOTOS[cle];
     const v = VUES_PHOTO[cle];
@@ -561,6 +561,49 @@
     return h;
   }
 
+  /* ====================================================================== */
+  /*  DOCUMENT 4 : DEVIS D'ACHAT                                            */
+  /* ====================================================================== */
+  function devis() {
+    const A = C.listeAchats(M);
+    const q = (x) => nf(x, Number.isInteger(x) ? 0 : 1);
+    const ligne = (titre, sec) => sec.lignes;
+    const tube = A.sections[0].lignes, pan = A.sections[2].lignes, tol = A.sections[3].lignes, qu = A.sections[4].lignes;
+    let h = '<section><div class="couverture" style="height:auto;break-after:auto"><div class="bandeau"><div class="sur">Colocation étudiante · mobilier sur mesure</div>' +
+      '<h1>Devis d\'achat</h1><div class="sous">Dressing à rideaux (A) · Étagère murale de cuisine (B) · Station de cuisson (C) — ' + M.version + ' du ' + M.date + '</div></div></div>';
+    h += '<div class="note bleu"><b>En bref :</b> ' +
+      tube.map(l => '<b>' + l.qConseil + ' barres</b> de ' + l.designation.replace(/, acier.*/, '').toLowerCase()).join(' et ') + ' ; ' +
+      pan.map(l => '<b>' + l.qConseil + '</b> panneau' + (l.qConseil > 1 ? 'x' : '') + ' de ' + l.designation.replace(', panneau 2440 × 1220', '').replace('Contreplaqué', 'contreplaqué')).join(', ') + ' (format 2440 × 1220) ; ' +
+      '<b>' + tol.length + ' tôles</b> à faire découper et plier ; <b>' + nf(qu.reduce((a, l) => a + l.qConseil, 0)) + ' pièces</b> de quincaillerie. ' +
+      'Masse totale des trois meubles : environ ' + nf(MASSES.A.total + MASSES.B.total + MASSES.C.total) + ' kg.</div>';
+    h += '<p class="petit">« Qté mini » : quantité strictement nécessaire d\'après les plans. « À acheter » : avec une marge (une barre de réserve, environ 10 % de quincaillerie en plus). Prix à compléter avec les tarifs locaux ; la version Excel (04_devis_achats.xlsx) calcule les montants et les totaux.</p>';
+    A.sections.forEach((sec, i) => {
+      h += '<h3>' + (i + 1) + '. ' + sec.titre + '</h3>';
+      h += tableau(['Réf.', 'Désignation', 'Précisions', 'Unité', 'Qté mini', 'À acheter', 'Prix unit.', 'Montant'],
+        sec.lignes.map(l => ['<span class="cle">' + l.ref + '</span>', l.designation + (l.note ? '<br><span class="petit">' + esc(l.note) + '</span>' : ''), l.spec, l.unite, q(l.qMin), '<b>' + q(l.qConseil) + '</b>', '', '']),
+        ['', '', '', '', 'n', 'n', 'vide', 'vide']);
+      h += '<table style="width:60mm;margin-left:auto"><tr><td>Sous-total ' + (i + 1) + '</td><td class="vide" style="width:30mm"></td></tr></table>';
+    });
+    h += '<table style="width:80mm;margin-left:auto;font-size:9pt"><tr><th>Total hors taxes</th><td class="vide" style="width:35mm"></td></tr><tr><td>TVA (…… %)</td><td class="vide"></td></tr><tr><th>Total TTC</th><td class="vide"></td></tr></table>';
+    // annexes : coupes
+    h += '<h2 class="saut">Annexe 1 — Coupes des tubes</h2><p class="petit">À remettre à l\'atelier ou au fournisseur qui coupe à la longueur. Le plan de débit répartit les pièces dans les barres (trait de scie 3 mm).</p>';
+    A.debitTubes.filter(s => s.sec === 'T25' || s.sec === 'T20').forEach(s => {
+      const compte = {};
+      s.barres.forEach(b => b.pieces.forEach(p => { compte[p.L] = compte[p.L] || { n: 0, reps: new Set() }; compte[p.L].n++; compte[p.L].reps.add(p.rep); }));
+      h += '<h4>' + s.nom + ' — plan de débit sur ' + s.barres.length + ' barres de 6 m</h4>';
+      h += tableau(['Longueur (mm)', 'Quantité', 'Repères'], Object.keys(compte).map(Number).sort((a, b) => b - a).map(L => [nf(L), '<b>' + compte[L].n + '</b>', Array.from(compte[L].reps).sort().join(', ')]), ['n', 'n', '']);
+      h += '<div class="barres">' + dessinBarres(s) + '</div>';
+    });
+    h += '<h2 class="saut">Annexe 2 — Coupes des panneaux</h2><p class="petit">Pour un débit sur mesure chez le fournisseur, ou pour découper soi-même dans les panneaux entiers suivant le calepinage.</p>';
+    const pieces = [];
+    Object.values(ME).forEach(m => C.nomenclature(m, M.SECTIONS).liste.filter(g => g.cat === 'panneau').forEach(g => pieces.push(g)));
+    pieces.sort((a, b) => (b.debit.ep - a.debit.ep) || (b.debit.L * b.debit.l - a.debit.L * a.debit.l));
+    h += tableau(['Matériau', 'Repère', 'Pièce', 'Longueur × largeur (mm)', 'Qté', 'Usinage, finition'], pieces.map(g => [g.mat, '<span class="cle">' + g.rep + '</span>', g.noms.join(' / '), nf(g.debit.L) + ' × ' + nf(g.debit.l), '<b>' + g.qte + '</b>', g.debit.usin]), ['', '', '', 'n', 'n', '']);
+    A.panneaux.forEach(p => { h += '<h4>' + p.mat + '</h4><div class="calepin">' + dessinCalepin(p) + '</div>'; });
+    h += '</section>';
+    return h;
+  }
+
   function colisage() {
     const lignes = [];
     Object.values(ME).forEach(m => {
@@ -591,7 +634,7 @@
 
   /* ---------- Assemblage ---------- */
   async function lancer() {
-    if (window.RENDU3D && window.RENDU3D.disponible()) {
+    if (TYPE !== 'devis' && window.RENDU3D && window.RENDU3D.disponible()) {
       try {
         capture = window.RENDU3D.capture(M);
         ['A', 'B', 'C', 'K'].forEach(c => capture.v.charger(c));
@@ -609,6 +652,7 @@
     let html = '';
     if (TYPE === 'dossier') html = dossier();
     else if (TYPE === 'debit') html = debit();
+    else if (TYPE === 'devis') html = devis();
     else html = notice();
     document.getElementById('contenu').innerHTML = html;
     const imgs = Array.from(document.images);

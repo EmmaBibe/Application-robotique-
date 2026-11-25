@@ -50,8 +50,24 @@ function integrer(fichierHtml, remplacements) {
 const DOCUMENTS = [
   { type: 'dossier', fichier: '01_dossier_conception_plans', titre: 'Dossier de conception et plans' },
   { type: 'debit', fichier: '02_nomenclature_fiches_debit', titre: 'Nomenclature et fiches de débit' },
-  { type: 'notice', fichier: '03_notice_montage_pose_demontage', titre: 'Notice de montage, pose et démontage' }
+  { type: 'notice', fichier: '03_notice_montage_pose_demontage', titre: 'Notice de montage, pose et démontage' },
+  { type: 'devis', fichier: '04_devis_achats', titre: 'Devis d\'achat' }
 ];
+
+/* Devis Excel : liste d'achat consolidée, prix à saisir, totaux automatiques */
+function construireDevisExcel() {
+  const MODELE = require(path.join(SRC, 'modele.js'));
+  const CALC = require(path.join(SRC, 'calculs.js'));
+  const achats = CALC.listeAchats(MODELE);
+  const pieces = [];
+  Object.values(MODELE.MEUBLES).forEach(m => CALC.nomenclature(m, MODELE.SECTIONS).liste.filter(g => g.cat === 'panneau').forEach(g => {
+    pieces.push({ mat: g.mat, rep: g.rep, nom: g.noms.join(' / '), L: g.debit.L, l: g.debit.l, qte: g.qte, usin: g.debit.usin });
+  }));
+  const json = path.join(BUILD, 'achats.json');
+  fs.writeFileSync(json, JSON.stringify({ version: MODELE.version, date: MODELE.date, sections: achats.sections, debitTubes: achats.debitTubes, pieces }));
+  const r = require('child_process').spawnSync('python3', [path.join(__dirname, 'devis_xlsx.py'), json, path.join(OUT, '04_devis_achats.xlsx')], { stdio: 'inherit' });
+  console.log(r.status === 0 ? '04_devis_achats.xlsx' : 'Devis Excel non généré (python3 + openpyxl requis)');
+}
 
 async function main() {
   const sansPdf = process.argv.includes('--sans-pdf');
@@ -65,6 +81,7 @@ async function main() {
     fs.writeFileSync(path.join(OUT, d.fichier + '.html'), html);
     console.log(d.fichier + '.html');
   });
+  construireDevisExcel();
   if (sansPdf) return;
   let chromium;
   try { chromium = require('playwright').chromium; } catch (e) {
