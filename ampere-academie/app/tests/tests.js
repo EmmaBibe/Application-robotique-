@@ -191,7 +191,7 @@
       if (inst.steps.length !== Math.min(X.count(lvl), X.scenarios[inst.k](AA.rng('e' + i)).steps.length)) allOk = false;
       inst.steps.forEach(s => { if (!(isFinite(s.a) && s.a > 0 && X.ok(s.a, s.a, s.tol) && !X.ok(s.a * 1.05, s.a, s.tol))) allOk = false; });
     }
-    log(allOk && kinds.size === 5 && sigs.size > 40, `Défi électrotechnique : 90 études, 5 types, ${sigs.size} énoncés distincts, réponses exactes acceptées et ± 5 % refusées`);
+    log(allOk && kinds.size === 6 && sigs.size > 40, `Défi électrotechnique : 90 études, 6 types, ${sigs.size} énoncés distincts, réponses exactes acceptées et ± 5 % refusées`);
     eq([X.parse('12,5'), X.parse(' 1 250 '), isNaN(X.parse(''))], [12.5, 1250, true], 'Défi électrotechnique : saisie avec virgule ou espaces');
   }
 
@@ -285,6 +285,23 @@
     log(nr(N.avail(990, 10), 0.99) && nr(N.series(0.99, 0.99), 0.9801) && nr(N.redund(0.99, 0.99), 0.9999), 'Disponibilité : 99 % → 98,01 % en série, 99,99 % en redondance');
     eq(N.reorder(4, 3, 5), 17, 'Point de commande : 4 × 3 + 5 = 17 pièces');
     const q0 = 0.02, R = t => N.Rins(t, 1000, q0); log(N.pi(R(60), R(600)) > 3 && N.pi(N.Rins(60, 1000, 0.8), N.Rins(600, 1000, 0.8)) < 1.3, "Modèle d'isolement : bobinage sec IP > 3, bobinage humide IP < 1,3");
+  }
+
+  // Niveau 10 : ingénierie
+  if (window.AA && AA.N10) {
+    const N = AA.N10, nr = (x, y, e) => Math.abs(x - y) <= (e || 1e-9);
+    const g = []; [1, 2].forEach(S => [1, 2].forEach(F => [1, 2].forEach(P => g.push(N.plr(S, F, P)))));
+    eq(g.join(''), 'abbccdde', 'ISO 13849-1 : graphe de risque S/F/P → PLr (S1F1P1 = a … S2F2P2 = e)');
+    eq([N.plFromPFH(5e-8), N.plFromPFH(5e-7), N.plFromPFH(2e-6), N.plFromPFH(5e-6), N.silFromPFH(5e-8), N.silFromPFH(5e-7), N.silFromPFH(5e-6)], ['e', 'd', 'c', 'b', 'SIL 3', 'SIL 2', 'SIL 1'], 'Correspondance PFH → PL et SIL');
+    log(nr(N.idmt('SI', 1000, 100, 1), 2.971, 0.002) && nr(N.idmt('VI', 1000, 100, 1), 1.5) && nr(N.idmt('EI', 1000, 100, 1), 80 / 99) && N.idmt('SI', 90, 100, 1) === Infinity, 'Relais à temps inverse IEC 60255-151 à 10 Is, TMS 1 : 2,97 s (NI), 1,5 s (TI), 0,81 s (EI)');
+    const r = N.cpm([{ id: 'A', d: 3, dep: [] }, { id: 'B', d: 6, dep: ['A'] }, { id: 'C', d: 4, dep: ['A'] }, { id: 'D', d: 5, dep: ['C'] }, { id: 'E', d: 4, dep: ['B', 'C'] }, { id: 'F', d: 1, dep: ['D', 'E'] }, { id: 'G', d: 3, dep: ['F'] }, { id: 'H', d: 2, dep: ['G'] }]);
+    eq([r.end, r.crit.join(''), r.slack.C, r.slack.D], [19, 'ABEFGH', 1, 1], 'Chemin critique : 19 semaines, marge de 1 semaine pour C (limitée par D) et pour D');
+    log(nr(N.pumpP(30, 0.5), 3.75) && nr(N.saving(22, 6000, 0.89, 0.935, 0.18), 22 * 6000 * (1 / 0.89 - 1 / 0.935) * 0.18), 'Pompe P ∝ n³ ; économie liée au rendement');
+  }
+
+  if (window.AA && AA.DEFAUTO && AA.DEFAUTO.PLR && AA.N10) {
+    const X = AA.DEFAUTO, pls = X.PLR.map(c => AA.N10.plr(c.S, c.F, c.P));
+    log(pls.every(p => 'abcde'.includes(p)) && new Set(pls).size === 5, "Défi PLr : " + X.PLR.length + " situations couvrant les cinq niveaux (" + pls.join(' ') + ")");
   }
 
   // Automate

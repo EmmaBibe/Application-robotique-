@@ -80,8 +80,47 @@
     return { kind: 'read', frame: fr, sig: 'r' + slave + vals.join('.'), steps };
   };
 
+  /* ---------- Niveau de performance requis (graphe de risque ISO 13849-1) ---------- */
+  X.PLR = [
+    { t: 'Un opérateur charge à la main une presse rapide plusieurs fois par minute. Ses mains peuvent être écrasées (blessure irréversible) et le coulisseau descend trop vite pour qu\'il puisse retirer la main.', S: 2, F: 2, P: 2 },
+    { t: 'Une fois par semaine, un technicien règle un convoyeur très lent. Le risque est un pincement léger (ecchymose) ; le mouvement est lent et visible, il peut retirer la main.', S: 1, F: 1, P: 1 },
+    { t: 'Une fois par mois, un technicien entre dans la cellule d\'un robot rapide pour la maintenance. Un choc peut provoquer une fracture ; le robot est trop rapide pour être évité.', S: 2, F: 1, P: 2 },
+    { t: 'Chaque jour, pendant plusieurs heures, un agent nettoie un tapis lent. Il risque une coupure superficielle ; le mouvement est lent et il peut s\'écarter.', S: 1, F: 2, P: 1 },
+    { t: 'Rarement, un régleur intervient sur une scie en vitesse lente de réglage. Une amputation est possible, mais la vitesse réduite et la bonne visibilité lui permettent en général d\'éviter le contact.', S: 2, F: 1, P: 1 },
+    { t: 'Un opérateur alimente une plieuse rapide toute la journée. Le risque est un pincement superficiel des doigts, sans séquelle ; le mouvement est trop rapide pour réagir.', S: 1, F: 2, P: 2 },
+    { t: 'Toute la journée, un opérateur travaille près d\'un chariot automatique lent qui peut écraser un pied (fracture). Le chariot est lent et signalé : il peut s\'écarter.', S: 2, F: 2, P: 1 },
+    { t: 'Une fois par trimestre, on change l\'outil d\'une machine dont la broche rapide peut happer un gant et blesser gravement la main ; impossible de réagir à temps.', S: 2, F: 1, P: 2 }
+  ];
+  X.plrGen = (r, lvl) => { const k = r.int(0, X.PLR.length - 1), k2 = (k + 1 + r.int(0, X.PLR.length - 2)) % X.PLR.length; const cases = lvl >= 3 ? [k, k2] : [k]; return { cases, sig: cases.join('-') }; };
+
   const register = () => {
     const D = AA.Defis; if (!D || !D.TYPES || !AA.GRAFCET || !AA.N7) return;
+    if (AA.N10) D.TYPES.plr = {
+      name: 'Niveau de performance requis', icon: 'trophy', min: 3,
+      desc: 'Une situation dangereuse décrite en quelques lignes : estime la gravité, l\'exposition, la possibilité d\'évitement, et déduis le PLr de la fonction de sécurité.',
+      gen: (r, lvl) => Object.assign(X.plrGen(r, lvl), { lvl }),
+      play(main, inst, done) {
+        const sel = (k, opts) => `<select class="sel" data-k="${k}"><option value="">—</option>${opts.map(o => `<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
+        main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Défi · Sécurité des machines</p><h1>Quel PL<sub>r</sub> ?</h1></div></div>
+          <div class="brief">Pour chaque situation, choisis S, F et P selon l'énoncé, puis le niveau de performance requis par le graphe de risque de l'ISO 13849-1.</div>
+          <div class="grid" style="margin-top:14px">${inst.cases.map((c, i) => `<div class="card" data-i="${i}"><p class="eyebrow">Situation ${i + 1}</p><p>${esc(X.PLR[c].t)}</p>
+            <div class="row">${sel('S', [[1, 'S1 légère'], [2, 'S2 grave']])}${sel('F', [[1, 'F1 rare / courte'], [2, 'F2 fréquente / longue']])}${sel('P', [[1, 'P1 possible'], [2, 'P2 à peine possible']])}${sel('L', [...'abcde'].map(x => [x, 'PLr ' + x]))}</div><div class="js-c"></div></div>`).join('')}</div>
+          <button class="btn primary js-ok" style="margin-top:14px">${ic.check}Valider</button><div class="js-fb"></div>`;
+        let finished = false;
+        main.querySelector('.js-ok').onclick = () => {
+          let pts = 0, tot = 0;
+          inst.cases.forEach((c, i) => {
+            const card = main.querySelector(`[data-i="${i}"]`), v = k => card.querySelector(`[data-k="${k}"]`).value, s = X.PLR[c], pl = AA.N10.plr(s.S, s.F, s.P);
+            const ok = { S: +v('S') === s.S, F: +v('F') === s.F, P: +v('P') === s.P, L: v('L') === pl };
+            pts += Object.values(ok).filter(Boolean).length; tot += 4;
+            card.querySelector('.js-c').innerHTML = `<p class="${ok.L ? 'ok-t' : 'bad-t'}" style="margin:10px 0 0">Réponse : S${s.S}, F${s.F}, P${s.P} → PL<sub>r</sub> ${pl}. ${ok.S && ok.F && ok.P ? '' : 'Relis l\'énoncé : la gravité se juge sur la blessure possible, F sur la fréquence et la durée d\'exposition, P sur la vitesse du mouvement et la possibilité de s\'écarter.'}</p>`;
+          });
+          const score = Math.round(100 * pts / tot);
+          main.querySelector('.js-fb').innerHTML = `<div class="result ${score >= 50 ? 'win' : 'lose'}"><div class="score-big">${score}</div><p>Dans une vraie appréciation du risque, ces choix se discutent en équipe et se justifient par écrit ; un doute sur un critère conduit à retenir l'option la plus défavorable.</p></div>`;
+          if (!finished) { finished = true; done(score); }
+        };
+      }
+    };
     if (AA.N8) D.TYPES.modbus = {
       name: 'Trame Modbus', icon: 'plc', min: 3,
       desc: 'Une trame de réponse Modbus RTU, en hexadécimal, captée sur la ligne : décode-la octet par octet, comme avec un analyseur de bus.',

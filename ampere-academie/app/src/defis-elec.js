@@ -74,6 +74,20 @@
         ]
       };
     },
+    protection(r) {
+      const Is1 = r.pick([100, 150, 200]), tms1 = r.pick([0.05, 0.1, 0.15]), Is2 = Is1 * r.pick([2, 3]), If = Is1 * r.pick([8, 10, 15, 20]), marg = 0.3;
+      const t = (Is, tms) => tms * 0.14 / (Math.pow(If / Is, 0.02) - 1), t1 = t(Is1, tms1), k2 = 0.14 / (Math.pow(If / Is2, 0.02) - 1), tms2 = (t1 + marg) / k2;
+      return {
+        sig: 'p' + Is1 + tms1 + Is2 + If,
+        brief: `Deux relais à maximum de courant « normalement inverse » (IEC 60255-151 : t = TMS × 0,14 / ((I/I<sub>s</sub>)<sup>0,02</sup> − 1)) protègent un départ HTA et son arrivée. Relais aval : I<sub>s</sub> = <b>${Is1} A</b>, TMS = <b>${f(tms1)}</b>. Relais amont : I<sub>s</sub> = <b>${Is2} A</b>. Courant de défaut sur le départ : <b>${If} A</b>. Intervalle de sélectivité visé : <b>0,3 s</b>.`,
+        steps: [
+          { q: 'Rapport I / I<sub>s</sub> vu par le relais aval', a: If / Is1, u: '', sol: `${If} / ${Is1} = ${f(If / Is1, 2)}` },
+          { q: 'Temps de déclenchement du relais aval', a: t1, u: 's', sol: `t = ${f(tms1)} × 0,14 / (${f(If / Is1, 2)}^0,02 − 1) = ${f(t1, 3)} s` },
+          { q: 'Temps visé pour le relais amont', a: t1 + marg, u: 's', sol: `${f(t1, 3)} + 0,3 = ${f(t1 + marg, 3)} s` },
+          { q: 'TMS à régler sur le relais amont', a: tms2, u: '', sol: `TMS = ${f(t1 + marg, 3)} / (0,14 / (${f(If / Is2, 2)}^0,02 − 1)) = ${f(tms2, 3)}` }
+        ]
+      };
+    },
     four(r) {
       const R = r.pick([10, 15, 20, 23, 30, 40, 46]), cp = r.pick(['Y', 'D']);
       const Iy = 230 / R, Py = 3 * 230 * 230 / R, Id = sq3 * 400 / R, Pd = 3 * 400 * 400 / R;
