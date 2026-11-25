@@ -201,3 +201,15 @@
 .bo-acts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
 .bo-quiz { display: grid; gap: 8px; margin: 10px 0; }
 @media (max-width: 980px) { .bo-wrap, .bo-grid { grid-template-columns: 1fr; } }
+
+/* Schéma de répartition */
+.rep-svg { display: block; height: auto; }
+.rep-svg text { fill: var(--sch-ink); font: 600 11px var(--f-mono); }
+.rep-svg .rep-u { font: 600 10px var(--f-body); }
+.rep-l { stroke: var(--sch-ink); stroke-width: 1.8; fill: none; }
+.rep-bus { stroke: var(--sch-ink); stroke-width: 4; }
+.rep-bus2 { stroke: var(--sch-ink); stroke-width: 3; fill: none; }
+.rep-b { fill: var(--sch-bg); stroke: var(--sch-ink); stroke-width: 1.8; }
+.rep-b.ta { fill: color-mix(in srgb, var(--copper) 18%, var(--sch-bg)); }
+.rep-c { cursor: pointer; }
+.rep-c:hover .rep-b, .rep-c.on .rep-b { fill: color-mix(in srgb, var(--copper) 30%, var(--sch-bg)); stroke: var(--copper); }

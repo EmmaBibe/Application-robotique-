@@ -388,6 +388,23 @@
     log(!!M.reading(c, 'A', 'par').err && Math.abs(M.reading(c, 'V', 'ser').val - 12) < 1e-9 && !!M.reading(c, 'V', 'ser').warn && !M.reading(c, 'V', 'par').warn, 'Montage : ampèremètre en parallèle = court-circuit ; voltmètre en série = tension de la source ; voltmètre en parallèle = mesure juste');
   }
 
+  // Types de schémas et schéma de répartition
+  if (window.AA && AA.SIMS && AA.SIMS.repartition) {
+    let okR = true, msgR = [];
+    ['studio', 't2', 't3', 't4'].forEach(typ => {
+      const el = document.createElement('div'); AA.SIMS.repartition(el, { typ });
+      if (!el.querySelectorAll('.rep-c').length) { okR = false; msgR.push(typ + ' sans circuit'); }
+      for (let k = 0; k < 25; k++) {
+        el.querySelector('.js-nq').click(); const sel = el.querySelector('.js-a'); let good = 0;
+        [...sel.options].forEach(o => { sel.value = o.value; el.querySelector('.js-ok').click(); if (el.querySelector('.js-fb .ok-t')) good++; });
+        if (good !== 1) { okR = false; msgR.push(typ + ' : « ' + el.querySelector('.js-q').textContent + ' » a ' + good + ' bonne(s) réponse(s)'); break; }
+      }
+    });
+    log(okR, 'Schéma de répartition : 4 types de logements dessinés, chaque question de lecture a exactement une bonne réponse' + (msgR.length ? ' — ' + msgR.join(' ; ') : ''));
+    const v = document.createElement('div'); AA.SIMS.vues2(v, { v: 'multi' });
+    log(!!AA.L.n1m2l7 && AA.VISMAP.n1m2l7 && v.querySelectorAll('.js-v button').length === 4, 'Leçon « schéma de répartition » présente et vues synoptique / unifilaire / multifilaire / développé');
+  }
+
   // Bornes des appareils
   if (window.AA && AA.BORNES) {
     const BO = AA.BORNES, D = BO.DEV, m = (k, st, a, b) => BO.measure(D[k].links(Object.assign({}, D[k].st, st)), a, b);
