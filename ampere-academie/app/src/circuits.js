@@ -285,6 +285,122 @@
     guide: [{ id: 'S2', t: "Une impulsion brève suffit." }, { id: 'KT1', t: "La minuterie garde son contact fermé pendant la durée réglée, puis le rouvre seule." }]
   });
 
-  const LIST = ['simple', 'vaetvient', 'double', 'telerupteur', 'minuterie', 'dol', 'inversion', 'etoile'];
+  /* ---------- 9. Commande depuis deux postes ---------- */
+  const NW = 'N';
+  C.multipostes = finish({
+    id: 'multipostes', title: 'Commande depuis deux postes', folio: 'Moteur M1 — deux postes de commande', level: 'Industriel',
+    w: 40, h: 50,
+    intro: "Le moteur se commande depuis deux pupitres. Règle : les boutons d'arrêt (contacts à ouverture) se placent en série, les boutons de marche (contacts à fermeture) en parallèle, avec le contact d'auto-maintien.",
+    sources: powerSources.concat([{ net: 'L', pot: 'L1', x: 4 + OX, y: 2, label: 'L1' }, { net: NW, pot: 'N', x: 2 + OX, y: 44, label: 'N' }]),
+    parts: dolPower.concat(shift([
+      P('fuse', 'F1', 4, 6, { a: 'L', b: 'c1' }, { rating: 2, t: ['1', '2'], info: 'Fusible du circuit de commande 2 A' }),
+      P('th_nc', 'F2.95', 4, 12, { a: 'c1', b: 'c2' }, { of: 'F2', tag: 'F2', t: ['95', '96'] }),
+      P('pb_nc', 'S1', 4, 18, { a: 'c2', b: 'c3' }, { t: ['1', '2'], color: 'red', info: 'Arrêt — poste 1' }),
+      P('pb_nc', 'S3', 4, 24, { a: 'c3', b: 'c4' }, { t: ['1', '2'], color: 'red', info: 'Arrêt — poste 2' }),
+      P('pb_no', 'S2', 4, 30, { a: 'c4', b: 'c5' }, { t: ['3', '4'], color: 'green', info: 'Marche — poste 1' }),
+      P('pb_no', 'S4', 9, 30, { a: 'c4', b: 'c5' }, { t: ['3', '4'], color: 'green', info: 'Marche — poste 2' }),
+      P('no', 'KM1.13', 14, 30, { a: 'c4', b: 'c5' }, { of: 'KM1', tag: 'KM1', t: ['13', '14'], info: "Contact d'auto-maintien" }),
+      P('coil', 'KM1', 4, 38, { a: 'c5', b: NW }, { t: ['A1', 'A2'], u: 230 })
+    ], OX)),
+    wires: dolPowerWires.concat(shift([
+      W('L', [4, 2], [4, 4]), W('c1', [4, 8], [4, 10]), W('c2', [4, 14], [4, 16]), W('c3', [4, 20], [4, 22]),
+      W('c4', [4, 26], [4, 28]), W('c4', [4, 27], [14, 27], [14, 28]), W('c4', [9, 27], [9, 28]),
+      W('c5', [4, 32], [4, 36]), W('c5', [14, 32], [14, 34], [4, 34]), W('c5', [9, 32], [9, 34]),
+      W(NW, [4, 40], [4, 44], [2, 44])
+    ], OX)),
+    dots: shiftPts([[4, 27], [9, 27], [4, 34], [9, 34]], OX),
+    sections: [{ x: 1.5, y: 0.9, t: 'Puissance 3 × 400 V' }, { x: 1.5 + OX, y: 0.9, t: 'Commande 230 V' }],
+    guide: [
+      { id: 'S2', t: 'Marche depuis le poste 1 (S2) ou le poste 2 (S4) : les deux sont en parallèle, un seul suffit.' },
+      { id: 'KM1.13', t: "L'auto-maintien est en parallèle avec toutes les marches." },
+      { id: 'S3', t: "Arrêt depuis n'importe quel poste : S1 et S3 sont en série, chacun coupe le circuit." }
+    ]
+  });
+
+  /* ---------- 10. Marche par à-coups (sélecteur) ---------- */
+  C.acoups = finish({
+    id: 'acoups', title: 'Marche par à-coups', folio: 'Moteur M1 — marche continue ou à-coups', level: 'Industriel',
+    w: 40, h: 50,
+    intro: "Pour positionner une machine (réglage, changement d'outil), le moteur ne doit tourner que tant que l'on appuie. Le sélecteur SA1 ouvert supprime l'auto-maintien : le bouton Marche devient un bouton d'à-coups.",
+    sources: powerSources.concat([{ net: 'L', pot: 'L1', x: 4 + OX, y: 2, label: 'L1' }, { net: NW, pot: 'N', x: 2 + OX, y: 44, label: 'N' }]),
+    parts: dolPower.concat(shift([
+      P('fuse', 'F1', 4, 6, { a: 'L', b: 'c1' }, { rating: 2, t: ['1', '2'] }),
+      P('th_nc', 'F2.95', 4, 12, { a: 'c1', b: 'c2' }, { of: 'F2', tag: 'F2', t: ['95', '96'] }),
+      P('pb_nc', 'S1', 4, 18, { a: 'c2', b: 'c3' }, { t: ['1', '2'], color: 'red', info: 'Arrêt' }),
+      P('pb_no', 'S2', 4, 26, { a: 'c3', b: 'c4' }, { t: ['3', '4'], color: 'green', info: 'Marche (ou à-coups si SA1 ouvert)' }),
+      P('sw1', 'SA1', 9, 24, { a: 'c3', b: 'c6' }, { t: ['1', '2'], info: 'Sélecteur : fermé = marche continue, ouvert = à-coups' }),
+      P('no', 'KM1.13', 9, 30, { a: 'c6', b: 'c4' }, { of: 'KM1', tag: 'KM1', t: ['13', '14'], info: "Contact d'auto-maintien" }),
+      P('coil', 'KM1', 4, 38, { a: 'c4', b: NW }, { t: ['A1', 'A2'], u: 230 })
+    ], OX)),
+    wires: dolPowerWires.concat(shift([
+      W('L', [4, 2], [4, 4]), W('c1', [4, 8], [4, 10]), W('c2', [4, 14], [4, 16]),
+      W('c3', [4, 20], [4, 24]), W('c3', [4, 21], [9, 21], [9, 22]),
+      W('c6', [9, 26], [9, 28]), W('c4', [4, 28], [4, 36]), W('c4', [9, 32], [9, 33], [4, 33]),
+      W(NW, [4, 40], [4, 44], [2, 44])
+    ], OX)),
+    dots: shiftPts([[4, 21], [4, 33]], OX),
+    sections: [{ x: 1.5, y: 0.9, t: 'Puissance 3 × 400 V' }, { x: 1.5 + OX, y: 0.9, t: 'Commande 230 V' }],
+    guide: [
+      { id: 'SA1', t: "SA1 fermé : marche normale, l'auto-maintien fonctionne." },
+      { id: 'S2', t: 'SA1 ouvert : le moteur tourne seulement pendant l\'appui sur S2 (à-coups).' },
+      { id: 'KM1.13', t: "Le contact d'auto-maintien est en série avec SA1 : sélecteur ouvert, il ne sert plus." }
+    ]
+  });
+
+  /* ---------- 11. Va-et-vient automatique par fins de course ---------- */
+  const OF = 18;
+  C.fdc = finish({
+    id: 'fdc', title: 'Va-et-vient par fins de course', folio: 'Chariot — va-et-vient automatique', level: 'Industriel',
+    w: 50, h: 54,
+    intro: "Un chariot fait des allers-retours. Chaque fin de course porte deux contacts actionnés ensemble : un contact à ouverture arrête le sens en cours, un contact à fermeture lance le sens opposé. Clique SQ1 (fin de course avant) ou SQ2 (arrière) pour simuler l'arrivée du chariot.",
+    sources: powerSources.concat([{ net: 'L', pot: 'L1', x: 4 + OF, y: 2, label: 'L1' }, { net: NW, pot: 'N', x: 2 + OF, y: 48, label: 'N' }]),
+    parts: [
+      P('breaker3', 'Q1', 3, 6, { a1: 'L1', a2: 'L2', a3: 'L3', b1: 'pa1', b2: 'pa2', b3: 'pa3' }, { rating: 16, t: ['1', '2', '3', '4', '5', '6'] }),
+      P('km3', 'KM1:P', 3, 14, { a1: 'pa1', a2: 'pa2', a3: 'pa3', b1: 'pb1', b2: 'pb2', b3: 'pb3' }, { of: 'KM1', t: ['1', '2', '3', '4', '5', '6'] }),
+      P('km3', 'KM2:P', 10, 14, { a1: 'pa1', a2: 'pa2', a3: 'pa3', b1: 'pb3', b2: 'pb2', b3: 'pb1' }, { of: 'KM2', t: ['1', '2', '3', '4', '5', '6'] }),
+      P('thermal3', 'F2', 3, 20, { a1: 'pb1', a2: 'pb2', a3: 'pb3', b1: 'pc1', b2: 'pc2', b3: 'pc3' }, { motor: 'M1', t: ['1', '2', '3', '4', '5', '6'] }),
+      P('motor3', 'M1', 5, 27, { U: 'pc1', V: 'pc2', W: 'pc3' }, { info: 'Moteur du chariot' })
+    ].concat(shift([
+      P('fuse', 'F1', 4, 6, { a: 'L', b: 'c1' }, { rating: 2, t: ['1', '2'] }),
+      P('th_nc', 'F2.95', 4, 12, { a: 'c1', b: 'c2' }, { of: 'F2', tag: 'F2', t: ['95', '96'] }),
+      P('pb_nc', 'S1', 4, 18, { a: 'c2', b: 'c3' }, { t: ['1', '2'], color: 'red', info: 'Arrêt' }),
+      P('pb_no', 'S2', 4, 26, { a: 'c3', b: 'c4' }, { t: ['3', '4'], color: 'green', info: 'Départ vers l\'avant' }),
+      P('no', 'KM1.13', 8, 26, { a: 'c3', b: 'c4' }, { of: 'KM1', tag: 'KM1', t: ['13', '14'] }),
+      P('ls_no', 'SQ2:2', 12, 26, { a: 'c3', b: 'c4' }, { t: ['13', '14'], mech: ['SQ2'], info: 'Fin de course arrière, contact à fermeture : relance vers l\'avant' }),
+      P('ls_nc', 'SQ1', 4, 32, { a: 'c4', b: 'c5' }, { t: ['11', '12'], mech: ['SQ1:2'], info: 'Fin de course avant, contact à ouverture : arrête la marche avant' }),
+      P('nc', 'KM2.21', 4, 38, { a: 'c5', b: 'c8' }, { of: 'KM2', tag: 'KM2', t: ['21', '22'], info: 'Verrouillage électrique' }),
+      P('coil', 'KM1', 4, 44, { a: 'c8', b: NW }, { t: ['A1', 'A2'], u: 230, info: 'Marche avant' }),
+      P('pb_no', 'S3', 18, 26, { a: 'c3', b: 'c6' }, { t: ['3', '4'], color: 'white', info: 'Départ vers l\'arrière' }),
+      P('no', 'KM2.13', 22, 26, { a: 'c3', b: 'c6' }, { of: 'KM2', tag: 'KM2', t: ['13', '14'] }),
+      P('ls_no', 'SQ1:2', 26, 26, { a: 'c3', b: 'c6' }, { t: ['13', '14'], mech: ['SQ1'], info: 'Fin de course avant, contact à fermeture : lance le retour' }),
+      P('ls_nc', 'SQ2', 18, 32, { a: 'c6', b: 'c7' }, { t: ['11', '12'], mech: ['SQ2:2'], info: 'Fin de course arrière, contact à ouverture : arrête le retour' }),
+      P('nc', 'KM1.21', 18, 38, { a: 'c7', b: 'c9' }, { of: 'KM1', tag: 'KM1', t: ['21', '22'], info: 'Verrouillage électrique' }),
+      P('coil', 'KM2', 18, 44, { a: 'c9', b: NW }, { t: ['A1', 'A2'], u: 230, info: 'Marche arrière' })
+    ], OF)),
+    wires: [W('L1', [3, 2], [3, 4]), W('L2', [5, 2], [5, 4]), W('L3', [7, 2], [7, 4]),
+      W('pa1', [3, 8], [3, 12]), W('pa2', [5, 8], [5, 12]), W('pa3', [7, 8], [7, 12]),
+      W('pa1', [3, 10], [10, 10], [10, 12]), W('pa2', [5, 9], [12, 9], [12, 12]), W('pa3', [7, 8.5], [14, 8.5], [14, 12]),
+      W('pb1', [3, 16], [3, 18]), W('pb2', [5, 16], [5, 18]), W('pb3', [7, 16], [7, 18]),
+      W('pb3', [10, 16], [10, 16.5], [7, 16.5]), W('pb2', [12, 16], [12, 17], [5, 17]), W('pb1', [14, 16], [14, 17.5], [3, 17.5]),
+      W('pc1', [3, 22], [3, 24]), W('pc2', [5, 22], [5, 24]), W('pc3', [7, 22], [7, 24])].concat(shift([
+      W('L', [4, 2], [4, 4]), W('c1', [4, 8], [4, 10]), W('c2', [4, 14], [4, 16]),
+      W('c3', [4, 20], [4, 24]), W('c3', [4, 22], [26, 22], [26, 24]), W('c3', [8, 22], [8, 24]), W('c3', [12, 22], [12, 24]), W('c3', [18, 22], [18, 24]), W('c3', [22, 22], [22, 24]),
+      W('c4', [4, 28], [4, 30]), W('c4', [12, 28], [12, 29], [4, 29]), W('c4', [8, 28], [8, 29]),
+      W('c5', [4, 34], [4, 36]), W('c8', [4, 40], [4, 42]),
+      W('c6', [18, 28], [18, 30]), W('c6', [26, 28], [26, 29], [18, 29]), W('c6', [22, 28], [22, 29]),
+      W('c7', [18, 34], [18, 36]), W('c9', [18, 40], [18, 42]),
+      W(NW, [4, 46], [4, 48]), W(NW, [18, 46], [18, 48], [2, 48])
+    ], OF)),
+    dots: [[3, 10], [5, 9], [7, 8.5], [7, 16.5], [5, 17], [3, 17.5]].concat(shiftPts([[4, 22], [8, 22], [12, 22], [18, 22], [22, 22], [4, 29], [8, 29], [18, 29], [22, 29], [4, 48]], OF)),
+    sections: [{ x: 1.5, y: 0.9, t: 'Puissance 3 × 400 V' }, { x: 1.5 + OF, y: 0.9, t: 'Commande 230 V' }],
+    guide: [
+      { id: 'S2', t: 'S2 lance le chariot vers l\'avant (KM1).' },
+      { id: 'SQ1', t: 'En fin de course avant, SQ1 ouvre la branche de KM1 et SQ1 13-14 ferme celle de KM2 : le chariot repart en arrière.' },
+      { id: 'SQ2', t: 'En fin de course arrière, SQ2 fait l\'inverse : le cycle continue jusqu\'à l\'arrêt (S1).' },
+      { id: 'KM1.21', t: 'Les verrouillages électriques interdisent toujours KM1 et KM2 ensemble.' }
+    ]
+  });
+
+  const LIST = ['simple', 'vaetvient', 'double', 'telerupteur', 'minuterie', 'dol', 'inversion', 'etoile', 'multipostes', 'acoups', 'fdc'];
   window.AACircuits = { C, LIST, finish, P, W };
 })();

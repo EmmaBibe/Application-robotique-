@@ -304,6 +304,24 @@
     log(pls.every(p => 'abcde'.includes(p)) && new Set(pls).size === 5, "Défi PLr : " + X.PLR.length + " situations couvrant les cinq niveaux (" + pls.join(' ') + ")");
   }
 
+  // Nouveaux folios et leçons complémentaires (niveaux 0, 2, 3)
+  {
+    const C = window.AACircuits.C, Sm = window.AASim.Sim, mk = id => { const s = new Sm(C[id]); if (s.byId.Q1 && !s.byId.Q1.st.on) s.toggle('Q1'); return s; };
+    let s = mk('multipostes'); s.press('S4', true); s.press('S4', false); const m1 = s.coil.KM1; s.press('S3', true); s.press('S3', false); const m2 = s.coil.KM1; s.press('S2', true); s.press('S2', false); s.press('S1', true); s.press('S1', false);
+    eq([m1, m2, s.coil.KM1], [true, false, false], 'Deux postes : marche depuis le poste 2, arrêt depuis chaque poste');
+    s = mk('acoups'); s.press('S2', true); const a1 = s.coil.KM1; s.press('S2', false); const a2 = s.coil.KM1; s.toggle('SA1'); s.press('S2', true); s.press('S2', false);
+    eq([a1, a2, s.coil.KM1], [true, false, true], 'À-coups : marche pendant l\'appui seulement, auto-maintien rétabli par SA1');
+    s = mk('fdc'); s.press('S2', true); s.press('S2', false); const f1 = [s.coil.KM1, s.coil.KM2]; s.press('SQ1', true); s.press('SQ1', false); const f2 = [s.coil.KM1, s.coil.KM2]; s.press('SQ2', true); s.press('SQ2', false); const f3 = [s.coil.KM1, s.coil.KM2];
+    eq([f1, f2, f3], [[true, false], [false, true], [true, false]], 'Fins de course : contacts liés mécaniquement, inversion automatique du sens, verrouillages respectés');
+  }
+  if (window.AA && AA.N023) {
+    const N = AA.N023, Um = 230 * Math.SQRT2, nr = (x, y, e) => Math.abs(x - y) <= (e || 1e-9);
+    log(nr(N.leading(Um, 0), 230, 1e-9) && nr(N.trailing(Um, Math.PI), 230, 1e-9) && nr(N.leading(Um, Math.PI / 2), Um / 2, 1e-9) && nr(N.trailing(Um, Math.PI / 2), Um / 2, 1e-9), 'Gradateur : pleine conduction = 230 V, demi-alternance = Û/2 (début ou fin de phase)');
+    const r = N.reduced(0.7, 6, 2); log(nr(r.I, 4.2) && nr(r.C, 0.98), 'Tension réduite à 70 % : courant × 0,7, couple × 0,49');
+    log(nr(N.kloss(0.3, 0.3, 2.5), 2.5) && N.kloss(1, 0.6, 2.5) > N.kloss(1, 0.12, 2.5), 'Rotor bobiné : couple maximal inchangé, couple de démarrage accru par la résistance rotorique');
+    log(nr(N.charge(true, 400, 16), 11085.1, 0.1) && nr(N.charge(false, 230, 32), 7360), 'Recharge VE : 16 A tri ≈ 11 kW, 32 A mono ≈ 7,4 kW');
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis

@@ -414,7 +414,8 @@
     }
 
     /* Commandes de l'opérateur */
-    press(id, down) { const p = this.byId[id]; if (!p) return; p.st.pressed = down; this.solve(); this.emit('act', { id, down }); }
+    // mech : contacts portés par le même organe mécanique (fin de course à deux contacts…) actionnés ensemble
+    press(id, down) { const p = this.byId[id]; if (!p) return; p.st.pressed = down; (p.mech || []).forEach(m => { const q = this.byId[m]; if (q) q.st.pressed = down; }); this.solve(); this.emit('act', { id, down }); }
     latch(id) { const p = this.byId[id]; if (!p) return; p.st.latched = !p.st.latched; this.solve(); this.emit('act', { id, latched: p.st.latched }); }
     toggle(id) {
       const p = this.byId[id]; if (!p) return;

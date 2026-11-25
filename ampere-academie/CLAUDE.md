@@ -36,6 +36,7 @@ Application d'apprentissage des schémas électriques, du câblage, des coffrets
 | `app/src/defis-elec.js` | Défi « Électrotechnique » : études chiffrées moteur / transformateur / four |
 | `app/src/defis-auto.js` | Défis « Grafcet » (prédire la situation finale), « Réglage PID » (cahier des charges) et « Trame Modbus » (décoder une réponse RTU), « Niveau de performance requis » (graphe de risque) |
 | `app/src/lessons/n6b.js` | Capteurs, sorties, AU câblé, moteur et simulateur Grafcet (`AA.GRAFCET`, IEC 60848), GEMMA |
+| `app/src/lessons/n023.js` | Leçons complémentaires des niveaux 0, 2, 3 (VAT, outillage, gradateur LED, prises, VE, types de différentiels, projet logement, démarrages, deux vitesses, freinages, monophasé, câblage) (`AA.N023`) |
 | `app/src/lessons/n10.js` | Graphe de risque ISO 13849, PFH/SIL, poste HTA/BT, relais à temps inverse IEC 60255, creux de tension, efficacité des moteurs, audit, chemin critique (`AA.N10`) |
 | `app/src/lessons/n9.js` | Dépannage sur folios en panne (missions + quiz), index de polarisation, boucle de défaut, harmoniques, AMDEC, disponibilité, stock (`AA.N9`) |
 | `app/src/lessons/n8.js` | Variateurs (MLI, U/f, rampes, freinage), codeurs, boucle de position, interpolation, Modbus (CRC), réseaux, IO-Link, cybersécurité, IHM, historisation, TRS (`AA.N8`) |
@@ -61,16 +62,16 @@ powershell -ExecutionPolicy Bypass -File windows\build.ps1    # dist\Ampere-Acad
 Les outils (JDK, SDK Android, WebView2) sont dans `C:\Users\SUZANE\AndroidBuild`. La clé de signature Android est dans `C:\Users\SUZANE\AndroidBuild\cles\ampere-academie` (hors dépôt) : à sauvegarder aussi sur un support externe.
 
 ## État au 25/11/2026 (soir)
-- 13 niveaux ; 239 leçons rédigées sur 267 (niveaux 4 à 10, mesure et solaire complets). Il manque 28 leçons dans les niveaux 0, 2 et 3 (voir « Suite prévue »), toutes avec une visualisation ou une simulation.
+- 13 niveaux ; les 267 leçons du programme sont rédigées, toutes avec une visualisation ou une simulation, toutes avec une visualisation ou une simulation.
 - Modèles vérifiés par les tests : `AA.ELEC`, `AA.DESIGN`, `AA.GRAFCET` (règles d'évolution IEC 60848, actions N/S/R/D/L, traduction Ladder), `AA.N7` (Pt100 IEC 60751, 4-20 mA et NAMUR NE 43, mise à l'échelle, filtre, PID avec anti-saturation, Ziegler-Nichols).
-- 8 folios vivants ; 13 types de défis aléatoires (dont électrotechnique avec études de variateur, de maintenance et de protection HTA, Grafcet, réglage PID, trame Modbus, niveau de performance requis) ; 7 labos ; coffret 3D.
-- 162 tests automatiques au vert (dont CRC Modbus comparé aux exemples de référence), dont un contrôle de syntaxe de tous les scripts.
+- 11 folios vivants (dont commande depuis deux postes, marche par à-coups, va-et-vient par fins de course ; contacts liés mécaniquement par la propriété `mech` des pièces) ; 13 types de défis aléatoires (dont électrotechnique avec études de variateur, de maintenance et de protection HTA, Grafcet, réglage PID, trame Modbus, niveau de performance requis) ; 7 labos ; coffret 3D.
+- 172 tests automatiques au vert (dont CRC Modbus comparé aux exemples de référence), dont un contrôle de syntaxe de tous les scripts.
 - L'appli Windows est copiée sur le Bureau de la propriétaire (`Desktop\Ampere Academie` + raccourci « Ampère Académie ») : le dossier `dist` est trop profond pour Windows (chemin > 260 caractères). Après chaque fabrication, recopier `dist\Ampere Academie PC\*` vers ce dossier.
 
 ## Suite prévue (par ordre de priorité)
-1. Rédiger les 28 leçons manquantes : n0m4l2-3 (VAT, outillage isolé), n2 (variateur LED, prises, circuits spécialisés, volets/VMC, borne VE, types de différentiels, peigne/bornier, projet logement), n3 (multi-postes, à-coups, fins de course, démarrages statorique/rotorique, Dahlander, deux enroulements, freinages, monophasé à condensateur, câblage d'armoire et projet coffret), chacune avec sa visualisation réglable et ses formules, et un défi par module.
+1. Approfondir : plus d'exercices et de défis par module, relecture de chaque leçon.
    Continuer la passe sur les simulations : valeurs réglables partout où c'est pertinent (cable, tableau, megger, rcdtest, ups…).
-2. Nouveaux folios : marche par à-coups, commande multi-postes, Dahlander, freinage, démarrage statorique, va-et-vient automatique par fins de course, schémas TT/TN/IT.
+2. Nouveaux folios : Dahlander, freinage par injection, démarrage statorique, schémas TT/TN/IT (pour l'instant traités par des simulations dédiées).
 3. Défis : éditeur de schéma (câbler soi-même un folio à partir d'un cahier des charges), Grafcet, diagnostic sur coffret 3D, projets multi-sites et extensions d'usine.
 4. Coffret 3D : autres armoires (inversion, étoile-triangle), mode « câblage » où l'apprenant tire les fils.
 5. Labo : variateur détaillé, batteries et recharge VE, protection différentielle, harmoniques.
