@@ -1,0 +1,121 @@
+/* Ampère Académie — défis d'automatisme avancé :
+ *  - « Grafcet » : une suite d'événements tirée au hasard ; prédire la situation finale (étapes et sorties actives).
+ *    La correction est calculée par le moteur AA.GRAFCET (règles de l'IEC 60848) et détaillée pas à pas.
+ *  - « Réglage PID » : un procédé (gain, constante de temps, retard) tiré au hasard ; régler Kp et Ti pour tenir
+ *    un cahier des charges (dépassement, temps de réponse à 5 %, écart final). Un réglage valide existe toujours :
+ *    les exigences sont calculées à partir du meilleur réglage trouvé par recherche systématique. */
+(function () {
+  'use strict';
+  const { esc, ic } = AA;
+  const X = AA.DEFAUTO = {};
+
+  /* ---------- Grafcet ---------- */
+  X.GF = {
+    perceuse: { init: { a: true, b: false, dcy: false }, pool: [['dcy', 'pulse'], ['a', 'tog'], ['b', 'tog']] },
+    cuve: { init: { bas: true, haut: false, dcy: false }, pool: [['dcy', 'pulse'], ['bas', 'tog'], ['haut', 'tog'], ['wait', 2], ['wait', 4], ['wait', 7]] },
+    tri: { init: { p: false, G: false, fa: false, fb: false }, pool: [['p', 'tog'], ['G', 'tog'], ['fa', 'tog'], ['fb', 'tog']] },
+    et: { init: { dcy: false, fp: false, fm: false }, pool: [['dcy', 'pulse'], ['fp', 'tog'], ['fm', 'tog']] }
+  };
+  X.gfLabel = (ev, I) => ev[0] === 'wait' ? `on attend ${ev[1]} s` : ev[1] === 'pulse' ? `appui bref sur ${ev[0]}` : `${ev[0]} passe à ${I[ev[0]] ? 1 : 0}`;
+  X.gfRun = (key, events) => {
+    const G = AA.GRAFCET, def = G.EX[key], g = G.create(def), I = Object.assign({}, X.GF[key].init), trace = [];
+    g.tick(0.01, I);
+    events.forEach(ev => {
+      if (ev[0] === 'wait') g.tick(ev[1], I);
+      else if (ev[1] === 'pulse') { I[ev[0]] = true; g.tick(0.01, I); I[ev[0]] = false; g.tick(0.01, I); }
+      else { I[ev[0]] = !I[ev[0]]; g.tick(0.01, I); }
+      trace.push({ lbl: X.gfLabel(ev, I), steps: [...g.active].sort((a, b) => a - b), outs: [...g.outputs()].sort() });
+    });
+    return { steps: [...g.active].sort((a, b) => a - b), outs: [...g.outputs()].sort(), trace };
+  };
+  X.gfGen = (r, lvl) => {
+    const keys = lvl <= 1 ? ['perceuse', 'tri'] : ['perceuse', 'cuve', 'tri', 'et'], key = r.pick(keys), pool = X.GF[key].pool, n = 3 + Math.min(4, lvl);
+    const events = []; for (let k = 0; k < n; k++) events.push(r.pick(pool));
+    return { key, events, sig: key + events.map(e => e.join('')).join('-') };
+  };
+
+  /* ---------- PID ---------- */
+  X.simLoop = (P, Kp, Ti, T, dt) => {
+    const N7 = AA.N7, s = N7.pidNew(), buf = [], out = []; let pv = 0;
+    dt = dt || 0.1;
+    for (let t = 0; t <= T; t += dt) {
+      const u = N7.pidStep(s, { Kp, Ti, Td: 0 }, 50, pv, dt).u;
+      buf.push(u); const lag = Math.round(P.L / dt); while (buf.length > lag + 1) buf.shift();
+      pv += (P.K * buf[0] - pv) / P.tau * dt; out.push([t, pv]);
+    }
+    let max = 0, settle = 0; out.forEach(([t, v]) => { max = Math.max(max, v); if (Math.abs(v - 50) > 2.5) settle = t; });
+    return { curve: out, over: Math.max(0, (max - 50) / 50 * 100), settle, err: Math.abs(50 - out[out.length - 1][1]) };
+  };
+  X.pidGen = (r, lvl) => {
+    const P = { K: r.pick([0.8, 1, 1.5, 2]), tau: r.pick([10, 15, 20, 30]), L: r.pick([1, 2, 3, 4]) };
+    const T = Math.round(8 * (P.tau + P.L)), over = [25, 20, 12, 8, 5][lvl - 1] || 10;
+    let best = null;
+    for (let i = 1; i <= 30; i++) for (let Ti = 2; Ti <= 60; Ti += 2) { const Kp = Math.round(i * 0.2 * 10) / 10, m = X.simLoop(P, Kp, Ti, T, 0.2); if (m.over <= over && m.err < 1 && (!best || m.settle < best.settle)) best = { Kp, Ti, settle: m.settle }; }
+    if (!best) best = { Kp: 0.2, Ti: 60, settle: T }; // ne se produit pas avec les procédés proposés (vérifié par les tests)
+    const margin = [2.2, 1.8, 1.5, 1.3, 1.15][lvl - 1] || 1.5;
+    return { P, T, over, settleMax: Math.ceil(best.settle * margin), best, sig: '' + P.K + P.tau + P.L + lvl };
+  };
+
+  const register = () => {
+    const D = AA.Defis; if (!D || !D.TYPES || !AA.GRAFCET || !AA.N7) return;
+    D.TYPES.grafcet = {
+      name: 'Grafcet', icon: 'plc', min: 2,
+      desc: 'Une suite d\'événements, un Grafcet : prédis exactement quelles étapes et quelles sorties sont actives à la fin. Les règles d\'évolution ne pardonnent pas.',
+      gen: (r, lvl) => Object.assign(X.gfGen(r, lvl), { lvl }),
+      play(main, inst, done) {
+        const G = AA.GRAFCET, def = G.EX[inst.key], res = X.gfRun(inst.key, inst.events), I = Object.assign({}, X.GF[inst.key].init);
+        const labels = inst.events.map(ev => { if (ev[0] !== 'wait' && ev[1] === 'tog') I[ev[0]] = !I[ev[0]]; return X.gfLabel(ev, I); });
+        const outsAll = [...new Set(Object.values(def.steps).flatMap(s => (s.acts || []).map(a => a.o)))];
+        main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Défi · Grafcet</p><h1>${esc(def.title)}</h1></div></div>
+          <div class="grid g2"><div class="card plain" style="padding:10px">${G.svg(def, null)}</div>
+          <div><div class="brief">Situation de départ : étape(s) initiale(s) active(s). Entrées au départ : ${Object.entries(X.GF[inst.key].init).map(([k, v]) => `${k} = ${v ? 1 : 0}`).join(', ')}. Puis, dans l'ordre :</div>
+          <ol class="nice">${labels.map(l => `<li>${esc(l)}</li>`).join('')}</ol>
+          <p class="eyebrow" style="margin-top:12px">Étapes actives à la fin</p><div class="row js-st">${Object.keys(def.steps).map(k => `<label class="chk"><input type="checkbox" value="${k}"><span>Étape ${k}</span></label>`).join('')}</div>
+          <p class="eyebrow" style="margin-top:12px">Sorties actives à la fin</p><div class="row js-o">${outsAll.map(k => `<label class="chk"><input type="checkbox" value="${k}"><span>${k}</span></label>`).join('')}</div>
+          <button class="btn primary js-ok" style="margin-top:14px">${ic.check}Valider</button></div></div><div class="js-fb"></div>`;
+        let finished = false;
+        main.querySelector('.js-ok').onclick = () => {
+          const pick = c => [...main.querySelectorAll(c + ' input:checked')].map(i => i.value);
+          const st = pick('.js-st').map(Number).sort((a, b) => a - b), os = pick('.js-o').sort();
+          const okS = JSON.stringify(st) === JSON.stringify(res.steps), okO = JSON.stringify(os) === JSON.stringify(res.outs);
+          const score = (okS ? 50 : 0) + (okO ? 50 : 0);
+          main.querySelector('.js-fb').innerHTML = `<div class="result ${score >= 50 ? 'win' : 'lose'}"><div class="score-big">${score}</div><p>Étapes : ${okS ? '✔' : '✘'} réponse ${res.steps.join(', ') || 'aucune'} · Sorties : ${okO ? '✔' : '✘'} réponse ${res.outs.join(', ') || 'aucune'}.</p>
+            <p class="eyebrow">Évolution pas à pas</p><ol class="nice">${res.trace.map(t => `<li>${esc(t.lbl)} → étapes ${t.steps.join(', ')}${t.outs.length ? ' ; sorties ' + t.outs.join(', ') : ''}</li>`).join('')}</ol>
+            <p class="muted">Rappel : une transition n'est franchie que si TOUTES ses étapes amont sont actives et sa réceptivité vraie ; un appui bref n'a d'effet que s'il arrive quand la transition est validée.</p></div>`;
+          if (!finished) { finished = true; done(score); }
+        };
+      }
+    };
+    D.TYPES.pid = {
+      name: 'Réglage PID', icon: 'sigma', min: 3,
+      desc: 'Un procédé inconnu, un cahier des charges : dépassement maximal, temps de réponse, écart nul. Règle Kp et Ti, essaie autant que tu veux, puis valide.',
+      gen: (r, lvl) => Object.assign(X.pidGen(r, lvl), { lvl }),
+      play(main, inst, done) {
+        const P = inst.P;
+        main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Défi · Réglage PID</p><h1>Tenir le cahier des charges</h1></div></div>
+          <div class="brief">Procédé : gain statique <b>${AA.fmt(P.K)}</b>, constante de temps <b>${P.tau} s</b>, retard pur <b>${P.L} s</b>. Échelon de consigne de 0 à 50 %. Exigences : dépassement <b>≤ ${inst.over} %</b>, temps de réponse à 5 % <b>≤ ${inst.settleMax} s</b>, écart final <b>< 1 %</b>.</div>
+          <div class="simcard" style="margin-top:14px"><div class="simview js-v"></div><div class="simctl"><label class="sl" data-k="Kp"><span>K<sub>p</sub></span><input type="range" min="0.1" max="6" step="0.1" value="1"><b>1</b><i></i></label><label class="sl" data-k="Ti"><span>T<sub>i</sub></span><input type="range" min="1" max="60" step="1" value="20"><b>20</b><i>s</i></label><button class="btn sm js-try">Essayer</button></div>
+          <div class="simout"><div><span>Dépassement</span><b class="o-o">—</b></div><div><span>Temps de réponse à 5 %</span><b class="o-s">—</b></div><div><span>Écart final</span><b class="o-e">—</b></div></div></div>
+          <button class="btn primary js-ok" style="margin-top:14px">${ic.check}Valider ce réglage</button><div class="js-fb"></div>`;
+        const st = { Kp: 1, Ti: 20 }; let m = null, tries = 0, finished = false;
+        main.querySelectorAll('.sl').forEach(l => { const i = l.querySelector('input'), o = l.querySelector('b'); i.oninput = () => { st[l.dataset.k] = +i.value; o.textContent = AA.fmt(+i.value, 1); }; });
+        const v = main.querySelector('.js-v');
+        const plot = () => { v.innerHTML = '<canvas style="width:100%;height:220px;display:block"></canvas>'; const c = v.firstChild, d = window.devicePixelRatio || 1, W = c.clientWidth, H = 220; c.width = W * d; c.height = H * d; const g = c.getContext('2d'); g.scale(d, d);
+          const X0 = 40, X1 = W - 10, Y = y => H - 20 - y / 80 * (H - 30), Xt = t => X0 + t / inst.T * (X1 - X0);
+          g.strokeStyle = AA.css('--line'); g.fillStyle = AA.css('--ink-3'); g.font = '500 10px Segoe UI'; [0, 25, 50, 75].forEach(y => { g.beginPath(); g.moveTo(X0, Y(y)); g.lineTo(X1, Y(y)); g.stroke(); g.fillText(y + ' %', 4, Y(y) + 4); });
+          g.fillStyle = 'rgba(30,160,100,.12)'; g.fillRect(X0, Y(52.5), X1 - X0, Y(47.5) - Y(52.5)); g.strokeStyle = AA.css('--bad'); g.setLineDash([4, 4]); g.beginPath(); g.moveTo(X0, Y(50 * (1 + inst.over / 100))); g.lineTo(X1, Y(50 * (1 + inst.over / 100))); g.moveTo(Xt(inst.settleMax), Y(0)); g.lineTo(Xt(inst.settleMax), Y(80)); g.stroke(); g.setLineDash([]);
+          if (m) { g.strokeStyle = AA.css('--copper'); g.lineWidth = 2.4; g.beginPath(); m.curve.forEach(([t, y], k) => k ? g.lineTo(Xt(t), Y(y)) : g.moveTo(Xt(t), Y(y))); g.stroke(); } };
+        plot();
+        main.querySelector('.js-try').onclick = () => { m = X.simLoop(P, st.Kp, st.Ti, inst.T, 0.2); tries++; main.querySelector('.o-o').textContent = AA.fmt(m.over, 1) + ' %'; main.querySelector('.o-s').textContent = AA.fmt(m.settle, 1) + ' s'; main.querySelector('.o-e').textContent = AA.fmt(m.err, 2) + ' %'; plot(); };
+        main.querySelector('.js-ok').onclick = () => {
+          m = X.simLoop(P, st.Kp, st.Ti, inst.T, 0.2); plot();
+          const okO = m.over <= inst.over, okS = m.settle <= inst.settleMax, okE = m.err < 1;
+          const score = okO && okS && okE ? 100 : Math.round(((okO ? 1 : 0) + (okS ? 1 : 0) + (okE ? 1 : 0)) / 3 * 70);
+          main.querySelector('.js-fb').innerHTML = `<div class="result ${score >= 70 ? 'win' : 'lose'}"><div class="score-big">${score}</div><p>Dépassement ${okO ? '✔' : '✘'} ${AA.fmt(m.over, 1)} % · Temps de réponse ${okS ? '✔' : '✘'} ${AA.fmt(m.settle, 1)} s · Écart ${okE ? '✔' : '✘'} ${AA.fmt(m.err, 2)} %. ${tries} essai(s).</p><p class="muted">Un réglage de référence : K<sub>p</sub> = ${AA.fmt(inst.best.Kp, 1)}, T<sub>i</sub> = ${inst.best.Ti} s (temps de réponse ${AA.fmt(inst.best.settle, 1)} s). Plus le retard est grand par rapport à la constante de temps, plus le gain doit rester modéré.</p></div>`;
+          if (!finished) { finished = true; done(score); }
+        };
+      }
+    };
+  };
+  register();
+})();

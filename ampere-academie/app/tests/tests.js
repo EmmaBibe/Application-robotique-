@@ -195,6 +195,64 @@
     eq([X.parse('12,5'), X.parse(' 1 250 '), isNaN(X.parse(''))], [12.5, 1250, true], 'Défi électrotechnique : saisie avec virgule ou espaces');
   }
 
+  // Grafcet (IEC 60848)
+  if (window.AA && AA.GRAFCET) {
+    const G = AA.GRAFCET, A = g => [...g.active].sort().join(',');
+    let g = G.create(G.EX.perceuse);
+    g.tick(0.02, { dcy: false, a: true }); const s0 = A(g);
+    g.tick(0.02, { dcy: true, a: true }); const s1 = A(g), o1 = [...g.outputs()].sort().join();
+    g.tick(0.02, { b: true }); const s2 = A(g);
+    g.tick(0.02, { a: true }); const s3 = A(g);
+    eq([s0, s1, o1, s2, s3], ['0', '1', 'DESC,ROT', '2', '0'], 'Grafcet perçage : étape initiale, franchissements successifs, actions continues');
+    g = G.create(G.EX.cuve);
+    g.tick(0.02, { dcy: true, bas: true }); const k0 = g.outputs().has('KLAX'), ag0 = g.outputs().has('AGIT');
+    g.tick(1.0, {}); const k1 = g.outputs().has('KLAX');
+    g.tick(0.02, { haut: true }); const ag2 = g.outputs().has('AGIT'), v2 = g.outputs().has('V1');
+    g.tick(2.9, {}); const d1 = g.outputs().has('PRET'); g.tick(0.2, {}); const d2 = g.outputs().has('PRET');
+    g.tick(2.8, {}); const st5 = A(g); g.tick(0.2, {}); const st6 = A(g), ag3 = g.outputs().has('AGIT');
+    eq([k0, ag0, k1, ag2, v2, d1, d2, st5, st6, ag3], [true, true, false, true, false, false, true, '2', '3', false], 'Grafcet cuve : actions L (limitée), S/R (mémorisées), D (retardée), réceptivité t/X2/6 s');
+    g = G.create(G.EX.et);
+    g.tick(0.02, { dcy: true }); const e1 = A(g);
+    g.tick(0.02, { fp: true }); const e2 = A(g);
+    g.tick(0.02, { fm: true }); const e3 = A(g);
+    eq([e1, e2, e3], ['1,3', '2,3', '0'], 'Grafcet divergence ET : branches parallèles, attente, convergence (= 1) franchie dès la synchronisation');
+    g = G.create(G.EX.tri); g.tick(0.02, { p: true, G: true });
+    eq(A(g), '1', 'Grafcet divergence OU : réceptivités exclusives, une seule branche active');
+    const q = G.equations(G.EX.perceuse).find(x => x.k === 1);
+    eq([q.set, q.rst], ['X0 · (dcy · a)', 'X2'], 'Grafcet → Ladder : SET X1 si X0·dcy·a, RESET X1 si X2');
+  }
+
+  // Niveau 7 : analogique et régulation
+  if (window.AA && AA.N7) {
+    const N = AA.N7, nr = (a, b, e) => Math.abs(a - b) <= (e || 1e-6);
+    log(nr(N.ptR(0), 100) && nr(N.ptR(100), 138.5055, 0.001) && nr(N.ptT(N.ptR(237.4)), 237.4, 1e-6), `Pt100 (IEC 60751) : 100 Ω à 0 °C, ${AA.fmt(N.ptR(100), 4)} Ω à 100 °C, conversion inverse exacte`);
+    log(nr(N.ma(6, 0, 10), 13.6) && nr(N.ma(0, 0, 10), 4) && nr(N.ma(10, 0, 10), 20) && N.maFault(3.5) && N.maFault(21.5) && !N.maFault(4), '4-20 mA : 6 bar sur 0-10 bar → 13,6 mA ; défaut sous 3,6 mA et au-dessus de 21 mA');
+    log(nr(N.scale(13824, 0, 27648, 0, 150), 75) && nr(N.scale(5530.6, 5530.6, 27648, 0, 100), 0, 1e-9), 'Mise à l\'échelle : mi-échelle 13 824 → 75 °C ; 4 mA (5 530,6 points) → 0 %');
+    const z = N.zn(4, 20); eq([z.Kp, z.Ti, z.Td], [2.4, 10, 2.5], 'Ziegler-Nichols : Kp = 0,6 Ku, Ti = Tu/2, Td = Tu/8');
+    const run = (p, sp, T) => { const s = N.pidNew(); let pv = 0; for (let t = 0; t < T; t += 0.05) { const u = N.pidStep(s, p, sp, pv, 0.05).u; pv += (u - pv) / 10 * 0.05; } return { pv, s }; };
+    const rP = run({ Kp: 2, Ti: 0, Td: 0 }, 60, 300), rPI = run({ Kp: 2, Ti: 10, Td: 0 }, 60, 300), rW = run({ Kp: 2, Ti: 10, Td: 0 }, 150, 300);
+    log(nr(rP.pv, 40, 0.05) && nr(rPI.pv, 60, 0.05) && rW.s.I <= 100 + 1e-9 && nr(rW.pv, 100, 0.05), `PID sur un 1er ordre : P seul laisse un écart (mesure ${AA.fmt(rP.pv, 2)} pour 60), PI l'annule (${AA.fmt(rPI.pv, 2)}), intégrale bornée en butée`);
+    let y = 0; for (let k = 0; k < 20; k++) y = N.filt(y, 1, 0.1, 0.9); log(nr(y, 1 - Math.pow(0.9, 20), 1e-9), 'Filtre du 1er ordre : réponse indicielle conforme');
+  }
+
+  // Défis Grafcet et réglage PID
+  if (window.AA && AA.DEFAUTO && AA.Defis.TYPES.grafcet) {
+    const X = AA.DEFAUTO;
+    const r1 = X.gfRun('perceuse', [['dcy', 'pulse'], ['a', 'tog'], ['b', 'tog'], ['b', 'tog'], ['a', 'tog']]);
+    eq(r1.trace.map(t => t.steps.join(',')), ['1', '1', '2', '2', '0'], 'Défi Grafcet : évolution pas à pas du poste de perçage (cycle réaliste)');
+    const r1b = X.gfRun('perceuse', [['dcy', 'pulse'], ['b', 'tog']]);
+    eq(r1b.steps.join(','), '0', "Défi Grafcet : si a est encore vrai quand b arrive, l'étape 2 est fugace (retour direct à 0)");
+    const r2 = X.gfRun('et', [['fp', 'tog'], ['dcy', 'pulse']]);
+    eq([r2.steps.join(','), r2.outs.join(',')], ['2,3', 'MARQ'], 'Défi Grafcet : évolution fugace (fp déjà vrai) franchie dans la même évolution');
+    const r3 = X.gfRun('perceuse', [['a', 'tog'], ['dcy', 'pulse'], ['a', 'tog']]);
+    eq(r3.steps.join(','), '0', 'Défi Grafcet : appui sur dcy sans effet si la réceptivité (dcy · a) est fausse à cet instant');
+    const sigs = new Set(); for (let i = 0; i < 60; i++) sigs.add(X.gfGen(AA.rng('g' + i), 1 + (i % 5)).sig);
+    log(sigs.size > 50, `Défi Grafcet : ${sigs.size} énoncés différents sur 60`);
+    let ok = true; const t0 = performance.now();
+    for (let i = 0; i < 5; i++) { const inst = X.pidGen(AA.rng('p' + i), 1 + i), m = X.simLoop(inst.P, inst.best.Kp, inst.best.Ti, inst.T, 0.2); if (!(m.over <= inst.over && m.settle <= inst.settleMax && m.err < 1 && inst.best.settle < inst.T)) ok = false; }
+    log(ok, `Défi PID : le réglage de référence respecte toujours le cahier des charges (5 procédés, ${AA.fmt((performance.now() - t0) / 5, 0)} ms par génération)`);
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis

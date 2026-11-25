@@ -34,6 +34,9 @@ Application d'apprentissage des schémas électriques, du câblage, des coffrets
 | `app/src/fx.js` | Changement de thème (révélation circulaire) — aucun effet de pointeur |
 | `app/src/sim-formulas.js` | Formules affichées sous les simulations (`AA.SIMFORM`, `AA.addFormula`) |
 | `app/src/defis-elec.js` | Défi « Électrotechnique » : études chiffrées moteur / transformateur / four |
+| `app/src/defis-auto.js` | Défis « Grafcet » (prédire la situation finale) et « Réglage PID » (cahier des charges) |
+| `app/src/lessons/n6b.js` | Capteurs, sorties, AU câblé, moteur et simulateur Grafcet (`AA.GRAFCET`, IEC 60848), GEMMA |
+| `app/src/lessons/n7.js` | Langages IEC 61131-3, analogique (4-20 mA, Pt100, échelle, filtre), PID (`AA.N7`), sécurité, alarmes |
 | `app/src/visuals-a.js`, `visuals-b.js`, `visuals-map.js`, `visuals.css` | Visualisations des leçons et association leçon → visualisation |
 | `app/src/solar.js` | Site isolé, chaînes, MPPT, ombrage, orientation, batteries, ASI, inverseur de sources, défis associés |
 | `app/src/photos.js`, `app/img/` | Photos d'appareils (Wikimedia Commons, licences libres, crédits affichés dans le profil) |
@@ -54,14 +57,15 @@ powershell -ExecutionPolicy Bypass -File windows\build.ps1    # dist\Ampere-Acad
 ```
 Les outils (JDK, SDK Android, WebView2) sont dans `C:\Users\SUZANE\AndroidBuild`. La clé de signature Android est dans `C:\Users\SUZANE\AndroidBuild\cles\ampere-academie` (hors dépôt) : à sauvegarder aussi sur un support externe.
 
-## État au 25/11/2026
-- 13 niveaux ; 170 leçons rédigées (dont « Électrotechnique » n4 : 20 leçons et « Concevoir une installation » n5 : 21 leçons), toutes avec une visualisation ou une simulation.
-- Modèles vérifiés par les tests : `AA.ELEC` (R-L-C, transformateur, indices horaires, bilan moteur, moteur CC) et `AA.DESIGN` (Icc par la méthode des impédances, longueur maximale en TN, contrainte thermique, simultanéité, bilan de puissance).
-- 8 folios vivants ; 10 types de défis aléatoires (dont électrotechnique) ; 7 labos ; coffret 3D.
-- 126 tests automatiques au vert, dont un contrôle de syntaxe de tous les scripts.
+## État au 25/11/2026 (soir)
+- 13 niveaux ; 195 leçons rédigées (niveaux 0 à 7 complets, plus mesure et solaire), toutes avec une visualisation ou une simulation.
+- Modèles vérifiés par les tests : `AA.ELEC`, `AA.DESIGN`, `AA.GRAFCET` (règles d'évolution IEC 60848, actions N/S/R/D/L, traduction Ladder), `AA.N7` (Pt100 IEC 60751, 4-20 mA et NAMUR NE 43, mise à l'échelle, filtre, PID avec anti-saturation, Ziegler-Nichols).
+- 8 folios vivants ; 12 types de défis aléatoires (dont électrotechnique, Grafcet, réglage PID) ; 7 labos ; coffret 3D.
+- 143 tests automatiques au vert, dont un contrôle de syntaxe de tous les scripts.
+- L'appli Windows est copiée sur le Bureau de la propriétaire (`Desktop\Ampere Academie` + raccourci « Ampère Académie ») : le dossier `dist` est trop profond pour Windows (chemin > 260 caractères). Après chaque fabrication, recopier `dist\Ampere Academie PC\*` vers ce dossier.
 
 ## Suite prévue (par ordre de priorité)
-1. Rédiger les leçons restantes, module par module (n6m4 Grafcet, n7, n8, n9, n10), chacune avec sa visualisation réglable et ses formules, et un défi par module.
+1. Rédiger les leçons restantes, module par module (n8 variation de vitesse et réseaux, n9 maintenance, n10 ingénierie), chacune avec sa visualisation réglable et ses formules, et un défi par module.
    Continuer la passe sur les simulations : valeurs réglables partout où c'est pertinent (cable, tableau, megger, rcdtest, ups…).
 2. Nouveaux folios : marche par à-coups, commande multi-postes, Dahlander, freinage, démarrage statorique, va-et-vient automatique par fins de course, schémas TT/TN/IT.
 3. Défis : éditeur de schéma (câbler soi-même un folio à partir d'un cahier des charges), Grafcet, diagnostic sur coffret 3D, projets multi-sites et extensions d'usine.
