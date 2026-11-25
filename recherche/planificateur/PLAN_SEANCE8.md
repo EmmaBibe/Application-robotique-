@@ -125,3 +125,14 @@ Le premier tour (section 10, journal) montre que, dans les mondes réalistes, le
 Mise au point sur les mêmes graines (7000 à 7019), variantes E seule et E avec A à poids réduit (0,3). Mêmes règles d'adoption et de robustesse (sections 8 à 10). Le modèle de réaction du robot (forces sociales) est aussi celui du simulateur : en validation, on vérifiera aussi la robustesse avec la condition « piétons réactifs », dont la réaction est différente.
 
 **Ajout (avant ses essais) : idée F, continuité du geste.** Diagnostic sur la graine 7001 (porte étroite, mondes réalistes) : les options de VIGIE 6 y sont presque toutes jugées sans risque et à coût voisin (à 5 % près) ; il change 24 fois d'option et tourne une vingtaine de secondes devant la porte, quand T-MPC++ en change 5 fois et passe par le bord de l'ouverture. L'option dont les 1,5 premières secondes prolongent le mieux le geste en cours garde la main, sauf si une autre fait mieux de plus de 10 % + 5. Sur la graine 7003, un autre défaut apparaît : VIGIE longe le mur jusqu'au bord de l'arène à la recherche d'un autre passage, puis revient. Variantes F et F+E mises au point avec E et E+A (indices 84 à 87).
+
+## 12. Validation de VIGIE 7 (écrit le 25 novembre, avant les essais)
+
+Variantes retenues à l'issue de la mise au point (journal) : **VIGIE 7-AC** (prédiction multi-modèles + budget d'échec, retard × 0,3 ; indice 82) et **VIGIE 7-EA** (prédiction interactive + budget d'échec, retard × 0,3 ; indice 85). Aucun réglage ne sera plus modifié.
+
+- Mondes : version 3 (réalistes), graines neuves 7100 à 7159, 11 scènes, trois conditions : 1 980 situations par méthode.
+- Méthodes : VIGIE 6, VIGIE 7-AC, VIGIE 7-EA, T-MPC++, DRA-MPPI (indices 71, 82, 85, 49, 54).
+- Lecture fixée d'avance : chaque variante contre VIGIE 6, T-MPC++ et DRA-MPPI, globalement (bootstrap simple et par grappes), par condition et par scène.
+- Adoption : au moins +1 point sur VIGIE 6, sans recul significatif dans aucune condition ni aucune scène. Si les deux variantes passent, on garde celle qui a le plus haut taux de réussite.
+- « Bat T-MPC++ » seulement si l'intervalle de l'écart est entièrement au-dessus de zéro. « Ne perd nulle part » seulement si aucune scène n'est significativement en dessous de la meilleure des deux références.
+- Pourcentage de garantie : borne basse à 95 % du taux de réussite et borne haute à 95 % du taux de collision (Clopper-Pearson), pour chaque méthode, globalement et par scène.

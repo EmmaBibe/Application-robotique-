@@ -930,3 +930,11 @@ Mêmes mondes de départ que la section 6 (graines 8000 à 8059, 11 scènes, tro
 - **VIGIE 7-AC (retard × 0,3) : 90,5 %**, collisions 8,5 %, temps dépassés 1,1 %. Écart à VIGIE 6 : **+2,6 [+0,5 ; +4,8]** ; écart à T-MPC++ : −0,3 [−2,6 ; +2,0], égalité. Par scène, elle est la meilleure des méthodes au carrefour rapide (93 %), en foule dense (98 %) et à la traversée (100 %) ; elle reste loin de T-MPC++ à la porte étroite (50 % contre 65 %) et un peu derrière à la poursuite (92 % contre 100 %).
 - VIGIE 7-AC (retard × 0,1) : 88,3 %, comme VIGIE 6.
 - Lecture : C retire des collisions, A retire des attentes ; au bon dosage, les deux gains s'additionnent au lieu de se compenser. C'est la première variante qui rattrape T-MPC++ sur les mondes réalistes. Elle reste une candidate de mise au point, pas un résultat : elle sera jugée sur des mondes neufs.
+
+**Troisième tour** (mêmes graines) : idées E (prédiction interactive) et F (continuité du geste).
+
+- VIGIE 7-EA (interactive + retard × 0,3) : 90,5 %, collisions 9,2 %, temps dépassés 0,3 % ; +2,6 [+0,2 ; +4,8] sur VIGIE 6 ; −0,3 [−2,7 ; +2,1] face à T-MPC++. Porte étroite 62 % (T-MPC++ 65 %, VIGIE 7-AC 50 %), mais carrefour rapide 77 % (VIGIE 7-AC 93 %).
+- **F échoue** : VIGIE 7-F 84,2 %, −3,6 [−6,1 ; −1,4] sur VIGIE 6 ; VIGIE 7-FE 85,2 %, −2,7 [−5,3 ; −0,3]. Garder le geste en cours fait s'engager au mauvais moment (porte étroite : 18 % et 22 %). Idée abandonnée.
+- VIGIE 7-E seule : campagne arrêtée à 251 essais sur 660 pour libérer le calcul de la validation ; non retenue, faute de résultats complets.
+
+**Variantes retenues pour la validation** (au plus deux, comme prévu) : VIGIE 7-AC (retard × 0,3) et VIGIE 7-EA (interactive + retard × 0,3).
