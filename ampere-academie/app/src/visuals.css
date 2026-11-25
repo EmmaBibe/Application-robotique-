@@ -138,3 +138,10 @@
 .fb-card.run { border-color: var(--ok); box-shadow: 0 0 0 2px color-mix(in srgb, var(--ok) 25%, transparent); }
 .fb-card.al { border-color: var(--bad); }
 .fb-card .lang-st { padding: 8px 0 0; font-size: 12.5px; }
+
+/* Trame Modbus */
+.mb-frame { padding: 12px 16px 4px; border-top: 1px solid var(--line); }
+.mb-bytes { display: flex; flex-wrap: wrap; gap: 8px; }
+.mb-part { padding: 8px 12px; border-radius: 12px; background: var(--sch-bg); border: 1px solid var(--line); }
+.mb-part span { display: block; font-size: 11px; color: var(--ink-3); }
+.mb-part b { font: 700 15px var(--f-mono); color: var(--copper-2); letter-spacing: .04em; }

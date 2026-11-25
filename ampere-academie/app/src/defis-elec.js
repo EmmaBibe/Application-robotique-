@@ -44,6 +44,21 @@
         ]
       };
     },
+    variateur(r) {
+      const fr = r.pick([20, 30, 35, 40, 45]), p = r.pick([1, 2, 3]), Un = 400, J = r.pick([0.5, 1, 2, 4, 8]), cyc = r.pick([20, 30, 60, 120]);
+      const ns = 60 * fr / p, U = Un * fr / 50, bus = Math.SQRT2 * Un, n = Math.round(ns * 0.97), w = n * 2 * Math.PI / 60, Ek = 0.5 * J * w * w / 1000, Pm = Ek * 1000 / cyc;
+      return {
+        sig: 'v' + fr + p + J + cyc,
+        brief: `Moteur asynchrone <b>${2 * p} pôles</b>, 400 V / 50 Hz, piloté en loi U/f par un variateur alimenté en 400 V triphasé. Il tourne à <b>${fr} Hz</b> (vitesse réelle ${n} tr/min) et entraîne une inertie totale de <b>${AA.fmt(J)} kg·m²</b>, freinée jusqu'à l'arrêt une fois toutes les <b>${cyc} s</b>.`,
+        steps: [
+          { q: 'Vitesse de synchronisme à cette fréquence', a: ns, u: 'tr/min', sol: `n_s = 60 f / p = 60 × ${fr} / ${p} = ${ns} tr/min` },
+          { q: 'Tension appliquée au moteur (loi U/f)', a: U, u: 'V', sol: `U = 400 × ${fr} / 50 = ${AA.fmt(U, 0)} V` },
+          { q: 'Tension du bus continu à vide', a: bus, u: 'V', sol: `U_bus ≈ √2 × 400 = ${AA.fmt(bus, 0)} V` },
+          { q: 'Énergie cinétique à évacuer à chaque freinage', a: Ek, u: 'kJ', sol: `ω = 2π × ${n} / 60 = ${AA.fmt(w, 1)} rad/s ; E = ½ × ${AA.fmt(J)} × ω² = ${AA.fmt(Ek, 2)} kJ` },
+          { q: 'Puissance moyenne que doit dissiper la résistance de freinage', a: Pm, u: 'W', sol: `P = E / durée du cycle = ${AA.fmt(Ek * 1000, 0)} / ${cyc} = ${AA.fmt(Pm, 0)} W` }
+        ]
+      };
+    },
     four(r) {
       const R = r.pick([10, 15, 20, 23, 30, 40, 46]), cp = r.pick(['Y', 'D']);
       const Iy = 230 / R, Py = 3 * 230 * 230 / R, Id = sq3 * 400 / R, Pd = 3 * 400 * 400 / R;

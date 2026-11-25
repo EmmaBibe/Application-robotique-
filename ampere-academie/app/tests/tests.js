@@ -191,7 +191,7 @@
       if (inst.steps.length !== Math.min(X.count(lvl), X.scenarios[inst.k](AA.rng('e' + i)).steps.length)) allOk = false;
       inst.steps.forEach(s => { if (!(isFinite(s.a) && s.a > 0 && X.ok(s.a, s.a, s.tol) && !X.ok(s.a * 1.05, s.a, s.tol))) allOk = false; });
     }
-    log(allOk && kinds.size === 3 && sigs.size > 40, `Défi électrotechnique : 90 études, 3 types, ${sigs.size} énoncés distincts, réponses exactes acceptées et ± 5 % refusées`);
+    log(allOk && kinds.size === 4 && sigs.size > 40, `Défi électrotechnique : 90 études, 4 types, ${sigs.size} énoncés distincts, réponses exactes acceptées et ± 5 % refusées`);
     eq([X.parse('12,5'), X.parse(' 1 250 '), isNaN(X.parse(''))], [12.5, 1250, true], 'Défi électrotechnique : saisie avec virgule ou espaces');
   }
 
@@ -251,6 +251,29 @@
     let ok = true; const t0 = performance.now();
     for (let i = 0; i < 5; i++) { const inst = X.pidGen(AA.rng('p' + i), 1 + i), m = X.simLoop(inst.P, inst.best.Kp, inst.best.Ti, inst.T, 0.2); if (!(m.over <= inst.over && m.settle <= inst.settleMax && m.err < 1 && inst.best.settle < inst.T)) ok = false; }
     log(ok, `Défi PID : le réglage de référence respecte toujours le cahier des charges (5 procédés, ${AA.fmt((performance.now() - t0) / 5, 0)} ms par génération)`);
+  }
+
+  // Niveau 8 : variateurs, mouvement, réseaux
+  if (window.AA && AA.N8) {
+    const N = AA.N8, nr = (a, b, e) => Math.abs(a - b) <= (e || 1e-6);
+    log(nr(N.busPeak(400), 565.69, 0.01) && nr(N.busAvg(400), 540.19, 0.01), 'Bus continu sous 400 V : 566 V à vide (√2 U), 540 V en moyenne redressée (1,35 U)');
+    eq([N.hex(N.rtu([1, 3, 0, 0, 0, 10])), N.hex(N.rtu([0x11, 3, 0, 0x6B, 0, 3]))], ['01 03 00 00 00 0A C5 CD', '11 03 00 6B 00 03 76 87'], 'Modbus RTU : CRC-16 conforme aux exemples de référence');
+    eq(N.hex(N.request(1, 16, 1, 2, [10, 258])), '01 10 00 01 00 02 04 00 0A 01 02', 'Modbus : trame d\'écriture de plusieurs registres (fonction 16)');
+    const op50 = N.opPoint(50, () => 50), op25 = N.opPoint(25, () => 50);
+    log(op50 > 1440 && op50 < 1465 && nr(1500 - op50, 750 - op25, 0.5), `Loi U/f : couple nominal à ${AA.fmt(op50, 0)} tr/min (50 Hz), même glissement en tr/min à 25 Hz (${AA.fmt(op25, 0)} tr/min)`);
+    log(nr(N.torque(0, 100).Cmax, 125 / 4) && N.opPoint(80, () => 120) === null, 'Défluxage : couple maximal divisé par 4 à 100 Hz ; calage si la charge dépasse le couple disponible');
+    log(nr(N.kin(2, 1500), 24674, 1) && nr(N.encF(1024, 1500), 25600) && nr(N.trs(0.9, 0.8, 0.95), 0.684), 'Énergie cinétique, fréquence codeur, TRS');
+  }
+
+  if (window.AA && AA.DEFAUTO && AA.DEFAUTO.mbGen && AA.N8) {
+    const X = AA.DEFAUTO, N = AA.N8; let ok = true, exc = 0, sigs = new Set();
+    for (let i = 0; i < 120; i++) {
+      const inst = X.mbGen(AA.rng('mb' + i), 1 + (i % 5)), f = inst.frame; sigs.add(inst.sig);
+      if (N.crc16(f) !== 0) ok = false; // propriété du CRC Modbus : recalculé sur la trame complète, il vaut 0
+      if (inst.kind === 'exc') { exc++; if (!(f[1] & 0x80) || f[1] - 0x80 !== inst.steps[1].a || f[2] !== inst.steps[2].a) ok = false; }
+      else { if (f[1] !== 3 || f[2] !== (f.length - 5)) ok = false; inst.steps.slice(2).forEach((s, k) => { if (k < f[2] / 2 && s.a !== f[3 + 2 * k] * 256 + f[4 + 2 * k]) ok = false; }); }
+    }
+    log(ok && exc > 5 && sigs.size > 110, `Défi Modbus : 120 trames (${exc} exceptions), CRC valides, réponses cohérentes avec les octets`);
   }
 
   // Automate

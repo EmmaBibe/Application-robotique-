@@ -56,8 +56,53 @@
     return { P, T, over, settleMax: Math.ceil(best.settle * margin), best, sig: '' + P.K + P.tau + P.L + lvl };
   };
 
+  /* ---------- Modbus : décoder une trame de réponse ---------- */
+  X.EXC = { 1: 'fonction non prise en charge', 2: 'adresse de données invalide', 3: 'valeur de données invalide', 4: 'défaillance de l\'esclave' };
+  X.mbGen = (r, lvl) => {
+    const N8 = AA.N8, slave = r.int(1, 247), qty = Math.min(4, 1 + lvl), big = lvl >= 3;
+    if (lvl >= 3 && r() < 0.25) {
+      const fc = r.pick([3, 4, 6, 16]), code = r.pick([1, 2, 3, 4]), fr = N8.rtu([slave, fc | 0x80, code]);
+      return { kind: 'exc', frame: fr, sig: 'e' + slave + fc + code, steps: [
+        { q: 'Numéro de l\'esclave qui répond (en décimal)', a: slave, u: '', tol: 0, sol: `Premier octet : ${N8.hex([slave])} hexadécimal = ${slave}.` },
+        { q: 'Code de la fonction demandée à l\'origine (en décimal)', a: fc, u: '', tol: 0, sol: `Le 2e octet ${N8.hex([fc | 0x80])} = fonction + 80 hexadécimal : c'est une réponse d'exception à la fonction ${fc}.` },
+        { q: 'Code d\'exception (en décimal)', a: code, u: '', tol: 0, sol: `3e octet : ${code} = ${X.EXC[code]}.` }
+      ] };
+    }
+    const vals = []; for (let k = 0; k < qty; k++) vals.push(lvl <= 1 ? r.int(0, 999) : r.int(0, 65535));
+    const data = []; vals.forEach(v => data.push(v >> 8, v & 0xFF));
+    const fr = N8.rtu([slave, 3, qty * 2].concat(data));
+    const steps = [
+      { q: 'Numéro de l\'esclave qui répond (en décimal)', a: slave, u: '', tol: 0, sol: `Premier octet : ${N8.hex([slave])} hexadécimal = ${slave}.` },
+      { q: 'Nombre d\'octets de données annoncé', a: qty * 2, u: 'octets', tol: 0, sol: `3e octet : ${N8.hex([qty * 2])} = ${qty * 2} octets, soit ${qty} registre(s) de 16 bits.` }
+    ];
+    vals.forEach((v, k) => steps.push({ q: `Valeur du registre n° ${k + 1} (en décimal)`, a: v, u: '', tol: 0, sol: `Octets ${N8.hex([v >> 8, v & 0xFF])} : ${v >> 8} × 256 + ${v & 0xFF} = ${v} (poids fort en premier).` }));
+    if (big && qty >= 2) { const v32 = vals[0] * 65536 + vals[1]; steps.push({ q: 'Les registres 1 et 2 forment un entier de 32 bits, mot de poids fort en premier. Sa valeur ?', a: v32, u: '', tol: 0, sol: `${vals[0]} × 65 536 + ${vals[1]} = ${v32}. Attention : certains appareils envoient le mot de poids faible en premier.` }); }
+    return { kind: 'read', frame: fr, sig: 'r' + slave + vals.join('.'), steps };
+  };
+
   const register = () => {
     const D = AA.Defis; if (!D || !D.TYPES || !AA.GRAFCET || !AA.N7) return;
+    if (AA.N8) D.TYPES.modbus = {
+      name: 'Trame Modbus', icon: 'plc', min: 3,
+      desc: 'Une trame de réponse Modbus RTU, en hexadécimal, captée sur la ligne : décode-la octet par octet, comme avec un analyseur de bus.',
+      gen: (r, lvl) => Object.assign(X.mbGen(r, lvl), { lvl }),
+      play(main, inst, done) {
+        const N8 = AA.N8;
+        main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Défi · Trame Modbus</p><h1>Décoder la réponse</h1></div></div>
+          <div class="brief">Le maître a envoyé une requête ; voici la réponse reçue sur la ligne RS-485 (Modbus RTU, octets en hexadécimal, CRC à la fin) :</div>
+          <div class="mb-frame"><div class="mb-bytes"><div class="mb-part"><span>Trame reçue</span><b>${N8.hex(inst.frame)}</b></div></div></div>
+          <div class="grid" style="margin-top:16px">${inst.steps.map((s, i) => `<div class="card numq" data-i="${i}"><p class="eyebrow">Question ${i + 1}</p><p class="q">${s.q}</p><div class="num-in"><input inputmode="decimal" placeholder="Ta réponse"><span class="unit">${esc(s.u)}</span></div><div class="js-c"></div></div>`).join('')}</div>
+          <button class="btn primary js-ok" style="margin-top:14px">${ic.check}Valider</button><div class="js-fb"></div>`;
+        let finished = false;
+        main.querySelector('.js-ok').onclick = () => {
+          let good = 0;
+          inst.steps.forEach((s, i) => { const c = main.querySelector(`[data-i="${i}"]`), v = Number(String(c.querySelector('input').value).replace(/\s/g, '').replace(',', '.')), ok = v === s.a; if (ok) good++; c.querySelector('.js-c').innerHTML = `<p class="${ok ? 'ok-t' : 'bad-t'}" style="margin:10px 0 0">${ok ? '✔' : '✘'} ${esc(s.sol)}</p>`; });
+          const score = Math.round(100 * good / inst.steps.length);
+          main.querySelector('.js-fb').innerHTML = `<div class="result ${score >= 50 ? 'win' : 'lose'}"><div class="score-big">${score}</div><p>${good} / ${inst.steps.length} réponses justes. Les deux derniers octets (${N8.hex(inst.frame.slice(-2))}) sont le CRC : l'esclave le calcule sur tous les octets précédents, le maître refait le calcul et rejette la trame s'il diffère.</p></div>`;
+          if (!finished) { finished = true; done(score); }
+        };
+      }
+    };
     D.TYPES.grafcet = {
       name: 'Grafcet', icon: 'plc', min: 2,
       desc: 'Une suite d\'événements, un Grafcet : prédis exactement quelles étapes et quelles sorties sont actives à la fin. Les règles d\'évolution ne pardonnent pas.',
