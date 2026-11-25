@@ -924,3 +924,9 @@ Mêmes mondes de départ que la section 6 (graines 8000 à 8059, 11 scènes, tro
 - Sur les mondes réalistes, **T-MPC++ passe devant VIGIE 6** : +2,9 [+0,3 ; +5,3]. L'écart vient surtout de la porte étroite (65 % contre 33 %). VIGIE 6 garde +5,5 [+3,2 ; +7,9] sur DRA-MPPI.
 - Aucune des quatre idées ne gagne nettement sur VIGIE 6 (de −1,4 à +0,5, intervalles autour de zéro). A et C déplacent les échecs sans les supprimer : A fait disparaître les temps dépassés mais double les collisions ; C divise les collisions par 1,5 mais allonge les attentes. A fait passer la porte étroite de 33 % à 57 %. D est un peu en dessous de VIGIE 6.
 - **Lecture du défaut.** Dans les mondes réalistes, les gens s'écartent devant un robot qui avance. T-MPC++ en profite sans le savoir ; VIGIE, qui prédit chacun comme s'il ignorait le robot, croit le passage fermé et attend. La bonne réponse n'est pas d'accepter plus de risque (A) mais de prévoir que les gens réagissent au robot.
+
+**Deuxième tour** (mêmes graines, `dev_vigie7_analyse_tour2.txt`) : A et C associés, poids du retard réduit.
+
+- **VIGIE 7-AC (retard × 0,3) : 90,5 %**, collisions 8,5 %, temps dépassés 1,1 %. Écart à VIGIE 6 : **+2,6 [+0,5 ; +4,8]** ; écart à T-MPC++ : −0,3 [−2,6 ; +2,0], égalité. Par scène, elle est la meilleure des méthodes au carrefour rapide (93 %), en foule dense (98 %) et à la traversée (100 %) ; elle reste loin de T-MPC++ à la porte étroite (50 % contre 65 %) et un peu derrière à la poursuite (92 % contre 100 %).
+- VIGIE 7-AC (retard × 0,1) : 88,3 %, comme VIGIE 6.
+- Lecture : C retire des collisions, A retire des attentes ; au bon dosage, les deux gains s'additionnent au lieu de se compenser. C'est la première variante qui rattrape T-MPC++ sur les mondes réalistes. Elle reste une candidate de mise au point, pas un résultat : elle sera jugée sur des mondes neufs.
