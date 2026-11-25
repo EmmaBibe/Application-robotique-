@@ -388,6 +388,15 @@
     log(!!M.reading(c, 'A', 'par').err && Math.abs(M.reading(c, 'V', 'ser').val - 12) < 1e-9 && !!M.reading(c, 'V', 'ser').warn && !M.reading(c, 'V', 'par').warn, 'Montage : ampèremètre en parallèle = court-circuit ; voltmètre en série = tension de la source ; voltmètre en parallèle = mesure juste');
   }
 
+  // Bornes des appareils
+  if (window.AA && AA.BORNES) {
+    const BO = AA.BORNES, D = BO.DEV, m = (k, st, a, b) => BO.measure(D[k].links(Object.assign({}, D[k].st, st)), a, b);
+    eq([m('contacteur', {}, '13', '14'), m('contacteur', { on: true }, '13', '14'), m('contacteur', {}, 'A1', 'A2'), m('thermique', {}, '95', '96'), m('thermique', { trip: true }, '95', '96'), m('thermique', { trip: true }, '97', '98'), m('interrupteur', { p: 2 }, 'L', '1'), m('interrupteur', { p: 2 }, 'L', '2'), m('disjoncteur', { on: true }, '3', '4')], [Infinity, 0, 560, 0, Infinity, 0, Infinity, 0, 0], 'Bornes : contacteur 13-14, bobine A1-A2, relais thermique 95-96 / 97-98, va-et-vient, disjoncteur');
+    const mm = BO.mystery(AA.rng('r1')), L0 = BO.mysteryLinks(mm, false), L1 = BO.mysteryLinks(mm, true);
+    log(BO.measure(L0, mm.s1.com, mm.s1.nc) === 0 && BO.measure(L0, mm.s1.com, mm.s1.no) === Infinity && BO.measure(L1, mm.s1.com, mm.s1.no) === 0 && BO.measure(L0, mm.coil[0], mm.coil[1]) === mm.R && new Set([...mm.coil, mm.s1.com, mm.s1.no, mm.s1.nc, mm.s2.com, mm.s2.no, mm.s2.nc]).size === 8, 'Relais inconnu : 8 broches distinctes, commun relié au repos puis au travail, bobine mesurable');
+    log(['contacteur', 'thermique', 'disjoncteur', 'telerupteur', 'relais', 'relaisbase', 'interrupteur'].every(k => AA.PHOTOS[k] && AA.PHOTOS[k].license && AA.PHOTOS[k].author), 'Photos des appareils : licence et auteur renseignés');
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis

@@ -180,3 +180,24 @@
 .ed-build { min-width: 0; overflow: hidden; }
 .mm-circ { border: 1px solid var(--line); border-radius: 12px; background: var(--sch-bg); }
 .mm-cv { width: 100%; height: 150px; display: block; }
+
+/* Bornes des appareils */
+.bo-wrap { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr); gap: 14px; padding: 14px; align-items: start; }
+.bo-photo img { width: 100%; border-radius: 12px; display: block; }
+.bo-photo figcaption { font-size: 12.5px; color: var(--ink-2); margin-top: 6px; }
+.bo-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.bo-svg svg { width: 100%; height: auto; display: block; background: var(--sch-bg); border-radius: 12px; border: 1px solid var(--line); }
+.bo-body { fill: var(--surface-3); stroke: var(--line-2); stroke-width: 2; }
+.bo-name { fill: var(--ink-2); font: 600 12px var(--f-display); text-anchor: middle; }
+.bo-t { cursor: pointer; }
+.bo-t circle { fill: #c9ccd2; stroke: #6b7180; stroke-width: 2; transition: fill .2s; }
+.bo-t .bo-screw { stroke: #4a4f5a; stroke-width: 2; }
+.bo-t text { fill: var(--ink); font: 700 13px var(--f-mono); text-anchor: middle; }
+.bo-t:hover circle { fill: color-mix(in srgb, var(--copper) 35%, #c9ccd2); }
+.bo-t.on circle { fill: var(--copper); stroke: var(--copper-deep); }
+.bo-meter { background: linear-gradient(180deg, #f4c430, #d9a514); border-radius: 14px; padding: 10px 12px; color: #1c1404; margin-bottom: 10px; }
+.bo-meter small { display: block; font: 700 10px var(--f-display); letter-spacing: .1em; }
+.bo-lcd { display: block; background: linear-gradient(180deg, #b8c7a6, #9fb08a); border-radius: 8px; padding: 6px 10px; font: 700 26px var(--f-mono); text-align: right; color: #1b2414; }
+.bo-acts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.bo-quiz { display: grid; gap: 8px; margin: 10px 0; }
+@media (max-width: 980px) { .bo-wrap, .bo-grid { grid-template-columns: 1fr; } }
