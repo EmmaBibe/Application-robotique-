@@ -186,7 +186,7 @@
       const st = stages(p);
       const revealed = {};
       let idx = 0, pts = 0;
-      main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Grand projet · ${['', 'Initiation', 'Confirmé', 'Avancé', 'Expert', 'Maître'][p.lvl]} · ${st.length} étapes</p><h1>${esc(p.site)}</h1>
+      main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Grand projet · ${['', 'Initiation', 'Confirmé', 'Avancé', 'Expert', 'Maître'][p.lvl]} · ${st.length} étapes</p><h1>${esc(AA.cap(p.site))}</h1>
         <p>${p.ateliers.length} ateliers, ${p.ateliers.reduce((a, x) => a + x.nCirc, 0)} circuits, ${p.ateliers.reduce((a, x) => a + x.loads.length, 0)} types de récepteurs. Tu es chargé·e d'affaires : du bilan de puissance jusqu'aux choix d'ingénierie. ★ = récepteur prioritaire (secours).</p></div></div>
         <div class="card syn-card"><div class="syn-wrap"></div></div>
         <div class="proj-steps"></div>`;

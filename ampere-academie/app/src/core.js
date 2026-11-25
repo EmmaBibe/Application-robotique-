@@ -19,6 +19,11 @@
   AA.$$ = (sel, root) => [...(root || document).querySelectorAll(sel)];
   AA.el = html => { const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; };
   AA.today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+  /* « de » + groupe nominal, avec élision et contraction : de une usine → d'une usine, de le site → du site */
+  AA.de = g => { const t = String(g).trim(), l = t.toLowerCase();
+    if (l.startsWith('le ')) return 'du ' + t.slice(3); if (l.startsWith('les ')) return 'des ' + t.slice(4);
+    return /^[aeiouyàâäéèêëîïôöûüœh]/i.test(t) && !/^(haut|hauteur|hausse|hall|hangar)/i.test(t) ? "d'" + t : 'de ' + t; };
+  AA.cap = t => { t = String(t); return t.charAt(0).toUpperCase() + t.slice(1); };
   AA.fmt = (x, d) => { const v = Number(x); if (!isFinite(v)) return String(x); return v.toLocaleString('fr-FR', { maximumFractionDigits: d == null ? 2 : d }); };
   /* Générateur pseudo-aléatoire reproductible (défis du jour, variantes) */
   AA.rng = seed => {

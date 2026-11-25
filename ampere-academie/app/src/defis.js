@@ -123,7 +123,7 @@
       const c = C[inst.cid];
       main.innerHTML = `<div class="page-head"><div><p class="eyebrow">Défi · Diagnostic de panne · ${LVL[inst.lvl]}</p><h1>Panne sur « ${esc(c.title)} »</h1></div>
         <div class="row">${inst.time ? `<span class="timer js-timer"></span>` : ''}${inst.budget ? `<span class="chip copper js-budget"></span>` : ''}</div></div>
-        <div class="brief"><b>${esc(inst.who)}</b> de ${esc(inst.site)} signale, ${esc(inst.when)} : « ${inst.sy.join(' ')} »
+        <div class="brief"><b>${esc(inst.who)}</b> ${esc(AA.de(inst.site))} signale, ${esc(inst.when)} : « ${inst.sy.join(' ')} »
         ${inst.faults.length > 1 ? '<br><b>Attention :</b> le dossier d\'intervention précise que <b>deux défauts</b> peuvent coexister.' : ''}
         ${inst.budget ? `<br>Le client facture l'immobilisation : tu disposes d'au plus <b>${inst.budget} mesures</b>.` : ''}</div>
         <div class="workbench" style="margin-top:14px"><div class="wb-host"></div><aside class="wb-side">
@@ -414,7 +414,7 @@
       return d;
     },
     text(x) {
-      return `Le service maintenance de ${esc(x.site)} doit installer un <b>${esc(x.m.n)}</b> entraîné par un moteur asynchrone de <b>${AA.fmt(x.kw)} kW</b>, plaque <b>${x.plate} V</b>, alimenté par un réseau <b>3 × 400 V</b>.
+      return `Le service maintenance ${esc(AA.de(x.site))} doit installer un <b>${esc(x.m.n)}</b> entraîné par un moteur asynchrone de <b>${AA.fmt(x.kw)} kW</b>, plaque <b>${x.plate} V</b>, alimenté par un réseau <b>3 × 400 V</b>.
         ${x.speed ? 'Le procédé exige de <b>régler la vitesse</b> en continu selon la demande. ' : 'La machine tourne à vitesse fixe. '}
         ${x.weak ? 'Le poste de transformation est déjà très chargé : le distributeur interdit les <b>pointes de courant importantes</b>. ' : ''}
         La machine démarre environ <b>${x.starts} fois par heure</b>${x.m.load === 'heavy' ? ' et toujours <b>en charge</b>' : ''}.
