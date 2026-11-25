@@ -30,6 +30,7 @@
       </div>
       <div class="wb-canvas"></div>
       <div class="meter" hidden>
+        <div class="grip" title="Glisser pour déplacer le multimètre ; double-clic pour le replacer">⠿ déplacer<button class="m-min" title="Réduire / agrandir">–</button></div>
         <div class="lcd"><small class="mode">V∿</small><span class="val">- - -</span></div>
         <div class="dial"><button class="on" data-m="V">V</button><button data-m="R">Ω</button></div>
         <div class="hint">Clique deux points de test : COM puis V</div>
@@ -38,6 +39,28 @@
     </div>`;
     const canvas = host.querySelector('.wb-canvas');
     const meter = host.querySelector('.meter');
+    /* Multimètre déplaçable : on le saisit par sa poignée et on le pose où l'on veut dans le folio */
+    (() => {
+      const grip = meter.querySelector('.grip'), box = host.querySelector('.wb-main');
+      let sx = 0, sy = 0, ox = 0, oy = 0, drag = false;
+      grip.addEventListener('pointerdown', e => {
+        if (e.target.closest('.m-min')) return;
+        drag = true; const r = meter.getBoundingClientRect(), b = box.getBoundingClientRect();
+        sx = e.clientX; sy = e.clientY; ox = r.left - b.left; oy = r.top - b.top;
+        meter.style.left = ox + 'px'; meter.style.top = oy + 'px'; meter.style.right = 'auto'; meter.style.bottom = 'auto';
+        try { grip.setPointerCapture(e.pointerId); } catch (err) { /* ignoré */ }
+        e.preventDefault();
+      });
+      grip.addEventListener('pointermove', e => {
+        if (!drag) return;
+        const b = box.getBoundingClientRect(), w = meter.offsetWidth, h = meter.offsetHeight;
+        meter.style.left = Math.max(0, Math.min(b.width - w, ox + e.clientX - sx)) + 'px';
+        meter.style.top = Math.max(0, Math.min(b.height - h, oy + e.clientY - sy)) + 'px';
+      });
+      ['pointerup', 'pointercancel'].forEach(t => grip.addEventListener(t, () => { drag = false; }));
+      grip.addEventListener('dblclick', () => { meter.style.left = meter.style.top = ''; meter.style.right = meter.style.bottom = ''; });
+      meter.querySelector('.m-min').addEventListener('click', () => { meter.classList.toggle('mini'); });
+    })();
     let mmode = 'V';
     const view = new SchemaView(canvas, sim, {
       showFaults: !!o.showFaults,

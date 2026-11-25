@@ -334,12 +334,38 @@
    * ===================================================================== */
   const CAL = [1.5, 5, 15, 50, 150, 500];
   AA.VIS.anaScale = cal => (String(cal).startsWith('1') ? 15 : 5);
+  /* Cadran analogique partagé : deux échelles (0-15 et 0-5), miroir anti-parallaxe, aiguille. f = position 0..1,05 */
+  AA.VIS.anaDraw = (g, W, H, needle, unit) => {
+    const A0 = Math.PI * 1.22, A1 = Math.PI * 1.78;
+    g.clearRect(0, 0, W, H); g.fillStyle = '#f6f1e3'; g.fillRect(0, 0, W, H);
+    const cx = W / 2, cy = H * 0.93, R = Math.min(W * 0.46, H * 0.82), fs = Math.max(11, Math.round(R * 0.055));
+    const at = (f, rr) => [cx + Math.cos(A0 + (A1 - A0) * f) * rr, cy + Math.sin(A0 + (A1 - A0) * f) * rr];
+    g.strokeStyle = '#b9c3cc'; g.lineWidth = Math.max(6, R * 0.03); g.beginPath(); g.arc(cx, cy, R * 0.86, A0, A1); g.stroke();
+    const scale = (max, rr, minor, major, outside, col) => {
+      g.strokeStyle = col; g.fillStyle = col;
+      for (let v = 0; v <= max + 1e-9; v += minor) {
+        const f = v / max, isM = Math.abs(v / major - Math.round(v / major)) < 1e-6, half = !isM && Math.abs((v / (major / 2)) - Math.round(v / (major / 2))) < 1e-6;
+        const k = R / 200, [x1, y1] = at(f, rr), [x2, y2] = at(f, rr + (isM ? 13 : half ? 9 : 5) * k * (outside ? 1 : -1));
+        g.lineWidth = isM ? 1.8 : 1; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke();
+        if (isM) { const [tx, ty] = at(f, rr + (outside ? 24 : -22) * k); g.font = `600 ${fs}px Bahnschrift, Segoe UI`; g.textAlign = 'center'; g.fillText(AA.fmt(v), tx, ty + fs / 3); }
+      }
+    };
+    scale(15, R * 0.94, 0.25, 1.5, true, '#1c1c1c');
+    scale(5, R * 0.74, 0.1, 0.5, false, '#1c3d8a');
+    g.textAlign = 'left'; g.font = `700 ${fs + 1}px Bahnschrift, Segoe UI`; g.fillStyle = '#1c1c1c';
+    g.fillText(unit || 'V ⎓', 12, fs + 8); g.font = `600 ${fs}px Bahnschrift, Segoe UI`; g.textAlign = 'right'; g.fillText('classe 1,5', W - 12, fs + 8);
+    g.textAlign = 'left'; g.fillStyle = '#1c1c1c'; g.fillText('échelle extérieure 0-15', 12, H - fs * 2.6); g.fillStyle = '#1c3d8a'; g.fillText('échelle intérieure 0-5', 12, H - fs * 1.2);
+    const [nx, ny] = at(Math.max(-0.02, needle), R * 1.0);
+    g.strokeStyle = '#c62828'; g.lineWidth = Math.max(2, R * 0.009); g.beginPath(); g.moveTo(cx, cy); g.lineTo(nx, ny); g.stroke();
+    g.fillStyle = '#222'; g.beginPath(); g.arc(cx, cy, Math.max(9, R * 0.04), 0, 7); g.fill();
+    if (needle > 1.0) { g.fillStyle = '#c62828'; g.font = `700 ${fs}px Bahnschrift, Segoe UI`; g.textAlign = 'center'; g.fillText('BUTÉE : calibre trop petit !', W / 2, H * 0.45); g.textAlign = 'left'; }
+  };
   SIMS.analog = (el, o) => {
     o = o || {};
     const r = AA.rng(Date.now() ^ 12345);
     const newVal = () => Math.round(r.pick([0.62, 1.12, 2.4, 3.6, 7.3, 11.4, 23, 36, 42, 118, 131, 227, 236, 318, 398]) * (0.97 + r() * 0.06) * 100) / 100;
     let val = newVal(), cal = 500, needle = 0, vel = 0, tries = 0;
-    el.innerHTML = `<div class="simcard vis-ana"><div class="ana-wrap"><canvas class="ana-cv"></canvas></div>
+    el.innerHTML = `<div class="simcard vis-ana"><div class="ana-wrap"><canvas class="ana-cv"></canvas><button class="btn sm ana-big" title="Agrandir le cadran">⤢ Agrandir</button></div>
       <div class="ana-side"><div class="field"><label>Calibre (commutateur)</label><div class="ana-cal">${CAL.map(c => `<button data-c="${c}" class="${c === 500 ? 'on' : ''}">${AA.fmt(c)} V</button>`).join('')}</div></div>
       <p class="muted" style="font-size:13px">Tension continue inconnue. 1) Choisis le calibre le plus adapté (le plus petit qui ne fait pas dépasser l'aiguille). 2) Lis l'échelle qui correspond au calibre et calcule la valeur. Appareil de classe 1,5.</p>
       <div class="num-in"><input inputmode="decimal" placeholder="valeur lue"><span class="unit">V</span><button class="btn primary sm js-ok">Vérifier</button><button class="btn sm ghost js-new">Nouvelle mesure</button></div><div class="js-fb"></div></div></div>`;
@@ -347,36 +373,13 @@
     let W = 0, H = 0, alive = true, last = 0;
     const size = () => { const d = window.devicePixelRatio || 1, rc = cvs.getBoundingClientRect(); W = rc.width; H = rc.height; cvs.width = W * d; cvs.height = H * d; g.setTransform(d, 0, 0, d, 0, 0); };
     const ro = new ResizeObserver(size); ro.observe(cvs); size();
-    const A0 = Math.PI * 1.22, A1 = Math.PI * 1.78;
+    el.querySelector('.ana-big').onclick = e => { const w = el.querySelector('.ana-wrap'); w.classList.toggle('big'); e.target.textContent = w.classList.contains('big') ? '⤡ Réduire' : '⤢ Agrandir'; };
     const frame = tm => {
       if (!alive || !cvs.isConnected) { ro.disconnect(); return; }
       const dt = last ? Math.min(0.05, (tm - last) / 1000) : 0; last = tm;
       const target = Math.min(1.04, val / cal);
       vel += ((target - needle) * 60 - vel * 9) * dt; needle += vel * dt; if (needle > 1.05) { needle = 1.05; vel = 0; }
-      g.clearRect(0, 0, W, H);
-      g.fillStyle = '#f6f1e3'; g.fillRect(0, 0, W, H);
-      const cx = W / 2, cy = H * 0.92, R = Math.min(W * 0.46, H * 0.8);
-      const at = (f, rr) => [cx + Math.cos(A0 + (A1 - A0) * f) * rr, cy + Math.sin(A0 + (A1 - A0) * f) * rr];
-      // miroir anti-parallaxe
-      g.strokeStyle = '#b9c3cc'; g.lineWidth = 6; g.beginPath(); g.arc(cx, cy, R * 0.86, A0, A1); g.stroke();
-      const scale = (max, rr, minor, major, lbl) => {
-        g.strokeStyle = '#1c1c1c'; g.fillStyle = '#1c1c1c'; g.lineWidth = 1;
-        for (let v = 0; v <= max + 1e-9; v += minor) {
-          const f = v / max, isM = Math.abs(v / major - Math.round(v / major)) < 1e-6, half = !isM && Math.abs((v / (major / 2)) - Math.round(v / (major / 2))) < 1e-6;
-          const [x1, y1] = at(f, rr), [x2, y2] = at(f, rr + (isM ? 12 : half ? 8 : 5));
-          g.lineWidth = isM ? 1.6 : 1; g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke();
-          if (isM) { const [tx, ty] = at(f, rr + (lbl ? 22 : -10)); g.font = '600 11px Bahnschrift'; g.textAlign = 'center'; g.fillText(AA.fmt(v), tx, ty + 4); }
-        }
-      };
-      scale(15, R * 0.94, 0.25, 1.5, true); // 0-15 : 60 divisions de 0,25
-      scale(5, R * 0.74, 0.1, 0.5, false); // 0-5 : 50 divisions de 0,1
-      g.textAlign = 'left'; g.font = '700 12px Bahnschrift'; g.fillStyle = '#1c1c1c';
-      g.fillText('V ⎓', 12, 20); g.font = '600 11px Bahnschrift'; g.fillText('1,5  ⊓', W - 60, 20);
-      g.fillStyle = '#8a1c1c'; g.fillText('0-15', cx + R * 0.66, cy - R * 0.62); g.fillStyle = '#1c3d8a'; g.fillText('0-5', cx + R * 0.48, cy - R * 0.38);
-      const [nx, ny] = at(needle, R * 1.0);
-      g.strokeStyle = '#c62828'; g.lineWidth = 2; g.beginPath(); g.moveTo(cx, cy); g.lineTo(nx, ny); g.stroke();
-      g.fillStyle = '#222'; g.beginPath(); g.arc(cx, cy, 9, 0, 7); g.fill();
-      if (needle > 1.0) { g.fillStyle = '#c62828'; g.font = '700 12px Bahnschrift'; g.fillText('BUTÉE : calibre trop petit !', 12, H - 12); }
+      AA.VIS.anaDraw(g, W, H, needle, 'V ⎓');
       requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);

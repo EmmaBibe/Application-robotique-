@@ -381,6 +381,13 @@
     log([e1, e2, e3].every(d => B.grade(inst, [d], null).score < 100), 'Installation : plaque en 4 mm², lave-linge hors type A, séjour sous-équipé : refusés');
   }
 
+  // Mesure analogique sur montage
+  if (window.AA && AA.MONTAGE) {
+    const M = AA.MONTAGE, c = { U: 12, R1: 1500, R2: 3300, q: 'U2' };
+    log(Math.abs(M.value(c) - 8.25) < 1e-9 && Math.abs(M.value({ ...c, q: 'I' }) - 2.5) < 1e-9 && M.best(8.25) === 15 && M.best(2.5) === 5, 'Montage : U2 = 8,25 V (meilleur calibre 15 V), I = 2,5 mA (meilleur calibre 5 mA)');
+    log(!!M.reading(c, 'A', 'par').err && Math.abs(M.reading(c, 'V', 'ser').val - 12) < 1e-9 && !!M.reading(c, 'V', 'ser').warn && !M.reading(c, 'V', 'par').warn, 'Montage : ampèremètre en parallèle = court-circuit ; voltmètre en série = tension de la source ; voltmètre en parallèle = mesure juste');
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis
