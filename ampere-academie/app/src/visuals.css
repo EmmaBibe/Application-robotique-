@@ -174,3 +174,5 @@
 @media (max-width: 980px) { .ed-grid { grid-template-columns: 1fr; } }
 .ed-path { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 4px 6px; border-radius: 10px; background: var(--surface-2); }
 .ed-ser { font-style: normal; color: var(--ink-3); }
+.ed-load .sel, .ed-sel { min-width: 0; max-width: 100%; flex: 1 1 auto; }
+.ed-build { min-width: 0; overflow: hidden; }

@@ -198,7 +198,7 @@
     parts: [
       P('breaker3', 'Q1', 3, 6, { a1: 'L1', a2: 'L2', a3: 'L3', b1: 'pa1', b2: 'pa2', b3: 'pa3' }, { rating: 32, t: ['1', '2', '3', '4', '5', '6'], info: 'Disjoncteur-moteur' }),
       P('km3', 'KM1:P', 3, 14, { a1: 'pa1', a2: 'pa2', a3: 'pa3', b1: 'pb1', b2: 'pb2', b3: 'pb3' }, { of: 'KM1', t: ['1', '2', '3', '4', '5', '6'], info: 'Contacteur de ligne' }),
-      P('thermal3', 'F2', 3, 20, { a1: 'pb1', a2: 'pb2', a3: 'pb3', b1: 'pc1', b2: 'pc2', b3: 'pc3' }, { motor: 'M1', t: ['1', '2', '3', '4', '5', '6'], info: 'Relais thermique réglé à I/√3 (courant dans les enroulements)' }),
+      P('thermal3', 'F2', 3, 20, { a1: 'pb1', a2: 'pb2', a3: 'pb3', b1: 'pc1', b2: 'pc2', b3: 'pc3' }, { motor: 'M1', t: ['1', '2', '3', '4', '5', '6'], info: 'Relais thermique placé en amont du couplage : il est traversé par le courant de ligne, on le règle donc au courant nominal de plaque (couplage triangle). Placé dans les enroulements, on le réglerait à In/√3.' }),
       P('motor6', 'M1', 5, 28, { U1: 'pc1', V1: 'pc2', W1: 'pc3', U2: 'm4', V2: 'm5', W2: 'm6' }, { info: 'Moteur 400/690 V : couplé en triangle sur le réseau 400 V' }),
       P('km3', 'KM2:P', 3, 36, { a1: 'm4', a2: 'm5', a3: 'm6', b1: 'ys', b2: 'ys', b3: 'ys' }, { of: 'KM2', t: ['1', '2', '3', '4', '5', '6'], info: 'Contacteur étoile : relie U2, V2, W2' }),
       P('km3', 'KM3:P', 11, 36, { a1: 'm6', a2: 'm4', a3: 'm5', b1: 'pc1', b2: 'pc2', b3: 'pc3' }, { of: 'KM3', t: ['1', '2', '3', '4', '5', '6'], info: 'Contacteur triangle : W2-U1, U2-V1, V2-W1' })

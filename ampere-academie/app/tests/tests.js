@@ -347,6 +347,28 @@
     const c = E.layout(ac); log(c.parts.length === 6 && c.wires.length >= 8, 'Éditeur : le folio généré contient toutes les pièces et leurs conducteurs');
   }
 
+  // Projet de schéma complet (puissance + commande) : solutions de référence acceptées, erreurs typiques refusées
+  if (window.AA && AA.PROJSCHEMA) {
+    const X = AA.PROJSCHEMA, B = (groups, load, src) => ({ groups, load, src }), sp = id => X.SPECS.find(s => s.id === id);
+    const cfgOf = spec => spec.motors.map(m => ({ mode: m.need, ir: m.In, cal: X.CAL.find(v => v >= m.In) }));
+    const yd = (extra, h) => ({ common: [[['S0']], [['F2.95']], [['S1']], [['S2'], ['KM1.13']]], branches: [B([], 'KM1'), B([], 'KA1'), B([[['KA1.55']], [['KM3.21']]], 'KM2'), B([[['KA1.67']], [['KM2.21']]], 'KM3')].concat(extra) });
+    const sol = {
+      tapis: { common: [[['S0']]], branches: [B([[['F2.95']], [['S1']], [['S2'], ['KM1.13']]], 'KM1'), B([[['KM1.23']], [['F3.95']], [['S3']], [['S4'], ['KM2.13']]], 'KM2'), B([[['F2.97']]], 'H1')] },
+      porte: { common: [[['S0']], [['F2.95']], [['S1']]], branches: [B([[['S2'], ['KM1.13']], [['SQ1']], [['KM2.21']]], 'KM1'), B([[['S3'], ['KM2.13']], [['SQ2']], [['KM1.21']]], 'KM2'), B([[['KM1.23'], ['KM2.23']]], 'H1')] },
+      pompe: yd([B([[['KM1.23']]], 'H1'), B([[['F2.97']]], 'H2', 'top')]),
+      concassage: yd([B([[['KM3.13']], [['F3.95']], [['S3']], [['S4'], ['KM4.13']]], 'KM4'), B([[['F2.97'], ['F3.97']]], 'H1', 'top')])
+    };
+    const scores = Object.entries(sol).map(([k, m]) => X.grade(sp(k), cfgOf(sp(k)), m).score);
+    eq(scores, [100, 100, 100, 100], 'Projet complet : les 4 solutions de référence (direct ×2, deux sens + fins de course, étoile-triangle, ligne de concassage) obtiennent 100');
+    const badH2 = X.grade(sp('pompe'), cfgOf(sp('pompe')), yd([B([[['KM1.23']]], 'H1'), B([[['F2.97']]], 'H2')]));
+    const badLock = X.grade(sp('concassage'), cfgOf(sp('concassage')), yd([B([[['F3.95']], [['S3']], [['S4'], ['KM4.13']]], 'KM4'), B([[['F2.97'], ['F3.97']]], 'H1', 'top')]));
+    const badMode = X.grade(sp('porte'), [{ mode: 'dol', ir: 1.9, cal: 2.5 }], sol.porte);
+    const badIr = X.grade(sp('tapis'), [{ mode: 'dol', ir: 3.4, cal: 10 }, { mode: 'dol', ir: 3.4, cal: 4 }], sol.tapis);
+    log(badH2.score < 100 && badLock.score < 100 && badMode.score < 100 && badIr.score < 100 && !badIr.pw[0].ir && badIr.pw[1].ir, `Projet complet : voyant de défaut mal placé (${badH2.score}), convoyeur non asservi au triangle (${badLock.score}), mauvais mode de démarrage (${badMode.score}), mauvais réglage thermique (${badIr.score}) : refusés`);
+    const f = X.folio(sp('concassage'), cfgOf(sp('concassage')), sol.concassage);
+    log(f.parts.filter(p => p.type === 'km3').length === 4 && f.parts.some(p => p.type === 'motor6') && f.parts.some(p => p.type === 'motor3'), 'Projet complet : le folio généré contient la puissance (4 contacteurs, moteur étoile-triangle et moteur direct) et la commande');
+  }
+
   // Automate
   if (window.AA && AA.Ladder) AA.Ladder.selfTest(log, eq);
   // Défis
