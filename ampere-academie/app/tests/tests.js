@@ -405,6 +405,26 @@
     log(!!AA.L.n1m2l7 && AA.VISMAP.n1m2l7 && v.querySelectorAll('.js-v button').length === 4, 'Leçon « schéma de répartition » présente et vues synoptique / unifilaire / multifilaire / développé');
   }
 
+  // Commutateurs à cames
+  if (window.AA && AA.CAMES) {
+    const CM = AA.CAMES, allOk = (sp, R, w) => CM.check(sp, R.contacts, R.grid).every(x => x.ok) && CM.transitions(sp, R.contacts, R.grid, w).every(t => !t.short);
+    let refOk = true;
+    Object.keys(CM.FUNCS).forEach(k => { for (let i = 0; i < 30; i++) { const sp = CM.spec(k, i ? AA.rng(i * 7919) : null); if (!allOk(sp, CM.reference(sp), 0.5)) { refOk = false; break; } } });
+    log(refOk, 'Cames : la solution de référence de chaque fonction (et de 30 variantes tirées au sort) est juste dans toutes les positions et sans court-circuit pendant les manœuvres');
+    const yd = CM.spec('yd'), Ryd = CM.reference(yd), trW = CM.transitions(yd, Ryd.contacts, Ryd.grid, 1.2);
+    log(Ryd.contacts.length === 8 && !!trW[1].short && !trW[0].short, 'Cames : étoile-triangle = 8 contacts ; creux à 120 % du pas -> court-circuit transitoire au passage Y -> Δ (point étoile encore fermé)');
+    const alt = { contacts: [['L1', 'U1'], ['L2', 'V1'], ['L3', 'W1'], ['V2', 'U2'], ['W2', 'V2'], ['W2', 'L1'], ['U2', 'L2'], ['V2', 'L3']], grid: [[0, 1, 1], [0, 1, 1], [0, 1, 1], [0, 1, 0], [0, 1, 0], [0, 0, 1], [0, 0, 1], [0, 0, 1]].map(r => r.map(Boolean)) };
+    const rd = p => yd.read(CM.groups(yd, alt.contacts, alt.grid.map(r => r[p])));
+    log(allOk(yd, alt, 0.5) && /étoile/.test(rd(1)) && /triangle/.test(rd(2)) && /arrêté/.test(rd(0)), 'Cames : une autre solution étoile-triangle (point étoile U2-V2 + V2-W2) est acceptée ; lectures arrêt / étoile / triangle justes');
+    const vt = CM.spec('volt'), Rv = CM.reference(vt), bad = Rv.grid.map(r => r.slice()); bad[Rv.contacts.findIndex(c => c[0] === 'A' && c[1] === 'L2')][1] = true;
+    const r1 = CM.check(vt, Rv.contacts, bad)[1], gv = p => vt.read(CM.groups(vt, Rv.contacts, Rv.grid.map(r => r[p])));
+    log(Rv.contacts.length === 7 && !r1.ok && r1.msgs.some(m => /court-circuit/.test(m)) && /230 V/.test(gv(1)) && /400 V/.test(gv(4)) && /0 V/.test(gv(0)), 'Cames : voltmètre = 7 contacts ; deux phases sur la borne A -> court-circuit détecté ; lectures 0 V / 230 V / 400 V');
+    const iv = CM.spec('inv'), Ri = CM.reference(iv), gi = p => iv.read(CM.groups(iv, Ri.contacts, Ri.grid.map(r => r[p])));
+    const miss = Ri.grid.map(r => r.slice()); miss[Ri.contacts.findIndex(c => c[0] === 'L3')][2] = false;
+    log(Ri.contacts.length === 5 && /sens 1/.test(gi(0)) && /sens 2/.test(gi(2)) && /arrêté/.test(gi(1)) && /monophasé/.test(iv.read(CM.groups(iv, Ri.contacts, miss.map(r => r[2])))), 'Cames : inverseur 1-0-2 = 5 contacts ; sens 1 / arrêt / sens 2 ; phase manquante -> marche en monophasé signalée');
+    log(CM.closedAt([true, true, false], 60, 0.5, 30) && !CM.closedAt([true, true, false], 60, 0.5, 100) && CM.closedAt([true, false, true], 60, 0.5, 125) && !CM.closedAt([true, false, true], 60, 0.5, 60), 'Cames : creux continu entre deux positions fermées voisines, creux séparés sinon');
+  }
+
   // Bornes des appareils
   if (window.AA && AA.BORNES) {
     const BO = AA.BORNES, D = BO.DEV, m = (k, st, a, b) => BO.measure(D[k].links(Object.assign({}, D[k].st, st)), a, b);

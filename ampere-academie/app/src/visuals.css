@@ -213,3 +213,37 @@
 .rep-b.ta { fill: color-mix(in srgb, var(--copper) 18%, var(--sch-bg)); }
 .rep-c { cursor: pointer; }
 .rep-c:hover .rep-b, .rep-c.on .rep-b { fill: color-mix(in srgb, var(--copper) 30%, var(--sch-bg)); stroke: var(--copper); }
+
+/* Commutateurs à cames */
+.cam-knob { width: 100%; max-width: 230px; display: block; margin: 0 auto; }
+.cam-knob text { fill: var(--ink-2); font: 700 12px var(--f-mono); }
+.cam-k1 { fill: var(--bg-2); stroke: var(--line-2, var(--line)); stroke-width: 2; }
+.cam-k2 { fill: var(--copper); opacity: .9; }
+.cam-k3 { stroke: var(--accent-ink); stroke-width: 4; stroke-linecap: round; }
+.cam-read { min-height: 2.6em; }
+.cam-row { display: flex; flex-wrap: wrap; gap: 4px; }
+.cam-svg { width: 64px; height: auto; }
+.cam-svg text { fill: var(--ink-2); font: 600 10px var(--f-mono); }
+.cam-disc { fill: var(--bg-2); stroke: var(--ink-2); stroke-width: 1.6; }
+.cam-axe { fill: var(--ink-2); }
+.cam-pl, .cam-fix { stroke: var(--ink-2); stroke-width: 2; }
+.cam-bar { stroke: var(--ink-2); stroke-width: 3; stroke-linecap: round; transition: stroke .2s; }
+.cam-svg.on .cam-bar, .cam-svg.on .cam-fix { stroke: var(--copper); }
+.cam-wl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; font-size: 13px; }
+.cam-wl input { flex: 1; min-width: 140px; }
+.cam-wire { display: block; width: 100%; height: auto; min-width: 320px; }
+.cam-wire text { fill: var(--sch-ink); font: 700 11px var(--f-mono); }
+.cam-wire text.src { fill: var(--copper); }
+.cam-wire .cam-n { font: 600 9.5px var(--f-mono); fill: var(--ink-2); }
+.cam-t { fill: var(--sch-ink); }
+.cam-drop { stroke: var(--line-2, var(--line)); stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+.cam-drop.on { stroke: var(--copper); stroke-dasharray: none; stroke-width: 1.6; }
+.cam-w { stroke: var(--ink-2); stroke-width: 1.6; fill: none; opacity: .6; }
+.cam-w.on { stroke: var(--copper); stroke-width: 2.6; opacity: 1; }
+.cam-tab { border-collapse: collapse; font-size: 13px; }
+.cam-tab th, .cam-tab td { border: 1px solid var(--line); padding: 4px 8px; text-align: center; }
+.cam-tab th { font: 700 12px var(--f-mono); color: var(--ink-2); }
+.cam-x { width: 30px; height: 26px; border-radius: 6px; border: 1px solid var(--line); background: transparent; cursor: pointer; font: 700 14px var(--f-mono); color: var(--copper); }
+.cam-x.on { background: var(--bg-2); }
+.cam-res { margin: 6px 0; padding-left: 18px; }
+.cam-res li { margin: 2px 0; }
